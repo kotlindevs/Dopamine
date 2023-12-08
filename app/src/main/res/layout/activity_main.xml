@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/dopamine"
+            android:layout_width="128dp"
+            android:layout_height="256dp"
+            android:layout_marginBottom="24dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:gravity="center"
+            android:fontFamily="@font/circular_spotify"
+            android:textSize="36sp"
+            android:text="Millions of songs. \n Ad-Free on Dopamine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_up_free"
+            android:fontFamily="@font/gotham"
+            android:text="Sign up free"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_phone"
+            android:drawableLeft="@drawable/baseline_android_24"
+            android:paddingLeft="12dp"
+            android:fontFamily="@font/gotham"
+            android:text="Continue with phone number"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_google"
+            android:drawableLeft="@drawable/icons8_google"
+            android:paddingLeft="12dp"
+            android:fontFamily="@font/gotham"
+            android:text="Continue with Google"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sign_fb"
+            android:drawableLeft="@drawable/icons8_facebook"
+            android:paddingLeft="12dp"
+            android:fontFamily="@font/gotham"
+            android:text="Continue with Facebook"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login"
+            android:gravity="center"
+            android:fontFamily="@font/gotham"
+            android:textSize="16sp"
+            android:text="Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
