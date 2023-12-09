@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".continue_with_phone">
+    tools:context=".continue_with_phone_otp">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -39,8 +39,8 @@
         app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
 
         <com.google.android.material.textview.MaterialTextView
-            android:text="Enter phone number"
-            android:layout_marginTop="48dp"
+            android:text="Enter OTP number here"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
             android:textSize="28sp"
@@ -56,14 +56,13 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
-                app:placeholderText="Number Should be At Least 10 Digits"
+                app:placeholderText=" * * * * * * "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/CountryNumbers"
-                    android:hint="India"
-                    android:inputType="number"
+                    android:id="@+id/otp"
+                    android:hint="Enter OTP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -71,20 +70,19 @@
 
         </LinearLayout>
 
-
-
         <com.google.android.material.textview.MaterialTextView
-            android:text="We'll send you a code by SMS to confirm your phone \n number. \n"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="6dp"
+            android:layout_gravity="center"
+            android:text="We sent an SMS with a 6-digit code to \n"
+            android:layout_marginTop="16dp"
             android:textSize="12sp"
             android:fontFamily="@font/proxima_nova"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:text="We may occasionally send you service-based messages."
-            android:layout_marginStart="18dp"
+            android:id="@+id/received_phone_no"
+            android:layout_gravity="center"
+            android:text="Phone No."
             android:layout_marginBottom="32dp"
             android:textSize="12sp"
             android:fontFamily="@font/proxima_nova"
@@ -99,6 +97,31 @@
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="48dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/btn_resend_otp"
+            android:layout_gravity="center"
+            android:text="Resend SMS"
+            android:drawableLeft="@drawable/baseline_comment_24"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/circular_spotify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/btn_edit_phone_no"
+            android:layout_gravity="center"
+            android:text="Edit phone number"
+            android:drawableLeft="@drawable/baseline_create_24"
+            android:drawablePadding="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/circular_spotify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".continue_with_phone">
+    tools:context=".login">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -30,66 +30,62 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
 
         <com.google.android.material.textview.MaterialTextView
-            android:text="Enter phone number"
-            android:layout_marginTop="48dp"
+            android:text="Email or username"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
             android:textSize="28sp"
             android:fontFamily="@font/circular_spotify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:orientation="horizontal"
+            app:placeholderText="you@example.com"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
-                app:placeholderText="Number Should be At Least 10 Digits"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_email"
+                android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/CountryNumbers"
-                    android:hint="India"
-                    android:inputType="number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:text="We'll send you a code by SMS to confirm your phone \n number. \n"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="6dp"
-            android:textSize="12sp"
-            android:fontFamily="@font/proxima_nova"
+            android:text="Password"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:textSize="28sp"
+            android:fontFamily="@font/circular_spotify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:text="We may occasionally send you service-based messages."
-            android:layout_marginStart="18dp"
-            android:layout_marginBottom="32dp"
-            android:textSize="12sp"
-            android:fontFamily="@font/proxima_nova"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:passwordToggleEnabled="true"
+            app:placeholderText=" * * * * * * * * "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_pass"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_next"
@@ -98,7 +94,18 @@
             android:fontFamily="@font/circular_spotify"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
+            android:layout_marginTop="32dp"
             android:layout_height="48dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/sign_up_free"
+            android:text="New User ? Sign Up Here"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/circular_std"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

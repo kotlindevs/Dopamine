@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.login.setOnClickListener{
-
+            startActivity(Intent(applicationContext,login::class.java))
         }
     }
 }
