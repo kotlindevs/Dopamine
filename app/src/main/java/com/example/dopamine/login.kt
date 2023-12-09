@@ -27,16 +27,12 @@ class login : AppCompatActivity() {
         onBackPressedDispatcher.addCallback {  }
 
         binding.btnNext.setOnClickListener {
-            if(binding.userEmail!!.length()==0){
+            if(binding.userEmail.length()==0){
                 ShowToast("Email Can't Be Empty")
             } else if(!Patterns.EMAIL_ADDRESS.matcher(binding.userEmail.text.toString()).matches()){
                 ShowToast("Email Format is Wrong")
-            } else if(binding.userPass!!.length()==0){
+            } else if(binding.userPass.length()==0){
                 ShowToast("Password Can't Be Empty")
-            } else if(binding.userPass!!.length() < 8) {
-                ShowToast("Password Must Be 8 Characters")
-            } else if(binding.userPass!!.length() > 8){
-                ShowToast("Password Must Be 8 Characters")
             } else {
                 val email = binding.userEmail.text.toString()
                 val passwd = binding.userPass.text.toString()
@@ -48,6 +44,7 @@ class login : AppCompatActivity() {
                     }
                     .addOnFailureListener {
                         Toast.makeText(applicationContext,it.message.toString(),Toast.LENGTH_LONG).show()
+                        binding.userPass.text!!.clear()
                     }
             }
         }
