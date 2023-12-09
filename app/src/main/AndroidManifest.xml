@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".Dynamic"
         android:allowBackup="true"
@@ -14,14 +16,23 @@
         android:theme="@style/Theme.Dopamine"
         tools:targetApi="31">
         <activity
+            android:name=".login"
+            android:exported="true" />
+        <activity
+            android:name=".continue_with_phone_otp"
+            android:exported="true" />
+        <activity
+            android:name=".Dopamine_home"
+            android:exported="true" />
+        <activity
             android:name=".continue_with_phone"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".sign_up_free_pass"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".sign_up_free"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

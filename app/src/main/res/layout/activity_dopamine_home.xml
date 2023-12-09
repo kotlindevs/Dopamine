@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dopamine_home">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/UserImage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/UserName"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:padding="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/UserImage"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/UserSignOut"
+        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+        android:text="@string/sign_out"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/logout_24"
+        app:iconGravity="end"
+        app:iconPadding="12dp"
+        android:padding="12dp"
+        android:translationZ="5dp"
+        android:stateListAnimator="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/UserName" />
+</androidx.constraintlayout.widget.ConstraintLayout>

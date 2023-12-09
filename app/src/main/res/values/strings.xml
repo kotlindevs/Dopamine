@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Dopamine</string>
+    <string name="web_client_id">176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

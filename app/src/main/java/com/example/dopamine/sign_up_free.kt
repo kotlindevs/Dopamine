@@ -25,8 +25,8 @@ class sign_up_free : AppCompatActivity() {
         onBackPressedDispatcher.addCallback {}
 
         binding.btnNext.setOnClickListener {
-            if (email!!.length()==0){
-                email!!.setError("Email Can't Be Empty")
+            if (email.length()==0){
+                email.setError("Email Can't Be Empty")
             } else {
                 startActivity(Intent(applicationContext,sign_up_free_pass::class.java))
             }
