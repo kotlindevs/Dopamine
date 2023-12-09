@@ -37,7 +37,7 @@ class sign_up_free_pass : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             if (pass.length()==0){
                 Toast.makeText(this,"Password Can't Be Empty",Toast.LENGTH_SHORT).show()
-            } else if (pass.length() < 8){
+            } else if (pass.length() < 8 && pass.length() > 8){
                 Toast.makeText(this,"Password Must Be 8 Characters",Toast.LENGTH_SHORT).show()
             } else {
                 val email = intent.getStringExtra("SignupEmail")
