@@ -14,14 +14,23 @@ class googleSession(var context: Context) {
         this.editor = sharedPreferences.edit()
     }
 
-    fun googleLogin(email: String){
+    fun googleLogin(email: String,photo : String,name : String){
         editor.putBoolean("login",true)
+        editor.putString("photo",photo)
+        editor.putString("name",name)
         editor.putString("email",email)
         editor.commit()
     }
 
     fun isUserLogin() : Boolean{
         return sharedPreferences.getBoolean("login",false)
+    }
+
+    fun emailPasswordSession(Email : String , Password : String){
+        editor.putBoolean("login",true)
+        editor.putString("email",Email)
+        editor.putString("password",Password)
+        editor.commit()
     }
 
     fun userLogOut(){

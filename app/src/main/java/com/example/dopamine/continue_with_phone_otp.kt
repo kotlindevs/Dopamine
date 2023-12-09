@@ -1,18 +1,26 @@
 package com.example.dopamine
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dopamine.databinding.ActivityContinueWithPhoneOtpBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 
 class continue_with_phone_otp : AppCompatActivity() {
     private lateinit var binding: ActivityContinueWithPhoneOtpBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityContinueWithPhoneOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        firebaseAuth=FirebaseAuth.getInstance()
+        val verificationId =  intent.getStringExtra("verifyId")
+
 
         binding.receivedPhoneNo.setText(intent.getStringExtra("send_phone"))
 
@@ -29,9 +37,17 @@ class continue_with_phone_otp : AppCompatActivity() {
             } else if(binding.otp!!.length() < 6){
                 Toast.makeText(this,"OTP Can't Be Less Than 6 Digits",Toast.LENGTH_SHORT).show()
             } else {
-                //startActivity()
+                val otp = binding.otp.text.toString()
+                if (!otp.isEmpty()) {
+                    val credential: PhoneAuthCredential =
+                        PhoneAuthProvider.getCredential(verificationId.toString(), otp)
+                    signInWithPhoneAuthCredentialDemo(credential)
+                } else {
+                    showToast("Enter Otp")
+                }
             }
         }
+
 
         binding.btnResendOtp.setOnClickListener{
             Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
@@ -40,5 +56,20 @@ class continue_with_phone_otp : AppCompatActivity() {
         binding.btnEditPhoneNo.setOnClickListener {
             finish()
         }
+    }
+    private fun signInWithPhoneAuthCredentialDemo(credential: PhoneAuthCredential) {
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) {
+                if (it.isSuccessful) {
+                    showToast("Welcome !")
+                    startActivity(Intent(this, Dopamine_home::class.java))
+                    finish()
+                } else {
+                    showToast(it.exception.toString())
+                }
+            }
+    }
+    private fun showToast(str : String){
+        Toast.makeText(applicationContext,str,Toast.LENGTH_LONG).show()
     }
 }

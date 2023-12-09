@@ -97,8 +97,16 @@ class MainActivity : AppCompatActivity() {
                 if(it.isSuccessful){
                     showToast("Welcome")
                     val userDetail = GoogleSignIn.getLastSignedInAccount(this)
-                    googleSession.googleLogin(userDetail?.email.toString())
-                    startActivity(Intent(this,Dopamine_home::class.java))
+                    googleSession
+                        .googleLogin(
+                            userDetail?.email.toString(),
+                            userDetail?.photoUrl.toString(),
+                            userDetail?.displayName.toString()
+                        )
+                    startActivity(Intent(this,Dopamine_home::class.java)
+                        .putExtra("UserEmail",userDetail?.email)
+                        .putExtra("UserPhoto",userDetail?.photoUrl)
+                        .putExtra("UserName",userDetail?.displayName))
                 }else{
                     showToast(it.toString())
                 }

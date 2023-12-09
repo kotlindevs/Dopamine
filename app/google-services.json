@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "176373490775",
+    "project_id": "dopamine573",
+    "storage_bucket": "dopamine573.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176373490775:android:4c7ca5a47ab2c7feb32f12",
+        "android_client_info": {
+          "package_name": "com.example.dopamine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbFKxigNntRcy3rWcSt1tpfEE7cNwBbfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176373490775:android:f0808e5f0e45d353b32f12",
+        "android_client_info": {
+          "package_name": "com.piyush2k24.sutexian"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbFKxigNntRcy3rWcSt1tpfEE7cNwBbfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
