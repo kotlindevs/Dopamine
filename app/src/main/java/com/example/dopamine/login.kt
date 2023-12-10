@@ -33,6 +33,8 @@ class login : AppCompatActivity() {
                 ShowToast("Email Format is Wrong")
             } else if(binding.userPass.length()==0){
                 ShowToast("Password Can't Be Empty")
+            } else if(binding.userPass.length() < 6){
+                ShowToast("Password Can't Be Less Than 6 Characters")
             } else {
                 val email = binding.userEmail.text.toString()
                 val passwd = binding.userPass.text.toString()
