@@ -41,8 +41,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu"
-        app:itemIconTint="?attr/colorControlActivated"
-        app:itemRippleColor="?attr/colorControlHighlight">
+        app:itemIconTint="?attr/colorControlActivated">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +23,28 @@ class Dopamine_home : AppCompatActivity() {
         googleSession = googleSession(this)
         firebaseAuth = FirebaseAuth.getInstance()
         setContentView(binding.root)
+
+        //Recycler View Work
+        val recyclerViewLeft = findViewById<RecyclerView>(R.id.left_bar)
+        val recyclerViewRight = findViewById<RecyclerView>(R.id.right_bar)
+
+        recyclerViewLeft.layoutManager = LinearLayoutManager(this)
+        recyclerViewRight.layoutManager = LinearLayoutManager(this)
+
+        val data_left = ArrayList<ItemsViewModel>()
+        data_left.add(ItemsViewModel(R.drawable.likedsongs,"Liked Songs"))
+        data_left.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Today's Top Hits"))
+        data_left.add(ItemsViewModel(R.drawable.baseline_favorite_24,"2010s Mix"))
+        val adapter_left = MusicAdapter(data_left)
+        recyclerViewLeft.adapter = adapter_left
+
+        val data_right = ArrayList<ItemsViewModel>()
+        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Blade Runner"))
+        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Imagine Dragons"))
+        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"chill lofi study \n beats"))
+        val adapter_right = MusicAdapter(data_right)
+        recyclerViewRight.adapter = adapter_right
+
 
         //Greeting Message Backend
         val df = SimpleDateFormat("HH:mm:ss")
