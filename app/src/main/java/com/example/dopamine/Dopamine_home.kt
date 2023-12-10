@@ -20,17 +20,10 @@ class Dopamine_home : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.UserName.text = googleSession.sharedPreferences.getString("Mon","")
+        //binding.UserName.text = googleSession.sharedPreferences.getString("Mon","")
+
+        //Photo Fetching
         val userPhoto = googleSession.sharedPreferences.getString("photo","")
-        Log.d("UserImage",userPhoto.toString())
-        Glide
-            .with(this)
-            .load(userPhoto)
-            .into(binding.UserImage)
-        binding.UserSignOut.setOnClickListener {
-            googleSession.userLogOut()
-            Toast.makeText(applicationContext,"Good Bye ☹️", Toast.LENGTH_LONG).show()
-            firebaseAuth.signOut()
-        }
+        Glide.with(this).load(userPhoto).into(binding.UserImage)
     }
 }
