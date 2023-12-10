@@ -2,6 +2,7 @@ package com.example.dopamine
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -13,16 +14,19 @@ import com.google.firebase.auth.PhoneAuthProvider
 class continue_with_phone_otp : AppCompatActivity() {
     private lateinit var binding: ActivityContinueWithPhoneOtpBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var googleSession: googleSession
+    private lateinit var mAuthNumber : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityContinueWithPhoneOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth=FirebaseAuth.getInstance()
+        googleSession = googleSession(this)
+        mAuthNumber= googleSession.sharedPreferences.getString("str","").toString()
         val verificationId =  intent.getStringExtra("verifyId")
 
-
-        binding.receivedPhoneNo.setText(intent.getStringExtra("send_phone"))
+        binding.receivedPhoneNo.text =mAuthNumber
 
         binding.topAppBar.setOnClickListener {
             finish()
@@ -62,8 +66,8 @@ class continue_with_phone_otp : AppCompatActivity() {
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
                     showToast("Welcome !")
+                    googleSession.mobileOtpSession(mAuthNumber)
                     startActivity(Intent(this, Dopamine_home::class.java))
-                    finish()
                 } else {
                     showToast(it.exception.toString())
                 }

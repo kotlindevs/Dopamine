@@ -34,22 +34,11 @@
             android:layout_marginBottom="48dp"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_up_free"
-            android:fontFamily="@font/gotham"
-            android:text="Sign up free"
-            android:layout_marginStart="34dp"
-            android:layout_marginEnd="34dp"
-            android:layout_marginBottom="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"/>
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_phone"
             android:drawableLeft="@drawable/baseline_android_24"
             android:paddingLeft="12dp"
             android:fontFamily="@font/gotham"
             android:text="Continue with phone number"
-            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_marginStart="34dp"
             android:layout_marginEnd="34dp"
             android:layout_marginBottom="6dp"
@@ -81,16 +70,6 @@
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/login"
-            android:gravity="center"
-            android:fontFamily="@font/gotham"
-            android:textSize="16sp"
-            android:text="Login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"/>
 
     </LinearLayout>
 

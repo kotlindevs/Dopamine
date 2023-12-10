@@ -20,7 +20,7 @@ class Dopamine_home : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.UserName.text = googleSession.sharedPreferences.getString("email","")
+        binding.UserName.text = googleSession.sharedPreferences.getString("Mon","")
         val userPhoto = googleSession.sharedPreferences.getString("photo","")
         Log.d("UserImage",userPhoto.toString())
         Glide

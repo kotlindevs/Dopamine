@@ -46,10 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this,signInOptions)
 
-        binding.signUpFree.setOnClickListener{
-            startActivity(Intent(applicationContext,sign_up_free::class.java))
-        }
-
         binding.signPhone.setOnClickListener{
             startActivity(Intent(applicationContext,continue_with_phone::class.java))
         }
@@ -60,10 +56,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.signFb.setOnClickListener{
 
-        }
-
-        binding.login.setOnClickListener{
-            startActivity(Intent(applicationContext,login::class.java))
         }
     }
 

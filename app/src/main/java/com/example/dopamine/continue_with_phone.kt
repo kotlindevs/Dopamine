@@ -22,12 +22,14 @@ class continue_with_phone : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var resendToken:PhoneAuthProvider.ForceResendingToken
+    private lateinit var googleSession: googleSession
     lateinit var verificationId:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityContinueWithPhoneBinding.inflate(layoutInflater)
         firebaseAuth = FirebaseAuth.getInstance()
+        googleSession = googleSession(this)
         setContentView(binding.root)
 
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
@@ -73,9 +75,11 @@ class continue_with_phone : AppCompatActivity() {
                     .build()
                 PhoneAuthProvider.verifyPhoneNumber(option)
                 showToast("Please Verify Number")
-                val intent = Intent(this, continue_with_phone_otp::class.java)
-                intent.putExtra("UserPhone", "+91${binding.CountryNumbers.text.toString()}")
-                startActivity(intent)
+                startActivity(Intent(this, continue_with_phone_otp::class.java)
+                    .putExtra("UserPhone", "+91${binding.CountryNumbers.text.toString()}")
+                )
+                googleSession.savedNum("+91${binding.CountryNumbers.text.toString()}")
+                Log.d("UserVal","+91${binding.CountryNumbers.text.toString()}")
             }
         }
     }

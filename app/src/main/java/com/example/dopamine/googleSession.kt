@@ -26,13 +26,16 @@ class googleSession(var context: Context) {
         return sharedPreferences.getBoolean("login",false)
     }
 
-    fun emailPasswordSession(Email : String , Password : String){
+    fun mobileOtpSession(Mon : String){
         editor.putBoolean("login",true)
-        editor.putString("email",Email)
-        editor.putString("password",Password)
+        editor.putString("Mon",Mon)
         editor.commit()
     }
 
+    fun savedNum(str : String){
+        editor.putString("str",str)
+        editor.commit()
+    }
     fun userLogOut(){
         editor.clear()
         editor.commit()
