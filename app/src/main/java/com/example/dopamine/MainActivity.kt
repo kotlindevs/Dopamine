@@ -55,7 +55,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.signFb.setOnClickListener{
-
+            val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+            materialAlertDialogBuilder.setMessage("Facebook Login Is Currently Under Development. You Can Try Google Login Or OTP Login To Enjoy Dopamine .")
+                .setTitle("Under Development")
+                .setCancelable(false)
+                .setNegativeButton("Ok"){
+                        dialog, _ ->
+                    dialog.dismiss()
+                }
+            materialAlertDialogBuilder.create().show()
         }
     }
 

@@ -32,7 +32,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                app:navigationIcon="@drawable/baseline_menu_24"
+                app:navigationIcon="@drawable/baseline_arrow_back_24"
                 app:title="Dopamine"
                 app:titleTextAppearance="@style/ToolbarTheme">
 
