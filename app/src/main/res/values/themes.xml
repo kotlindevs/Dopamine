@@ -7,7 +7,8 @@
     
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/circular_spotify</item>
+        <item name="android:textSize">18sp</item>
     </style>
-
+    
     <style name="Theme.Dopamine" parent="Base.Theme.Dopamine" />
 </resources>

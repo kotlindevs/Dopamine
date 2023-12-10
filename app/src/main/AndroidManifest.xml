@@ -16,6 +16,18 @@
         android:theme="@style/Theme.Dopamine"
         tools:targetApi="31">
         <activity
+            android:name=".Dopamine_library"
+            android:exported="false" />
+        <activity
+            android:name=".Dopamine_search"
+            android:exported="false" />
+        <activity
+            android:name=".library"
+            android:exported="false" />
+        <activity
+            android:name=".search"
+            android:exported="false" />
+        <activity
             android:name=".login"
             android:exported="true" />
         <activity
