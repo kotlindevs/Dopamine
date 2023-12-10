@@ -1,17 +1,11 @@
 package com.example.dopamine
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -63,24 +57,6 @@ class Dopamine_home : AppCompatActivity() {
             false
         }
 
-        binding.topAppBar.setOnClickListener {
-            val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
-            materialAlertDialogBuilder
-                .setTitle("Do You Want To Logout ?")
-                .setCancelable(false)
-                .setPositiveButton("Yes"){
-                        dialog,msg ->
-                    googleSession.userLogOut()
-                    firebaseAuth.signOut()
-                    dialog.dismiss()
-                }
-                .setNegativeButton("No"){
-                        dialog, _ ->
-                    dialog.dismiss()
-                }
-            materialAlertDialogBuilder.create().show()
-        }
-
         binding.settings.setOnClickListener {
             Toast.makeText(applicationContext,"Settings",Toast.LENGTH_SHORT).show()
         }
@@ -90,7 +66,8 @@ class Dopamine_home : AppCompatActivity() {
         }
 
         binding.UserImage.setOnClickListener {
-            Toast.makeText(applicationContext,"You",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,googleSession.sharedPreferences.getString("name",""),Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,DopamineUserProfile::class.java))
         }
     }
 }

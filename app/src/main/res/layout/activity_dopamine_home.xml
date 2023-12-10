@@ -23,7 +23,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/nav_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,24 +30,21 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                app:navigationIcon="@drawable/baseline_arrow_back_24"
-                app:title="Dopamine"
-                app:titleTextAppearance="@style/ToolbarTheme">
+                android:layout_height="52dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/UserImage"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="12dp" />
+                    android:layout_marginRight="14dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/notifications"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="12dp"
+                    android:layout_marginRight="14dp"
                     android:src="@drawable/baseline_circle_notifications_24" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -56,7 +52,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="12dp"
+                    android:layout_marginRight="14dp"
                     android:src="@drawable/baseline_settings_24" />
 
             </com.google.android.material.appbar.MaterialToolbar>
