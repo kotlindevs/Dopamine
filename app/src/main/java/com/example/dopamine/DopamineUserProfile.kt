@@ -21,12 +21,14 @@ class DopamineUserProfile : AppCompatActivity() {
         if(googleSession.sharedPreferences.getString("Mon","")!!.startsWith("+91")){
             val userPhoto = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/default-profile-picture-grey-male-icon.png"
             Glide.with(this).load(userPhoto).into(binding.UserPhoto)
+            binding.UserName.text = "Dopamine User"
+            binding.UserEmail.text = googleSession.sharedPreferences.getString("Mon","")
         }else{
             val userPhoto = googleSession.sharedPreferences.getString("photo","")
             Glide.with(this).load(userPhoto).into(binding.UserPhoto)
+            binding.UserEmail.text = googleSession.sharedPreferences.getString("email","")
+            binding.UserName.text = googleSession.sharedPreferences.getString("name","")
         }
-        binding.UserEmail.text = googleSession.sharedPreferences.getString("email","")
-        binding.UserName.text = googleSession.sharedPreferences.getString("name","")
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.logout ->{
