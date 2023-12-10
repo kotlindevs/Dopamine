@@ -32,6 +32,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="52dp">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:fontFamily="@font/circular_spotify"
+                    android:text="Good Greetings"
+                    android:textSize="22sp" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/UserImage"
                     android:layout_width="32dp"

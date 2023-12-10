@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 
 class Dopamine_home : AppCompatActivity() {
@@ -19,6 +21,15 @@ class Dopamine_home : AppCompatActivity() {
         googleSession = googleSession(this)
         firebaseAuth = FirebaseAuth.getInstance()
         setContentView(binding.root)
+
+        //Greeting Message Backend
+        val df = SimpleDateFormat("HH:mm:ss")
+        val formattedDate = df.format(Calendar.getInstance().time)
+        if(formattedDate == "00:00:00" || formattedDate == "12:00:00"){
+            binding.greeting.text = "Good Morning"
+        } else {
+            binding.greeting.text = "Good Evening"
+        }
 
         //Photo Fetching
         if(googleSession.sharedPreferences.getString("Mon","")!!.startsWith("+91")){
