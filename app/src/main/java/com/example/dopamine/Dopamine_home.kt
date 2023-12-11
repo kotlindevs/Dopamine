@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -46,6 +47,21 @@ class Dopamine_home : AppCompatActivity() {
         data_right.add(ItemsViewModel(R.drawable.eminem,"Eminem's \n Mocking Bird"))
         val adapter_right = MusicAdapter(data_right)
         recyclerViewRight.adapter = adapter_right
+
+        //Recycler View Charts
+        val recyclerViewChart = findViewById<RecyclerView>(R.id.music_chart)
+        recyclerViewChart.setHasFixedSize(true)
+        recyclerViewChart.layoutManager = LinearLayoutManager(this,recyclerViewChart.horizontalFadingEdgeLength,false)
+        val data_chart = ArrayList<ItemsViewModel>()
+        data_chart.add(ItemsViewModel((R.drawable.sia),"Sia"))
+        data_chart.add(ItemsViewModel((R.drawable.tth),"Top Hits"))
+        data_chart.add(ItemsViewModel((R.drawable.mix),"2010s Mix"))
+        data_chart.add(ItemsViewModel((R.drawable.blade_runner),"Narvent \n Fainted"))
+        data_chart.add(ItemsViewModel((R.drawable.imagine),"Imagine Dragons \n Thunder"))
+        data_chart.add(ItemsViewModel((R.drawable.lofi),"Binaural Beats"))
+        data_chart.add(ItemsViewModel((R.drawable.eminem),"Superman"))
+        val adapter_chart = MusicChartAdapter(data_chart)
+        recyclerViewChart.adapter = adapter_chart
 
 
         //Greeting Message Backend

@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MusicAdapter(private val mList: List<ItemsViewModel>) : RecyclerView.Adapter<MusicAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicAdapter.ViewHolder {
+class MusicChartAdapter(private val mList: List<ItemsViewModel>) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicChartAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.music_card, parent, false)
+            .inflate(R.layout.music_chart_card, parent, false)
 
         return ViewHolder(view)
     }
@@ -28,7 +28,7 @@ class MusicAdapter(private val mList: List<ItemsViewModel>) : RecyclerView.Adapt
     }
 
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView){
-        val imageView: ImageView = itemView.findViewById(R.id.music_img)
-        val textView: TextView = itemView.findViewById(R.id.music_name)
+        val imageView: ImageView = itemView.findViewById(R.id.music_chart_image)
+        val textView: TextView = itemView.findViewById(R.id.music_chart_content)
     }
 }
