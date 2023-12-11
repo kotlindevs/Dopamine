@@ -60,7 +60,7 @@ class Dopamine_home : AppCompatActivity() {
         data_chart.add(ItemsViewModel((R.drawable.imagine),"Thunder"))
         data_chart.add(ItemsViewModel((R.drawable.lofi),"Binaural Beats"))
         data_chart.add(ItemsViewModel((R.drawable.eminem),"Superman"))
-        val adapter_chart = MusicChartAdapter(data_chart)
+        val adapter_chart = MusicChartAdapter(applicationContext,data_chart)
         recyclerViewChart.adapter = adapter_chart
 
 
