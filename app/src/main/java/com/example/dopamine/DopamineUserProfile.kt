@@ -44,7 +44,7 @@ class DopamineUserProfile : AppCompatActivity() {
                         .setTitle("You Want To Logout ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes"){
-                                dialog,msg ->
+                                dialog, _ ->
                             googleSession.userLogOut()
                             firebaseAuth.signOut()
                             Toast.makeText(applicationContext,"Good bye 🥺",Toast.LENGTH_LONG).show()
