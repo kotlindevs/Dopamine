@@ -50,9 +50,13 @@ class Dopamine_home : AppCompatActivity() {
         val df = SimpleDateFormat("HH:mm:ss")
         val formattedDate = df.format(Calendar.getInstance().time)
         if(formattedDate == "00:00:00" || formattedDate == "12:00:00"){
-            binding.greeting.text = "Good Morning"
-        } else {
-            binding.greeting.text = "Good Evening"
+            binding.greeting.text = "Good Morning 🌅"
+        } else if(formattedDate == "12:00:01" || formattedDate == "16:00:00"){
+            binding.greeting.text = "Good Afternoon 🌞"
+        }else if(formattedDate == "16:00:01" || formattedDate == "18:40:00"){
+            binding.greeting.text = "Good Evening 🌇"
+        }else{
+            binding.greeting.text = "Good Night 🌙"
         }
 
         //Photo Fetching

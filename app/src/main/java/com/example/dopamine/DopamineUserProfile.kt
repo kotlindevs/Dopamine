@@ -1,9 +1,7 @@
 package com.example.dopamine
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -32,6 +30,10 @@ class DopamineUserProfile : AppCompatActivity() {
             Glide.with(this).load(userPhoto).into(binding.UserPhoto)
             binding.UserEmail.text = googleSession.sharedPreferences.getString("email","")
             binding.UserName.text = googleSession.sharedPreferences.getString("name","")
+        }
+        binding.topAppBar.setNavigationOnClickListener {
+            startActivity(Intent(this,Dopamine_home::class.java))
+            finish()
         }
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId){
