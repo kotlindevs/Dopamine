@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:layout_margin="8dp"
-    android:background="@drawable/music_card_bg"
+    android:layout_margin="4dp"
     app:cardElevation="4dp">
 
     <LinearLayout
+        android:background="@drawable/music_card_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -17,9 +17,8 @@
             android:id="@+id/music_img"
             android:src="@drawable/likedsongs"
             android:layout_gravity="center"
-            android:layout_marginStart="2dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="52dp"
+            android:layout_height="match_parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/music_name"
@@ -34,4 +33,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

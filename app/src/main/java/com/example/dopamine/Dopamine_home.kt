@@ -33,31 +33,34 @@ class Dopamine_home : AppCompatActivity() {
 
         val data_left = ArrayList<ItemsViewModel>()
         data_left.add(ItemsViewModel(R.drawable.likedsongs,"Liked Songs"))
-        data_left.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Today's Top Hits"))
-        data_left.add(ItemsViewModel(R.drawable.baseline_favorite_24,"2010s Mix"))
+        data_left.add(ItemsViewModel(R.drawable.tth,"Today's Top Hits"))
+        data_left.add(ItemsViewModel(R.drawable.mix,"2010s Mix"))
+        data_left.add(ItemsViewModel(R.drawable.sia,"sia - Unstoppable"))
         val adapter_left = MusicAdapter(data_left)
         recyclerViewLeft.adapter = adapter_left
 
         val data_right = ArrayList<ItemsViewModel>()
-        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Blade Runner"))
-        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"Imagine Dragons"))
-        data_right.add(ItemsViewModel(R.drawable.baseline_favorite_24,"chill lofi study \n beats"))
+        data_right.add(ItemsViewModel(R.drawable.blade_runner,"Blade Runner"))
+        data_right.add(ItemsViewModel(R.drawable.imagine,"Imagine Dragons"))
+        data_right.add(ItemsViewModel(R.drawable.lofi,"chill lofi study \n beats"))
+        data_right.add(ItemsViewModel(R.drawable.eminem,"Eminem's \n Mocking Bird"))
         val adapter_right = MusicAdapter(data_right)
         recyclerViewRight.adapter = adapter_right
 
 
         //Greeting Message Backend
-        val df = SimpleDateFormat("HH:mm:ss")
-        val formattedDate = df.format(Calendar.getInstance().time)
-        if(formattedDate == "00:00:00" || formattedDate == "12:00:00"){
-            binding.greeting.text = "Good Morning 🌅"
-        } else if(formattedDate == "12:00:01" || formattedDate == "16:00:00"){
-            binding.greeting.text = "Good Afternoon 🌞"
-        }else if(formattedDate == "16:00:01" || formattedDate == "18:40:00"){
-            binding.greeting.text = "Good Evening 🌇"
+        val fullTime  = Calendar.getInstance().time
+        val time = fullTime.hours
+        if(time >= 6 && time < 12 ){
+            binding.greeting.text = "Good Morning"
+        }else if(time >= 12 && time < 16  ){
+            binding.greeting.text = "Good Afternoon"
+        }else if (time >= 16 && time < 20 ){
+            binding.greeting.text = "Good Evening"
         }else{
-            binding.greeting.text = "Good Night 🌙"
+            binding.greeting.text = "Good Night"
         }
+
 
         //Photo Fetching
         if(googleSession.sharedPreferences.getString("Mon","")!!.startsWith("+91")){

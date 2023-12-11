@@ -85,7 +85,6 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/left_bar"
-                    android:layout_margin="4dp"
                     tools:itemCount="4"
                     tools:listitem="@layout/music_card"
                     android:layout_width="wrap_content"
@@ -93,7 +92,6 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/right_bar"
-                    android:layout_margin="4dp"
                     tools:itemCount="4"
                     tools:listitem="@layout/music_card"
                     android:layout_width="wrap_content"
