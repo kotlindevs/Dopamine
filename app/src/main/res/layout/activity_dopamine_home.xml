@@ -108,6 +108,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginBottom="2dp"
                     android:fontFamily="@font/circular_std"
                     android:text="Charts"
                     android:textSize="22sp"
@@ -115,6 +116,8 @@
                     android:layout_height="wrap_content"/>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:orientation="horizontal"
                         android:id="@+id/music_chart"
                         android:layout_width="match_parent"
