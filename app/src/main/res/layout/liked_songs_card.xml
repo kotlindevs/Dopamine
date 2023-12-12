@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="52dp">
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/likedsongs"
+            android:layout_width="52dp"
+            android:layout_height="52dp"/>
+
+        <LinearLayout
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/liked_song_name"
+                android:text="Music Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/proxima_nova"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/liked_song_artist"
+                android:text="Music Artist"
+                android:textSize="14sp"
+                android:fontFamily="@font/proxima_nova"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+
+
+        
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

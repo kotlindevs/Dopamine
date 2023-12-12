@@ -29,7 +29,6 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.imageView.setImageResource(ItemsViewModel.image)
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
-            Toast.makeText(context,ItemsViewModel.text,Toast.LENGTH_SHORT).show()
             if(ItemsViewModel.text == "Liked Songs"){
                 val i : Intent = Intent(context,Like_songs::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
