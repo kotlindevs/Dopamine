@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Dopamine"
         tools:targetApi="31">
         <activity
+            android:name=".Like_songs"
+            android:exported="false" />
+        <activity
             android:name=".DopamineUserProfile"
             android:exported="false" />
         <activity

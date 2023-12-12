@@ -1,6 +1,7 @@
 package com.example.dopamine
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,15 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
             Toast.makeText(context,ItemsViewModel.text,Toast.LENGTH_SHORT).show()
+            if(ItemsViewModel.text == "Liked Songs"){
+                val i : Intent = Intent(context,Like_songs::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(i)
+            }else if(ItemsViewModel.text == "Blade Runner") {
+                val i : Intent = Intent(context,DopamineUserProfile::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(i)
+            }
         }
     }
 
