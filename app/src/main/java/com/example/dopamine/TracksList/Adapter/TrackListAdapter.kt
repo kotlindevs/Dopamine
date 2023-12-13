@@ -40,7 +40,7 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
         holder.tracksName.text = tracks.song_name
         holder.tracksArtist.text = tracks.artist_name
         Glide.with(context)
-            .load(tracks.url)
+            .load(tracks.rc_url)
             .into(holder.tracksPhoto)
         holder.tracks.setOnClickListener {
             Toast.makeText(context,tracks.type,Toast.LENGTH_LONG).show()
@@ -52,7 +52,7 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
                     .putExtra("song_name",tracks.song_name)
                     .putExtra("type",tracks.type)
                     .putExtra("is_playable",tracks.is_playable)
-                    .putExtra("url",tracks.url)
+                    .putExtra("url",tracks.mp_url)
                     .putExtra("preview_url",tracks.preview_url)
                     .putExtra("release_date",tracks.release_date)
                 )
