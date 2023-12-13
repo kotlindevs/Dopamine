@@ -31,7 +31,6 @@ class MusicChartAdapter(private val context : Context,private val mList: List<It
         holder.songClick.setOnClickListener {
             Toast.makeText(context,ItemsViewModel.text,Toast.LENGTH_SHORT).show()
             val intent : Intent = Intent(context,DopamineUserProfile::class.java) //here change your playSong activity
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

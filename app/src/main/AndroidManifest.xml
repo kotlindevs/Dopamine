@@ -14,7 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dopamine"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".DopamineMuiscPlayer.MasterMusicPlayer"
+            android:exported="false" />
+        <activity
+            android:name=".TracksList.DopamineTracks"
+            android:exported="false" />
         <activity
             android:name=".Like_songs"
             android:exported="false" />
