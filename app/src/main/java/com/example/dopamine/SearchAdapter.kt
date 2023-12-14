@@ -8,10 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 
-class SearchAdapter(private val context: Context,private val mList: List<SearchModel>) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder {
+class SearchAdapter(private val context: Context,private val mList: List<Data>) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.search_activity_card,parent,false)
         return ViewHolder(view)
@@ -23,11 +24,14 @@ class SearchAdapter(private val context: Context,private val mList: List<SearchM
         val browse_click : MaterialCardView = itemView.findViewById(R.id.browse_all)
     }
 
-    override fun onBindViewHolder(holder: SearchAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val SearchModel = mList[position]
-        holder.imageView.setImageResource(SearchModel.image)
-        holder.textView.text = SearchModel.text
+        Glide.with(context)
+            .load(SearchModel.url)
+            .into(holder.imageView)
+        holder.textView.text = SearchModel.transformedLabel
         holder.browse_click.setOnClickListener {
+
         }
     }
 

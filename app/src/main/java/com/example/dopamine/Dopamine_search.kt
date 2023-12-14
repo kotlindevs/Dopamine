@@ -6,70 +6,22 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopamine.databinding.ActivityDopamineSearchBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class Dopamine_search : AppCompatActivity() {
     private lateinit var binding: ActivityDopamineSearchBinding
+    private lateinit var adapter: SearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityDopamineSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Recycler View Work
-        val recyclerViewLeft = findViewById<RecyclerView>(R.id.rv_left_browse)
-        val recyclerViewRight = findViewById<RecyclerView>(R.id.rv_right_browse)
-
-        recyclerViewLeft.layoutManager = LinearLayoutManager(this)
-        recyclerViewRight.layoutManager = LinearLayoutManager(this)
-
-        val data_left = ArrayList<SearchModel>()
-        data_left.add(SearchModel(R.drawable.likedsongs,"Wrapped"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Podcasts"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Made For You"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"2023 in Music"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Hindi"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Tamil"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Podcast Charts"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Video Podcasts"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Charts"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Pop"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Trending"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Discover"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Mood"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Devotional"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Hip Hop"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Student"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Gaming"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Workout"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"EQUAL"))
-        data_left.add(SearchModel(R.drawable.likedsongs,"Rock"))
-
-        val adapter_left = SearchAdapter(applicationContext,data_left)
-        recyclerViewLeft.adapter = adapter_left
-
-        val data_right = ArrayList<SearchModel>()
-        data_right.add(SearchModel(R.drawable.likedsongs,"Music"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Live Events"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"New Releases"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"2023 in Podcasts"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Hindi"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Tamil"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Podcast Charts"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Video Podcasts"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Charts"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Pop"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Trending"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Discover"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Mood"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Devotional"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Hip Hop"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Student"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Gaming"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Workout"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"EQUAL"))
-        data_right.add(SearchModel(R.drawable.likedsongs,"Rock"))
-        val adapter_right = SearchAdapter(applicationContext,data_right)
-        recyclerViewRight.adapter = adapter_right
-
+        binding.rvLeftBrowse.layoutManager = LinearLayoutManager(this)
+        binding.rvRightBrowse.layoutManager = LinearLayoutManager(this)
         binding.bottomNavigationView.setSelectedItemId(R.id.search)
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -97,5 +49,41 @@ class Dopamine_search : AppCompatActivity() {
             }
             false
         }
+
+        Retrofit.Builder()
+            .baseUrl("https://api.npoint.io/2d750257967d1836ebc1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SearchApi::class.java)
+            .browseAll()
+            .enqueue(object : Callback<List<Data>> {
+                override fun onResponse(call: Call<List<Data>>, response: Response<List<Data>>) {
+                    adapter = SearchAdapter(applicationContext,response.body()!!)
+                    binding.rvLeftBrowse.adapter = adapter
+                }
+
+                override fun onFailure(call: Call<List<Data>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+        Retrofit.Builder()
+            .baseUrl("https://api.npoint.io/bea4ee26ace677a5390d/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SearchApi::class.java)
+            .browseAll()
+            .enqueue(object : Callback<List<Data>> {
+                override fun onResponse(call: Call<List<Data>>, response: Response<List<Data>>) {
+                    adapter = SearchAdapter(applicationContext,response.body()!!)
+                    binding.rvRightBrowse.adapter = adapter
+                }
+
+                override fun onFailure(call: Call<List<Data>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
     }
 }
