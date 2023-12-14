@@ -10,4 +10,5 @@
     <string name="marathi">Marathi</string>
     <string name="dhwani_bhanushali">Dhwani Bhanushali</string>
     <string name="artist">Artist</string>
+    <string name="this_is_id_of_artist">this_is_id_of_artist</string>
 </resources>

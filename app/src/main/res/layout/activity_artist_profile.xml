@@ -6,4 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".Artist.ArtistProfile">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ArtistHeaderImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="center"
+        android:src="#AF7070"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ArtistProfileImage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:src="@color/black"
+        app:layout_constraintTop_toTopOf="@id/ArtistHeaderImage"
+        app:layout_constraintLeft_toLeftOf="@id/ArtistHeaderImage"
+        android:layout_marginTop="108dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="0dp"
+        app:civ_border_color="?attr/colorSecondary"
+        app:civ_border_width="3dp"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ArtistProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dhwani_bhanushali"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ArtistProfileImage"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ArtistProfileId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ArtistProfileName" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ArtistProfileId"
+        tools:listitem="@layout/tracks_list_layout_mdc"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
