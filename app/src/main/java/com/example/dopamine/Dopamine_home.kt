@@ -45,6 +45,7 @@ class Dopamine_home : AppCompatActivity() {
         data_left.add(ItemsViewModel(R.drawable.likedsongs,"Liked Songs"))
         data_left.add(ItemsViewModel(R.drawable.tth,"Today's Top Hits"))
         data_left.add(ItemsViewModel(R.drawable.mix,"2010s Mix"))
+        data_left.add(ItemsViewModel(R.drawable.sia,"sia-Unstoppable"))
         val adapter_left = MusicAdapter(applicationContext,data_left)
         recyclerViewLeft.adapter = adapter_left
 
@@ -52,6 +53,7 @@ class Dopamine_home : AppCompatActivity() {
         data_right.add(ItemsViewModel(R.drawable.blade_runner,"Blade Runner"))
         data_right.add(ItemsViewModel(R.drawable.imagine,"Imagine Dragons"))
         data_right.add(ItemsViewModel(R.drawable.lofi,"chill lofi study \n beats"))
+        data_right.add(ItemsViewModel(R.drawable.eminem,"Eminen \n Superman"))
         val adapter_right = MusicAdapter(applicationContext,data_right)
         recyclerViewRight.adapter = adapter_right
 
