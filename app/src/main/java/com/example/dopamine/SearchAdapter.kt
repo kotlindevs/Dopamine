@@ -28,7 +28,6 @@ class SearchAdapter(private val context: Context,private val mList: List<SearchM
         holder.imageView.setImageResource(SearchModel.image)
         holder.textView.text = SearchModel.text
         holder.browse_click.setOnClickListener {
-            Toast.makeText(context,position,Toast.LENGTH_SHORT).show()
         }
     }
 
