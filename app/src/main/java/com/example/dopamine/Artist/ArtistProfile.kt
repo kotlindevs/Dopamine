@@ -5,11 +5,15 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.dopamine.Artist.Adapter.ArtistAdapter
-import com.example.dopamine.R
+import com.example.dopamine.Artist.ArtistList.ArtistInterface
 import com.example.dopamine.TracksList.Adapter.TrackListAdapter
+import com.example.dopamine.TracksList.TracksDataClass.Track
 import com.example.dopamine.databinding.ActivityArtistProfileBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ArtistProfile : AppCompatActivity() {
     private lateinit var binding: ActivityArtistProfileBinding
@@ -38,5 +42,48 @@ class ArtistProfile : AppCompatActivity() {
 
 //        binding.ArtistProfileId.text = intent.getStringExtra("type")
         binding.ArtistProfileName.text = intent.getStringExtra("artist_name")
+
+        val id = intent.getStringExtra("id")
+        intent.getStringExtra("base_url")?.let {
+            val retrofit = Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(it)
+                .build()
+                .create(ArtistInterface::class.java)
+
+            if (id == "1OPqAyxsQc8mcRmoNBAnVk") {
+                retrofit.getDhwaniList()
+                    .enqueue(object : Callback<List<Track>> {
+                        override fun onResponse(
+                            call: Call<List<Track>>,
+                            response: Response<List<Track>>
+                        ) {
+                            adapter = TrackListAdapter(applicationContext, response.body()!!)
+                            binding.recyclerView.adapter = adapter
+                        }
+
+                        override fun onFailure(call: Call<List<Track>>, t: Throwable) {
+                            Log.d("UserVal", t.message.toString())
+                        }
+
+                    })
+            } else if (id == "4YRxDV8wJFPHPTeXepOstw") {
+                retrofit.getArijitsList()
+                    .enqueue(object : Callback<List<Track>> {
+                        override fun onResponse(
+                            call: Call<List<Track>>,
+                            response: Response<List<Track>>
+                        ) {
+                            adapter = TrackListAdapter(applicationContext, response.body()!!)
+                            binding.recyclerView.adapter = adapter
+                        }
+
+                        override fun onFailure(call: Call<List<Track>>, t: Throwable) {
+                            Log.d("UserVal", t.message.toString())
+                        }
+
+                    })
+            }
+        }
     }
 }
