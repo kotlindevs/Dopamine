@@ -49,30 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hindi" />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:id="@+id/TracksMarathi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/marathi" />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:id="@+id/TracksTelugu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/telugu" />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
+
         </LinearLayout>
     </HorizontalScrollView>
 
