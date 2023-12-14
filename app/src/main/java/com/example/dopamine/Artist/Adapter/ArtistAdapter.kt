@@ -20,7 +20,6 @@ class ArtistAdapter(val context: Context,val artistList : List<Artist>) : Recycl
     class ArtistViewHolder(artistViewData : View) : RecyclerView.ViewHolder(artistViewData) {
         val artistPhoto : CircleImageView = artistViewData.findViewById(R.id.ArtistPhoto)
         val artistName : MaterialTextView = artistViewData.findViewById(R.id.ArtistName)
-        val artistLike : FloatingActionButton = artistViewData.findViewById(R.id.isArtistLike)
         val artist : MaterialCardView = artistViewData.findViewById(R.id.artist)
     }
 
