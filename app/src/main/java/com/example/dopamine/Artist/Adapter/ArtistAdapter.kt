@@ -51,6 +51,7 @@ class ArtistAdapter(val context: Context,val artistList : List<Artist>) : Recycl
                     .putExtra("artist_name",artist.name)
                     .putExtra("type",artist.type)
                     .putExtra("profile_url",artist.ar_url)
+                    .putExtra("header_image",artist.hi_url)
                 )
         }
     }
