@@ -36,7 +36,7 @@ class Dopamine_home : AppCompatActivity() {
         //Recycler View Work
         val recyclerViewLeft = findViewById<RecyclerView>(R.id.left_bar)
         val recyclerViewRight = findViewById<RecyclerView>(R.id.right_bar)
-        binding.musicArtist.layoutManager = LinearLayoutManager(this)
+        binding.musicArtist.layoutManager = LinearLayoutManager(this,binding.musicArtist.horizontalFadingEdgeLength,false)
 
         recyclerViewLeft.layoutManager = LinearLayoutManager(this)
         recyclerViewRight.layoutManager = LinearLayoutManager(this)
