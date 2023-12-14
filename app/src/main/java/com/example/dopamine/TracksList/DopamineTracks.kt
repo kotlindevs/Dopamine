@@ -1,10 +1,9 @@
 package com.example.dopamine.TracksList
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dopamine.R
 import com.example.dopamine.TracksList.Adapter.TrackListAdapter
 import com.example.dopamine.TracksList.TrackListApi.TracksApi
 import com.example.dopamine.TracksList.TracksDataClass.Track

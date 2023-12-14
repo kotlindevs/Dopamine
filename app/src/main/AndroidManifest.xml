@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Artist.ArtistProfile"
+            android:exported="false" />
+        <activity
             android:name=".DopamineMuiscPlayer.MasterMusicPlayer"
             android:exported="false" />
         <activity
