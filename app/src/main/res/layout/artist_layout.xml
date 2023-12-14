@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/artist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="22dp"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_margin="17dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ArtistPhoto"
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                app:layout_constraintBottom_toTopOf="@id/ArtistName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/isArtistLike"
+                style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Tertiary"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:foreground="@drawable/favorite_24px"
+                android:foregroundGravity="center"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="@id/constraint"
+                app:layout_constraintRight_toRightOf="@id/constraint"
+                app:layout_constraintTop_toTopOf="@+id/ArtistPhoto"
+                app:layout_constraintVertical_bias="0.726" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/ArtistName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/dhwani_bhanushali"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/ArtistPhoto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
