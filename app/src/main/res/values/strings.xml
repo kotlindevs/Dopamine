@@ -3,4 +3,9 @@
     <string name="web_client_id">176373490775-vcmp0p6ssvu27j8h72kb5g99j7fmd7t0.apps.googleusercontent.com</string>
     <string name="sign_out">Sign Out</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all">All</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="telugu">Telugu</string>
+    <string name="marathi">Marathi</string>
 </resources>
