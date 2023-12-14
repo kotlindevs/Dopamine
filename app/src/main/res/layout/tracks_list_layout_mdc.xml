@@ -16,13 +16,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp">
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/TracksCardViewForPhoto"
-                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:padding="7dp"
@@ -35,8 +36,8 @@
                     android:layout_gravity="center">
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/TracksPhoto"
-                        android:layout_width="52dp"
-                        android:layout_height="52dp" />
+                        android:layout_width="64dp"
+                        android:layout_height="64dp" />
                 </com.google.android.material.card.MaterialCardView>
             </com.google.android.material.card.MaterialCardView>
             <com.google.android.material.textview.MaterialTextView
