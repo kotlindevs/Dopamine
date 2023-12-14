@@ -19,8 +19,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint"
             android:layout_margin="8dp"
-            android:layout_width="128dp"
-            android:layout_height="128dp">
+            android:layout_width="124dp"
+            android:layout_height="148dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ArtistPhoto"
