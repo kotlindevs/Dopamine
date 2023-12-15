@@ -6,61 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".TracksList.DopamineTracks">
 
-    <HorizontalScrollView
-        android:layout_marginTop="28dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/SortView"
-        android:fadeScrollbars="true"
-        android:scrollbars="none"
-        android:overScrollMode="ifContentScrolls"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/TracksAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/all" />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:id="@+id/TracksEnglish"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/english" />
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
-            <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:id="@+id/TracksHindi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hindi" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        tools:listitem="@layout/music_card"
+        tools:itemCount="12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SortView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
