@@ -42,7 +42,6 @@ class ArtistAdapter(val context: Context,val artistList : List<Artist>) : Recycl
             .load(artist.ar_url)
             .into(holder.artistPhoto)
         holder.artist.setOnClickListener {
-            Toast.makeText(context,artist.name, Toast.LENGTH_LONG).show()
             context
                 .startActivity(
                     Intent(context, ArtistProfile::class.java)

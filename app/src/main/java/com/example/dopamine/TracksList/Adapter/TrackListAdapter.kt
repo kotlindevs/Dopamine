@@ -2,6 +2,7 @@ package com.example.dopamine.TracksList.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,10 +41,10 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
         holder.tracksName.text = tracks.song_name
         holder.tracksArtist.text = tracks.artist_name
         Glide.with(context)
-            .load(tracks.rc_url)
+            .load(tracks.mp_url)
             .into(holder.tracksPhoto)
         holder.tracks.setOnClickListener {
-            Toast.makeText(context,tracks.type,Toast.LENGTH_LONG).show()
+            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
