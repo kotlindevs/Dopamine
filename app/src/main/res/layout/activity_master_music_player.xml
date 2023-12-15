@@ -17,6 +17,13 @@
         app:icon="@drawable/ic_back"
         app:iconGravity="start"/>
 
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/stylePLayer"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        app:surface_type="texture_view"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/TracksName"
         android:layout_width="256dp"
