@@ -3,6 +3,8 @@ package com.example.dopamine.DopamineMuiscPlayer
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -22,7 +24,7 @@ class MasterMusicPlayer : AppCompatActivity(){
         setContentView(binding.root)
         mediaPlayer = MediaPlayer()
 
-        binding.musicSeekBar.progress = 0
+        binding.musicSeekBar.max = mediaPlayer.duration
 
         Glide.with(applicationContext)
             .load(intent.getStringExtra("url").toString().toUri())
@@ -50,29 +52,27 @@ class MasterMusicPlayer : AppCompatActivity(){
 
         prepareMediaPlayer()
 
+        binding.musicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                mediaPlayer.seekTo(progress)
+                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+            }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                val playPos = (mediaPlayer.duration /100) * seekBar!!.progress
+                mediaPlayer.seekTo(playPos)
+            }
 
-//        binding.musicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                mediaPlayer.seekTo(progress)
-//                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//                val playPos = (mediaPlayer.duration /100) * seekBar!!.progress
-//                mediaPlayer.seekTo(playPos)
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                val stopPos = (mediaPlayer.duration /100) * seekBar!!.progress
-//                mediaPlayer.seekTo(stopPos)
-//            }
-//        })
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                val stopPos = (mediaPlayer.duration /100) * seekBar!!.progress
+                mediaPlayer.seekTo(stopPos)
+            }
+        })
 
         mediaPlayer.setOnCompletionListener {
             binding.playPause.setImageResource(R.drawable.baseline_favorite_24)
-            binding.musicSeekBar.progress = 0
         }
+
     }
 
     private fun prepareMediaPlayer() {
@@ -86,7 +86,8 @@ class MasterMusicPlayer : AppCompatActivity(){
     }
     private fun updateSeekBar(){
         if(mediaPlayer.isPlaying){
-            binding.musicSeekBar.progress = ((mediaPlayer.currentPosition/mediaPlayer.duration)*100)
+            binding.musicSeekBar.progress = (mediaPlayer.currentPosition)
+            Log.d("Progress", mediaPlayer.currentPosition.toString())
             handler.postDelayed(runnable,1000)
         }
     }
