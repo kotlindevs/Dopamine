@@ -36,10 +36,10 @@ class MasterMusicPlayer : AppCompatActivity(){
             if(mediaPlayer.isPlaying){
                 handler.removeCallbacks(runnable)
                 mediaPlayer.pause()
-                binding.playPause.setImageResource(R.drawable.baseline_favorite_border_24)
+                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
             }else{
                 mediaPlayer.start()
-                binding.playPause.setImageResource(R.drawable.baseline_favorite_24)
+                binding.playPause.setImageResource(R.drawable.baseline_pause_circle_24)
                 updateSeekBar()
             }
         }
@@ -70,7 +70,7 @@ class MasterMusicPlayer : AppCompatActivity(){
         })
 
         mediaPlayer.setOnCompletionListener {
-            binding.playPause.setImageResource(R.drawable.baseline_favorite_24)
+            binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
         }
 
     }
