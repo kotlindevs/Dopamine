@@ -1,4 +1,4 @@
-package com.example.dopamine
+package com.example.dopamine.authentication
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.dopamine.Dopamine_home
+import com.example.dopamine.R
 import com.example.dopamine.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if(googleSession.isUserLogin()){
-            startActivity(Intent(this,Dopamine_home::class.java))
+            startActivity(Intent(this, Dopamine_home::class.java))
             finish()
         }
 
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this,signInOptions)
 
         binding.signPhone.setOnClickListener{
-            startActivity(Intent(applicationContext,continue_with_phone::class.java))
+            startActivity(Intent(applicationContext, continue_with_phone::class.java))
         }
 
         binding.signGoogle.setOnClickListener{
@@ -103,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                             userDetail?.photoUrl.toString(),
                             userDetail?.displayName.toString()
                         )
-                    startActivity(Intent(this,Dopamine_home::class.java)
+                    startActivity(Intent(this, Dopamine_home::class.java)
                         .putExtra("UserEmail",userDetail?.email)
                         .putExtra("UserPhoto",userDetail?.photoUrl)
                         .putExtra("UserName",userDetail?.displayName))

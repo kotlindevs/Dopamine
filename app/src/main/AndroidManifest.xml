@@ -47,13 +47,13 @@
             android:name=".login"
             android:exported="true" />
         <activity
-            android:name=".continue_with_phone_otp"
+            android:name=".authentication.continue_with_phone_otp"
             android:exported="true" />
         <activity
             android:name=".Dopamine_home"
             android:exported="true" />
         <activity
-            android:name=".continue_with_phone"
+            android:name=".authentication.continue_with_phone"
             android:exported="true" />
         <activity
             android:name=".sign_up_free_pass"
@@ -62,7 +62,7 @@
             android:name=".sign_up_free"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".authentication.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.example.dopamine
+package com.example.dopamine.authentication
 
 import android.content.Context
 import android.content.Intent
@@ -39,7 +39,7 @@ class googleSession(var context: Context) {
     fun userLogOut(){
         editor.clear()
         editor.commit()
-        val i : Intent = Intent(context,MainActivity::class.java)
+        val i : Intent = Intent(context, MainActivity::class.java)
             .setAction(Intent.ACTION_VIEW)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

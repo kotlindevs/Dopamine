@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.Artist.Adapter.ArtistAdapter
 import com.example.dopamine.Artist.ArtistData.Artist
 import com.example.dopamine.Artist.ArtistList.ArtistInterface
+import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call

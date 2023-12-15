@@ -1,4 +1,4 @@
-package com.example.dopamine
+package com.example.dopamine.authentication
 
 import android.content.Intent
 import android.os.Bundle
@@ -44,7 +44,7 @@ class continue_with_phone : AppCompatActivity() {
                 super.onCodeSent(p0, p1)
                 verificationId=p0
                 resendToken=p1
-                val intent=Intent(applicationContext,continue_with_phone_otp::class.java)
+                val intent=Intent(applicationContext, continue_with_phone_otp::class.java)
                 intent.putExtra("verifyId",verificationId)
                 Log.d("verifyId",verificationId)
                 startActivity(intent)
