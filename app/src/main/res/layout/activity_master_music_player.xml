@@ -103,7 +103,8 @@
         <SeekBar
             android:id="@+id/music_seek_bar"
             android:layout_width="200dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:progress="0"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/track_end"

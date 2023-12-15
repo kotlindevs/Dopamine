@@ -1,6 +1,7 @@
 package com.example.dopamine.DopamineMuiscPlayer
 
 import android.media.MediaPlayer
+import android.media.session.MediaSession
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -18,13 +19,36 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var binding: ActivityMasterMusicPlayerBinding
     private var handler: Handler = Handler()
     private lateinit var runnable: Runnable
+    private lateinit var musicSession: musicSession
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMasterMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mediaPlayer = MediaPlayer()
+        musicSession = musicSession(this)
 
-        binding.musicSeekBar.max = mediaPlayer.duration
+        if(musicSession.isSongRunning() && musicSession.isPlaying()){
+            showToast("well")
+        }
+
+        try {
+            mediaPlayer.setDataSource(applicationContext,intent.getStringExtra("preview_url")!!.toUri())
+            mediaPlayer.prepare()
+            binding.trackEnd.text = milliSecondToTime(mediaPlayer.duration.toLong())
+            binding.musicSeekBar.max = mediaPlayer.duration
+            musicSession.setMusicPlayer(
+                intent.getStringExtra("id")!!,
+                intent.getStringExtra("artist_name")!!,
+                intent.getStringExtra("song_name")!!,
+                intent.getStringExtra("url")!!,
+                intent.getStringExtra("preview_url")!!,
+                intent.getStringExtra("type")!!,
+                intent.getStringExtra("release_date")!!,
+                intent.getBooleanExtra("is_playable",true)
+                )
+        }catch (e : Exception){
+            showToast(e.message.toString())
+        }
 
         Glide.with(applicationContext)
             .load(intent.getStringExtra("url").toString().toUri())
@@ -47,48 +71,38 @@ class MasterMusicPlayer : AppCompatActivity(){
         runnable= Runnable {
             binding.musicSeekBar.setProgress(mediaPlayer.currentPosition,true)
             binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+            musicSession.currentPos(mediaPlayer.currentPosition)
             updateSeekBar()
         }
 
-        prepareMediaPlayer()
-
         binding.musicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mediaPlayer.seekTo(progress)
-                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                if(fromUser) {
+                    mediaPlayer.seekTo(progress)
+                    binding.trackStart.text =
+                        milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                val playPos = (mediaPlayer.duration /100) * seekBar!!.progress
-                mediaPlayer.seekTo(playPos)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                val stopPos = (mediaPlayer.duration /100) * seekBar!!.progress
-                mediaPlayer.seekTo(stopPos)
             }
         })
 
         mediaPlayer.setOnCompletionListener {
+            Log.d("UserVal","Called")
             binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
-        }
-
-    }
-
-    private fun prepareMediaPlayer() {
-        try {
-            mediaPlayer.setDataSource(applicationContext,intent.getStringExtra("preview_url")!!.toUri())
-            mediaPlayer.prepare()
-            binding.trackEnd.text = milliSecondToTime(mediaPlayer.duration.toLong())
-        }catch (e : Exception){
-            showToast(e.message.toString())
+            binding.musicSeekBar.progress = 0
         }
     }
+
     private fun updateSeekBar(){
         if(mediaPlayer.isPlaying){
-            binding.musicSeekBar.progress = (mediaPlayer.currentPosition)
+            binding.musicSeekBar.progress = mediaPlayer.currentPosition
             Log.d("Progress", mediaPlayer.currentPosition.toString())
-            handler.postDelayed(runnable,1000)
+            handler.postDelayed(runnable,100)
         }
     }
 
@@ -115,5 +129,12 @@ class MasterMusicPlayer : AppCompatActivity(){
 
     private fun showToast(str : String) {
         Toast.makeText(applicationContext,str,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(mediaPlayer.isPlaying){
+            showToast("You are playing song in background.")
+        }
     }
 }
