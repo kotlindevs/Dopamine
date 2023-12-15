@@ -3,6 +3,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DopamineMuiscPlayer.MasterMusicPlayer">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:icon="@drawable/ic_back"
+        app:iconGravity="start"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TracksName"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settingButton"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:text="@string/radha"
+        android:textSize="22sp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingButton"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:icon="@drawable/baseline_settings_24"
+        app:iconGravity="textEnd"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/TracksPhotoCard"
+        android:layout_width="270dp"
+        android:layout_height="270dp"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TracksName"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="72dp"
+        android:padding="32dp">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/TracksPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/sia" />
+        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TrackStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TracksPhotoCard"
+        app:layout_constraintEnd_toStartOf="@id/TracksPreview"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="6dp"
+        android:gravity="center"
+        android:text="@string/_00_00" />
+
+    <SeekBar
+        android:id="@+id/TracksPreview"
+        android:layout_width="294dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="12dp"
+        android:foregroundGravity="center"
+        app:layout_constraintStart_toEndOf="@id/TrackStart"
+        app:layout_constraintTop_toBottomOf="@id/TracksPhotoCard" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TrackEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TracksPhotoCard"
+        app:layout_constraintStart_toEndOf="@id/TracksPreview"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:text="@string/_99_99" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/previousButton"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="72dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TracksPreview"
+        app:icon="@drawable/ic_back"
+        app:iconGravity="start"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/play_pause"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toEndOf="@id/previousButton"
+        app:layout_constraintTop_toBottomOf="@id/TracksPreview"
+        app:icon="@drawable/favorite_24px"
+        app:iconGravity="start"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toEndOf="@id/play_pause"
+        app:layout_constraintTop_toBottomOf="@id/TracksPreview"
+        app:icon="@drawable/ic_back"
+        app:iconGravity="start"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
