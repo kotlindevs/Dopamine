@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,18 +16,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/circular_spotify"
-            android:text="Library Activity"
-            android:textSize="28sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="52dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/UserImage"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="12dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:fontFamily="@font/circular_spotify"
+                    android:text="Your Library"
+                    android:textSize="22sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/notifications"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="14dp"
+                    android:src="@drawable/baseline_add_24" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/settings"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="14dp"
+                    android:src="@drawable/baseline_search_24" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
