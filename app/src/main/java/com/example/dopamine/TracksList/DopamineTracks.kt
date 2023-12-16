@@ -2,6 +2,7 @@ package com.example.dopamine.TracksList
 
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dopamine.TracksList.Adapter.TrackListAdapter
@@ -43,5 +44,6 @@ class DopamineTracks : AppCompatActivity() {
                 }
 
             })
+
     }
 }
