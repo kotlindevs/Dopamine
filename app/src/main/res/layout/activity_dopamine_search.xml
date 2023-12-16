@@ -51,8 +51,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/settings"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="right"
                     android:layout_marginRight="14dp"
                     android:src="@drawable/outline_camera_enhance_24" />
