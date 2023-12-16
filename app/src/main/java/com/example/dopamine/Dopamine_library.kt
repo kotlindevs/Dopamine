@@ -27,7 +27,7 @@ class Dopamine_library : AppCompatActivity() {
             val userPhoto = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/default-profile-picture-grey-male-icon.png"
             Glide.with(this).load(userPhoto).into(binding.UserImage)
         } else {
-            val userPhoto = googleSession.sharedPreferences.getString("Photo","")
+            val userPhoto = googleSession.sharedPreferences.getString("photo","")
             Glide.with(this).load(userPhoto).into(binding.UserImage)
         }
 
