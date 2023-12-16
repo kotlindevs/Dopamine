@@ -82,11 +82,6 @@ class MasterMusicPlayer : AppCompatActivity(){
             binding.musicSeekBar.progress = 0
         }
 
-        onBackPressedDispatcher.addCallback {
-            if(mediaPlayer.isPlaying){
-                showToast("If you are exist from activity then musicPLayer will be stopped !")
-            }
-        }
     }
 
     private fun updateSeekBar(){
@@ -124,20 +119,14 @@ class MasterMusicPlayer : AppCompatActivity(){
 
     override fun onPause() {
         super.onPause()
-        if(mediaPlayer.isPlaying){
-            showToast("You are running in background")
-            Log.d("UserVal","pause")
-        }
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("UserVal","stop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.stop()
-        Log.d("UserVal","destroy")
     }
 }
