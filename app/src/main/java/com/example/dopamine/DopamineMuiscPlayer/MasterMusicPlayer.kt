@@ -1,5 +1,6 @@
 package com.example.dopamine.DopamineMuiscPlayer
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.media.session.MediaSession
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
@@ -79,6 +81,12 @@ class MasterMusicPlayer : AppCompatActivity(){
             binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
             binding.musicSeekBar.progress = 0
         }
+
+        onBackPressedDispatcher.addCallback {
+            if(mediaPlayer.isPlaying){
+                showToast("If you are exist from activity then musicPLayer will be stopped !")
+            }
+        }
     }
 
     private fun updateSeekBar(){
@@ -117,7 +125,19 @@ class MasterMusicPlayer : AppCompatActivity(){
     override fun onPause() {
         super.onPause()
         if(mediaPlayer.isPlaying){
-            showToast("You are playing song in background.")
+            showToast("You are running in background")
+            Log.d("UserVal","pause")
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("UserVal","stop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
+        Log.d("UserVal","destroy")
     }
 }
