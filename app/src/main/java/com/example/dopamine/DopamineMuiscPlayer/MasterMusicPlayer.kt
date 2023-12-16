@@ -19,33 +19,17 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var binding: ActivityMasterMusicPlayerBinding
     private var handler: Handler = Handler()
     private lateinit var runnable: Runnable
-    private lateinit var musicSession: musicSession
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMasterMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mediaPlayer = MediaPlayer()
-        musicSession = musicSession(this)
-
-        if(musicSession.isSongRunning() && musicSession.isPlaying()){
-            showToast("well")
-        }
 
         try {
             mediaPlayer.setDataSource(applicationContext,intent.getStringExtra("preview_url")!!.toUri())
             mediaPlayer.prepare()
             binding.trackEnd.text = milliSecondToTime(mediaPlayer.duration.toLong())
             binding.musicSeekBar.max = mediaPlayer.duration
-            musicSession.setMusicPlayer(
-                intent.getStringExtra("id")!!,
-                intent.getStringExtra("artist_name")!!,
-                intent.getStringExtra("song_name")!!,
-                intent.getStringExtra("url")!!,
-                intent.getStringExtra("preview_url")!!,
-                intent.getStringExtra("type")!!,
-                intent.getStringExtra("release_date")!!,
-                intent.getBooleanExtra("is_playable",true)
-                )
         }catch (e : Exception){
             showToast(e.message.toString())
         }
@@ -71,7 +55,6 @@ class MasterMusicPlayer : AppCompatActivity(){
         runnable= Runnable {
             binding.musicSeekBar.setProgress(mediaPlayer.currentPosition,true)
             binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-            musicSession.currentPos(mediaPlayer.currentPosition)
             updateSeekBar()
         }
 
