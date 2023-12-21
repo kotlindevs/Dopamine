@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopamine.TracksList.DopamineTracks
 import com.google.android.material.card.MaterialCardView
@@ -29,14 +30,12 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.imageView.setImageResource(ItemsViewModel.image)
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
-            if(ItemsViewModel.text == "Top 50 India"){
+            if(ItemsViewModel.text == "Liked Songs"){
                 val i : Intent = Intent(context,DopamineTracks::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(i)
-            }else if(ItemsViewModel.text == "Top 50 Global") {
-                val i : Intent = Intent(context,DopamineUserProfile::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(i)
+            }else if(ItemsViewModel.text == "Blade Runner") {
+                //
             }
         }
     }
