@@ -29,11 +29,11 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.imageView.setImageResource(ItemsViewModel.image)
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
-            if(ItemsViewModel.text == "Liked Songs"){
+            if(ItemsViewModel.text == "Top 50 India"){
                 val i : Intent = Intent(context,DopamineTracks::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(i)
-            }else if(ItemsViewModel.text == "Blade Runner") {
+            }else if(ItemsViewModel.text == "Top 50 Global") {
                 val i : Intent = Intent(context,DopamineUserProfile::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(i)
