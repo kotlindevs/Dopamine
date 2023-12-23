@@ -17,7 +17,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="right"
-            android:src="@drawable/likedsongs" />
+            android:src="@drawable/icons8_batman" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/browse_text"

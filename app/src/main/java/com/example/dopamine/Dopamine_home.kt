@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.Artist.Adapter.ArtistAdapter
 import com.example.dopamine.Artist.ArtistData.Artist
 import com.example.dopamine.Artist.ArtistList.ArtistInterface
+import com.example.dopamine.OldButGold.Chart
+import com.example.dopamine.OldButGold.ChartsApi
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -24,9 +26,13 @@ import java.util.Calendar
 
 class Dopamine_home : AppCompatActivity() {
     private lateinit var binding: ActivityDopamineHomeBinding
+    private lateinit var adapter: MusicChartAdapter
+    val baseUrl = "https://api.npoint.io/504ec4f9cb720cbeb8df/"
+
     private lateinit var googleSession: googleSession
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var artistAdapter: ArtistAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
@@ -43,35 +49,41 @@ class Dopamine_home : AppCompatActivity() {
         recyclerViewRight.layoutManager = LinearLayoutManager(this)
 
         val data_left = ArrayList<ItemsViewModel>()
-        data_left.add(ItemsViewModel(R.drawable.likedsongs,"Liked Songs"))
-        data_left.add(ItemsViewModel(R.drawable.tth,"Today's Top Hits"))
-        data_left.add(ItemsViewModel(R.drawable.mix,"2010s Mix"))
-        data_left.add(ItemsViewModel(R.drawable.sia,"sia-Unstoppable"))
+        data_left.add(ItemsViewModel(R.drawable.dopamine,"Dopamine's Picks"))
+        data_left.add(ItemsViewModel(R.drawable.baseline_headphones_24,"Bollywood"))
+        data_left.add(ItemsViewModel(R.drawable.icons8_batman,"Phonk"))
+        data_left.add(ItemsViewModel(R.drawable.icons8_minecraft,"Gaming"))
         val adapter_left = MusicAdapter(applicationContext,data_left)
         recyclerViewLeft.adapter = adapter_left
 
         val data_right = ArrayList<ItemsViewModel>()
-        data_right.add(ItemsViewModel(R.drawable.blade_runner,"Blade Runner"))
-        data_right.add(ItemsViewModel(R.drawable.imagine,"Imagine Dragons"))
-        data_right.add(ItemsViewModel(R.drawable.lofi,"chill lofi study \n beats"))
-        data_right.add(ItemsViewModel(R.drawable.eminem,"Eminen \n Superman"))
+        data_right.add(ItemsViewModel(R.drawable.trending,"Trending"))
+        data_right.add(ItemsViewModel(R.drawable.baseline_bluetooth_drive_24,"Travelling"))
+        data_right.add(ItemsViewModel(R.drawable.icons8_joker_dc,"Remix"))
+        data_right.add(ItemsViewModel(R.drawable.baseline_directions_bike_24,"Gym & Workout"))
         val adapter_right = MusicAdapter(applicationContext,data_right)
         recyclerViewRight.adapter = adapter_right
 
-        //Recycler View Charts
+        //Recycler View Old But Gold
         val recyclerViewChart = findViewById<RecyclerView>(R.id.music_chart)
         recyclerViewChart.setHasFixedSize(true)
         recyclerViewChart.layoutManager = LinearLayoutManager(this,recyclerViewChart.horizontalFadingEdgeLength,false)
-        val data_chart = ArrayList<ItemsViewModel>()
-        data_chart.add(ItemsViewModel((R.drawable.sia),"Sia"))
-        data_chart.add(ItemsViewModel((R.drawable.tth),"Top Hits"))
-        data_chart.add(ItemsViewModel((R.drawable.mix),"2010s Mix"))
-        data_chart.add(ItemsViewModel((R.drawable.blade_runner),"Narvent Fainted"))
-        data_chart.add(ItemsViewModel((R.drawable.imagine),"Thunder"))
-        data_chart.add(ItemsViewModel((R.drawable.lofi),"Binaural Beats"))
-        data_chart.add(ItemsViewModel((R.drawable.eminem),"Superman"))
-        val adapter_chart = MusicChartAdapter(applicationContext,data_chart)
-        recyclerViewChart.adapter = adapter_chart
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ChartsApi::class.java)
+            .getCharts()
+            .enqueue(object : Callback<List<Chart>>{
+                override fun onResponse(call: Call<List<Chart>>, response: Response<List<Chart>>) {
+                    adapter = MusicChartAdapter(applicationContext,response.body()!!)
+                    recyclerViewChart.adapter = adapter
+                }
+
+                override fun onFailure(call: Call<List<Chart>>, t: Throwable) {
+                    //
+                }
+            })
 
 
         //Greeting Message Backend

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
         
         <com.google.android.material.imageview.ShapeableImageView
-            android:src="@drawable/likedsongs"
+            android:src="@drawable/icons8_batman"
             android:layout_width="52dp"
             android:layout_height="52dp"/>
 

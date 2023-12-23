@@ -61,7 +61,7 @@
             android:id="@+id/TracksPhoto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/imagine" />
+            android:src="@drawable/icons8_batman" />
 
 
     </com.google.android.material.card.MaterialCardView>

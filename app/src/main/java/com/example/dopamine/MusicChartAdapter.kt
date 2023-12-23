@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
+import com.example.dopamine.OldButGold.Chart
 import com.google.android.material.card.MaterialCardView
 
-class MusicChartAdapter(private val context : Context,private val mList: List<ItemsViewModel>) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
+class MusicChartAdapter(val context : Context,private val mList: List<Chart>) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicChartAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.music_chart_card, parent, false)
@@ -25,14 +27,24 @@ class MusicChartAdapter(private val context : Context,private val mList: List<It
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val ItemsViewModel = mList[position]
-        holder.imageView.setImageResource(ItemsViewModel.image)
-        holder.textView.text = ItemsViewModel.text
-        holder.songClick.setOnClickListener {
-            Toast.makeText(context,ItemsViewModel.text,Toast.LENGTH_SHORT).show()
-            val intent : Intent = Intent(context,DopamineUserProfile::class.java) //here change your playSong activity
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
+        val Chart = mList[position]
+        holder.textView.text = Chart.song_name
+        Glide.with(context)
+            .load(Chart.mp_url)
+            .into(holder.imageView)
+        holder.songClick.setOnClickListener{
+            context
+                .startActivity(Intent(context,MasterMusicPlayer::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra("id",Chart.id)
+                    .putExtra("artist_name",Chart.artist_name)
+                    .putExtra("song_name",Chart.song_name)
+                    .putExtra("type",Chart.type)
+                    .putExtra("is_playable",Chart.is_playable)
+                    .putExtra("url",Chart.mp_url)
+                    .putExtra("preview_url",Chart.preview_url)
+                    .putExtra("release_date",Chart.release_date)
+                )
         }
     }
 

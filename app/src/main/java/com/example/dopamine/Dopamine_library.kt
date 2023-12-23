@@ -3,6 +3,7 @@ package com.example.dopamine
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineLibraryBinding
@@ -56,6 +57,12 @@ class Dopamine_library : AppCompatActivity() {
                 }
             }
             false
+        }
+
+        binding.UserImage.setOnClickListener {
+            Toast.makeText(applicationContext,googleSession.sharedPreferences.getString("name",""),
+                Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,DopamineUserProfile::class.java))
         }
     }
 }

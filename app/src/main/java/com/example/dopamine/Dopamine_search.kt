@@ -3,6 +3,7 @@ package com.example.dopamine
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -64,6 +65,12 @@ class Dopamine_search : AppCompatActivity() {
                 }
             }
             false
+        }
+
+        binding.UserImage.setOnClickListener {
+            Toast.makeText(applicationContext,googleSession.sharedPreferences.getString("name",""),
+                Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,DopamineUserProfile::class.java))
         }
 
         Retrofit.Builder()

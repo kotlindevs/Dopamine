@@ -16,10 +16,11 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/music_img"
-            android:src="@drawable/likedsongs"
+            android:src="@drawable/icons8_batman"
             android:layout_gravity="center"
-            android:layout_width="52dp"
-            android:layout_height="match_parent" />
+            android:layout_marginStart="4dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/music_name"
