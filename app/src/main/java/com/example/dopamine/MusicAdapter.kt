@@ -30,7 +30,7 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.imageView.setImageResource(ItemsViewModel.image)
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
-            if(ItemsViewModel.text == "Dopamine"){
+            if(ItemsViewModel.text == "Dopamine's Picks"){
                 val i : Intent = Intent(context,DopamineTracks::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(i)

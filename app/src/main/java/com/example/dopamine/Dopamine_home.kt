@@ -50,17 +50,17 @@ class Dopamine_home : AppCompatActivity() {
 
         val data_left = ArrayList<ItemsViewModel>()
         data_left.add(ItemsViewModel(R.drawable.dopamine,"Dopamine's Picks"))
-        data_left.add(ItemsViewModel(R.drawable.baseline_headphones_24,"Bollywood"))
-        data_left.add(ItemsViewModel(R.drawable.icons8_batman,"Phonk"))
-        data_left.add(ItemsViewModel(R.drawable.icons8_minecraft,"Gaming"))
+        data_left.add(ItemsViewModel(R.drawable.bollywood,"Bollywood"))
+        data_left.add(ItemsViewModel(R.drawable.phonk,"Phonk"))
+        data_left.add(ItemsViewModel(R.drawable.gaming,"Gaming and chill"))
         val adapter_left = MusicAdapter(applicationContext,data_left)
         recyclerViewLeft.adapter = adapter_left
 
         val data_right = ArrayList<ItemsViewModel>()
         data_right.add(ItemsViewModel(R.drawable.trending,"Trending"))
-        data_right.add(ItemsViewModel(R.drawable.baseline_bluetooth_drive_24,"Travelling"))
-        data_right.add(ItemsViewModel(R.drawable.icons8_joker_dc,"Remix"))
-        data_right.add(ItemsViewModel(R.drawable.baseline_directions_bike_24,"Gym & Workout"))
+        data_right.add(ItemsViewModel(R.drawable.travel,"Travelling"))
+        data_right.add(ItemsViewModel(R.drawable.remix,"Remix"))
+        data_right.add(ItemsViewModel(R.drawable.gym,"Gym & Workout"))
         val adapter_right = MusicAdapter(applicationContext,data_right)
         recyclerViewRight.adapter = adapter_right
 

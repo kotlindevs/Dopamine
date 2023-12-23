@@ -18,9 +18,8 @@
             android:id="@+id/music_img"
             android:src="@drawable/icons8_batman"
             android:layout_gravity="center"
-            android:layout_marginStart="4dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="52dp"
+            android:layout_height="match_parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/music_name"
