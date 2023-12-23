@@ -44,7 +44,7 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
             .load(tracks.mp_url)
             .into(holder.tracksPhoto)
         holder.tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
+            tracks.rc_url?.let { it1 -> Log.d("TracksPhoto", it1) }
             context
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
