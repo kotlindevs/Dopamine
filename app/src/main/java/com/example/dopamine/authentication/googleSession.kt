@@ -3,6 +3,7 @@ package com.example.dopamine.authentication
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import java.text.FieldPosition
 
 class googleSession(var context: Context) {
     lateinit var sharedPreferences : SharedPreferences
@@ -36,6 +37,19 @@ class googleSession(var context: Context) {
         editor.putString("str",str)
         editor.commit()
     }
+
+    fun songLike(like : Boolean,id : String){
+        editor.putBoolean("song",true)
+        editor.putBoolean("like",like)
+        editor.putString("id",id)
+        editor.commit()
+    }
+
+    fun isSongLike() : Boolean{
+        return sharedPreferences.getBoolean("song",false)
+    }
+
+
     fun userLogOut(){
         editor.clear()
         editor.commit()

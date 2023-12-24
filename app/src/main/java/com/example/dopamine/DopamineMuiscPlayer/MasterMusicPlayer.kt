@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.dopamine.R
+import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityMasterMusicPlayerBinding
 
 
@@ -18,11 +19,20 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var binding: ActivityMasterMusicPlayerBinding
     private var handler: Handler = Handler()
     private lateinit var runnable: Runnable
+    private lateinit var googleSession: googleSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMasterMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mediaPlayer = MediaPlayer()
+        googleSession = googleSession(this)
+
+        if(googleSession.isSongLike()){
+            if(googleSession.sharedPreferences.getString("id","") == intent.getStringExtra("id")){
+                binding.likeSong.isChecked = true
+            }
+        }
 
         try {
             mediaPlayer.setDataSource(applicationContext,intent.getStringExtra("preview_url")!!.toUri())
@@ -78,7 +88,24 @@ class MasterMusicPlayer : AppCompatActivity(){
             binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
             binding.musicSeekBar.progress = 0
         }
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        binding.likeSong.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                showToast("You liked ❤️")
+                googleSession.songLike(true,intent.getStringExtra("id")!!)
+                likeSongs()
+            }else{
+                googleSession.songLike(false,intent.getStringExtra("id")!!)
+            }
+        }
+    }
+
+    private fun likeSongs() {
+        
     }
 
     private fun updateSeekBar(){

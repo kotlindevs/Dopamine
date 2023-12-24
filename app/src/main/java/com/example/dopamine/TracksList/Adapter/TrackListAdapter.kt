@@ -12,15 +12,18 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.R
 import com.example.dopamine.TracksList.TracksDataClass.Track
+import com.example.dopamine.authentication.googleSession
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
-class TrackListAdapter(val context: Context, private val tracksList: List<Track>) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
+class TrackListAdapter(val context: Context, private val tracksList: List<Track>, private val googleSession : googleSession= googleSession(context)) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
     class TracksViewHolder(tracksView : View) : RecyclerView.ViewHolder(tracksView) {
         val tracksPhoto : ShapeableImageView = tracksView.findViewById(R.id.TracksPhoto)
         val tracksName : MaterialTextView = tracksView.findViewById(R.id.TracksName)
         val tracksArtist : MaterialTextView = tracksView.findViewById(R.id.TracksArtist)
+        val tracksLike :MaterialCheckBox = tracksView.findViewById(R.id.likeSong)
         val tracks : MaterialCardView = tracksView.findViewById(R.id.tracks)
     }
 
@@ -40,6 +43,14 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
         val tracks = tracksList[position]
         holder.tracksName.text = tracks.song_name
         holder.tracksArtist.text = tracks.artist_name
+        holder.tracksLike.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                Toast.makeText(context,"You liked ❤️",Toast.LENGTH_LONG).show()
+                googleSession.songLike(true,tracks.id)
+            }else{
+                googleSession.songLike(false,tracks.id)
+            }
+        }
         Glide.with(context)
             .load(tracks.mp_url)
             .into(holder.tracksPhoto)
@@ -57,6 +68,14 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
                     .putExtra("preview_url",tracks.preview_url)
                     .putExtra("release_date",tracks.release_date)
                 )
+        }
+
+        if(googleSession.isSongLike()){
+            if (googleSession.sharedPreferences.getString("id","")!=null){
+                if (googleSession.sharedPreferences.getString("id","") == tracks.id){
+                    holder.tracksLike.isChecked = true
+                }
+            }
         }
     }
 }

@@ -73,13 +73,21 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/circular_spotify"
         android:gravity="left"
-        android:drawableRight="@drawable/baseline_favorite_border_24"
         android:text="@string/radha"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TracksPhotoCard" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/likeSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/like_song"
+        app:layout_constraintEnd_toEndOf="@id/TracksName"
+        app:layout_constraintTop_toBottomOf="@id/TracksPhotoCard"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
