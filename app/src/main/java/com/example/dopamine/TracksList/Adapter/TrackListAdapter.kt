@@ -18,7 +18,11 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
-class TrackListAdapter(val context: Context, private val tracksList: List<Track>, private val googleSession : googleSession= googleSession(context)) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
+class TrackListAdapter(
+    val context: Context,
+    val tracksList: List<Track>?,
+    val googleSession: googleSession = googleSession(context),
+) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
     class TracksViewHolder(tracksView : View) : RecyclerView.ViewHolder(tracksView) {
         val tracksPhoto : ShapeableImageView = tracksView.findViewById(R.id.TracksPhoto)
         val tracksName : MaterialTextView = tracksView.findViewById(R.id.TracksName)
@@ -36,12 +40,12 @@ class TrackListAdapter(val context: Context, private val tracksList: List<Track>
     }
 
     override fun getItemCount(): Int {
-        return tracksList.size
+        return tracksList!!.size
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
-        val tracks = tracksList[position]
-        holder.tracksName.text = tracks.song_name
+        val tracks = tracksList?.get(position)
+        holder.tracksName.text = tracks!!.song_name
         holder.tracksArtist.text = tracks.artist_name
         holder.tracksLike.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){

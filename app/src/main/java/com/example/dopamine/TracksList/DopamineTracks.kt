@@ -2,7 +2,6 @@ package com.example.dopamine.TracksList
 
 import android.os.Bundle
 import android.util.Log
-import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dopamine.TracksList.Adapter.TrackListAdapter
@@ -41,7 +40,11 @@ class DopamineTracks : AppCompatActivity() {
             .getTracks()
             .enqueue(object :  Callback<List<Track>> {
                 override fun onResponse(call: Call<List<Track>>, response: Response<List<Track>>) {
-                    adapter = TrackListAdapter(applicationContext,response.body()!!,googleSession)
+                    adapter = TrackListAdapter(
+                        applicationContext,
+                        response.body()!!,
+                        googleSession,
+                    )
                     binding.recyclerView.adapter = adapter
                     Log.d("Tracks", response.body()!!.toString())
                 }

@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.Artist.ArtistList.ArtistInterface
 import com.example.dopamine.TracksList.Adapter.TrackListAdapter
 import com.example.dopamine.TracksList.TracksDataClass.Track
+import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityArtistProfileBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,10 +19,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArtistProfile : AppCompatActivity() {
     private lateinit var binding: ActivityArtistProfileBinding
     private lateinit var adapter: TrackListAdapter
+    private lateinit var googleSession: googleSession
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityArtistProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        googleSession = googleSession(this)
 
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
 
@@ -58,7 +61,7 @@ class ArtistProfile : AppCompatActivity() {
                             call: Call<List<Track>>,
                             response: Response<List<Track>>
                         ) {
-                            adapter = TrackListAdapter(applicationContext, response.body()!!)
+                            adapter = TrackListAdapter(applicationContext, response.body()!!,googleSession)
                             binding.recyclerView.adapter = adapter
                         }
 
@@ -74,7 +77,11 @@ class ArtistProfile : AppCompatActivity() {
                             call: Call<List<Track>>,
                             response: Response<List<Track>>
                         ) {
-                            adapter = TrackListAdapter(applicationContext, response.body()!!)
+                            adapter = TrackListAdapter(
+                                applicationContext,
+                                response.body()!!,
+                                googleSession
+                            )
                             binding.recyclerView.adapter = adapter
                         }
 
