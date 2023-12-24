@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopamine.TracksList.DopamineTracks
+import com.example.dopamine.Trending.DopamineTrending
 import com.google.android.material.card.MaterialCardView
 
 class MusicAdapter(private val context : Context,private val mList: List<ItemsViewModel>) : RecyclerView.Adapter<MusicAdapter.ViewHolder>() {
@@ -31,11 +31,25 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
         holder.textView.text = ItemsViewModel.text
         holder.onAlbumClick.setOnClickListener {
             if(ItemsViewModel.text == "Dopamine's Picks"){
-                val i : Intent = Intent(context,DopamineTracks::class.java)
+                val Picks : Intent = Intent(context,DopamineTracks::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(i)
-            }else if(ItemsViewModel.text == "Blade Runner") {
-                //
+                context.startActivity(Picks)
+            }else if(ItemsViewModel.text == "Trending") {
+                val Trending : Intent = Intent(context, DopamineTrending::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Trending)
+            } else if(ItemsViewModel.text == "Bollywood"){
+
+            } else if(ItemsViewModel.text == "Travelling"){
+
+            } else if(ItemsViewModel.text == "Phonk"){
+
+            } else if(ItemsViewModel.text == "Remix"){
+
+            } else if(ItemsViewModel.text == "Gaming and chill"){
+
+            } else if(ItemsViewModel.text == "Gym & Workout"){
+
             }
         }
     }

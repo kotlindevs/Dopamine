@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".TracksList.DopamineTracks">
+    tools:context=".Trending.DopamineTrending">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -22,9 +22,9 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
-                app:titleTextAppearance="@style/ToolbarTheme"
+                app:title="Trending"
                 app:titleCentered="true"
-                app:title="Dopamine's Picks"
+                app:titleTextAppearance="@style/ToolbarTheme"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/baseline_arrow_back_24" />
 
@@ -33,15 +33,14 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rv_trending"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        tools:listitem="@layout/tracks_list_layout_mdc"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout"
-        tools:itemCount="12"
-        tools:listitem="@layout/tracks_list_layout_mdc" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

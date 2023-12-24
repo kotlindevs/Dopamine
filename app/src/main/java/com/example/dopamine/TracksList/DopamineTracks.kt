@@ -24,6 +24,10 @@ class DopamineTracks : AppCompatActivity() {
         binding = ActivityDopamineTracksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.topAppBar.setNavigationOnClickListener{
+            finish()
+        }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         Retrofit.Builder()
