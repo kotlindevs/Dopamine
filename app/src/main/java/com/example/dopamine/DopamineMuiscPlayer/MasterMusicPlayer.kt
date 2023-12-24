@@ -1,14 +1,11 @@
 package com.example.dopamine.DopamineMuiscPlayer
 
-import android.content.Intent
 import android.media.MediaPlayer
-import android.media.session.MediaSession
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
