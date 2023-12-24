@@ -13,6 +13,7 @@ import com.example.dopamine.Artist.ArtistData.Artist
 import com.example.dopamine.Artist.ArtistList.ArtistInterface
 import com.example.dopamine.OldButGold.Chart
 import com.example.dopamine.OldButGold.ChartsApi
+import com.example.dopamine.OldButGold.MusicChartAdapter
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.firebase.auth.FirebaseAuth

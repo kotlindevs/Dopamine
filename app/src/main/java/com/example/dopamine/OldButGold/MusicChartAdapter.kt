@@ -1,4 +1,4 @@
-package com.example.dopamine
+package com.example.dopamine.OldButGold
 
 import android.content.Context
 import android.content.Intent
@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
-import com.example.dopamine.OldButGold.Chart
+import com.example.dopamine.R
 import com.google.android.material.card.MaterialCardView
 
 class MusicChartAdapter(val context : Context,private val mList: List<Chart>) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicChartAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.music_chart_card, parent, false)
 

@@ -1,7 +1,7 @@
 package com.example.dopamine.OldButGold
 
 data class Chart(
-    val id: String,
+    val id: Int,
     val artist_name: String,
     val song_name: String,
     val type: String,
