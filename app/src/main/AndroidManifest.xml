@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Bollywood.DopamineBollywood"
+            android:exported="false" />
+        <activity
             android:name=".Trending.DopamineTrending"
             android:exported="false" />
         <activity

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dopamine.Bollywood.DopamineBollywood
 import com.example.dopamine.TracksList.DopamineTracks
 import com.example.dopamine.Trending.DopamineTrending
 import com.google.android.material.card.MaterialCardView
@@ -39,7 +40,9 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(Trending)
             } else if(ItemsViewModel.text == "Bollywood"){
-
+                val Bollywood : Intent = Intent(context, DopamineBollywood::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Bollywood)
             } else if(ItemsViewModel.text == "Travelling"){
 
             } else if(ItemsViewModel.text == "Phonk"){
