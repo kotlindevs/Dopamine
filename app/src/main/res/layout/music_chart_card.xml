@@ -9,10 +9,10 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:background="@drawable/music_card_bg"
-        android:orientation="vertical"
         android:layout_width="128dp"
-        android:layout_height="158dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/music_card_bg"
+        android:orientation="vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/music_chart_image"
@@ -27,11 +27,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/music_chart_content"
-            android:layout_marginTop="4dp"
-            android:layout_gravity="center"
-            android:text="content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/circular_spotify"
+            android:text="content" />
 
     </LinearLayout>
 

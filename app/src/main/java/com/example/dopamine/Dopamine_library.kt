@@ -64,5 +64,17 @@ class Dopamine_library : AppCompatActivity() {
                 Toast.LENGTH_SHORT).show()
             startActivity(Intent(this,DopamineUserProfile::class.java))
         }
+
+        binding.likedSongsUser.setOnClickListener {
+            startActivity(Intent(applicationContext,Like_songs::class.java))
+        }
+
+        binding.addArtistsUser.setOnClickListener {
+            Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.addPodcasts.setOnClickListener {
+            Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
+        }
     }
 }
