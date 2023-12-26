@@ -69,11 +69,11 @@ class Dopamine_library : AppCompatActivity() {
             startActivity(Intent(applicationContext,Like_songs::class.java))
         }
 
-        binding.addArtistsUser.setOnClickListener {
+        binding.dopamineArtists.setOnClickListener {
             Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
         }
 
-        binding.addPodcasts.setOnClickListener {
+        binding.dopaminePodcasters.setOnClickListener {
             Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
         }
     }
