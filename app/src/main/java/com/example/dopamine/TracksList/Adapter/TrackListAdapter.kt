@@ -23,12 +23,22 @@ class TrackListAdapter(
     val tracksList: List<Track>?,
     val googleSession: googleSession = googleSession(context),
 ) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
+
+    private val arrayList = ArrayList<Track>()
     class TracksViewHolder(tracksView : View) : RecyclerView.ViewHolder(tracksView) {
         val tracksPhoto : ShapeableImageView = tracksView.findViewById(R.id.TracksPhoto)
         val tracksName : MaterialTextView = tracksView.findViewById(R.id.TracksName)
         val tracksArtist : MaterialTextView = tracksView.findViewById(R.id.TracksArtist)
         val tracksLike :MaterialCheckBox = tracksView.findViewById(R.id.likeSong)
         val tracks : MaterialCardView = tracksView.findViewById(R.id.tracks)
+    }
+
+    fun getArrayList(): ArrayList<Track> {
+        return arrayList.apply {
+            tracksList?.forEach {
+                add(it)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -63,14 +73,7 @@ class TrackListAdapter(
             context
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("id",tracks.id)
-                    .putExtra("artist_name",tracks.artist_name)
-                    .putExtra("song_name",tracks.song_name)
-                    .putExtra("type",tracks.type)
-                    .putExtra("is_playable",tracks.is_playable)
-                    .putExtra("url",tracks.mp_url)
-                    .putExtra("preview_url",tracks.preview_url)
-                    .putExtra("release_date",tracks.release_date)
+                    .putExtra("position",position)
                 )
         }
 
