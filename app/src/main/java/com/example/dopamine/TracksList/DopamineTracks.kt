@@ -25,6 +25,7 @@ class DopamineTracks : AppCompatActivity() {
         binding = ActivityDopamineTracksBinding.inflate(layoutInflater)
         setContentView(binding.root)
         googleSession = googleSession(this)
+        adapter = TrackListAdapter(applicationContext,ArrayList(),googleSession)
 
         binding.topAppBar.setNavigationOnClickListener{
             finish()
@@ -45,6 +46,7 @@ class DopamineTracks : AppCompatActivity() {
                         response.body()!!,
                         googleSession,
                     )
+                    Log.d("Admin",adapter.getArrayList().toString())
                     binding.recyclerView.adapter = adapter
                     Log.d("Tracks", response.body()!!.toString())
                 }
@@ -52,10 +54,6 @@ class DopamineTracks : AppCompatActivity() {
                 override fun onFailure(call: Call<List<Track>>, t: Throwable) {
                     Log.d("Tracks", t.message.toString())
                 }
-
             })
-
-
-
     }
 }
