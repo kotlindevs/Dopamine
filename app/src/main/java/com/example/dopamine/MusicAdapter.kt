@@ -9,7 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopamine.Bollywood.DopamineBollywood
+import com.example.dopamine.Gaming.DopamineGaming
+import com.example.dopamine.Gym.DopamineGym
 import com.example.dopamine.Phonk.DopaminePhonk
+import com.example.dopamine.Remix.DopamineRemix
 import com.example.dopamine.TracksList.DopamineTracks
 import com.example.dopamine.Travelling.DopamineTravelling
 import com.example.dopamine.Trending.DopamineTrending
@@ -54,11 +57,17 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(Phonk)
             } else if(ItemsViewModel.text == "Remix"){
-
+                val Remix : Intent = Intent(context, DopamineRemix::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Remix)
             } else if(ItemsViewModel.text == "Gaming and chill"){
-
+                val Gaming : Intent = Intent(context, DopamineGaming::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Gaming)
             } else if(ItemsViewModel.text == "Gym & Workout"){
-
+                val Gym : Intent = Intent(context, DopamineGym::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Gym)
             }
         }
     }

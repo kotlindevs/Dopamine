@@ -17,6 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Gym.DopamineGym"
+            android:exported="false" />
+        <activity
+            android:name=".Gaming.DopamineGaming"
+            android:exported="false" />
+        <activity
             android:name=".Remix.DopamineRemix"
             android:exported="false" />
         <activity
