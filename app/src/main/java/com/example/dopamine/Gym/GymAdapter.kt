@@ -2,7 +2,6 @@ package com.example.dopamine.Gym
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,7 @@ class GymAdapter(
     val googleSession: googleSession = googleSession(context),
 ) : RecyclerView.Adapter<GymAdapter.ViewHolder>(){
 
-
+    private val arrayList = ArrayList<Gym>()
 
     class ViewHolder(Phonk_track: View) : RecyclerView.ViewHolder(Phonk_track) {
         val gym_tracksPhoto : ShapeableImageView = Phonk_track.findViewById(R.id.TracksPhoto)
@@ -41,6 +40,14 @@ class GymAdapter(
                 .from(parent.context)
                 .inflate(R.layout.tracks_list_layout_mdc,parent,false)
         )
+    }
+
+    fun getArrayList(): ArrayList<Gym> {
+        return arrayList.apply {
+            Gym_track?.forEach {
+                add(it)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -60,19 +67,12 @@ class GymAdapter(
             .load(tracks.mp_url)
             .into(holder.gym_tracksPhoto)
         holder.gym_tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(
                     Intent(context, MasterMusicPlayer::class.java)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("id",tracks.id)
-                        .putExtra("artist_name",tracks.artist_name)
-                        .putExtra("song_name",tracks.song_name)
-                        .putExtra("type",tracks.type)
-                        .putExtra("is_playable",tracks.is_playable)
-                        .putExtra("url",tracks.mp_url)
-                        .putExtra("preview_url",tracks.preview_url)
-                        .putExtra("release_date",tracks.release_date)
+                        .putExtra("position",position)
+                        .putExtra("Bollywood","https://api.npoint.io/2ffcaa6e10a2152f101b")
                 )
         }
     }

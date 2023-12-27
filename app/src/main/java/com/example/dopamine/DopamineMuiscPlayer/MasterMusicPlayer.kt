@@ -10,12 +10,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.example.dopamine.Artist.Adapter.ArtistAdapter
 import com.example.dopamine.Bollywood.Bollywood
 import com.example.dopamine.Bollywood.BollywoodAdapter
 import com.example.dopamine.Bollywood.BollywoodApi
 import com.example.dopamine.Gaming.Gaming
 import com.example.dopamine.Gaming.GamingAdapter
 import com.example.dopamine.Gaming.GamingApi
+import com.example.dopamine.Gym.Gym
+import com.example.dopamine.Gym.GymAdapter
+import com.example.dopamine.Gym.GymApi
+import com.example.dopamine.OldButGold.Chart
+import com.example.dopamine.OldButGold.ChartsApi
+import com.example.dopamine.OldButGold.MusicChartAdapter
 import com.example.dopamine.Phonk.Phonk
 import com.example.dopamine.Phonk.PhonkAdapter
 import com.example.dopamine.Phonk.PhonkApi
@@ -56,6 +63,9 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var phonkAdapter: PhonkAdapter
     private lateinit var remixAdapter: RemixAdapter
     private lateinit var gamingAdapter: GamingAdapter
+    private lateinit var gymAdapter: GymAdapter
+    private lateinit var musicChartAdapter: MusicChartAdapter
+    private lateinit var artistAdapter: ArtistAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -584,7 +594,155 @@ class MasterMusicPlayer : AppCompatActivity(){
 
             //Gym & workout
         } else if(intent.getStringExtra("Gym") != null){
+            gymAdapter = GymAdapter(applicationContext,ArrayList())
+            Retrofit.Builder()
+                .baseUrl("https://api.npoint.io/2ffcaa6e10a2152f101b/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(GymApi::class.java)
+                .getGym()
+                .enqueue(object : Callback<List<Gym>> {
+                    override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) {
+                        gymAdapter = GymAdapter(
+                            applicationContext,
+                            response.body()!!
+                        )
+                        var currentSongPosition = intent.getIntExtra("position",0)
+                        val bollywoodList  = gymAdapter.getArrayList()
+                        var currentSong = bollywoodList[currentSongPosition]
 
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        playSong(currentSong.preview_url.toUri())
+
+                        Log.d("currentSong",currentSong.toString())
+
+                        binding.nextSong.setOnClickListener {
+                            if(mediaPlayer.isPlaying){
+                                handler.removeCallbacks(runnable)
+                                mediaPlayer.reset()
+                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                binding.musicSeekBar.progress = 0
+                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                            }else{
+                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                mediaPlayer.reset()
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                Log.d("currentSong",currentSong.toString())
+                                Log.d("currentSongPosition",currentSongPosition.toString())
+                            }
+                        }
+                        binding.prevSong.setOnClickListener {
+                            if(mediaPlayer.isPlaying){
+                                handler.removeCallbacks(runnable)
+                                mediaPlayer.reset()
+                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                binding.musicSeekBar.progress = 0
+                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                            }else{
+                                currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                mediaPlayer.reset()
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+
+                                Log.d("currentSong", currentSong.toString())
+                                Log.d("currentSongPosition", currentSongPosition.toString())
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<Gym>>, t: Throwable) {
+                        Log.d("Tracks", t.message.toString())
+                    }
+                })
+
+            //Old But Gold
+        } else if (intent.getStringExtra("OldButGold") != null){
+            musicChartAdapter = MusicChartAdapter(applicationContext,ArrayList())
+            Retrofit.Builder()
+                .baseUrl("https://api.npoint.io/504ec4f9cb720cbeb8df/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ChartsApi::class.java)
+                .getCharts()
+                .enqueue(object : Callback<List<Chart>> {
+                    override fun onResponse(call: Call<List<Chart>>, response: Response<List<Chart>>) {
+                        musicChartAdapter = MusicChartAdapter(
+                            applicationContext,
+                            response.body()!!
+                        )
+                        var currentSongPosition = intent.getIntExtra("position",0)
+                        val bollywoodList  = musicChartAdapter.getArrayList()
+                        var currentSong = bollywoodList[currentSongPosition]
+
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        playSong(currentSong.preview_url.toUri())
+
+                        Log.d("currentSong",currentSong.toString())
+
+                        binding.nextSong.setOnClickListener {
+                            if(mediaPlayer.isPlaying){
+                                handler.removeCallbacks(runnable)
+                                mediaPlayer.reset()
+                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                binding.musicSeekBar.progress = 0
+                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                            }else{
+                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                mediaPlayer.reset()
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                Log.d("currentSong",currentSong.toString())
+                                Log.d("currentSongPosition",currentSongPosition.toString())
+                            }
+                        }
+                        binding.prevSong.setOnClickListener {
+                            if(mediaPlayer.isPlaying){
+                                handler.removeCallbacks(runnable)
+                                mediaPlayer.reset()
+                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                binding.musicSeekBar.progress = 0
+                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                            }else{
+                                currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
+                                currentSong = bollywoodList[currentSongPosition]
+                                mediaPlayer.reset()
+                                playSong(currentSong.preview_url.toUri())
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+
+                                Log.d("currentSong", currentSong.toString())
+                                Log.d("currentSongPosition", currentSongPosition.toString())
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<Chart>>, t: Throwable) {
+                        Log.d("Tracks", t.message.toString())
+                    }
+                })
+
+            //Artist
+        } else if(intent.getStringExtra("Artist") != null){
+            // Piyush sir will go for this......
         }
 
         //Player

@@ -19,6 +19,7 @@ class BollywoodAdapter(
 
     val context: Context,
     val Bollywood_track : List<Bollywood>?
+
 ) : RecyclerView.Adapter<BollywoodAdapter.BollywoodViewHolder>() {
 
     private val arrayList = ArrayList<Bollywood>()

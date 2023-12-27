@@ -13,7 +13,15 @@ import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.R
 import com.google.android.material.card.MaterialCardView
 
-class MusicChartAdapter(val context : Context,private val mList: List<Chart>) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
+class MusicChartAdapter(
+
+    val context : Context,
+    val mList: List<Chart>?
+
+) : RecyclerView.Adapter<MusicChartAdapter.ViewHolder>() {
+
+    private val arrayList = ArrayList<Chart>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.music_chart_card, parent, false)
@@ -21,14 +29,22 @@ class MusicChartAdapter(val context : Context,private val mList: List<Chart>) : 
         return ViewHolder(view)
     }
 
+    fun getArrayList(): ArrayList<Chart> {
+        return arrayList.apply {
+            mList?.forEach {
+                add(it)
+            }
+        }
+    }
+
     override fun getItemCount(): Int {
-        return mList.size
+        return mList!!.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val Chart = mList[position]
-        holder.textView.text = Chart.song_name
+        val Chart = mList?.get(position)
+        holder.textView.text = Chart!!.song_name
         Glide.with(context)
             .load(Chart.mp_url)
             .into(holder.imageView)
@@ -36,14 +52,8 @@ class MusicChartAdapter(val context : Context,private val mList: List<Chart>) : 
             context
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("id",Chart.id)
-                    .putExtra("artist_name",Chart.artist_name)
-                    .putExtra("song_name",Chart.song_name)
-                    .putExtra("type",Chart.type)
-                    .putExtra("is_playable",Chart.is_playable)
-                    .putExtra("url",Chart.mp_url)
-                    .putExtra("preview_url",Chart.preview_url)
-                    .putExtra("release_date",Chart.release_date)
+                    .putExtra("position",position)
+                    .putExtra("OldButGold","https://api.npoint.io/504ec4f9cb720cbeb8df")
                 )
         }
     }
