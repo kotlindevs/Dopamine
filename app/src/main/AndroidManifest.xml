@@ -4,19 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <meta-data
-        android:name="android.app.activity.openEnterAnimation"
-        android:resource="@anim/slide_in_top" />
-    <meta-data
-        android:name="android.app.activity.openExitAnimation"
-        android:resource="@anim/slide_out_bottom" />
-    <meta-data
-        android:name="android.app.activity.closeEnterAnimation"
-        android:resource="@anim/slide_in_top" />
-    <meta-data
-        android:name="android.app.activity.closeExitAnimation"
-        android:resource="@anim/slide_out_bottom" />
-
     <application
         android:name=".Dynamic"
         android:allowBackup="true"
@@ -29,6 +16,9 @@
         android:theme="@style/Theme.Dopamine"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Phonk.DopaminePhonk"
+            android:exported="false" />
         <activity
             android:name=".Travelling.DopamineTravelling"
             android:exported="false" />
