@@ -18,10 +18,15 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
 class GymAdapter(
+
     val context: Context,
     val Gym_track : List<Gym>?,
+
     val googleSession: googleSession = googleSession(context),
 ) : RecyclerView.Adapter<GymAdapter.ViewHolder>(){
+
+
+
     class ViewHolder(Phonk_track: View) : RecyclerView.ViewHolder(Phonk_track) {
         val gym_tracksPhoto : ShapeableImageView = Phonk_track.findViewById(R.id.TracksPhoto)
         val gym_tracksName : MaterialTextView = Phonk_track.findViewById(R.id.TracksName)

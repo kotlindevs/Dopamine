@@ -2,7 +2,6 @@ package com.example.dopamine.Remix
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +21,23 @@ class RemixAdapter(
     val Remix_track : List<Remix>?,
     val googleSession: googleSession = googleSession(context),
 ) : RecyclerView.Adapter<RemixAdapter.ViewHolder>() {
+
+    private val arrayList = ArrayList<Remix>()
+
     class ViewHolder(Remix_track: View) : RecyclerView.ViewHolder(Remix_track) {
         val Rx_tracksPhoto : ShapeableImageView = Remix_track.findViewById(R.id.TracksPhoto)
         val Rx_tracksName : MaterialTextView = Remix_track.findViewById(R.id.TracksName)
         val Rx_tracksArtist : MaterialTextView = Remix_track.findViewById(R.id.TracksArtist)
         val Rx_tracksLike : MaterialCheckBox = Remix_track.findViewById(R.id.likeSong)
         val Rx_tracks : MaterialCardView = Remix_track.findViewById(R.id.tracks)
+    }
+
+    fun getArrayList(): ArrayList<Remix> {
+        return arrayList.apply {
+            Remix_track?.forEach {
+                add(it)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,19 +65,12 @@ class RemixAdapter(
             .load(tracks.mp_url)
             .into(holder.Rx_tracksPhoto)
         holder.Rx_tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(
                     Intent(context, MasterMusicPlayer::class.java)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("id",tracks.id)
-                        .putExtra("artist_name",tracks.artist_name)
-                        .putExtra("song_name",tracks.song_name)
-                        .putExtra("type",tracks.type)
-                        .putExtra("is_playable",tracks.is_playable)
-                        .putExtra("url",tracks.mp_url)
-                        .putExtra("preview_url",tracks.preview_url)
-                        .putExtra("release_date",tracks.release_date)
+                        .putExtra("position",position)
+                        .putExtra("Remix","https://api.npoint.io/12abb65f1a120508b605")
                 )
         }
     }

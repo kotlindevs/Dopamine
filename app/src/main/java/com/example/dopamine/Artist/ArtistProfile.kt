@@ -61,7 +61,7 @@ class ArtistProfile : AppCompatActivity() {
                             call: Call<List<Track>>,
                             response: Response<List<Track>>
                         ) {
-                            adapter = TrackListAdapter(applicationContext, response.body()!!,googleSession)
+                            adapter = TrackListAdapter(applicationContext, response.body()!!)
                             binding.recyclerView.adapter = adapter
                         }
 
@@ -79,8 +79,7 @@ class ArtistProfile : AppCompatActivity() {
                         ) {
                             adapter = TrackListAdapter(
                                 applicationContext,
-                                response.body()!!,
-                                googleSession
+                                response.body()!!
                             )
                             binding.recyclerView.adapter = adapter
                         }

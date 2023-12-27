@@ -12,19 +12,20 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.R
 import com.example.dopamine.TracksList.TracksDataClass.Track
-import com.example.dopamine.authentication.googleSession
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
 class TrackListAdapter(
+
     val context: Context,
-    val tracksList: List<Track>?,
-    val googleSession: googleSession = googleSession(context),
+    val tracksList: List<Track>?
+
 ) : RecyclerView.Adapter<TrackListAdapter.TracksViewHolder>() {
 
     private val arrayList = ArrayList<Track>()
+
     class TracksViewHolder(tracksView : View) : RecyclerView.ViewHolder(tracksView) {
         val tracksPhoto : ShapeableImageView = tracksView.findViewById(R.id.TracksPhoto)
         val tracksName : MaterialTextView = tracksView.findViewById(R.id.TracksName)
@@ -71,6 +72,7 @@ class TrackListAdapter(
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("position",position)
+                    .putExtra("dopamine_pick","https://api.npoint.io/a2bbf40c66d86d855cda")
                 )
         }
     }

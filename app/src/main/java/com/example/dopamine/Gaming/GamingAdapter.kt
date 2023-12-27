@@ -2,7 +2,6 @@ package com.example.dopamine.Gaming
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +21,23 @@ class GamingAdapter(
     val Gaming_track : List<Gaming>?,
     val googleSession: googleSession = googleSession(context),
 ) : RecyclerView.Adapter<GamingAdapter.ViewHolder>(){
+
+    private val arrayList = ArrayList<Gaming>()
+
     class ViewHolder(Gaming_track: View) : RecyclerView.ViewHolder(Gaming_track) {
         val g_tracksPhoto : ShapeableImageView = Gaming_track.findViewById(R.id.TracksPhoto)
         val g_tracksName : MaterialTextView = Gaming_track.findViewById(R.id.TracksName)
         val g_tracksArtist : MaterialTextView = Gaming_track.findViewById(R.id.TracksArtist)
         val g_tracksLike : MaterialCheckBox = Gaming_track.findViewById(R.id.likeSong)
         val g_tracks : MaterialCardView = Gaming_track.findViewById(R.id.tracks)
+    }
+
+    fun getArrayList(): ArrayList<Gaming> {
+        return arrayList.apply {
+            Gaming_track?.forEach {
+                add(it)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,19 +65,12 @@ class GamingAdapter(
             .load(tracks.mp_url)
             .into(holder.g_tracksPhoto)
         holder.g_tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(
                     Intent(context, MasterMusicPlayer::class.java)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("id",tracks.id)
-                        .putExtra("artist_name",tracks.artist_name)
-                        .putExtra("song_name",tracks.song_name)
-                        .putExtra("type",tracks.type)
-                        .putExtra("is_playable",tracks.is_playable)
-                        .putExtra("url",tracks.mp_url)
-                        .putExtra("preview_url",tracks.preview_url)
-                        .putExtra("release_date",tracks.release_date)
+                        .putExtra("position",position)
+                        .putExtra("Gaming","https://api.npoint.io/3c6b399952924125b043")
                 )
         }
     }

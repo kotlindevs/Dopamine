@@ -13,7 +13,15 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
-class TrendsAdaptor(var context: Context, private val trendList: List<Trend>) : RecyclerView.Adapter<TrendsAdaptor.TrendsViewHolder>() {
+class TrendsAdaptor(
+
+    var context: Context,
+    val trendList: List<Trend>?
+
+) : RecyclerView.Adapter<TrendsAdaptor.TrendsViewHolder>() {
+
+    private val arrayList = ArrayList<Trend>()
+
     class TrendsViewHolder(tracksView : View) : RecyclerView.ViewHolder(tracksView){
         val tracksPhoto : ShapeableImageView = tracksView.findViewById(R.id.TracksPhoto)
         val tracksName : MaterialTextView = tracksView.findViewById(R.id.TracksName)
@@ -21,6 +29,13 @@ class TrendsAdaptor(var context: Context, private val trendList: List<Trend>) : 
         val tracks : MaterialCardView = tracksView.findViewById(R.id.tracks)
     }
 
+    fun getArrayList(): ArrayList<Trend> {
+        return arrayList.apply {
+            trendList?.forEach {
+                add(it)
+            }
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendsViewHolder {
         return TrendsViewHolder(
             LayoutInflater
@@ -29,12 +44,12 @@ class TrendsAdaptor(var context: Context, private val trendList: List<Trend>) : 
         )    }
 
     override fun getItemCount(): Int {
-        return trendList.size
+        return trendList!!.size
     }
 
     override fun onBindViewHolder(holder: TrendsViewHolder, position: Int) {
-        val tracks = trendList[position]
-        holder.tracksName.text = tracks.song_name
+        val tracks = trendList?.get(position)
+        holder.tracksName.text = tracks!!.song_name
         holder.tracksArtist.text = tracks.artist_name
         Glide.with(context)
             .load(tracks.mp_url)
@@ -43,14 +58,8 @@ class TrendsAdaptor(var context: Context, private val trendList: List<Trend>) : 
             context.startActivity(
                 Intent(context,MasterMusicPlayer::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("id",tracks.id)
-                    .putExtra("artist_name",tracks.artist_name)
-                    .putExtra("song_name",tracks.song_name)
-                    .putExtra("type",tracks.type)
-                    .putExtra("is_playable",tracks.is_playable)
-                    .putExtra("url",tracks.mp_url)
-                    .putExtra("preview_url",tracks.preview_url)
-                    .putExtra("release_date",tracks.release_date)
+                    .putExtra("position",position)
+                    .putExtra("trendings","https://api.npoint.io/23ad1a516e3776ed61b5")
             )
         }
     }

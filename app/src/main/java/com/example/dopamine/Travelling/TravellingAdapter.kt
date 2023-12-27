@@ -2,7 +2,6 @@ package com.example.dopamine.Travelling
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +17,15 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
 class TravellingAdapter(
+
     val context: Context,
     val Travelling_track : List<Travelling>?,
     val googleSession: googleSession = googleSession(context),
+
 ) : RecyclerView.Adapter<TravellingAdapter.ViewHolder>(){
+
+    private val arrayList = ArrayList<Travelling>()
+
     class ViewHolder(Travelling_track : View) : RecyclerView.ViewHolder(Travelling_track) {
         val Tr_tracksPhoto : ShapeableImageView = Travelling_track.findViewById(R.id.TracksPhoto)
         val Tr_tracksName : MaterialTextView = Travelling_track.findViewById(R.id.TracksName)
@@ -36,6 +40,14 @@ class TravellingAdapter(
                 .from(parent.context)
                 .inflate(R.layout.tracks_list_layout_mdc,parent,false)
         )
+    }
+
+    fun getArrayList(): ArrayList<Travelling> {
+        return arrayList.apply {
+            Travelling_track?.forEach {
+                add(it)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -55,19 +67,12 @@ class TravellingAdapter(
             .load(tracks.mp_url)
             .into(holder.Tr_tracksPhoto)
         holder.Tr_tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(
                     Intent(context, MasterMusicPlayer::class.java)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("id",tracks.id)
-                        .putExtra("artist_name",tracks.artist_name)
-                        .putExtra("song_name",tracks.song_name)
-                        .putExtra("type",tracks.type)
-                        .putExtra("is_playable",tracks.is_playable)
-                        .putExtra("url",tracks.mp_url)
-                        .putExtra("preview_url",tracks.preview_url)
-                        .putExtra("release_date",tracks.release_date)
+                        .putExtra("position",position)
+                        .putExtra("Travelling","https://api.npoint.io/2a0dd0282835656afdcd")
                 )
         }
     }

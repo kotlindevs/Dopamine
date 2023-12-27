@@ -135,13 +135,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shuffle_song"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/baseline_shuffle_24" />
-
-        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/prev_song"
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -160,13 +153,6 @@
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/baseline_skip_next_24" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/repeat_song"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/baseline_repeat_24" />
 
     </LinearLayout>
 

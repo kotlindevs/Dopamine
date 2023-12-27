@@ -1,9 +1,8 @@
 package com.example.dopamine.Bollywood
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineBollywoodBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,13 +14,11 @@ class DopamineBollywood : AppCompatActivity() {
     private lateinit var binding : ActivityDopamineBollywoodBinding
     private lateinit var adapter: BollywoodAdapter
     val baseUrl = "https://api.npoint.io/362bf03a7dd20cef3dce/"
-    private lateinit var googleSession: googleSession
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDopamineBollywoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        googleSession = googleSession(this)
 
         binding.topAppBar.setNavigationOnClickListener {
             finish()
@@ -39,8 +36,7 @@ class DopamineBollywood : AppCompatActivity() {
                 override fun onResponse(call: Call<List<Bollywood>>, response: Response<List<Bollywood>>) {
                     adapter = BollywoodAdapter(
                         applicationContext,
-                        response.body()!!,
-                        googleSession,
+                        response.body()!!
                     )
                     binding.rvBollywood.adapter = adapter
                 }

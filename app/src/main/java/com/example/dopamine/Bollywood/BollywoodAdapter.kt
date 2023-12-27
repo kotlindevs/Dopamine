@@ -2,7 +2,6 @@ package com.example.dopamine.Bollywood
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.R
-import com.example.dopamine.authentication.googleSession
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 
 class BollywoodAdapter(
+
     val context: Context,
-    val Bollywood_track : List<Bollywood>?,
-    val googleSession: googleSession = googleSession(context),
+    val Bollywood_track : List<Bollywood>?
 ) : RecyclerView.Adapter<BollywoodAdapter.BollywoodViewHolder>() {
+
+    private val arrayList = ArrayList<Bollywood>()
+
     class BollywoodViewHolder(Bollywood_track : View) : RecyclerView.ViewHolder(Bollywood_track) {
         val B_tracksPhoto : ShapeableImageView = Bollywood_track.findViewById(R.id.TracksPhoto)
         val B_tracksName : MaterialTextView = Bollywood_track.findViewById(R.id.TracksName)
@@ -38,6 +39,14 @@ class BollywoodAdapter(
         )
     }
 
+    fun getArrayList(): ArrayList<Bollywood> {
+        return arrayList.apply {
+            Bollywood_track?.forEach {
+                add(it)
+            }
+        }
+    }
+
     override fun getItemCount(): Int {
         return Bollywood_track!!.size
     }
@@ -49,26 +58,18 @@ class BollywoodAdapter(
         holder.B_tracksLike.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 Toast.makeText(context,"You liked ❤️",Toast.LENGTH_LONG).show()
-            }else{
             }
         }
         Glide.with(context)
             .load(tracks.mp_url)
             .into(holder.B_tracksPhoto)
         holder.B_tracks.setOnClickListener {
-            Log.d("TracksPhoto",tracks.rc_url)
             context
                 .startActivity(
                     Intent(context, MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("id",tracks.id)
-                    .putExtra("artist_name",tracks.artist_name)
-                    .putExtra("song_name",tracks.song_name)
-                    .putExtra("type",tracks.type)
-                    .putExtra("is_playable",tracks.is_playable)
-                    .putExtra("url",tracks.mp_url)
-                    .putExtra("preview_url",tracks.preview_url)
-                    .putExtra("release_date",tracks.release_date)
+                        .putExtra("position",position)
+                        .putExtra("Bollywood","https://api.npoint.io/362bf03a7dd20cef3dce")
                 )
         }
     }
