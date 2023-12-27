@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopamine.Bollywood.DopamineBollywood
 import com.example.dopamine.TracksList.DopamineTracks
+import com.example.dopamine.Travelling.DopamineTravelling
 import com.example.dopamine.Trending.DopamineTrending
 import com.google.android.material.card.MaterialCardView
 
@@ -44,7 +45,9 @@ class MusicAdapter(private val context : Context,private val mList: List<ItemsVi
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(Bollywood)
             } else if(ItemsViewModel.text == "Travelling"){
-
+                val Travelling : Intent = Intent(context, DopamineTravelling::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Travelling)
             } else if(ItemsViewModel.text == "Phonk"){
 
             } else if(ItemsViewModel.text == "Remix"){

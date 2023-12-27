@@ -35,7 +35,8 @@ class BollywoodAdapter(
             LayoutInflater
                 .from(parent.context)
                 .inflate(R.layout.tracks_list_layout_mdc,parent,false)
-        )    }
+        )
+    }
 
     override fun getItemCount(): Int {
         return Bollywood_track!!.size
