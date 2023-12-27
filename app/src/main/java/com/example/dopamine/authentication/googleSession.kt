@@ -38,17 +38,6 @@ class googleSession(var context: Context) {
         editor.commit()
     }
 
-    fun songLike(like : Boolean,id : String){
-        editor.putBoolean("song",true)
-        editor.putBoolean("like",like)
-        editor.putString("id",id)
-        editor.commit()
-    }
-
-    fun isSongLike() : Boolean{
-        return sharedPreferences.getBoolean("song",false)
-    }
-
 
     fun userLogOut(){
         editor.clear()

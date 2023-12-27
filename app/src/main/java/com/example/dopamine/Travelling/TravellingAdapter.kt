@@ -49,9 +49,6 @@ class TravellingAdapter(
         holder.Tr_tracksLike.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 Toast.makeText(context,"You liked ❤️", Toast.LENGTH_LONG).show()
-                googleSession.songLike(true,tracks.id)
-            }else{
-                googleSession.songLike(false,tracks.id)
             }
         }
         Glide.with(context)
@@ -72,14 +69,6 @@ class TravellingAdapter(
                         .putExtra("preview_url",tracks.preview_url)
                         .putExtra("release_date",tracks.release_date)
                 )
-        }
-
-        if(googleSession.isSongLike()){
-            if (googleSession.sharedPreferences.getString("id","")!=null){
-                if (googleSession.sharedPreferences.getString("id","") == tracks.id){
-                    holder.Tr_tracksLike.isChecked = true
-                }
-            }
         }
     }
 }

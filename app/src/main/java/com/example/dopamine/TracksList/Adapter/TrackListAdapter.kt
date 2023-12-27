@@ -60,9 +60,6 @@ class TrackListAdapter(
         holder.tracksLike.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 Toast.makeText(context,"You liked ❤️",Toast.LENGTH_LONG).show()
-                googleSession.songLike(true,tracks.id)
-            }else{
-                googleSession.songLike(false,tracks.id)
             }
         }
         Glide.with(context)
@@ -75,14 +72,6 @@ class TrackListAdapter(
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("position",position)
                 )
-        }
-
-        if(googleSession.isSongLike()){
-            if (googleSession.sharedPreferences.getString("id","")!=null){
-                if (googleSession.sharedPreferences.getString("id","") == tracks.id){
-                    holder.tracksLike.isChecked = true
-                }
-            }
         }
     }
 }

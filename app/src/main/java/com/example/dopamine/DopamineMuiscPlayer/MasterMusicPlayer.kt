@@ -125,17 +125,6 @@ class MasterMusicPlayer : AppCompatActivity(){
                     Log.d("Tracks", t.message.toString())
                 }
             })
-
-
-        if(googleSession.isSongLike()){
-            if(googleSession.sharedPreferences.getString("id","") == intent.getStringExtra("id")){
-                binding.likeSong.isChecked = true
-            }
-        }
-
-
-
-
         binding.playPause.setOnClickListener {
             if(mediaPlayer.isPlaying){
                 handler.removeCallbacks(runnable)
@@ -202,9 +191,6 @@ class MasterMusicPlayer : AppCompatActivity(){
         binding.likeSong.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 showToast("You liked ❤️")
-                googleSession.songLike(true,intent.getStringExtra("id")!!)
-            }else{
-                googleSession.songLike(false,intent.getStringExtra("id")!!)
             }
         }
     }

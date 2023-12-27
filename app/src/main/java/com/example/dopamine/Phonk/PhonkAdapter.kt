@@ -47,11 +47,8 @@ class PhonkAdapter(
         holder.Ph_tracksName.text = tracks!!.song_name
         holder.Ph_tracksArtist.text = tracks.artist_name
         holder.Ph_tracksLike.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
-                Toast.makeText(context,"You liked ❤️", Toast.LENGTH_LONG).show()
-                googleSession.songLike(true,tracks.id)
-            }else{
-                googleSession.songLike(false,tracks.id)
+            if(isChecked) {
+                Toast.makeText(context, "You liked ❤️", Toast.LENGTH_LONG).show()
             }
         }
         Glide.with(context)
@@ -72,14 +69,6 @@ class PhonkAdapter(
                         .putExtra("preview_url",tracks.preview_url)
                         .putExtra("release_date",tracks.release_date)
                 )
-        }
-
-        if(googleSession.isSongLike()){
-            if (googleSession.sharedPreferences.getString("id","")!=null){
-                if (googleSession.sharedPreferences.getString("id","") == tracks.id){
-                    holder.Ph_tracksLike.isChecked = true
-                }
-            }
         }
     }
 }
