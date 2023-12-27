@@ -63,11 +63,6 @@ class MasterMusicPlayer : AppCompatActivity(){
 
                     Log.d("currentSong",currentSong.toString())
 
-                    if(currentSongPosition <= 0 ){
-                        binding.prevSong.isEnabled = false
-                        binding.prevSong.setColorFilter(R.color.grey)
-                    }
-
                     binding.nextSong.setOnClickListener {
                         if(mediaPlayer.isPlaying){
                             handler.removeCallbacks(runnable)
@@ -90,10 +85,6 @@ class MasterMusicPlayer : AppCompatActivity(){
                         }
                     }
                     binding.prevSong.setOnClickListener {
-                        if(currentSongPosition <= 0 ){
-                            binding.prevSong.isEnabled = false
-                            binding.prevSong.setColorFilter(R.color.grey)
-                        }
                         if(mediaPlayer.isPlaying){
                             handler.removeCallbacks(runnable)
                             mediaPlayer.reset()
@@ -105,18 +96,14 @@ class MasterMusicPlayer : AppCompatActivity(){
                             playSong(currentSong.preview_url.toUri())
                             setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
                         }else{
-                            if(currentSongPosition <= -1){
-                                showToast("no more available")
-                                binding.prevSong.isVisible = false
-                            }else {
-                                currentSongPosition = (currentSongPosition - 1) % tracksList.size
-                                currentSong = tracksList[currentSongPosition]
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                            currentSongPosition = (currentSongPosition - 1) % tracksList.size
+                            currentSong = tracksList[currentSongPosition]
+                            mediaPlayer.reset()
+                            playSong(currentSong.preview_url.toUri())
+                            setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
 
-                                Log.d("currentSong", currentSong.toString())
-                                Log.d("currentSongPosition", currentSongPosition.toString())
-                            }
+                            Log.d("currentSong", currentSong.toString())
+                            Log.d("currentSongPosition", currentSongPosition.toString())
                         }
                     }
                 }
