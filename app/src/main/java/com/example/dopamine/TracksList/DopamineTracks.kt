@@ -46,9 +46,7 @@ class DopamineTracks : AppCompatActivity() {
                         response.body()!!,
                         googleSession,
                     )
-                    Log.d("Admin",adapter.getArrayList().toString())
                     binding.recyclerView.adapter = adapter
-                    Log.d("Tracks", response.body()!!.toString())
                 }
 
                 override fun onFailure(call: Call<List<Track>>, t: Throwable) {
