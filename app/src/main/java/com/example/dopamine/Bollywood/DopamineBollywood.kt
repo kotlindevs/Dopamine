@@ -2,9 +2,7 @@ package com.example.dopamine.Bollywood
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dopamine.R
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineBollywoodBinding
 import retrofit2.Call

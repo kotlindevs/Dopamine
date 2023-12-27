@@ -3,9 +3,6 @@ package com.example.dopamine.Travelling
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dopamine.Bollywood.Bollywood
-import com.example.dopamine.Bollywood.BollywoodAdapter
-import com.example.dopamine.Bollywood.BollywoodApi
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineTravellingBinding
 import retrofit2.Call
@@ -16,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DopamineTravelling : AppCompatActivity() {
     private lateinit var binding : ActivityDopamineTravellingBinding
-    private lateinit var adapter: BollywoodAdapter
+    private lateinit var adapter: TravellingAdapter
     val baseUrl = "https://api.npoint.io/2a0dd0282835656afdcd/"
     private lateinit var googleSession: googleSession
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +33,11 @@ class DopamineTravelling : AppCompatActivity() {
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(BollywoodApi::class.java)
-            .getBollywood()
-            .enqueue(object : Callback<List<Bollywood>> {
-                override fun onResponse(call: Call<List<Bollywood>>, response: Response<List<Bollywood>>) {
-                    adapter = BollywoodAdapter(
+            .create(TravellingApi::class.java)
+            .getTravelling()
+            .enqueue(object : Callback<List<Travelling>> {
+                override fun onResponse(call: Call<List<Travelling>>, response: Response<List<Travelling>>) {
+                    adapter = TravellingAdapter(
                         applicationContext,
                         response.body()!!,
                         googleSession,
@@ -48,7 +45,7 @@ class DopamineTravelling : AppCompatActivity() {
                     binding.rvTravelling.adapter = adapter
                 }
 
-                override fun onFailure(call: Call<List<Bollywood>>, t: Throwable) {
+                override fun onFailure(call: Call<List<Travelling>>, t: Throwable) {
                 }
 
             })
