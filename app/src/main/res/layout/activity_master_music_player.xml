@@ -22,13 +22,14 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
+            app:navigationIcon="@drawable/baseline_keyboard_arrow_down_24"
             android:layout_height="52dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/music_greet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="center"
                 android:fontFamily="@font/circular_spotify"
                 android:text="Enjoy Your Melody"
                 android:textSize="22sp" />
