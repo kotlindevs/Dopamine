@@ -26,7 +26,6 @@ import com.example.dopamine.DopamineHome.OldButGold.MusicChartAdapter
 import com.example.dopamine.DopamineHome.Phonk.Phonk
 import com.example.dopamine.DopamineHome.Phonk.PhonkAdapter
 import com.example.dopamine.DopamineHome.Phonk.PhonkApi
-import com.example.dopamine.R
 import com.example.dopamine.DopamineHome.Remix.Remix
 import com.example.dopamine.DopamineHome.Remix.RemixAdapter
 import com.example.dopamine.DopamineHome.Remix.RemixApi
@@ -39,6 +38,7 @@ import com.example.dopamine.DopamineHome.Travelling.TravellingApi
 import com.example.dopamine.DopamineHome.Trending.Trend
 import com.example.dopamine.DopamineHome.Trending.TrendsAdaptor
 import com.example.dopamine.DopamineHome.Trending.TrendsApi
+import com.example.dopamine.R
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityMasterMusicPlayerBinding
 import retrofit2.Call
@@ -46,7 +46,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class MasterMusicPlayer : AppCompatActivity(){
 
@@ -811,7 +810,7 @@ class MasterMusicPlayer : AppCompatActivity(){
 
         binding.likeSong.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
-                showToast("You liked ❤️")
+                //showToast("You liked ❤️")
             }
         }
     }

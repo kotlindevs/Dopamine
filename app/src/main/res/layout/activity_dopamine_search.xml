@@ -78,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_search_24"
                 android:drawablePadding="8dp"
+                android:inputType="text"
                 android:hint="Search" />
 
         </com.google.android.material.textfield.TextInputLayout>
