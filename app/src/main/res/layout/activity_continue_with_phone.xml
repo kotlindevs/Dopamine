@@ -15,12 +15,12 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_marginTop="22dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
+                android:layout_marginTop="22dp"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/baseline_arrow_back_24" />

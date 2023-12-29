@@ -15,7 +15,9 @@ import com.example.dopamine.DopamineHome.OldButGold.Chart
 import com.example.dopamine.DopamineHome.OldButGold.ChartsApi
 import com.example.dopamine.DopamineHome.OldButGold.MusicChartAdapter
 import com.example.dopamine.DopamineLibrary.Dopamine_library
+import com.example.dopamine.DopamineNotifications.DopamineNotifications
 import com.example.dopamine.DopamineSearch.Dopamine_search
+import com.example.dopamine.DopamineSettings.DopamineSettings
 import com.example.dopamine.R
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityDopamineHomeBinding
@@ -142,11 +144,11 @@ class Dopamine_home : AppCompatActivity() {
         }
 
         binding.settings.setOnClickListener {
-            Toast.makeText(applicationContext,"Settings",Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,DopamineSettings::class.java))
         }
 
         binding.notifications.setOnClickListener {
-            Toast.makeText(applicationContext,"Notifications",Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,DopamineNotifications::class.java))
         }
 
         binding.UserImage.setOnClickListener {
