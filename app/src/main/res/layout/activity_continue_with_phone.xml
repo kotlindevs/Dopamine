@@ -40,7 +40,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:text="Enter phone number"
-            android:layout_marginTop="48dp"
+
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
             android:textSize="28sp"

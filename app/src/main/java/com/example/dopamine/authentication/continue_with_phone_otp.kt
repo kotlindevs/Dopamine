@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.example.dopamine.Dopamine_home
+import com.example.dopamine.DopamineHome.Dopamine_home
 import com.example.dopamine.databinding.ActivityContinueWithPhoneOtpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

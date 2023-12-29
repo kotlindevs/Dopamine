@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.example.dopamine.Dopamine_home
+import com.example.dopamine.DopamineHome.Dopamine_home
 import com.example.dopamine.R
 import com.example.dopamine.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn

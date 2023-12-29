@@ -17,46 +17,46 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Gym.DopamineGym"
+            android:name=".DopamineHome.Gym.DopamineGym"
             android:exported="false" />
         <activity
-            android:name=".Gaming.DopamineGaming"
+            android:name=".DopamineHome.Gaming.DopamineGaming"
             android:exported="false" />
         <activity
-            android:name=".Remix.DopamineRemix"
+            android:name=".DopamineHome.Remix.DopamineRemix"
             android:exported="false" />
         <activity
-            android:name=".Phonk.DopaminePhonk"
+            android:name=".DopamineHome.Phonk.DopaminePhonk"
             android:exported="false" />
         <activity
-            android:name=".Travelling.DopamineTravelling"
+            android:name=".DopamineHome.Travelling.DopamineTravelling"
             android:exported="false" />
         <activity
-            android:name=".Bollywood.DopamineBollywood"
+            android:name=".DopamineHome.Bollywood.DopamineBollywood"
             android:exported="false" />
         <activity
-            android:name=".Trending.DopamineTrending"
+            android:name=".DopamineHome.Trending.DopamineTrending"
             android:exported="false" />
         <activity
-            android:name=".Artist.ArtistProfile"
+            android:name=".DopamineHome.Artist.ArtistProfile"
             android:exported="false" />
         <activity
             android:name=".DopamineMuiscPlayer.MasterMusicPlayer"
             android:exported="false" />
         <activity
-            android:name=".TracksList.DopamineTracks"
+            android:name=".DopamineHome.TracksList.DopamineTracks"
             android:exported="false" />
         <activity
-            android:name=".Like_songs"
+            android:name=".DopamineLibrary.Like_songs"
             android:exported="false" />
         <activity
-            android:name=".DopamineUserProfile"
+            android:name=".DopamineHome.DopamineUserProfile"
             android:exported="false" />
         <activity
-            android:name=".Dopamine_library"
+            android:name=".DopamineLibrary.Dopamine_library"
             android:exported="false" />
         <activity
-            android:name=".Dopamine_search"
+            android:name=".DopamineSearch.Dopamine_search"
             android:exported="false" />
         <activity
             android:name=".library"
@@ -71,7 +71,7 @@
             android:name=".authentication.continue_with_phone_otp"
             android:exported="true" />
         <activity
-            android:name=".Dopamine_home"
+            android:name=".DopamineHome.Dopamine_home"
             android:exported="true" />
         <activity
             android:name=".authentication.continue_with_phone"
