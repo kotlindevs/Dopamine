@@ -50,7 +50,7 @@
                     android:textSize="22sp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/settings"
+                    android:id="@+id/scan_song"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="right"

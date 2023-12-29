@@ -1,13 +1,15 @@
 package com.example.dopamine.DopamineSearch
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.dopamine.DopamineHome.Dopamine_home
 import com.example.dopamine.DopamineHome.DopamineUserProfile
+import com.example.dopamine.DopamineHome.Dopamine_home
 import com.example.dopamine.DopamineLibrary.Dopamine_library
 import com.example.dopamine.R
 import com.example.dopamine.authentication.googleSession
@@ -68,6 +70,16 @@ class Dopamine_search : AppCompatActivity() {
                 }
             }
             false
+        }
+
+        binding.scanSong.setOnClickListener {
+            val REQUEST_IMAGE_CAPTURE = 1
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                } catch (e: ActivityNotFoundException) {
+                    // display error state to the user
+                }
         }
 
         binding.UserImage.setOnClickListener {

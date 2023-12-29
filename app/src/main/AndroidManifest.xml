@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DopamineSearch.DopamineSearchUsingInnerTube"
+            android:exported="false" />
+        <activity
             android:name=".DopamineSettings.DopamineSettings"
             android:exported="false" />
         <activity
