@@ -2,28 +2,21 @@ package com.example.dopamine.authentication
 
 import android.app.Activity
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.dopamine.Dopamine_home
 import com.example.dopamine.R
 import com.example.dopamine.databinding.ActivityMainBinding
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -35,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var googleSession: googleSession
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,22 +41,19 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
+        val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this,signInOptions)
+
         binding.signPhone.setOnClickListener{
             startActivity(Intent(applicationContext, continue_with_phone::class.java))
         }
 
         binding.signGoogle.setOnClickListener{
-            oneTapClient.beginSignIn(signInRequest)
-                .addOnSuccessListener(this) {
-                    try {
-                        activityResult.launch(IntentSenderRequest.Builder(it.pendingIntent.intentSender).build())
-                    } catch (e: IntentSender.SendIntentException) {
-                        e.message?.let { it1 -> Log.e("UserVal", it1) }
-                    }
-                }
-                .addOnFailureListener(this) { e ->
-                    e.message?.let { it1 -> Log.e("UserVal", it1) }
-                }
+            networkPermission()
         }
 
         binding.signFb.setOnClickListener{
@@ -79,44 +67,108 @@ class MainActivity : AppCompatActivity() {
                 }
             materialAlertDialogBuilder.create().show()
         }
-
-        oneTapClient = Identity.getSignInClient(this)
-        signInRequest = BeginSignInRequest.builder()
-            .setPasswordRequestOptions(BeginSignInRequest.PasswordRequestOptions.builder()
-                .setSupported(true)
-                .build())
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId(getString(R.string.web_client_id))
-                    .setFilterByAuthorizedAccounts(false)
-                    .build())
-            .setAutoSelectEnabled(false)
-            .build()
     }
 
-    private val activityResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()){
-        try {
-            val credential = oneTapClient.getSignInCredentialFromIntent(it.data)
-            val idToken = credential.googleIdToken
+    private fun googleSignIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        launcher.launch(signInIntent)
+    }
 
-            if(idToken!=null){
-                googleSession
-                    .googleLogin(
-                        credential.googleIdToken.toString(),
-                        credential.profilePictureUri.toString(),
-                        credential.displayName.toString()
-                    )
-                startActivity(Intent(this, Dopamine_home::class.java)
-                    .putExtra("UserEmail", credential.googleIdToken.toString())
-                    .putExtra("UserPhoto",credential.profilePictureUri.toString())
-                    .putExtra("UserName",credential.displayName.toString()))
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result -> if(result.resultCode==Activity.RESULT_OK){
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        handleResult(task)
+    }
+    }
+
+    private fun handleResult(task : Task<GoogleSignInAccount>){
+        if(task.isSuccessful){
+            val account : GoogleSignInAccount? = task.result
+            if(account!=null){
+                updateUI(account)
+            }else{
+                showToast(task.exception.toString())
             }
-        } catch (e: ApiException) {
-            e.message?.let { it1 -> Log.d("UserVal", it1) }
         }
     }
+
+    private fun updateUI(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    showToast("Welcome")
+                    val userDetail = GoogleSignIn.getLastSignedInAccount(this)
+                    googleSession
+                        .googleLogin(
+                            userDetail?.email.toString(),
+                            userDetail?.photoUrl.toString(),
+                            userDetail?.displayName.toString()
+                        )
+                    startActivity(Intent(this, Dopamine_home::class.java)
+                        .putExtra("UserEmail",userDetail?.email)
+                        .putExtra("UserPhoto",userDetail?.photoUrl)
+                        .putExtra("UserName",userDetail?.displayName))
+                }else{
+                    showToast(it.toString())
+                }
+            }
+    }
+
     private fun showToast(str : String){
         Toast.makeText(applicationContext,str,Toast.LENGTH_LONG).show()
+    }
+
+    private fun networkPermission() {
+        if(checkSelfPermission(android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+            googleSignIn()
+        }else if(ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permission.INTERNET)){
+            val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+                .setTitle("Permission required")
+                .setCancelable(false)
+                .setPositiveButton("OK") {
+                        dialog, _ ->
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.INTERNET),100)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel"){
+                        dialog, _ -> dialog.dismiss()
+                }
+            materialAlertDialogBuilder.create().show()
+        }else{
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.INTERNET),100)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode==100){
+            if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                googleSignIn()
+            }else if (!ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permission.INTERNET)){
+                val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+                materialAlertDialogBuilder.setMessage("This feature is unavailable because this feature permission that you have denied."+ "Please allow network permission from setting to proceed further")
+                    .setTitle("Permission Required")
+                    .setCancelable(false)
+                    .setPositiveButton("Setting"){
+                            dialog,msg ->
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri = Uri.fromParts("package",packageName,null)
+                        intent.data= uri
+                        startActivity(intent)
+
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel"){
+                            dialog, _ ->
+                        dialog.dismiss()
+                    }
+                materialAlertDialogBuilder.create().show()
+            }
+        }
     }
 }
