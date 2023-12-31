@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/circular_spotify"
-                android:text="Enjoy Your Melody"
+                android:text="Now Playing"
                 android:textSize="22sp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -49,8 +49,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/TracksPhotoCard"
         style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="32dp"
         android:padding="32dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,9 +71,9 @@
         android:id="@+id/TracksName"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/circular_spotify"
-        android:gravity="left"
+        android:gravity="center"
         android:text="@string/radha"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,59 +81,70 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TracksPhotoCard" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/likeSong"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TracksArtist"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:button="@drawable/like_song"
-        app:layout_constraintEnd_toEndOf="@id/TracksName"
-        app:layout_constraintTop_toBottomOf="@id/TracksPhotoCard"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/proxima_nova"
+        android:gravity="center"
+        android:text="Artist"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TracksName" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TracksName">
+        app:layout_constraintTop_toBottomOf="@+id/TracksArtist">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/track_start"
-            android:text="@string/_00_00"
-            android:layout_marginEnd="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/_00_00" />
 
         <SeekBar
             android:id="@+id/music_seek_bar"
             android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:progress="0"/>
+            android:progress="0" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/track_end"
-            android:text="@string/_99_99"
-            android:layout_marginStart="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/_99_99" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/likeSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:button="@drawable/like_song" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/prev_song"
@@ -154,6 +165,14 @@
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/baseline_skip_next_24" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/SongLoop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:button="@drawable/baseline_repeat_24" />
 
     </LinearLayout>
 

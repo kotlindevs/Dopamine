@@ -92,7 +92,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val tracksList  = trackListAdapter.getArrayList()
                         var currentSong = tracksList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -107,13 +107,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % tracksList.size
                                 currentSong = tracksList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % tracksList.size
                                 currentSong = tracksList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -128,13 +128,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % tracksList.size
                                 currentSong = tracksList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % tracksList.size
                                 currentSong = tracksList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -166,7 +166,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val trendsList  = trendsAdaptor.getArrayList()
                         var currentSong = trendsList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -181,13 +181,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % trendsList.size
                                 currentSong = trendsList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % trendsList.size
                                 currentSong = trendsList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -202,13 +202,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % trendsList.size
                                 currentSong = trendsList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % trendsList.size
                                 currentSong = trendsList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -240,7 +240,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = bollywoodAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -255,13 +255,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -276,13 +276,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -314,7 +314,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = travellingAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -329,13 +329,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -350,13 +350,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -388,7 +388,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = phonkAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -403,13 +403,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -424,13 +424,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -462,7 +462,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = remixAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -477,13 +477,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -498,13 +498,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -536,7 +536,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = gamingAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -551,13 +551,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -572,13 +572,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -610,7 +610,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = gymAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -625,13 +625,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -646,13 +646,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -684,7 +684,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         val bollywoodList  = musicChartAdapter.getArrayList()
                         var currentSong = bollywoodList[currentSongPosition]
 
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                         playSong(currentSong.preview_url.toUri())
 
                         Log.d("currentSong",currentSong.toString())
@@ -699,13 +699,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                                 Log.d("currentSong",currentSong.toString())
                                 Log.d("currentSongPosition",currentSongPosition.toString())
                             }
@@ -720,13 +720,13 @@ class MasterMusicPlayer : AppCompatActivity(){
                                 currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
                             }else{
                                 currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
                                 currentSong = bollywoodList[currentSongPosition]
                                 mediaPlayer.reset()
                                 playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name)
+                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
 
                                 Log.d("currentSong", currentSong.toString())
                                 Log.d("currentSongPosition", currentSongPosition.toString())
@@ -797,12 +797,14 @@ class MasterMusicPlayer : AppCompatActivity(){
         }
     }
 
-    private fun setDataForSong(songImage : Uri,songName : String){
+    private fun setDataForSong(songImage : Uri,songName : String, artistName : String){
         Glide.with(applicationContext)
             .load(songImage)
             .into(binding.TracksPhoto)
 
         binding.TracksName.text = songName
+
+        binding.TracksArtist.text = artistName
     }
 
     override fun onStart() {
@@ -811,6 +813,12 @@ class MasterMusicPlayer : AppCompatActivity(){
         binding.likeSong.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 //showToast("You liked ❤️")
+            }
+        }
+
+        binding.SongLoop.setOnCheckedChangeListener{_, isChecked ->
+            if(isChecked){
+
             }
         }
     }

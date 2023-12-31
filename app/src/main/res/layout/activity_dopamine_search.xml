@@ -14,8 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -78,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_search_24"
                 android:drawablePadding="8dp"
-                android:inputType="text"
-                android:hint="Search" />
+                android:hint="Search"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,10 +97,9 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -140,12 +138,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav_bg"
+        app:itemIconTint="?attr/colorControlActivated"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/navigation_menu"
-        app:itemIconTint="?attr/colorControlActivated">
+        app:menu="@menu/navigation_menu">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

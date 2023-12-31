@@ -58,7 +58,7 @@ class BollywoodAdapter(
         holder.B_tracksArtist.text = tracks.artist_name
         holder.B_tracksLike.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
-                Toast.makeText(context,"You liked ❤️",Toast.LENGTH_LONG).show()
+                //Toast.makeText(context,"You liked ❤️",Toast.LENGTH_LONG).show()
             }
         }
         Glide.with(context)
