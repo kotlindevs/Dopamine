@@ -64,7 +64,6 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var gamingAdapter: GamingAdapter
     private lateinit var gymAdapter: GymAdapter
     private lateinit var musicChartAdapter: MusicChartAdapter
-    private lateinit var artistAdapter: ArtistAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -738,10 +737,6 @@ class MasterMusicPlayer : AppCompatActivity(){
                         Log.d("Tracks", t.message.toString())
                     }
                 })
-
-            //Artist
-        } else if(intent.getStringExtra("Artist") != null){
-            // Piyush sir will go for this......
         }
 
         //Player
