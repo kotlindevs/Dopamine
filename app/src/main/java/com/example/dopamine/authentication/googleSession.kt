@@ -3,7 +3,6 @@ package com.example.dopamine.authentication
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import java.text.FieldPosition
 
 class googleSession(var context: Context) {
     lateinit var sharedPreferences : SharedPreferences
