@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.dopamine.DopamineHome.Artist.Adapter.ArtistAdapter
 import com.example.dopamine.DopamineHome.Bollywood.Bollywood
 import com.example.dopamine.DopamineHome.Bollywood.BollywoodAdapter
 import com.example.dopamine.DopamineHome.Bollywood.BollywoodApi
@@ -807,13 +806,13 @@ class MasterMusicPlayer : AppCompatActivity(){
 
         binding.likeSong.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
-                //showToast("You liked ❤️")
+                showToast("You liked ❤️")
             }
         }
 
         binding.SongLoop.setOnCheckedChangeListener{_, isChecked ->
             if(isChecked){
-
+                showToast("Now Song Will Repeat 🔁")
             }
         }
     }
