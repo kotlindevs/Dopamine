@@ -1,5 +1,6 @@
 package com.example.dopamine.DopamineHome.Artist
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.dopamine.DopamineHome.Artist.ArtistList.ArtistInterface
 import com.example.dopamine.DopamineHome.TracksList.Adapter.TrackListAdapter
 import com.example.dopamine.DopamineHome.TracksList.TracksDataClass.Track
+import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityArtistProfileBinding
 import retrofit2.Call
@@ -28,9 +30,9 @@ class ArtistProfile : AppCompatActivity() {
 
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
 
-        if(intent.getStringExtra("header_image")!=null){
+        if(intent.getStringExtra("hi_url")!=null){
             Glide.with(applicationContext)
-                .load(intent.getStringExtra("header_image"))
+                .load(intent.getStringExtra("hi_url"))
                 .into(binding.ArtistHeaderImage)
         }else{
             Glide.with(applicationContext)
@@ -40,11 +42,11 @@ class ArtistProfile : AppCompatActivity() {
 
 
         Glide.with(applicationContext)
-            .load(intent.getStringExtra("profile_image"))
+            .load(intent.getStringExtra("ar_url"))
             .into(binding.ArtistProfileImage)
 
 //        binding.ArtistProfileId.text = intent.getStringExtra("type")
-        binding.ArtistProfileName.text = intent.getStringExtra("artist_name")
+        binding.ArtistProfileName.text = intent.getStringExtra("name")
 
         val id = intent.getStringExtra("id")
         intent.getStringExtra("base_url")?.let {
@@ -90,6 +92,16 @@ class ArtistProfile : AppCompatActivity() {
 
                     })
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.playArtistSong.setOnClickListener {
+            startActivity(Intent(applicationContext,MasterMusicPlayer::class.java)
+                .putExtra("id",intent.getStringExtra("id"))
+                .putExtra("base_url",intent.getStringExtra("base_url"))
+            )
         }
     }
 }

@@ -17,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class ArtistAdapter(
 
     val context: Context,
-    val artistList : List<Artist>?
+    private val artistList : List<Artist>?
 
 ) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
@@ -61,7 +61,12 @@ class ArtistAdapter(
                     Intent(context, ArtistProfile::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         .putExtra("position",position)
-                        .putExtra("Artist","https://api.npoint.io/a3ea088449c3a010fb5d")
+                        .putExtra("id",artist.id)
+                        .putExtra("ar_url",artist.ar_url)
+                        .putExtra("hi_url",artist.hi_url)
+                        .putExtra("name",artist.name)
+                        .putExtra("base_url",artist.base_url)
+                        .putExtra("type",artist.type)
                 )
         }
     }

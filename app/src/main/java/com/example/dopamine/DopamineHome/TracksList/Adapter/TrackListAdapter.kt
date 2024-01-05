@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.dopamine.DopamineHome.TracksList.TracksDataClass.Track
 import com.example.dopamine.DopamineMuiscPlayer.MasterMusicPlayer
 import com.example.dopamine.R
-import com.example.dopamine.DopamineHome.TracksList.TracksDataClass.Track
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.imageview.ShapeableImageView
@@ -72,7 +72,6 @@ class TrackListAdapter(
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("position",position)
-                    .putExtra("dopamine_pick","https://api.npoint.io/a2bbf40c66d86d855cda")
                 )
         }
     }
