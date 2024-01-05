@@ -14,67 +14,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dopamine"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
-        <activity
-            android:name=".DopamineSearch.DopamineSearchUsingInnerTube"
-            android:exported="false" />
+        tools:targetApi="tiramisu">
         <activity
             android:name=".DopamineSettings.DopamineSettings"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineNotifications.DopamineNotifications"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Gym.DopamineGym"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Gaming.DopamineGaming"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Remix.DopamineRemix"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Phonk.DopaminePhonk"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Travelling.DopamineTravelling"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Bollywood.DopamineBollywood"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Trending.DopamineTrending"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.Artist.ArtistProfile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineMuiscPlayer.MasterMusicPlayer"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.TracksList.DopamineTracks"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineLibrary.Like_songs"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".DopamineHome.DopamineUserProfile"
-            android:exported="false" />
-        <activity
-            android:name=".DopamineLibrary.Dopamine_library"
-            android:exported="false" />
-        <activity
-            android:name=".DopamineSearch.Dopamine_search"
-            android:exported="false" />
-        <activity
-            android:name=".library"
-            android:exported="false" />
-        <activity
-            android:name=".search"
-            android:exported="false" />
-        <activity
-            android:name=".login"
             android:exported="true" />
         <activity
             android:name=".authentication.continue_with_phone_otp"
@@ -86,17 +69,10 @@
             android:name=".authentication.continue_with_phone"
             android:exported="true" />
         <activity
-            android:name=".sign_up_free_pass"
-            android:exported="true" />
-        <activity
-            android:name=".sign_up_free"
-            android:exported="true" />
-        <activity
             android:name=".authentication.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

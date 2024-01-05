@@ -14,4 +14,7 @@
     <string name="radha">Radha</string>
     <string name="_00_00">00:00</string>
     <string name="_99_99">99:99</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="your_library">Your Library</string>
 </resources>
