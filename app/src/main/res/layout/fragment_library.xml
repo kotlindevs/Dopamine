@@ -39,7 +39,7 @@
                 android:textSize="22sp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/notifications"
+                android:id="@+id/add_playlist"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="right"
@@ -47,12 +47,12 @@
                 android:src="@drawable/baseline_add_24" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/settings"
+                android:id="@+id/search_in_playlist"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="right"
                 android:layout_marginRight="14dp"
-                android:src="@drawable/library_frag" />
+                android:src="@drawable/search_none" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
