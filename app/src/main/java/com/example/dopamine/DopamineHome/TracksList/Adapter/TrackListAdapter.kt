@@ -72,7 +72,10 @@ class TrackListAdapter(
                 .startActivity(Intent(context,MasterMusicPlayer::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("position",position)
+                    .putExtra("base_url",tracks.type)
+                    .putExtra("artist_name",tracks.artist_name)
                 )
+            Log.d("position",position.toString())
         }
     }
 }

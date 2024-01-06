@@ -41,6 +41,7 @@ import com.example.dopamine.DopamineHome.Trending.TrendsApi
 import com.example.dopamine.R
 import com.example.dopamine.authentication.googleSession
 import com.example.dopamine.databinding.ActivityMasterMusicPlayerBinding
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -886,6 +887,222 @@ class MasterMusicPlayer : AppCompatActivity(){
                             }
                         })
                 }
+            }
+        }else {
+            if (intent.getIntExtra("position", 0) >= 0) {
+                trackListAdapter = TrackListAdapter(applicationContext, ArrayList())
+                Log.d("base_url",intent.getStringExtra("base_url").toString())
+                intent.getStringExtra("base_url")?.let {
+             val retrofit =  Retrofit.Builder()
+                        .baseUrl(it)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                        .create(ArtistInterface::class.java)
+                        if(intent.getStringExtra("artist_name") == "Arijit Singh" ) {
+                            retrofit.getArijitsList()
+                                .enqueue(object : Callback<List<Track>> {
+                                    override fun onResponse(
+                                        call: Call<List<Track>>,
+                                        response: Response<List<Track>>
+                                    ) {
+                                        trackListAdapter = TrackListAdapter(
+                                            applicationContext,
+                                            response.body()!!
+                                        )
+                                        var currentSongPosition = intent.getIntExtra("position", 0)
+                                        val tracksList = trackListAdapter.getArrayList()
+                                        var currentSong = tracksList[currentSongPosition]
+
+                                        setDataForSong(
+                                            currentSong.mp_url.toUri(),
+                                            currentSong.song_name,
+                                            currentSong.artist_name
+                                        )
+                                        playSong(currentSong.preview_url.toUri())
+
+                                        Log.d("currentSong", currentSong.toString())
+
+                                        binding.nextSong.setOnClickListener {
+                                            if (mediaPlayer.isPlaying) {
+                                                handler.removeCallbacks(runnable)
+                                                mediaPlayer.reset()
+                                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                                binding.musicSeekBar.progress = 0
+                                                binding.trackStart.text =
+                                                    milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                                currentSongPosition =
+                                                    (currentSongPosition + 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                            } else {
+                                                currentSongPosition =
+                                                    (currentSongPosition + 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                mediaPlayer.reset()
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                                Log.d("currentSong", currentSong.toString())
+                                                Log.d(
+                                                    "currentSongPosition",
+                                                    currentSongPosition.toString()
+                                                )
+                                            }
+                                        }
+                                        binding.prevSong.setOnClickListener {
+                                            if (mediaPlayer.isPlaying) {
+                                                handler.removeCallbacks(runnable)
+                                                mediaPlayer.reset()
+                                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                                binding.musicSeekBar.progress = 0
+                                                binding.trackStart.text =
+                                                    milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                                currentSongPosition =
+                                                    (currentSongPosition - 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                            } else {
+                                                currentSongPosition =
+                                                    (currentSongPosition - 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                mediaPlayer.reset()
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+
+                                                Log.d("currentSong", currentSong.toString())
+                                                Log.d(
+                                                    "currentSongPosition",
+                                                    currentSongPosition.toString()
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<List<Track>>, t: Throwable) {
+                                        Log.d("Tracks", t.message.toString())
+                                    }
+                                })
+                        } else if(intent.getStringExtra("artist_name") == "Dhvani Bhanushali"){
+                            retrofit.getDhwaniList()
+                                .enqueue(object : Callback<List<Track>> {
+                                    override fun onResponse(
+                                        call: Call<List<Track>>,
+                                        response: Response<List<Track>>
+                                    ) {
+                                        trackListAdapter = TrackListAdapter(
+                                            applicationContext,
+                                            response.body()!!
+                                        )
+                                        var currentSongPosition = intent.getIntExtra("position", 0)
+                                        val tracksList = trackListAdapter.getArrayList()
+                                        var currentSong = tracksList[currentSongPosition]
+
+                                        setDataForSong(
+                                            currentSong.mp_url.toUri(),
+                                            currentSong.song_name,
+                                            currentSong.artist_name
+                                        )
+                                        playSong(currentSong.preview_url.toUri())
+
+                                        Log.d("currentSong", currentSong.toString())
+
+                                        binding.nextSong.setOnClickListener {
+                                            if (mediaPlayer.isPlaying) {
+                                                handler.removeCallbacks(runnable)
+                                                mediaPlayer.reset()
+                                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                                binding.musicSeekBar.progress = 0
+                                                binding.trackStart.text =
+                                                    milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                                currentSongPosition =
+                                                    (currentSongPosition + 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                            } else {
+                                                currentSongPosition =
+                                                    (currentSongPosition + 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                mediaPlayer.reset()
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                                Log.d("currentSong", currentSong.toString())
+                                                Log.d(
+                                                    "currentSongPosition",
+                                                    currentSongPosition.toString()
+                                                )
+                                            }
+                                        }
+                                        binding.prevSong.setOnClickListener {
+                                            if (mediaPlayer.isPlaying) {
+                                                handler.removeCallbacks(runnable)
+                                                mediaPlayer.reset()
+                                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
+                                                binding.musicSeekBar.progress = 0
+                                                binding.trackStart.text =
+                                                    milliSecondToTime(mediaPlayer.currentPosition.toLong())
+                                                currentSongPosition =
+                                                    (currentSongPosition - 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+                                            } else {
+                                                currentSongPosition =
+                                                    (currentSongPosition - 1) % tracksList.size
+                                                currentSong = tracksList[currentSongPosition]
+                                                mediaPlayer.reset()
+                                                playSong(currentSong.preview_url.toUri())
+                                                setDataForSong(
+                                                    currentSong.mp_url.toUri(),
+                                                    currentSong.song_name,
+                                                    currentSong.artist_name
+                                                )
+
+                                                Log.d("currentSong", currentSong.toString())
+                                                Log.d(
+                                                    "currentSongPosition",
+                                                    currentSongPosition.toString()
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<List<Track>>, t: Throwable) {
+                                        Log.d("Tracks", t.message.toString())
+                                    }
+                                })
+                        }
+                }
+
             }
         }
         //Player

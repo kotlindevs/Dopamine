@@ -40,12 +40,10 @@ class ArtistProfile : AppCompatActivity() {
                 .into(binding.ArtistHeaderImage)
         }
 
-
         Glide.with(applicationContext)
             .load(intent.getStringExtra("ar_url"))
             .into(binding.ArtistProfileImage)
 
-//        binding.ArtistProfileId.text = intent.getStringExtra("type")
         binding.ArtistProfileName.text = intent.getStringExtra("name")
 
         val id = intent.getStringExtra("id")
