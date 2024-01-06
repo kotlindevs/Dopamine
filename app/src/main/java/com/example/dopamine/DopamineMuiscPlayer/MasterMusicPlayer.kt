@@ -737,6 +737,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         Log.d("Tracks", t.message.toString())
                     }
                 })
+            // Artist
         }else if(intent.getStringExtra("id")!=null){
             trackListAdapter = TrackListAdapter(applicationContext,ArrayList())
             val id = intent.getStringExtra("id")
