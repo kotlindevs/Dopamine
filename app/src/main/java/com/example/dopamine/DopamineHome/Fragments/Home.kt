@@ -13,11 +13,17 @@ import com.example.dopamine.DopamineHome.Artist.Adapter.ArtistAdapter
 import com.example.dopamine.DopamineHome.Artist.ArtistData.Artist
 import com.example.dopamine.DopamineHome.Artist.ArtistList.ArtistInterface
 import com.example.dopamine.DopamineHome.DopamineUserProfile
+import com.example.dopamine.DopamineHome.IndiaBest.IndiaBest
+import com.example.dopamine.DopamineHome.IndiaBest.IndiaBestAdapter
+import com.example.dopamine.DopamineHome.IndiaBest.IndiaBestApi
 import com.example.dopamine.DopamineHome.ItemsViewModel
 import com.example.dopamine.DopamineHome.MusicAdapter
 import com.example.dopamine.DopamineHome.OldButGold.Chart
 import com.example.dopamine.DopamineHome.OldButGold.ChartsApi
 import com.example.dopamine.DopamineHome.OldButGold.MusicChartAdapter
+import com.example.dopamine.DopamineHome.TopWeek.TopWeek
+import com.example.dopamine.DopamineHome.TopWeek.TopWeekAdapter
+import com.example.dopamine.DopamineHome.TopWeek.TopWeekApi
 import com.example.dopamine.DopamineNotifications.DopamineNotifications
 import com.example.dopamine.DopamineSettings.DopamineSettings
 import com.example.dopamine.R
@@ -94,6 +100,50 @@ class Home : Fragment() {
                 }
 
                 override fun onFailure(call: Call<List<Chart>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+        }
+
+        binding.topHitsThisWeek.apply {
+            this.layoutManager = LinearLayoutManager(context,binding.topHitsThisWeek.horizontalFadingEdgeLength,false)
+            setHasFixedSize(true)
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://api.npoint.io/bd952edd473e435304b3/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(TopWeekApi::class.java)
+                .getTopWeek()
+            retrofit.enqueue(object: Callback<List<TopWeek>>{
+                override fun onResponse(call: Call<List<TopWeek>>, response: Response<List<TopWeek>>) {
+                    binding.topHitsThisWeek.adapter = TopWeekAdapter(context,response.body())
+                }
+
+                override fun onFailure(call: Call<List<TopWeek>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+        }
+
+        binding.indiaBest.apply {
+            this.layoutManager = LinearLayoutManager(context,binding.indiaBest.horizontalFadingEdgeLength,false)
+            setHasFixedSize(true)
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://api.npoint.io/680948fdb94d0f461888/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(IndiaBestApi::class.java)
+                .getIndiaBest()
+            retrofit.enqueue(object: Callback<List<IndiaBest>>{
+                override fun onResponse(call: Call<List<IndiaBest>>, response: Response<List<IndiaBest>>) {
+                    binding.indiaBest.adapter = IndiaBestAdapter(context,response.body())
+                }
+
+                override fun onFailure(call: Call<List<IndiaBest>>, t: Throwable) {
                     TODO("Not yet implemented")
                 }
 
