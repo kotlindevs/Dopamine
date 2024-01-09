@@ -20,9 +20,6 @@ import com.example.dopamine.DopamineHome.Gaming.GamingApi
 import com.example.dopamine.DopamineHome.Gym.Gym
 import com.example.dopamine.DopamineHome.Gym.GymAdapter
 import com.example.dopamine.DopamineHome.Gym.GymApi
-import com.example.dopamine.DopamineHome.IndiaBest.IndiaBest
-import com.example.dopamine.DopamineHome.IndiaBest.IndiaBestAdapter
-import com.example.dopamine.DopamineHome.IndiaBest.IndiaBestApi
 import com.example.dopamine.DopamineHome.OldButGold.Chart
 import com.example.dopamine.DopamineHome.OldButGold.ChartsApi
 import com.example.dopamine.DopamineHome.OldButGold.MusicChartAdapter
@@ -32,9 +29,6 @@ import com.example.dopamine.DopamineHome.Phonk.PhonkApi
 import com.example.dopamine.DopamineHome.Remix.Remix
 import com.example.dopamine.DopamineHome.Remix.RemixAdapter
 import com.example.dopamine.DopamineHome.Remix.RemixApi
-import com.example.dopamine.DopamineHome.TopWeek.TopWeek
-import com.example.dopamine.DopamineHome.TopWeek.TopWeekAdapter
-import com.example.dopamine.DopamineHome.TopWeek.TopWeekApi
 import com.example.dopamine.DopamineHome.TracksList.Adapter.TrackListAdapter
 import com.example.dopamine.DopamineHome.TracksList.TrackListApi.TracksApi
 import com.example.dopamine.DopamineHome.TracksList.TracksDataClass.Track
@@ -70,8 +64,6 @@ class MasterMusicPlayer : AppCompatActivity(){
     private lateinit var gamingAdapter: GamingAdapter
     private lateinit var gymAdapter: GymAdapter
     private lateinit var musicChartAdapter: MusicChartAdapter
-    private lateinit var TopWeekAdapter: TopWeekAdapter
-    private lateinit var IndiaBestAdapter: IndiaBestAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -896,154 +888,7 @@ class MasterMusicPlayer : AppCompatActivity(){
                         })
                 }
             }
-            // Top Week
-        } else if (intent.getStringExtra("TopWeek") != null){
-            TopWeekAdapter = TopWeekAdapter(applicationContext,ArrayList())
-            Retrofit.Builder()
-                .baseUrl("https://api.npoint.io/bd952edd473e435304b3/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(TopWeekApi::class.java)
-                .getTopWeek()
-                .enqueue(object : Callback<List<TopWeek>> {
-                    override fun onResponse(call: Call<List<TopWeek>>, response: Response<List<TopWeek>>) {
-                        TopWeekAdapter = TopWeekAdapter(
-                            applicationContext,
-                            response.body()!!
-                        )
-                        var currentSongPosition = intent.getIntExtra("position",0)
-                        val bollywoodList  = TopWeekAdapter.getArrayList()
-                        var currentSong = bollywoodList[currentSongPosition]
-
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                        playSong(currentSong.preview_url.toUri())
-
-                        Log.d("currentSong",currentSong.toString())
-
-                        binding.nextSong.setOnClickListener {
-                            if(mediaPlayer.isPlaying){
-                                handler.removeCallbacks(runnable)
-                                mediaPlayer.reset()
-                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
-                                binding.musicSeekBar.progress = 0
-                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                            }else{
-                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                mediaPlayer.reset()
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                                Log.d("currentSong",currentSong.toString())
-                                Log.d("currentSongPosition",currentSongPosition.toString())
-                            }
-                        }
-                        binding.prevSong.setOnClickListener {
-                            if(mediaPlayer.isPlaying){
-                                handler.removeCallbacks(runnable)
-                                mediaPlayer.reset()
-                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
-                                binding.musicSeekBar.progress = 0
-                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-                                currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                            }else{
-                                currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                mediaPlayer.reset()
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
-
-                                Log.d("currentSong", currentSong.toString())
-                                Log.d("currentSongPosition", currentSongPosition.toString())
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<TopWeek>>, t: Throwable) {
-                        Log.d("Tracks", t.message.toString())
-                    }
-                })
-            // India's Best
-        } else if(intent.getStringExtra("IndiaBest") != null){
-            IndiaBestAdapter = IndiaBestAdapter(applicationContext,ArrayList())
-            Retrofit.Builder()
-                .baseUrl("https://api.npoint.io/680948fdb94d0f461888/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(IndiaBestApi::class.java)
-                .getIndiaBest()
-                .enqueue(object : Callback<List<IndiaBest>> {
-                    override fun onResponse(call: Call<List<IndiaBest>>, response: Response<List<IndiaBest>>) {
-                        IndiaBestAdapter = IndiaBestAdapter(
-                            applicationContext,
-                            response.body()!!
-                        )
-                        var currentSongPosition = intent.getIntExtra("position",0)
-                        val bollywoodList  = IndiaBestAdapter.getArrayList()
-                        var currentSong = bollywoodList[currentSongPosition]
-
-                        setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                        playSong(currentSong.preview_url.toUri())
-
-                        Log.d("currentSong",currentSong.toString())
-
-                        binding.nextSong.setOnClickListener {
-                            if(mediaPlayer.isPlaying){
-                                handler.removeCallbacks(runnable)
-                                mediaPlayer.reset()
-                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
-                                binding.musicSeekBar.progress = 0
-                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                            }else{
-                                currentSongPosition  = (currentSongPosition + 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                mediaPlayer.reset()
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                                Log.d("currentSong",currentSong.toString())
-                                Log.d("currentSongPosition",currentSongPosition.toString())
-                            }
-                        }
-                        binding.prevSong.setOnClickListener {
-                            if(mediaPlayer.isPlaying){
-                                handler.removeCallbacks(runnable)
-                                mediaPlayer.reset()
-                                binding.playPause.setImageResource(R.drawable.baseline_play_circle_24)
-                                binding.musicSeekBar.progress = 0
-                                binding.trackStart.text = milliSecondToTime(mediaPlayer.currentPosition.toLong())
-                                currentSongPosition  = (currentSongPosition - 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(),currentSong.song_name,currentSong.artist_name)
-                            }else{
-                                currentSongPosition = (currentSongPosition - 1) % bollywoodList.size
-                                currentSong = bollywoodList[currentSongPosition]
-                                mediaPlayer.reset()
-                                playSong(currentSong.preview_url.toUri())
-                                setDataForSong(currentSong.mp_url.toUri(), currentSong.song_name,currentSong.artist_name)
-
-                                Log.d("currentSong", currentSong.toString())
-                                Log.d("currentSongPosition", currentSongPosition.toString())
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<IndiaBest>>, t: Throwable) {
-                        Log.d("Tracks", t.message.toString())
-                    }
-                })
         }
-
         //Player
         binding.playPause.setOnClickListener {
             if(mediaPlayer.isPlaying){
