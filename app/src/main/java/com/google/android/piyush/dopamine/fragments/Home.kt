@@ -1,32 +1,145 @@
 package com.google.android.piyush.dopamine.fragments
 
-import androidx.fragment.app.viewModels
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.viewModels.HomeViewModel
+import com.google.android.piyush.dopamine.activities.DopamineSettings
+import com.google.android.piyush.dopamine.activities.DopamineUserProfile
+import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
+import com.google.android.piyush.dopamine.adapters.HomeAdapter
+import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
+import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.viewModels.HomeViewModel
+import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import java.util.Calendar
 
 class Home : Fragment() {
 
-    companion object {
-        fun newInstance() = Home()
-    }
-
-    private val viewModel: HomeViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private var fragmentHomeBinding : FragmentHomeBinding? = null
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var repository: YoutubeRepositoryImpl
+    private lateinit var homeViewModelFactory: HomeViewModelFactory
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var homeAdapter: HomeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val binding = FragmentHomeBinding.bind(view)
+        fragmentHomeBinding = binding
+        repository = YoutubeRepositoryImpl()
+        homeViewModelFactory = HomeViewModelFactory(repository)
+        homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        fragmentHomeBinding!!.greeting.text = getGreeting()
+
+        Log.d(TAG, firebaseAuth.currentUser?.displayName.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.email.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.photoUrl.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.uid.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.phoneNumber.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.providerId.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.isAnonymous.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.isEmailVerified.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.providerData.toString())
+        Log.d(TAG, firebaseAuth.currentUser?.metadata.toString())
+
+        if(firebaseAuth.currentUser?.photoUrl == null){
+            val userPhoto = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/default-profile-picture-grey-male-icon.png"
+            Glide.with(this).load(userPhoto).into(fragmentHomeBinding!!.userImage)
+        }else{
+            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
+        }
+
+        fragmentHomeBinding!!.settings.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    DopamineSettings::class.java
+                )
+            )
+        }
+
+        fragmentHomeBinding!!.watchHistory.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    DopamineVideoWatchHistory::class.java
+                )
+            )
+        }
+
+        fragmentHomeBinding!!.userImage.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    DopamineUserProfile::class.java
+                )
+            )
+        }
+
+        if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+            homeViewModel.videos.observe(viewLifecycleOwner) {videos ->
+                when (videos) {
+                    is YoutubeResource.Success -> {
+                        binding.shimmerRecyclerView.visibility = View.INVISIBLE
+                        binding.shimmerRecyclerView.stopShimmer()
+                        binding.recyclerView.apply {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(context)
+                            homeAdapter = HomeAdapter(requireContext(), videos.data)
+                            adapter = homeAdapter
+                        }
+                        Log.d(ContentValues.TAG, "Success: ${videos.data}")
+                    }
+                    is YoutubeResource.Error -> {
+                        Log.d(ContentValues.TAG, "Error: ${videos.exception}")
+                    }
+                    is YoutubeResource.Loading -> {
+                        binding.shimmerRecyclerView.visibility = View.VISIBLE
+                        binding.shimmerRecyclerView.startShimmer()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentHomeBinding = null
+        homeViewModel.videos.removeObservers(viewLifecycleOwner)
+    }
+
+    private fun getGreeting(): String {
+        val calendar = Calendar.getInstance()
+        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+
+        return when (hourOfDay) {
+            in 6..11 -> "Good Morning"
+            in 12..17 -> "Good Afternoon"
+            in 18..23 -> "Good Evening"
+            else -> "Good Night"
+        }
     }
 }

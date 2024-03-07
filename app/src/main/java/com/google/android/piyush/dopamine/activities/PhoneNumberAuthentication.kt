@@ -53,13 +53,10 @@ class PhoneNumberAuthentication : AppCompatActivity() {
             if(NetworkUtilities.isNetworkAvailable(this)){
                 if(binding.phoneNumber.text.toString().isEmpty()){
                     showToast("Please enter phone number")
-                    return@setOnClickListener
                 }else if(binding.phoneNumber.text.toString().length < 10){
                     showToast("Please enter minimum 10 digit phone number")
-                    return@setOnClickListener
                 }else if(binding.phoneNumber.text.toString().length > 10){
                     showToast("Please enter maximum 10 digit phone number")
-                    return@setOnClickListener
                 }else {
                     val phoneNumber = "+91 ${binding.phoneNumber.text}"
                     userViewModel.sendVerificationCode(

@@ -4,4 +4,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.google.gms.google.services) apply false
+    kotlin("jvm") version "1.9.23"
+
 }
