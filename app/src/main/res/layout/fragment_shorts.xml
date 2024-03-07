@@ -5,9 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".fragments.Shorts">
 
-    <TextView
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/playWithShortsEffect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/shimmer_item_fragment_shorts"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/playWithShorts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:orientation="vertical"/>
 
 </FrameLayout>

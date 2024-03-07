@@ -10,14 +10,14 @@ import kotlinx.serialization.json.Json
 
 object YoutubeClient {
 
-    private const val YOUTUBE = "https://youtube.googleapis.com/youtube/v3/"
+    const val YOUTUBE = "https://youtube.googleapis.com/youtube/v3/"
 
     val REGION_CODE = arrayListOf(
         "IN",
         "US"
     ).random()
 
-    val SHORTS = arrayListOf(
+    private val SHORTS = arrayListOf(
         "e0b088ecf082c9d119f9","df2a4f0cdf426639ff66","82a4bfb6062016fab407"
     ).random()
 
@@ -34,6 +34,10 @@ object YoutubeClient {
     const val MAX_RESULTS = "50"
 
     const val API_KEY = "AIzaSyBuO1S8x52SWLSQwFm_T12Wnsseao5Q9x8"
+
+    val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
+
+    const val SHORTS_PART = "shorts"
 
     val REVERB_AND_SLOWED = arrayListOf(
         "PLnMEO-E9-ZnMlcG_XrFHfBzhiaTfwRB1K", "PLBTanuC8SLeZaIXwjc-vDZ-CmRak-KITf",
@@ -95,9 +99,8 @@ object YoutubeClient {
                 }
             )
         }
-
-        defaultRequest {
-            url(YOUTUBE)
-        }
+//        defaultRequest {
+//            url(YOUTUBE)
+//        }
     }
 }
