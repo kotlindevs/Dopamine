@@ -54,6 +54,7 @@ class Home : Fragment() {
 
         fragmentHomeBinding!!.greeting.text = getGreeting()
 
+        //User details
         Log.d(TAG, firebaseAuth.currentUser?.displayName.toString())
         Log.d(TAG, firebaseAuth.currentUser?.email.toString())
         Log.d(TAG, firebaseAuth.currentUser?.photoUrl.toString())
@@ -65,7 +66,7 @@ class Home : Fragment() {
         Log.d(TAG, firebaseAuth.currentUser?.providerData.toString())
         Log.d(TAG, firebaseAuth.currentUser?.metadata.toString())
 
-        if(firebaseAuth.currentUser?.photoUrl == null){
+        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
             val userPhoto = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/default-profile-picture-grey-male-icon.png"
             Glide.with(this).load(userPhoto).into(fragmentHomeBinding!!.userImage)
         }else{
