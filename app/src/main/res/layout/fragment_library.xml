@@ -1,13 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="ifContentScrolls"
+    android:scrollbars="none"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.Library">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="52dp">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="left"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                    android:layout_marginRight="12dp" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:fontFamily="@font/circular_spotify"
+                    android:text="Your Library"
+                    android:textSize="22sp" />
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/edits_you_liked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/edits_you_liked"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"/>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/editsYouLikedEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/edits_you_liked"
+            app:layout_constraintStart_toStartOf="parent">
+            <HorizontalScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:overScrollMode="always"
+                android:fitsSystemWindows="true">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <ScrollView
+            android:id="@+id/scrollable"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:scrollbars="none"
+            android:overScrollMode="always"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toBottomOf="@id/edits_you_liked"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/editsYouLikedList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_fragment_library"
+                android:orientation="horizontal"/>
+        </ScrollView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/gaming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/gaming"
+            android:fontFamily="@font/proxima_nova"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollable"/>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/gamingEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/gaming"
+            app:layout_constraintStart_toStartOf="parent">
+            <HorizontalScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:overScrollMode="always"
+                android:fitsSystemWindows="true">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <ScrollView
+            android:id="@+id/scrollable1"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:scrollbars="none"
+            android:overScrollMode="always"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toBottomOf="@id/gaming"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gamingList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_fragment_library"
+                android:orientation="horizontal"/>
+        </ScrollView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/lofiBhajan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/lofi_bhajan"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollable1"/>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/lofiBhajanEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/lofiBhajan"
+            app:layout_constraintStart_toStartOf="parent">
+            <HorizontalScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:overScrollMode="always"
+                android:fitsSystemWindows="true">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                    <include layout="@layout/shimmer_item_fragment_library"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <ScrollView
+            android:id="@+id/scrollable2"
+            android:layout_width="wrap_content"
+            android:layout_height="168dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:scrollbars="none"
+            android:overScrollMode="always"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toBottomOf="@id/lofiBhajan"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lofiBhajanList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_fragment_library"
+                android:orientation="horizontal"/>
+        </ScrollView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/youtube_player_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorTertiaryContainer"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/scrollable2"
+            app:layout_constraintStart_toStartOf="parent">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.CardView.Elevated"
+                android:elevation="2dp"
+                android:layout_margin="12dp">
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/youtubePlayerView" />
+            </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</ScrollView>

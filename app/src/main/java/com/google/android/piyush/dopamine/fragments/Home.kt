@@ -17,6 +17,7 @@ import com.google.android.piyush.dopamine.activities.DopamineSettings
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
+import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -67,8 +68,7 @@ class Home : Fragment() {
         Log.d(TAG, firebaseAuth.currentUser?.metadata.toString())
 
         if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            val userPhoto = "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/default-profile-picture-grey-male-icon.png"
-            Glide.with(this).load(userPhoto).into(fragmentHomeBinding!!.userImage)
+            Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentHomeBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
         }
@@ -112,14 +112,15 @@ class Home : Fragment() {
                             homeAdapter = HomeAdapter(requireContext(), videos.data)
                             adapter = homeAdapter
                         }
-                        Log.d(ContentValues.TAG, "Success: ${videos.data}")
+                        Log.d(TAG, "Success: ${videos.data}")
                     }
                     is YoutubeResource.Error -> {
-                        Log.d(ContentValues.TAG, "Error: ${videos.exception}")
+                        Log.d(TAG, "Error: ${videos.exception}")
                     }
                     is YoutubeResource.Loading -> {
                         binding.shimmerRecyclerView.visibility = View.VISIBLE
                         binding.shimmerRecyclerView.startShimmer()
+                        Log.d(TAG, "Loading")
                     }
                 }
             }

@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.shimmer)
     implementation(libs.glide)
+    implementation(libs.core)
     implementation(project(":Youtube"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    android:id="@+id/video"
+    style="@style/Widget.Material3.CardView.Filled"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="128dp"
+            android:layout_height="92dp"
+            android:background="?attr/colorTertiaryContainer"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/text1"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/circular_spotify"
+            android:gravity="left"
+            android:background="?attr/colorTertiaryContainer"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintBottom_toTopOf="@id/text2"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@id/text2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/proxima_nova"
+            android:gravity="left"
+            android:background="?attr/colorTertiaryContainer"
+            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text1"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

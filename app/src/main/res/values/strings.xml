@@ -8,4 +8,7 @@
     <string name="video_title">Video Title</string>
     <string name="time">00:00</string>
     <string name="sign_out">Sign out</string>
+    <string name="edits_you_liked">Edits you liked</string>
+    <string name="gaming">Gaming</string>
+    <string name="lofi_bhajan">Lofi Bhajan</string>
 </resources>

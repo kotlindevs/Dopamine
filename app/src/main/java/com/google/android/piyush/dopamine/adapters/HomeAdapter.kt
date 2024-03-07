@@ -20,14 +20,9 @@ import java.time.temporal.ChronoUnit
 
 class HomeAdapter(
     private val context: Context,
-    private var youtube : Youtube? = null
+    private var youtube : Youtube?
 ) : RecyclerView.Adapter<HomeViewHolder>() {
 
-    fun clearYoutube(){
-        val size = itemCount
-        youtube = null
-        notifyItemRangeRemoved(0, size)
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         return HomeViewHolder(
             LayoutInflater

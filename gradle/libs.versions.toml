@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.0"
+core = "12.1.0"
 glide = "4.16.0"
 kotlin = "1.9.23"
 coreKtx = "1.12.0"
@@ -24,6 +25,7 @@ shimmer = "0.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
