@@ -34,7 +34,7 @@ class LibraryAdapter(
             .load(videos?.snippet?.thumbnails?.standard?.url)
             .into(holder.image)
         holder.title.text = videos?.snippet?.title
-        holder.subtitle.text = videos?.snippet?.channelTitle
+        holder.subtitle.text = videos?.snippet?.publishedAt
         holder.video.setOnClickListener {
             context.startActivity(
                 Intent(context, YoutubePlayer::class.java)

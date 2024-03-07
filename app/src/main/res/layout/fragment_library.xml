@@ -28,16 +28,16 @@
                     android:id="@+id/userImage"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                    android:layout_marginRight="12dp" />
+                    android:layout_marginEnd="12dp" />
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/greeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/circular_spotify"
-                    android:text="Your Library"
+                    android:text="@string/dopamine_library"
                     android:textSize="22sp" />
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -56,7 +56,7 @@
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/editsYouLikedEffect"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:overScrollMode="always"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="false">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,13 +85,13 @@
         <ScrollView
             android:id="@+id/scrollable"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:scrollbars="none"
             android:overScrollMode="always"
-            android:fitsSystemWindows="true"
+            android:fitsSystemWindows="false"
             app:layout_constraintTop_toBottomOf="@id/edits_you_liked"
             app:layout_constraintStart_toStartOf="parent">
             <androidx.recyclerview.widget.RecyclerView
@@ -116,7 +116,7 @@
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/gamingEffect"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:overScrollMode="always"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="false">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,13 +145,13 @@
         <ScrollView
             android:id="@+id/scrollable1"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:scrollbars="none"
             android:overScrollMode="always"
-            android:fitsSystemWindows="true"
+            android:fitsSystemWindows="false"
             app:layout_constraintTop_toBottomOf="@id/gaming"
             app:layout_constraintStart_toStartOf="parent">
             <androidx.recyclerview.widget.RecyclerView
@@ -176,7 +176,7 @@
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/lofiBhajanEffect"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:overScrollMode="always"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="false">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -205,13 +205,13 @@
         <ScrollView
             android:id="@+id/scrollable2"
             android:layout_width="wrap_content"
-            android:layout_height="168dp"
+            android:layout_height="172dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:scrollbars="none"
             android:overScrollMode="always"
-            android:fitsSystemWindows="true"
+            android:fitsSystemWindows="false"
             app:layout_constraintTop_toBottomOf="@id/lofiBhajan"
             app:layout_constraintStart_toStartOf="parent">
             <androidx.recyclerview.widget.RecyclerView

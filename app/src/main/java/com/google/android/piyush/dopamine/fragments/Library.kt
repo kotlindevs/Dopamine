@@ -51,7 +51,7 @@ class Library : Fragment() {
         viewModel = ViewModelProvider(
             this,
             viewModelProviderFactory
-        ).get(LibraryViewModel::class.java)
+        )[LibraryViewModel::class.java]
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -98,7 +98,6 @@ class Library : Fragment() {
             }
         }
 
-        /*
         viewModel.gamingVideos.observe(viewLifecycleOwner){ playListVideos ->
             when(playListVideos) {
                 is YoutubeResource.Success -> {
@@ -175,13 +174,15 @@ class Library : Fragment() {
             },
             true,
             iFramePlayerOptions
-        ) */
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentLibraryBinding = null
         viewModel.reverbAndSlowedVideos.removeObservers(viewLifecycleOwner)
+        viewModel.gamingVideos.removeObservers(viewLifecycleOwner)
+        viewModel.lofiBhajan.removeObservers(viewLifecycleOwner)
     }
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
