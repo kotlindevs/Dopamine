@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".DopamineApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,25 +17,25 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.YoutubePlayer"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.DopamineSettings"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.DopamineVideoWatchHistory"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.DopamineUserProfile"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.PhoneNumberVerifyCode"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.PhoneNumberAuthentication"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.DopamineHome"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">
