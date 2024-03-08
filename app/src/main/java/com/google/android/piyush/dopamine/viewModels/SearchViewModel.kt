@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -16,13 +17,25 @@ class SearchViewModel(
     private val _searchVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
     val searchVideos : MutableLiveData<YoutubeResource<Youtube>> = _searchVideos
 
-    fun searchVideos(query : String) = viewModelScope.launch {
-        try {
-            _searchVideos.postValue(YoutubeResource.Loading)
-            val videos = youtubeRepositoryImpl.getSearchVideos(query)
-            _searchVideos.postValue(YoutubeResource.Success(videos))
-        } catch (e : Exception) {
-            _searchVideos.postValue(YoutubeResource.Error(e))
+    fun searchVideos(query : String) {
+        viewModelScope.launch {
+            try {
+                _searchVideos.postValue(YoutubeResource.Loading)
+                val videos = youtubeRepositoryImpl.getSearchVideos(query)
+                if(videos.items.isNullOrEmpty()){
+                    _searchVideos.postValue(
+                        YoutubeResource.Error(
+                            Exception(
+                                "The request cannot be completed because you have exceeded your quota."
+                            )
+                        )
+                    )
+                } else {
+                    _searchVideos.postValue(YoutubeResource.Success(videos))
+                }
+            } catch (e : Exception) {
+                _searchVideos.postValue(YoutubeResource.Error(e))
+            }
         }
     }
 }

@@ -27,9 +27,21 @@ class HomeViewModel(
                 YoutubeResource.Loading
             )
             val response = youtubeRepositoryImpl.getHomeVideos()
-            _videos.postValue(
-                YoutubeResource.Success(response)
-            )
+            if(response.items.isNullOrEmpty()){
+                _videos.postValue(
+                    YoutubeResource.Error(
+                        Exception(
+                            "The request cannot be completed because you have exceeded your quota."
+                        )
+                    )
+                )
+            }else{
+                _videos.postValue(
+                    YoutubeResource.Success(
+                        response
+                    )
+                )
+            }
         }catch (exception : Exception){
             _videos.postValue(
                 YoutubeResource.Error(

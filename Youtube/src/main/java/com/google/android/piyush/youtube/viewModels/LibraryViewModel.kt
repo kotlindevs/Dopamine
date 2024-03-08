@@ -34,9 +34,19 @@ class LibraryViewModel(
             val response = youtubeRepositoryImpl.getLibraryVideos(
                 YoutubeClient.REVERB_AND_SLOWED
             )
-            _reverbAndSlowedVideos.postValue(
-                YoutubeResource.Success(response)
-            )
+            if(response.items.isNullOrEmpty()){
+                _reverbAndSlowedVideos.postValue(
+                    YoutubeResource.Error(
+                        Exception(
+                            "The request cannot be completed because you have exceeded your quota."
+                        )
+                    )
+                )
+            }else{
+                _reverbAndSlowedVideos.postValue(
+                    YoutubeResource.Success(response)
+                )
+            }
         }catch (exception : Exception){
             _reverbAndSlowedVideos.postValue(
                 YoutubeResource.Error(exception)
@@ -50,9 +60,19 @@ class LibraryViewModel(
             val response = youtubeRepositoryImpl.getLibraryVideos(
                 YoutubeClient.GAMING_VIDEOS
             )
-            _gamingVideos.postValue(
-                YoutubeResource.Success(response)
-            )
+            if(response.items.isNullOrEmpty()){
+                _gamingVideos.postValue(
+                    YoutubeResource.Error(
+                        Exception(
+                            "The request cannot be completed because you have exceeded your quota."
+                        )
+                    )
+                )
+            }else{
+                _gamingVideos.postValue(
+                    YoutubeResource.Success(response)
+                )
+            }
         }catch (exception : Exception){
             _gamingVideos.postValue(
                 YoutubeResource.Error(exception)
@@ -66,9 +86,19 @@ class LibraryViewModel(
             val response = youtubeRepositoryImpl.getLibraryVideos(
                 YoutubeClient.LOFI_BHAJAN
             )
-            _lofiBhajan.postValue(
-                YoutubeResource.Success(response)
-            )
+            if(response.items.isNullOrEmpty()){
+                _lofiBhajan.postValue(
+                    YoutubeResource.Error(
+                        Exception(
+                            "The request cannot be completed because you have exceeded your quota."
+                        )
+                    )
+                )
+            }else{
+                _lofiBhajan.postValue(
+                    YoutubeResource.Success(response)
+                )
+            }
         }catch (exception : Exception){
             _lofiBhajan.postValue(
                 YoutubeResource.Error(exception)

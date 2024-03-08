@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineSettings
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
@@ -103,6 +104,11 @@ class Home : Fragment() {
         if(NetworkUtilities.isNetworkAvailable(requireContext())) {
             homeViewModel.videos.observe(viewLifecycleOwner) {videos ->
                 when (videos) {
+                    is YoutubeResource.Loading -> {
+                        binding.shimmerRecyclerView.visibility = View.VISIBLE
+                        binding.shimmerRecyclerView.startShimmer()
+                        Log.d(TAG, "Loading: True")
+                    }
                     is YoutubeResource.Success -> {
                         binding.shimmerRecyclerView.visibility = View.INVISIBLE
                         binding.shimmerRecyclerView.stopShimmer()
@@ -115,12 +121,35 @@ class Home : Fragment() {
                         //Log.d(TAG, "Success: ${videos.data}")
                     }
                     is YoutubeResource.Error -> {
-                        Log.d(TAG, "Error: ${videos.exception}")
-                    }
-                    is YoutubeResource.Loading -> {
-                        binding.shimmerRecyclerView.visibility = View.VISIBLE
-                        binding.shimmerRecyclerView.startShimmer()
-                        Log.d(TAG, "Loading")
+                        Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                        MaterialAlertDialogBuilder(requireContext())
+                            .apply {
+                                this.setTitle("Something went wrong")
+                                this.setMessage(videos.exception.message.toString())
+                                this.setIcon(R.drawable.ic_dialog_error)
+                                this.setCancelable(false)
+                                this.setNegativeButton("Cancel") { dialog, _ ->
+                                    dialog?.dismiss()
+                                }
+                                this.setPositiveButton("Retry") { _, _ ->
+                                    homeViewModel.videos.observe(viewLifecycleOwner) {
+                                        if(it is YoutubeResource.Success) {
+                                            binding.shimmerRecyclerView.visibility = View.INVISIBLE
+                                            binding.shimmerRecyclerView.stopShimmer()
+                                            binding.recyclerView.apply {
+                                                setHasFixedSize(true)
+                                                layoutManager = LinearLayoutManager(context)
+                                                homeAdapter = HomeAdapter(requireContext(),it.data)
+                                                adapter = homeAdapter
+                                            }
+                                        }else{
+                                            binding.shimmerRecyclerView.visibility = View.VISIBLE
+                                            binding.shimmerRecyclerView.startShimmer()
+                                            this.create().show()
+                                        }
+                                    }
+                                }.create().show()
+                            }
                     }
                 }
             }

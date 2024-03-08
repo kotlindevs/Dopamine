@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
@@ -28,6 +29,8 @@ import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
+import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.Utilities.REQUEST_CODE_SPEECH_INPUT
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
 import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -120,14 +123,13 @@ class Search : Fragment() {
                             query
                         )
                     )
-                    Toast.makeText(context, "Insert Query", Toast.LENGTH_SHORT).show()
 
                     searchViewModel.searchVideos(query!!)
 
                     searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
                         when (searchVideos) {
                             is YoutubeResource.Loading -> {
-                                Log.d(TAG, "onQueryTextSubmit: Loading")
+                                Log.d(TAG, "Loading: True")
                                 binding.utilList.visibility = View.GONE
                             }
 
@@ -137,11 +139,25 @@ class Search : Fragment() {
                                     visibility = View.VISIBLE
                                     adapter = SearchAdapter(context!!, searchVideos.data)
                                 }
-                                Log.d(TAG, "onQueryTextSubmit: ${ searchVideos.data}")
+                                Log.d(TAG, "Success: ${ searchVideos.data}")
                             }
 
                             is YoutubeResource.Error -> {
-                                Log.d(TAG, "onQueryTextSubmit: ${searchVideos.exception}")
+                                Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                                MaterialAlertDialogBuilder(context!!)
+                                    .apply {
+                                        this.setTitle("Error")
+                                        this.setMessage(searchVideos.exception.message.toString())
+                                        this.setIcon(R.drawable.ic_dialog_error)
+                                        this.setCancelable(false)
+                                        this.setNegativeButton("Cancel") { dialog, _ ->
+                                            dialog?.dismiss()
+                                        }
+                                        this.setPositiveButton("Retry") { _, _ ->
+                                            searchViewModel.searchVideos(query)
+                                        }.create().show()
+                                    }
+
                             }
                         }
                     }
@@ -155,13 +171,58 @@ class Search : Fragment() {
         )
 
         binding.voiceSearch.setOnClickListener {
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Search video here 🫡")
+            if(
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.RECORD_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    REQUEST_CODE_SPEECH_INPUT
+                )
+            }else{
+                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+            }
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == REQUEST_CODE_SPEECH_INPUT){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "super.onActivityResult(requestCode, resultCode, data)",
+        "androidx.fragment.app.Fragment")
+    )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK){
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            fragmentSearchBinding!!.searchVideo.setQuery(result?.get(0), true)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

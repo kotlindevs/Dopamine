@@ -1,10 +1,11 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -16,12 +17,14 @@ import com.google.android.piyush.dopamine.fragments.Library
 import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
+import kotlin.system.exitProcess
 
+@Suppress("DEPRECATION")
 class DopamineHome : AppCompatActivity() {
 
     private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()
     private lateinit var binding: ActivityDopamineHomeBinding
-    private var backPressed = false
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,15 +39,12 @@ class DopamineHome : AppCompatActivity() {
         }
 
         onBackPressedDispatcher.addCallback {
-            if(backPressed!=true){
-                Toast.makeText(applicationContext,"Press back again to exit", Toast.LENGTH_SHORT).show()
-                backPressed = true
-            }else{
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finishAffinity()
-                finish()
-                System.exit(0)
-            }
+            overridePendingTransition(
+                android.R.anim.fade_in, android.R.anim.fade_out
+            )
+            finishAffinity()
+            finish()
+            exitProcess(0)
         }
 
         if (savedInstanceState == null) {

@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
+import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
@@ -88,7 +90,35 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Error -> {
-                    showToast(playListVideos.exception.message.toString())
+                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
+                    MaterialAlertDialogBuilder(requireContext())
+                        .apply {
+                            this.setTitle("Something went wrong")
+                            this.setMessage(playListVideos.exception.message.toString())
+                            this.setIcon(R.drawable.ic_dialog_error)
+                            this.setCancelable(false)
+                            this.setNegativeButton("Cancel") { dialog, _ ->
+                                dialog?.dismiss()
+                            }
+                            this.setPositiveButton("Retry") { _, _ ->
+                                viewModel.reverbAndSlowedVideos.observe(viewLifecycleOwner) {
+                                    if(it is YoutubeResource.Success) {
+                                        binding.editsYouLikedEffect.visibility = View.INVISIBLE
+                                        binding.editsYouLikedEffect.stopShimmer()
+                                        binding.editsYouLikedList.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = LinearLayoutManager(context)
+                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            adapter = libraryAdapter
+                                        }
+                                    }else{
+                                        binding.editsYouLikedEffect.visibility = View.VISIBLE
+                                        binding.editsYouLikedEffect.startShimmer()
+                                        this.create().show()
+                                    }
+                                }
+                            }.create().show()
+                        }
                 }
 
                 is YoutubeResource.Loading -> {
@@ -117,7 +147,7 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Error -> {
-                    showToast(playListVideos.exception.message.toString())
+                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
                 }
 
                 is YoutubeResource.Loading -> {
@@ -146,7 +176,7 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Error -> {
-                    showToast(playListVideos.exception.message.toString())
+                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
                 }
 
                 is YoutubeResource.Loading -> {
