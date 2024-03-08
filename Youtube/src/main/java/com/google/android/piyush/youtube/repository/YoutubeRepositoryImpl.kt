@@ -8,7 +8,8 @@ import io.ktor.client.request.get
 
 class YoutubeRepositoryImpl : YoutubeRepository {
     override suspend fun getHomeVideos(): Youtube {
-        val response = YoutubeClient.CLIENT.get( YoutubeClient.YOUTUBE + YoutubeClient.VIDEO){
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("chart", YoutubeClient.CHART)
@@ -21,10 +22,25 @@ class YoutubeRepositoryImpl : YoutubeRepository {
     }
 
     override suspend fun getLibraryVideos(playListId: String): Youtube {
-        val response = YoutubeClient.CLIENT.get(YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST){
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST){
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
+
+    override suspend fun getSearchVideos(query: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", query)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
                 parameters.append("key", YoutubeClient.API_KEY)
             }

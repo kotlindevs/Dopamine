@@ -12,4 +12,7 @@
     <string name="gaming">Gaming</string>
     <string name="lofi_bhajan">Lofi Bhajan</string>
     <string name="dopamine_library">Dopamine Library</string>
+    <string name="clear_all">Clear all</string>
+    <string name="song_name">Song Name</string>
+    <string name="artist_name">Artist Name</string>
 </resources>

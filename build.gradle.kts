@@ -5,5 +5,5 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     kotlin("jvm") version "1.9.23"
-
+    id("com.google.devtools.ksp") version "1.9.23-1.0.19" apply false
 }

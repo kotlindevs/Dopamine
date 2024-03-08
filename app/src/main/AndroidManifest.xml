@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Dopamine"
         tools:targetApi="31">
         <activity
+            android:name=".activities.YoutubeChannel"
+            android:exported="false" />
+        <activity
             android:name=".activities.YoutubePlayer"
             android:exported="true" />
         <activity

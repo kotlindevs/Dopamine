@@ -33,11 +33,15 @@ object YoutubeClient {
 
     const val MAX_RESULTS = "50"
 
-    const val API_KEY = "AIzaSyBuO1S8x52SWLSQwFm_T12Wnsseao5Q9x8"
+    const val API_KEY = "AIzaSyCeDwbf36FfoudfZhQGQgRFjJb3OlaOtJ4"
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
 
     const val SHORTS_PART = "shorts"
+
+    const val SEARCH= "search"
+
+    const val SEARCH_PART = "snippet"
 
     val REVERB_AND_SLOWED = arrayListOf(
         "PLnMEO-E9-ZnMlcG_XrFHfBzhiaTfwRB1K", "PLBTanuC8SLeZaIXwjc-vDZ-CmRak-KITf",

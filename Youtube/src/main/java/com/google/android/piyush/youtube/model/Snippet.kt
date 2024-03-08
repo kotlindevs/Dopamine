@@ -8,6 +8,7 @@ data class Snippet(
     val channelTitle: String? = null,
     val thumbnails: Thumbnails? = null,
     val publishedAt: String? = null,
+    val description: String? = null,
     val title: String? = null
 )
 

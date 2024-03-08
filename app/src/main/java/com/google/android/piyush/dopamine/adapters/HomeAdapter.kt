@@ -71,7 +71,7 @@ class HomeAdapter(
             if(NetworkUtilities.isNetworkAvailable(context)) {
                 context.startActivity(
                     Intent(context, YoutubePlayer::class.java)
-                        .putExtra("videoId", youtube!!.items?.get(position)?.id.toString())
+                        .putExtra("videoId", youtube!!.items?.get(position)?.contentDetails?.videoId)
                         .putExtra("channelId", youtube!!.items?.get(position)?.snippet!!.channelId)
                 )
             }else{
