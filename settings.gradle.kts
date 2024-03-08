@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Dopamine"
 include(":app")
 include(":Youtube")
+include(":Database")
