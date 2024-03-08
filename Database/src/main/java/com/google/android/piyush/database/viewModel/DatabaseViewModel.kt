@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.database.dao.DopamineDao
@@ -19,9 +20,17 @@ class DatabaseViewModel(
 ) : ViewModel() {
 
     private val dopamineDatabaseRepository : DopamineDatabaseRepository
+
+    private val _searchVideoHistory = MutableLiveData<List<EntityVideoSearch>>()
+    val searchVideoHistory : LiveData<List<EntityVideoSearch>> = _searchVideoHistory
+
     init {
         val dopamineDao = DopamineDatabase.getDatabase(context).dopamineDao()
         dopamineDatabaseRepository = DopamineDatabaseRepository(dopamineDao)
+        viewModelScope.launch {
+            val searchVideos = getSearchVideoList()
+            _searchVideoHistory.value = searchVideos
+        }
     }
 
     fun insertSearchVideos(searchVideos: EntityVideoSearch) = viewModelScope.launch {
@@ -31,9 +40,8 @@ class DatabaseViewModel(
     fun deleteSearchVideoList() = viewModelScope.launch {
         dopamineDatabaseRepository.deleteSearchVideoList()
     }
-
-    fun getSearchVideoList() = viewModelScope.launch {
-        dopamineDatabaseRepository.getSearchVideoList()
+    private suspend fun getSearchVideoList() : List<EntityVideoSearch> {
+        return dopamineDatabaseRepository.getSearchVideoList()
     }
 
     fun insertFavouriteVideos(favouritePlaylist: EntityFavouritePlaylist) = viewModelScope.launch {

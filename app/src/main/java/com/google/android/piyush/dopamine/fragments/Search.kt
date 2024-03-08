@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.piyush.database.entities.EntityVideoSearch
@@ -24,6 +25,7 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
+import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
@@ -33,7 +35,10 @@ import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.cancelFutureOnCompletion
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.random.Random
 
@@ -87,7 +92,22 @@ class Search : Fragment() {
             binding.clearAll.visibility = View.GONE
         }
 
-        val searchVideoList = databaseViewModel.getSearchVideoList()
+        databaseViewModel.searchVideoHistory.observe(viewLifecycleOwner){
+            if(it.isEmpty()){
+                binding.clearAll.visibility = View.GONE
+                binding.searchEffect.visibility = View.VISIBLE
+                binding.utilList.visibility = View.GONE
+            }else{
+                binding.searchEffect.visibility = View.INVISIBLE
+                binding.clearAll.visibility = View.VISIBLE
+                binding.utilList.apply {
+                    visibility = View.VISIBLE
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = SearchHistoryAdapter(it)
+                }
+            }
+        }
 
         binding.searchVideo.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener{
@@ -104,20 +124,22 @@ class Search : Fragment() {
 
                     searchViewModel.searchVideos(query!!)
 
-                    searchViewModel.searchVideos.observe(viewLifecycleOwner){ searchVideos ->
-                        when(searchVideos){
+                    searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
+                        when (searchVideos) {
                             is YoutubeResource.Loading -> {
                                 Log.d(TAG, "onQueryTextSubmit: Loading")
                                 binding.utilList.visibility = View.GONE
                             }
+
                             is YoutubeResource.Success -> {
-                                binding.utilList.apply{
+                                binding.utilList.apply {
                                     layoutManager = LinearLayoutManager(context)
                                     visibility = View.VISIBLE
                                     adapter = SearchAdapter(context!!, searchVideos.data)
                                 }
-                                //Log.d(TAG, "onQueryTextSubmit: ${ searchVideos.data}")
+                                Log.d(TAG, "onQueryTextSubmit: ${ searchVideos.data}")
                             }
+
                             is YoutubeResource.Error -> {
                                 Log.d(TAG, "onQueryTextSubmit: ${searchVideos.exception}")
                             }
@@ -144,6 +166,6 @@ class Search : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentSearchBinding = null
+        searchViewModel.searchVideos.removeObservers(viewLifecycleOwner)
     }
-
 }
