@@ -112,7 +112,7 @@ class Home : Fragment() {
                             homeAdapter = HomeAdapter(requireContext(), videos.data)
                             adapter = homeAdapter
                         }
-                        Log.d(TAG, "Success: ${videos.data}")
+                        //Log.d(TAG, "Success: ${videos.data}")
                     }
                     is YoutubeResource.Error -> {
                         Log.d(TAG, "Error: ${videos.exception}")

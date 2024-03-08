@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubeChannel
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
@@ -30,6 +31,9 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val video = youtube?.items?.get(position)
+        Glide.with(context)
+            .load(video?.snippet?.thumbnails?.standard?.url)
+            .into(holder.image)
         holder.text1.text = video?.snippet?.title
         holder.text2.text = video?.snippet?.channelTitle
         holder.channelview.setOnClickListener {

@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -110,9 +111,12 @@ class Search : Fragment() {
                                 binding.utilList.visibility = View.GONE
                             }
                             is YoutubeResource.Success -> {
-                                binding.utilList.adapter = SearchAdapter(context!!, searchVideos.data)
-                                binding.utilList.visibility = View.VISIBLE
-                                Log.d(TAG, "onQueryTextSubmit: ${searchVideos.data}")
+                                binding.utilList.apply{
+                                    layoutManager = LinearLayoutManager(context)
+                                    visibility = View.VISIBLE
+                                    adapter = SearchAdapter(context!!, searchVideos.data)
+                                }
+                                //Log.d(TAG, "onQueryTextSubmit: ${ searchVideos.data}")
                             }
                             is YoutubeResource.Error -> {
                                 Log.d(TAG, "onQueryTextSubmit: ${searchVideos.exception}")
