@@ -28,8 +28,7 @@ class DatabaseViewModel(
         val dopamineDao = DopamineDatabase.getDatabase(context).dopamineDao()
         dopamineDatabaseRepository = DopamineDatabaseRepository(dopamineDao)
         viewModelScope.launch {
-            val searchVideos = getSearchVideoList()
-            _searchVideoHistory.value = searchVideos
+            _searchVideoHistory.value = getSearchVideoList()
         }
     }
 

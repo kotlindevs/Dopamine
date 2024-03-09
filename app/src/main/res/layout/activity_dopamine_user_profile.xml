@@ -105,7 +105,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:padding="12dp"
-                android:src="@drawable/ic_like_videos"
+                android:src="@drawable/ic_favourite_videos_fill"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -6,8 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 
 class YoutubePlayer : AppCompatActivity() {
+
+    private lateinit var binding: ActivityYoutubePlayerBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

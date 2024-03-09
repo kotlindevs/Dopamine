@@ -15,4 +15,9 @@
     <string name="clear_all">Clear all</string>
     <string name="song_name">Song Name</string>
     <string name="artist_name">Artist Name</string>
+    <string name="youtube_data">Youtube Data</string>
+    <string name="video_view">View</string>
+    <string name="like">Like</string>
+    <string name="pip">PIP</string>
+    <string name="copy">Copy</string>
 </resources>
