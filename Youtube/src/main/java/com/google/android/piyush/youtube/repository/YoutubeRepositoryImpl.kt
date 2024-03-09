@@ -84,4 +84,18 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         }
         return response.body()
     }
+
+    override suspend fun getPlaylistVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
 }

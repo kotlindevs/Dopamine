@@ -93,7 +93,7 @@ class YoutubeChannel : AppCompatActivity() {
         youtubeChannelViewModel.channelsPlaylists.observe(this) { channelsPlaylists ->
             when(channelsPlaylists){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "Loading: False")
+                    Log.d(TAG, "Loading: True")
                 }
                 is YoutubeResource.Success -> {
                     binding.recyclerview.apply {
@@ -104,7 +104,7 @@ class YoutubeChannel : AppCompatActivity() {
                         )
 
                     }
-                    Log.d(TAG, "Success -> : ${channelsPlaylists.data.items}")
+                    //Log.d(TAG, "Success: ${channelsPlaylists.data.items}")
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
