@@ -29,6 +29,7 @@ import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.Utilities.REQUEST_CODE_SPEECH_INPUT
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
@@ -87,13 +88,17 @@ class Search : Fragment() {
         }
 
         binding.clearAll.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                databaseViewModel.deleteSearchVideoList()
-            }
             binding.utilList.visibility = View.GONE
             binding.searchEffect.visibility = View.VISIBLE
             binding.clearAll.visibility = View.GONE
+            databaseViewModel.deleteSearchVideoList()
+            ToastUtilities.showToast(
+                requireContext(),
+                "Search History Cleared",
+            )
         }
+
+        databaseViewModel.getSearchVideoList()
 
         databaseViewModel.searchVideoHistory.observe(viewLifecycleOwner){
             if(it.isEmpty()){

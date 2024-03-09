@@ -57,6 +57,7 @@ class SearchAdapter(
                 )
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra("videoId", video?.id?.videoId)
+                    .putExtra("channelId", video?.snippet?.channelId)
             )
         }
     }

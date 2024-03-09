@@ -35,7 +35,8 @@ object YoutubeClient {
     const val MAX_RESULTS = "50"
 
     val API_KEY = arrayListOf(
-        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk"
+        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8",
+        "AIzaSyDMQuMItUqW2QrSQUtLtCpKmdCfniKD1zE","AIzaSyDaHGB5Z5nq29U46YGINN4Xjku3f-U8AIs","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c"
     ).random()
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"

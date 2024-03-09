@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.repository.DopamineDatabaseRepository
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
@@ -39,7 +40,6 @@ class YoutubePlayer : AppCompatActivity() {
     private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
     private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
-    private var isPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +47,7 @@ class YoutubePlayer : AppCompatActivity() {
         binding = ActivityYoutubePlayerBinding.inflate(layoutInflater)
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         youtubePlayerViewModelFactory = YoutubePlayerViewModelFactory(youtubeRepositoryImpl)
+        databaseViewModel = DatabaseViewModel(applicationContext)
         youtubePlayerViewModel = ViewModelProvider(
             this, youtubePlayerViewModelFactory
         )[YoutubePlayerViewModel::class.java]
@@ -128,7 +129,26 @@ class YoutubePlayer : AppCompatActivity() {
                             clipboardManager.setPrimaryClip(clipData)
                             Toast.makeText(applicationContext,"Copied", Toast.LENGTH_SHORT).show()
                         }
+                        addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
+                            if(isFavourite.equals(true)){
+                                databaseViewModel.insertFavouriteVideos(
+                                    EntityFavouritePlaylist(
+                                        videoId = intent.getStringExtra("videoId").toString(),
+                                        thumbnail = video.items!![0].snippet?.thumbnails?.high?.url,
+                                        title = video.items!![0].snippet?.title,
+                                        customName = video.items!![0].snippet?.customUrl,
+                                        channelId = video.items!![0].snippet?.channelId!!
+                                    )
+                                )
+                            }else{
+                                databaseViewModel.deleteFavouriteVideo(
+                                    intent.getStringExtra("videoId").toString()
+                                )
+                            }
+                        }
                     }
+
+
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")

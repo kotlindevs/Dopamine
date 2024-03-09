@@ -26,7 +26,7 @@ object NetworkUtilities {
 
 object ToastUtilities {
     fun showToast(context: Context?, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }
 

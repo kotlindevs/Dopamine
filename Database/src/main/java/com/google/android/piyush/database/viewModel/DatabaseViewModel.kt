@@ -27,32 +27,38 @@ class DatabaseViewModel(
     init {
         val dopamineDao = DopamineDatabase.getDatabase(context).dopamineDao()
         dopamineDatabaseRepository = DopamineDatabaseRepository(dopamineDao)
+    }
+
+    fun insertSearchVideos(searchVideos: EntityVideoSearch) {
         viewModelScope.launch {
-            _searchVideoHistory.value = getSearchVideoList()
+            dopamineDatabaseRepository.insertSearchVideos(searchVideos)
+        }
+    }
+    fun deleteSearchVideoList() {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.deleteSearchVideoList()
+        }
+    }
+    fun getSearchVideoList() {
+        viewModelScope.launch {
+           _searchVideoHistory.value = dopamineDatabaseRepository.getSearchVideoList()
         }
     }
 
-    fun insertSearchVideos(searchVideos: EntityVideoSearch) = viewModelScope.launch {
-        dopamineDatabaseRepository.insertSearchVideos(searchVideos)
-    }
-
-    fun deleteSearchVideoList() = viewModelScope.launch {
-        dopamineDatabaseRepository.deleteSearchVideoList()
-    }
-    private suspend fun getSearchVideoList() : List<EntityVideoSearch> {
-        return dopamineDatabaseRepository.getSearchVideoList()
-    }
-
-    fun insertFavouriteVideos(favouritePlaylist: EntityFavouritePlaylist) = viewModelScope.launch {
-        dopamineDatabaseRepository.insertFavouriteVideos(favouritePlaylist)
+    fun insertFavouriteVideos(favouritePlaylist: EntityFavouritePlaylist) {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.insertFavouriteVideos(favouritePlaylist)
+        }
     }
 
     fun isFavouriteVideo(videoId: String) = viewModelScope.launch {
         dopamineDatabaseRepository.isFavouriteVideo(videoId)
     }
 
-    fun deleteFavouriteVideo(videoId: String) = viewModelScope.launch {
-        dopamineDatabaseRepository.deleteFavouriteVideo(videoId)
+    fun deleteFavouriteVideo(videoId: String) {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.deleteFavouriteVideo(videoId)
+        }
     }
 
     fun getFavouritePlayList() = viewModelScope.launch {
