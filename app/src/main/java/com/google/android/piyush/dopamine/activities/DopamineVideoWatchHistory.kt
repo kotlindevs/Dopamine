@@ -38,5 +38,9 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
                 adapter = RecentVideosAdapter(context,recentVideos)
             }
         }
+
+        binding.topAppBar.setNavigationOnClickListener{
+            finish()
+        }
     }
 }
