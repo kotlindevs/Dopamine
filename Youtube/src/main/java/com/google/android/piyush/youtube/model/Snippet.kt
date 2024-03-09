@@ -9,7 +9,9 @@ data class Snippet(
     val customUrl: String? = null,
     val thumbnails: Thumbnails? = null,
     val publishedAt: String? = null,
+    val kind: String? = null,
     val description: String? = null,
+    val tags: List<String>? = null,
     val title: String? = null
 )
 
@@ -24,7 +26,8 @@ data class Thumbnails(
 @Serializable
 data class Statistics(
     val viewCount: String? = null,
-    val subscriberCount: String? = null
+    val subscriberCount: String? = null,
+    val likeCount: String? = null
 )
 
 @Serializable

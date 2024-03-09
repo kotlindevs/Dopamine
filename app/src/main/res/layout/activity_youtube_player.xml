@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        tools:context=".DopamineSearch.YtPlayer"
+        android:overScrollMode="ifContentScrolls"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/YtPlayerLayout">
@@ -412,7 +412,7 @@
                 app:layout_constraintTop_toBottomOf="@id/imageView" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
+                android:id="@+id/channelsPlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"

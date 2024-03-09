@@ -12,4 +12,5 @@ interface YoutubeRepository {
     suspend fun getChannelDetails(channelId : String) : Youtube
     suspend fun getChannelsPlaylists(channelId : String) : Youtube
     suspend fun getPlaylistVideos(playListId : String) : Youtube
+    suspend fun getVideoDetails(videoId : String) : Youtube
 }

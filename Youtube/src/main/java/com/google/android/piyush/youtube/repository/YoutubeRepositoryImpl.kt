@@ -98,4 +98,17 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         }
         return response.body()
     }
+
+    override suspend fun getVideoDetails(videoId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", videoId)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
 }

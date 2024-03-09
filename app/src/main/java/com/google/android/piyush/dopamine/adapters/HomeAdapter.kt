@@ -1,8 +1,10 @@
 package com.google.android.piyush.dopamine.adapters
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -71,9 +73,12 @@ class HomeAdapter(
             if(NetworkUtilities.isNetworkAvailable(context)) {
                 context.startActivity(
                     Intent(context, YoutubePlayer::class.java)
-                        .putExtra("videoId", youtube!!.items?.get(position)?.contentDetails?.videoId)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("videoId", youtube!!.items?.get(position)?.id)
                         .putExtra("channelId", youtube!!.items?.get(position)?.snippet!!.channelId)
                 )
+                Log.d(TAG, "onBindViewHolder: ${youtube!!.items?.get(position)?.id}")
+                Log.d(TAG, "onBindViewHolder: ${youtube!!.items?.get(position)?.snippet!!.channelId}")
             }else{
                 NetworkUtilities.showNetworkError(context)
             }
