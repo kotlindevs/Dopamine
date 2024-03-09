@@ -32,7 +32,7 @@ class SearchAdapter(
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val video = youtube?.items?.get(position)
         Glide.with(context)
-            .load(video?.snippet?.thumbnails?.standard?.url)
+            .load(video?.snippet?.thumbnails?.high?.url)
             .into(holder.image)
         holder.text1.text = video?.snippet?.title
         holder.text2.text = video?.snippet?.channelTitle

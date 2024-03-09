@@ -3,7 +3,6 @@ package com.google.android.piyush.youtube.utilities
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -33,7 +32,9 @@ object YoutubeClient {
 
     const val MAX_RESULTS = "50"
 
-    const val API_KEY = "AIzaSyCeDwbf36FfoudfZhQGQgRFjJb3OlaOtJ4"
+    val API_KEY = arrayListOf(
+        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk"
+    ).random()
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
 
@@ -103,8 +104,5 @@ object YoutubeClient {
                 }
             )
         }
-//        defaultRequest {
-//            url(YOUTUBE)
-//        }
     }
 }
