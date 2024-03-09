@@ -37,7 +37,7 @@ class YoutubeChannelPlaylistsAdapter(
             .load(playListData?.snippet?.thumbnails?.default?.url)
             .into(holder.image)
         holder.text1.text = playListData?.snippet?.title
-        holder.text2.text = playListData?.snippet?.description
+        holder.text2.text = playListData?.snippet?.channelTitle
         holder.video.setOnClickListener {
             if (playListData != null) {
                 context.startActivity(

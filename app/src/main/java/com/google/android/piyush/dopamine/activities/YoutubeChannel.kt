@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
@@ -40,6 +41,10 @@ class YoutubeChannel : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        youtubeChannelViewModel.getChannelDetails(
+            intent.getStringExtra("channelId").toString()
+        )
 
         youtubeChannelViewModel.channelDetails.observe(this){ channelDetails ->
             when(channelDetails){
@@ -81,15 +86,25 @@ class YoutubeChannel : AppCompatActivity() {
             }
         }
 
+        youtubeChannelViewModel.getChannelsPlaylist(
+            intent.getStringExtra("channelId").toString()
+        )
+
         youtubeChannelViewModel.channelsPlaylists.observe(this) { channelsPlaylists ->
             when(channelsPlaylists){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "Loading: True")
+                    Log.d(TAG, "Loading: False")
                 }
                 is YoutubeResource.Success -> {
-                    binding.recyclerview.adapter = YoutubeChannelPlaylistsAdapter(
-                        applicationContext, channelsPlaylists.data
-                    )
+                    binding.recyclerview.apply {
+                        this.setHasFixedSize(true)
+                        this.layoutManager = LinearLayoutManager(this@YoutubeChannel)
+                        adapter = YoutubeChannelPlaylistsAdapter(
+                            applicationContext, channelsPlaylists.data
+                        )
+
+                    }
+                    Log.d(TAG, "Success -> : ${channelsPlaylists.data.items}")
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
