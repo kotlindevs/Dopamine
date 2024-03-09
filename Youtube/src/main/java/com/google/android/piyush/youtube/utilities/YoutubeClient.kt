@@ -24,6 +24,8 @@ object YoutubeClient {
 
     const val PLAYLIST = "playlistItems"
 
+    const val CHANNEL = "channels"
+
     const val CHART = "mostPopular"
 
     const val PART = "snippet,contentDetails,statistics"
@@ -41,6 +43,8 @@ object YoutubeClient {
     const val SHORTS_PART = "shorts"
 
     const val SEARCH= "search"
+
+    const val PLAYLISTS= "playlists"
 
     const val SEARCH_PART = "snippet"
 

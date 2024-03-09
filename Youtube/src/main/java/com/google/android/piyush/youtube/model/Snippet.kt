@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class Snippet(
     val channelId: String? = null,
     val channelTitle: String? = null,
+    val customUrl: String? = null,
     val thumbnails: Thumbnails? = null,
     val publishedAt: String? = null,
     val description: String? = null,
@@ -22,7 +23,8 @@ data class Thumbnails(
 
 @Serializable
 data class Statistics(
-    val viewCount: String? = null
+    val viewCount: String? = null,
+    val subscriberCount: String? = null
 )
 
 @Serializable

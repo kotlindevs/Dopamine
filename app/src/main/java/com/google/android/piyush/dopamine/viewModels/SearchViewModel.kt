@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -14,8 +15,8 @@ class SearchViewModel(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModel() {
 
-    private val _searchVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val searchVideos : MutableLiveData<YoutubeResource<Youtube>> = _searchVideos
+    private val _searchVideos : MutableLiveData<YoutubeResource<SearchTube>> = MutableLiveData()
+    val searchVideos : MutableLiveData<YoutubeResource<SearchTube>> = _searchVideos
 
     fun searchVideos(query : String) {
         viewModelScope.launch {

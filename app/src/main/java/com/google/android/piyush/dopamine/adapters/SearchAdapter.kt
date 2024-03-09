@@ -11,11 +11,12 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubeChannel
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.viewHolders.SearchViewHolder
+import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Youtube
 
 class SearchAdapter(
     private val context: Context,
-    private val youtube: Youtube?
+    private val youtube: SearchTube?
 )  : RecyclerView.Adapter<SearchViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         return SearchViewHolder(
@@ -55,7 +56,7 @@ class SearchAdapter(
                     YoutubePlayer::class.java
                 )
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("videoId", video?.contentDetails?.videoId)
+                    .putExtra("videoId", video?.id?.videoId)
             )
         }
     }

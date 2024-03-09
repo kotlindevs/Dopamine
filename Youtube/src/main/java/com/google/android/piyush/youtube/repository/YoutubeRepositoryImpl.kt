@@ -1,5 +1,6 @@
 package com.google.android.piyush.youtube.repository
 
+import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Shorts
 import com.google.android.piyush.youtube.utilities.YoutubeClient
 import com.google.android.piyush.youtube.model.Youtube
@@ -36,7 +37,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         return response.body()
     }
 
-    override suspend fun getSearchVideos(query: String): Youtube {
+    override suspend fun getSearchVideos(query: String): SearchTube {
         val response = YoutubeClient.CLIENT.get(
             YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
         ){
@@ -54,6 +55,33 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         val response = YoutubeClient.CLIENT.get(
             YoutubeClient.HIDDEN_CLIENT + YoutubeClient.SHORTS_PART
         )
+        return response.body()
+    }
+
+    override suspend fun getChannelDetails(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", channelId)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
+
+    override suspend fun getChannelsPlaylists(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("id", channelId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
         return response.body()
     }
 }
