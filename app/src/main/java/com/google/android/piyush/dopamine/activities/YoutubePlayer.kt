@@ -3,14 +3,15 @@ package com.google.android.piyush.dopamine.activities
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.piyush.database.entities.EntityFavouritePlaylist
-import com.google.android.piyush.database.repository.DopamineDatabaseRepository
+import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
@@ -32,7 +33,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import java.text.DecimalFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
+@Suppress("DEPRECATION")
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
@@ -41,6 +46,7 @@ class YoutubePlayer : AppCompatActivity() {
     private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,6 +65,13 @@ class YoutubePlayer : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        databaseViewModel.isFavouriteVideo(
+            intent?.getStringExtra("videoId").toString()
+        )
+        databaseViewModel.isFavourite.observe(this){
+            binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
         }
 
         binding.YtPlayer.enableBackgroundPlayback(true)
@@ -130,8 +143,8 @@ class YoutubePlayer : AppCompatActivity() {
                             Toast.makeText(applicationContext,"Copied", Toast.LENGTH_SHORT).show()
                         }
                         addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
-                            if(isFavourite.equals(true)){
-                                databaseViewModel.insertFavouriteVideos(
+                            if(isFavourite == 1){
+                               databaseViewModel.insertFavouriteVideos(
                                     EntityFavouritePlaylist(
                                         videoId = intent.getStringExtra("videoId").toString(),
                                         thumbnail = video.items!![0].snippet?.thumbnails?.high?.url,
@@ -139,7 +152,7 @@ class YoutubePlayer : AppCompatActivity() {
                                         customName = video.items!![0].snippet?.customUrl,
                                         channelId = video.items!![0].snippet?.channelId!!
                                     )
-                                )
+                               )
                             }else{
                                 databaseViewModel.deleteFavouriteVideo(
                                     intent.getStringExtra("videoId").toString()
@@ -148,7 +161,30 @@ class YoutubePlayer : AppCompatActivity() {
                         }
                     }
 
+                    databaseViewModel.isRecentVideo( videoId = video.items?.get(0)?.id.toString())
 
+                    databaseViewModel.isRecent.observe(this){
+                        if(it == intent.getStringExtra("videoId").toString()){
+                            databaseViewModel.updateRecentVideo(
+                                videoId = intent.getStringExtra("videoId").toString(),
+                                time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")).toString()
+                            )
+                        }else{
+                            databaseViewModel.insertRecentVideos(
+                                EntityRecentVideos(
+                                    id = Random.nextInt(1, 100000),
+                                    videoId = video.items?.get(0)?.id,
+                                    thumbnail = video.items?.get(0)?.snippet?.thumbnails?.high?.url,
+                                    title = video.items?.get(0)?.snippet?.title,
+                                    customName = video.items?.get(0)?.snippet?.customUrl,
+                                    timing = LocalTime.now()
+                                        .format(DateTimeFormatter.ofPattern("hh:mm a"))
+                                        .toString(),
+                                    channelId = video.items?.get(0)?.snippet?.channelId
+                                )
+                            )
+                        }
+                    }
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
@@ -210,7 +246,7 @@ class YoutubePlayer : AppCompatActivity() {
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode)
         if (isInPictureInPictureMode) {
-            binding.YtPlayer.wrapContent();
+            binding.YtPlayer.wrapContent()
             binding.addToPlayList.visibility = View.GONE
         } else {
             binding.addToPlayList.visibility = View.VISIBLE
@@ -219,7 +255,7 @@ class YoutubePlayer : AppCompatActivity() {
 
     private fun counter(count : Int) : String{
         var num : Double = count.toDouble()
-        var data = ""
+        val data: String
         if(num > 1000000.00){
             num /= 1000000.00
             num = DecimalFormat("#.##").format(num).toDouble()

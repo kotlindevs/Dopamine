@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
+import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -34,6 +36,7 @@ class Library : Fragment() {
     private lateinit var repository: YoutubeRepositoryImpl
     private lateinit var viewModel : LibraryViewModel
     private lateinit var viewModelProviderFactory: LibraryViewModelFactory
+    private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var libraryAdapter: LibraryAdapter
     override fun onCreateView(
@@ -50,6 +53,7 @@ class Library : Fragment() {
         fragmentLibraryBinding = binding
         repository = YoutubeRepositoryImpl()
         viewModelProviderFactory = LibraryViewModelFactory(repository)
+        databaseViewModel = DatabaseViewModel(requireContext())
         viewModel = ViewModelProvider(
             this,
             viewModelProviderFactory
@@ -182,6 +186,20 @@ class Library : Fragment() {
                 is YoutubeResource.Loading -> {
                     binding.lofiBhajanEffect.startShimmer()
                     binding.lofiBhajanEffect.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        databaseViewModel.getFavouritePlayList()
+
+        databaseViewModel.favouritePlayList.observe(viewLifecycleOwner){ yourFavouriteList ->
+            if(yourFavouriteList.isEmpty()){
+                fragmentLibraryBinding!!.yourFavouriteList.visibility = View.GONE
+            }else{
+                fragmentLibraryBinding!!.yourFavouriteList.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    adapter = YourFavouriteVideosAdapter(requireContext(), yourFavouriteList)
                 }
             }
         }

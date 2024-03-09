@@ -5,6 +5,43 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activities.DopamineVideoWatchHistory">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_back"
+                app:title="History"
+                app:titleMarginStart="8dp"
+                app:titleTextAppearance="@style/ToolbarTheme" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_activity_video_views_history"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

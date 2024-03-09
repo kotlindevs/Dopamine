@@ -242,6 +242,36 @@
                     android:id="@+id/youtubePlayerView" />
             </com.google.android.material.card.MaterialCardView>
         </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/yourFavourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/your_favourites"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/proxima_nova"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/youtube_player_card"/>
+        <ScrollView
+            android:id="@+id/scrollable3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:scrollbars="none"
+            android:overScrollMode="always"
+            android:fitsSystemWindows="false"
+            app:layout_constraintTop_toBottomOf="@id/yourFavourite"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/yourFavouriteList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

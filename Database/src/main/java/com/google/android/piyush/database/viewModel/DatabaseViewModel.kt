@@ -24,6 +24,18 @@ class DatabaseViewModel(
     private val _searchVideoHistory = MutableLiveData<List<EntityVideoSearch>>()
     val searchVideoHistory : LiveData<List<EntityVideoSearch>> = _searchVideoHistory
 
+    private val _favouritePlayList = MutableLiveData<List<EntityFavouritePlaylist>>()
+    val favouritePlayList : LiveData<List<EntityFavouritePlaylist>> = _favouritePlayList
+
+    private val _isFavourite : MutableLiveData<String> = MutableLiveData()
+    val isFavourite : LiveData<String> = _isFavourite
+
+    private val _recentVideos : MutableLiveData<List<EntityRecentVideos>> = MutableLiveData()
+    val recentVideos : LiveData<List<EntityRecentVideos>> = _recentVideos
+
+    private val _isRecent : MutableLiveData<String> = MutableLiveData()
+    val isRecent : LiveData<String> = _isRecent
+
     init {
         val dopamineDao = DopamineDatabase.getDatabase(context).dopamineDao()
         dopamineDatabaseRepository = DopamineDatabaseRepository(dopamineDao)
@@ -51,8 +63,11 @@ class DatabaseViewModel(
         }
     }
 
-    fun isFavouriteVideo(videoId: String) = viewModelScope.launch {
-        dopamineDatabaseRepository.isFavouriteVideo(videoId)
+    fun isFavouriteVideo(videoId: String) : String {
+        viewModelScope.launch {
+          _isFavourite.value =  dopamineDatabaseRepository.isFavouriteVideo(videoId)
+        }
+        return _isFavourite.value.toString()
     }
 
     fun deleteFavouriteVideo(videoId: String) {
@@ -61,23 +76,34 @@ class DatabaseViewModel(
         }
     }
 
-    fun getFavouritePlayList() = viewModelScope.launch {
-        dopamineDatabaseRepository.getFavouritePlayList()
+    fun getFavouritePlayList() {
+        viewModelScope.launch {
+           _favouritePlayList.value = dopamineDatabaseRepository.getFavouritePlayList()
+        }
     }
 
-    fun insertRecentVideos(recentVideos: EntityRecentVideos) = viewModelScope.launch {
-        dopamineDatabaseRepository.insertRecentVideos(recentVideos)
+    fun insertRecentVideos(recentVideos: EntityRecentVideos) {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.insertRecentVideos(recentVideos)
+        }
     }
 
-    fun getRecentVideos() = viewModelScope.launch {
-        dopamineDatabaseRepository.getRecentVideos()
+    fun getRecentVideos() {
+        viewModelScope.launch {
+            _recentVideos.value = dopamineDatabaseRepository.getRecentVideos()
+        }
     }
 
-    fun isRecentVideo(videoId: String) = viewModelScope.launch {
-        dopamineDatabaseRepository.isRecentVideo(videoId)
+    fun isRecentVideo(videoId: String) : String {
+        viewModelScope.launch {
+           _isRecent.value = dopamineDatabaseRepository.isRecentVideo(videoId)
+        }
+        return _isRecent.value.toString()
     }
 
-    fun updateRecentVideo(videoId: String,time : String) = viewModelScope.launch {
-        dopamineDatabaseRepository.updateRecentVideo(videoId,time)
+    fun updateRecentVideo(videoId: String,time : String) {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.updateRecentVideo(videoId,time)
+        }
     }
 }

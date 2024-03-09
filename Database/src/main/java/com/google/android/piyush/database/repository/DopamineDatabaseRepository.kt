@@ -24,7 +24,7 @@ class DopamineDatabaseRepository(
         dopamineDao.insertFavouriteVideos(*favouriteVideo)
     }
 
-    suspend fun isFavouriteVideo(videoId: String): List<EntityFavouritePlaylist> {
+    suspend fun isFavouriteVideo(videoId: String): String {
         return dopamineDao.isFavouriteVideo(videoId)
     }
 
@@ -44,7 +44,7 @@ class DopamineDatabaseRepository(
         return dopamineDao.getRecentVideos()
     }
 
-    suspend fun isRecentVideo(videoId: String): List<EntityRecentVideos> {
+    suspend fun isRecentVideo(videoId: String): String {
         return dopamineDao.isRecentVideo(videoId)
     }
 
