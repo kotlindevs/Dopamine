@@ -7,8 +7,12 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -18,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -98,6 +104,7 @@ class YoutubePlayer : AppCompatActivity() {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 binding.YtPlayer.visibility = View.GONE
                 binding.addToPlayList.visibility = View.GONE
+                binding.addToCustomPlayList.visibility = View.GONE
                 binding.frameLayout.addView(fullscreenView)
             }
 
@@ -105,6 +112,8 @@ class YoutubePlayer : AppCompatActivity() {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 binding.frameLayout.removeAllViews()
                 binding.YtPlayer.visibility = View.VISIBLE
+                binding.addToPlayList.visibility = View.VISIBLE
+                binding.addToCustomPlayList.visibility = View.VISIBLE
             }
         })
 
@@ -112,6 +121,11 @@ class YoutubePlayer : AppCompatActivity() {
             val supportsPIP =
                 packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
             if (supportsPIP) enterPictureInPictureMode()
+        }
+
+        binding.addToCustomPlayList.setOnClickListener {
+            val bottomSheetFragment = MyBottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
         }
 
         youtubePlayerViewModel.getVideoDetails(
@@ -242,14 +256,35 @@ class YoutubePlayer : AppCompatActivity() {
         }
     }
 
+    class MyBottomSheetFragment : BottomSheetDialogFragment(){
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
+            val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
+            createNewPlaylist.setOnClickListener {
+                showToast("Under Development")
+            }
+            return view
+        }
+
+        private fun showToast(message: String) {
+            Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode)
         if (isInPictureInPictureMode) {
             binding.YtPlayer.wrapContent()
             binding.addToPlayList.visibility = View.GONE
+            binding.addToCustomPlayList.visibility = View.GONE
         } else {
             binding.addToPlayList.visibility = View.VISIBLE
+            binding.addToCustomPlayList.visibility = View.VISIBLE
         }
     }
 

@@ -425,22 +425,44 @@
     </ScrollView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        style="@style/Widget.Material3.CardView.Filled"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:cardBackgroundColor="?attr/colorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full">
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/addToPlayList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_margin="2dp"
-            android:contentDescription="@string/app_name"
             android:button="@drawable/ic_favourite"
-            app:buttonTint="?attr/colorOnTertiary"/>
+            android:contentDescription="@string/app_name"
+            android:visibility="visible"
+            app:buttonTint="?attr/colorOnTertiary" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="?attr/colorTertiary"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/addToCustomPlayList"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:padding="8dp"
+            android:src="@drawable/round_add_24"
+            android:visibility="visible" />
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

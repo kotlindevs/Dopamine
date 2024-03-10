@@ -2,13 +2,20 @@ package com.google.android.piyush.dopamine.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
@@ -75,6 +82,38 @@ class DopamineUserProfile : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+
+        binding.customPlayList.setOnClickListener {
+            val bottomSheetFragment = MyBottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
+        }
+    }
+
+    class MyBottomSheetFragment : BottomSheetDialogFragment(){
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+
+            val view = inflater.inflate(R.layout.bottom_sheet_add_playlist,container,false)
+
+            val playListName : TextInputEditText = view.findViewById(R.id.etPlaylistName)
+            val createPlaylist = view.findViewById<MaterialButton>(R.id.btCreatePlaylist)
+            createPlaylist.setOnClickListener {
+                if(playListName.text.toString().isEmpty()) {
+                    showToast("Playlist Name Cannot Be Empty :(")
+                } else {
+                    showToast("Under Development")
+                }
+            }
+
+            return view
+        }
+
+        private fun showToast(message: String) {
+            Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
         }
     }
 }
