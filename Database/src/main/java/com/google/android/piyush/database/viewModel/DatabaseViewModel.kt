@@ -1,7 +1,9 @@
 package com.google.android.piyush.database.viewModel
 
 import android.app.Application
+import android.content.ContentValues
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +14,10 @@ import com.google.android.piyush.database.DopamineDatabase
 import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.entities.EntityVideoSearch
+import com.google.android.piyush.database.model.CustomPlaylistView
+import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.database.repository.DopamineDatabaseRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(
@@ -20,6 +25,8 @@ class DatabaseViewModel(
 ) : ViewModel() {
 
     private val dopamineDatabaseRepository : DopamineDatabaseRepository
+    private val database = DopamineDatabase.getDatabase(context).openHelper
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     private val _searchVideoHistory = MutableLiveData<List<EntityVideoSearch>>()
     val searchVideoHistory : LiveData<List<EntityVideoSearch>> = _searchVideoHistory
@@ -105,5 +112,103 @@ class DatabaseViewModel(
         viewModelScope.launch {
             dopamineDatabaseRepository.updateRecentVideo(videoId,time)
         }
+    }
+
+    val defaultMasterDev = database.writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS DopamineMastersDev (playlistName TEXT PRIMARY KEY, playlistDescription TEXT)")
+    fun createCustomPlaylist(playlistsData: CustomPlaylistView) {
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(playlistsData.playListName)
+        val query = "CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)"
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS DopamineMastersDev (playlistName TEXT PRIMARY KEY, playlistDescription TEXT)")
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"${stringify(playlistsData.playListName)}\",\"${playlistsData.playListDescription}\") ")
+        writableDatabase.execSQL(query)
+    }
+
+    fun addVideosInCustomPlaylist(playlistName: String,playlistsData: CustomPlaylists) {
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(playlistName)
+        val query = "INSERT INTO $newPlaylistName VALUES (${playlistsData.videoId},${playlistsData.title},${playlistsData.customName},${playlistsData.thumbnail},${playlistsData.channelId})})"
+        writableDatabase.execSQL(query)
+    }
+
+    fun defaultMasterDev() : List<CustomPlaylistView> {
+        val list = mutableListOf<CustomPlaylistView>()
+        val usersFavoritePlayListName = currentUser?.displayName+" favorite 🧿❤️"
+        val usersFavoritePlayListDescription =  currentUser?.displayName+" favorites playlist is a reflection of his personality, showcasing his love for music and his zest for life "
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(usersFavoritePlayListName)
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
+        list.add(
+            CustomPlaylistView(
+                stringify(newPlaylistName),
+                usersFavoritePlayListDescription
+            )
+        )
+        return list
+    }
+
+
+    fun getPlaylist() : List<CustomPlaylistView>{
+        val writableDatabase = database.writableDatabase
+        val list = mutableListOf<CustomPlaylistView>()
+        val query = "SELECT name FROM sqlite_master Where type=\"table\" except \n" +
+                "select name from sqlite_master where name=\"android_metadata\" Except  select name from sqlite_master where name= \"recent_videos\" except  select name from sqlite_master where name= \"room_master_table\" except  \n" +
+                " select name from sqlite_master where name= \"sqlite_sequence\" except  select name from sqlite_master where name= \"search_table\" "
+        val data  = writableDatabase.query("SELECT * FROM DopamineMastersDev ORDER BY playlistName ASC")
+        while (data.moveToNext()){
+            list.add(
+                CustomPlaylistView(
+                    stringify(
+                        data.getString(0)
+                    ),
+                    data.getString(1)
+                )
+            )
+        }
+        writableDatabase.close()
+        return list
+    }
+
+    fun countTheNumberOfCustomPlaylist() : Int {
+        val writableDatabase = database.writableDatabase
+
+        val query = "SELECT COUNT(*) FROM DopamineMastersDev"
+        val data = writableDatabase.query(
+            query
+        )
+        var count = 0
+        while (data.moveToNext()){
+            count = data.getInt(0)
+            Log.d("count",count.toString())
+        }
+        writableDatabase.close()
+        return 0
+    }
+
+    fun isPlaylistExist(playlistName : String) : Boolean {
+        val writableDatabase = database.writableDatabase
+        val query = writableDatabase.query("SELECT playlistName FROM DopamineMastersDev WHERE playlistName = \"$playlistName\"")
+        while (query.moveToNext()){
+            val dbTableName = query.getString(0)
+            if(query.getString(0).isNotEmpty()){
+                if(dbTableName == playlistName){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun stringify(playlistName: String): String {
+        val name = if(playlistName.isNotEmpty()){
+            if(playlistName.contains(" ")){
+                playlistName.replace(" ","_")
+            } else{
+                playlistName.replace("_"," ")
+            }
+        } else {
+            "Null"
+        }
+        return name
     }
 }

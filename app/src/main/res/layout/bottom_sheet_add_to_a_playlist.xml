@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvLocalPlaylists"
+                android:id="@+id/recyclerViewLocalPlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/item_local_playlist"

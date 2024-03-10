@@ -7,12 +7,10 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -21,6 +19,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -28,8 +27,10 @@ import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
+import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -257,6 +258,8 @@ class YoutubePlayer : AppCompatActivity() {
     }
 
     class MyBottomSheetFragment : BottomSheetDialogFragment(){
+        private lateinit var databaseViewModel: DatabaseViewModel
+
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -264,14 +267,23 @@ class YoutubePlayer : AppCompatActivity() {
         ): View? {
             val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
             val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
-            createNewPlaylist.setOnClickListener {
-                showToast("Under Development")
-            }
-            return view
-        }
+            val customPlaylists : RecyclerView = view.findViewById(R.id.recyclerViewLocalPlaylist)
+            databaseViewModel = DatabaseViewModel(requireContext())
+            databaseViewModel.defaultMasterDev
 
-        private fun showToast(message: String) {
-            Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+            createNewPlaylist.setOnClickListener {
+                val customDialog = CustomDialog(requireContext())
+                customDialog.show()
+            }
+
+            customPlaylists.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = CustomPlaylistsAdapter(
+                    databaseViewModel.getPlaylist()
+                )
+            }
+
+            return view
         }
     }
 

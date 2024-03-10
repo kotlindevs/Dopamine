@@ -2,6 +2,7 @@
 agp = "8.3.0"
 kotlin = "1.9.23"
 googleGmsGoogleServices = "4.4.1"
+firebaseAuthKtx = "22.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.0-alpha05" }
@@ -30,6 +31,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.7.0-alpha10" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version = "0.5.0" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.6.1" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
