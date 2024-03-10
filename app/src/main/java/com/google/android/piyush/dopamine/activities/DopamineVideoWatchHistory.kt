@@ -29,10 +29,6 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
             insets
         }
 
-        binding.topAppBar.setNavigationOnClickListener {
-            finish()
-        }
-
         databaseViewModel.getRecentVideos()
 
         databaseViewModel.recentVideos.observe(this) { recentVideos ->
