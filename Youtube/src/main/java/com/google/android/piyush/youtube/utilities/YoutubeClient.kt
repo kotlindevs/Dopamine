@@ -14,10 +14,7 @@ object YoutubeClient {
     val REGION_CODE = arrayListOf(
         "IN",
         "US",
-        "UK",
-        "RU",
-        "CA",
-        "BR",
+        "UK"
     ).random()
 
     private val SHORTS = arrayListOf(

@@ -222,7 +222,12 @@ class Library : Fragment() {
         databaseViewModel.favouritePlayList.observe(viewLifecycleOwner){ yourFavouriteList ->
             if(yourFavouriteList.isEmpty()){
                 fragmentLibraryBinding!!.yourFavouriteList.visibility = View.GONE
+                fragmentLibraryBinding!!.yourFavouriteEffect.visibility = View.VISIBLE
+                fragmentLibraryBinding!!.yourFavouriteEffect.startShimmer()
             }else{
+                fragmentLibraryBinding!!.yourFavouriteList.visibility = View.VISIBLE
+                fragmentLibraryBinding!!.yourFavouriteEffect.stopShimmer()
+                fragmentLibraryBinding!!.yourFavouriteEffect.visibility = View.INVISIBLE
                 fragmentLibraryBinding!!.yourFavouriteList.apply {
                     setHasFixedSize(true)
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
