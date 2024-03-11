@@ -18,6 +18,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".activities.YoutubeChannelPlaylistsVideos"
             android:exported="true" />
         <activity
@@ -28,9 +32,7 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:supportsPictureInPicture="true" />
-        <activity
-            android:name=".activities.DopamineSettings"
-            android:exported="true" />
+
         <activity
             android:name=".activities.DopamineVideoWatchHistory"
             android:exported="true" />

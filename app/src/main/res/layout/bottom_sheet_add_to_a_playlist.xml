@@ -59,8 +59,9 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="8dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             style="@style/Widget.Material3.CardView.Filled"
             app:cardBackgroundColor="?attr/colorControlActivated"/>
 
@@ -72,7 +73,7 @@
                 android:id="@+id/recyclerViewLocalPlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/item_local_playlist"
+                tools:listitem="@layout/item_custom_playlists_view"
                 android:layout_marginBottom="10sp">
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>

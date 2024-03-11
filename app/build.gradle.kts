@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.lottie)
     implementation(project(":Youtube"))
     implementation(project(":Database"))
+    implementation(libs.androidx.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

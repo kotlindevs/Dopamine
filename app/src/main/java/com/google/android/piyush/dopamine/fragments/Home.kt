@@ -1,6 +1,5 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineSettings
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
@@ -72,15 +70,6 @@ class Home : Fragment() {
             Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentHomeBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
-        }
-
-        fragmentHomeBinding!!.settings.setOnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    DopamineSettings::class.java
-                )
-            )
         }
 
         fragmentHomeBinding!!.watchHistory.setOnClickListener {

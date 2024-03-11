@@ -19,32 +19,22 @@
             app:cardBackgroundColor="?attr/colorControlActivated"
             style="@style/Widget.Material3.CardView.Filled"
             android:layout_marginBottom="10sp">
-
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:placeholderText="Create Playlist Name"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPlaylistName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Playlist Name">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_data"
+            android:layout_width="128dp"
+            android:layout_height="128dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btCreatePlaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create"
+            android:text="Create A New PlayList"
             android:fontFamily="@font/circular_spotify"
             android:layout_gravity="center"
             android:textColor="?attr/colorControlActivated"
