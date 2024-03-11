@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
@@ -14,6 +15,11 @@ class SettingsActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
+
+        val rootView = layoutInflater.inflate(R.layout.settings_activity, null) as ViewGroup
+        rootView.fitsSystemWindows = true
+        setContentView(rootView)
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
