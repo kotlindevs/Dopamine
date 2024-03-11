@@ -158,7 +158,6 @@ class DatabaseViewModel(
                 )
             )
         }
-        writableDatabase.close()
         return list
     }
 
@@ -175,7 +174,6 @@ class DatabaseViewModel(
             )
             Log.d("list",list.toString())
         }
-        writableDatabase.close()
         return list
     }
 
@@ -190,7 +188,7 @@ class DatabaseViewModel(
                 return true
             }
         }
-       return false
+        return false
     }
 
     fun countTheNumberOfCustomPlaylist() : Int {
@@ -205,7 +203,6 @@ class DatabaseViewModel(
             count = data.getInt(0)
             Log.d("count",count.toString())
         }
-        writableDatabase.close()
         return 0
     }
 
