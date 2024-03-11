@@ -49,26 +49,20 @@ object YoutubeClient {
 
     const val SEARCH_PART = "snippet"
 
-    val REVERB_AND_SLOWED = arrayListOf(
-        "PLnMEO-E9-ZnMlcG_XrFHfBzhiaTfwRB1K", "PLBTanuC8SLeZaIXwjc-vDZ-CmRak-KITf",
-        "PLZehTKibbEcEMpQB7WgR0Uh_CSirRX1ja", "PLZinczBQn9b1YST_aqZp4FdXhUPTDYGSu",
-        "PLFf0Wzvy9UVrSdb9my7kThyLJwijK8sYZ", "PLoQQjA3VvcE4721CxuT6yY3luWl5ez-JV",
-        "PL7BOVx1utY9LPhbsjJTelTAVbtI9o-d95", "PL0SRsMXL71UjmtLxBsVHaXZKgpibKCRZ9",
-        "PLiP8-CkZzKEg3SpB8E9DDbUHU2JfMm6oD", "PLY50G60VnAbyu_sWx97DaTVDroXOLcGa2",
-        "PLz_XBAk7X4F1t0vh__8LXL6-2vE25_hqm", "PLTE0tRo9HHc9loqlgt4bGkSkoudeUcn0t"
+    val REVERB_AND_SLOWED = arrayListOf( // coding videos
+        "PLfqMhTWNBTe0PY9xunOzsP5kmYIz2Hu7i", "PLBTanuC8SLeZaIXwjc-vDZ-CmRak-KITf",
     ).random()
 
-    val GAMING_VIDEOS = arrayListOf(
+    val GAMING_VIDEOS = arrayListOf( // sports videos
         "PL3tRBEVW0hiBSFOFhTC5wt75P2BES0rAo", "PLe8jmEHFkvsasy1XhS5w4rWpvwBvOSFL0",
         "PLBUBxRIrD2exTPnwjcS_H130mD1srsHW0", "PLqVvtGEPyn1xplqlxx_9BSCQ46lF42tLy",
         "PLKTyKnsCvPUYwEkqueADvfX0aHx88ndCt", "PLhdhcwETqX-BqbssnCUS32dQ3fXE9fjk9",
         "PLhJUcbNkR99aSzTAMwZVoWhqA6kIfxd6Q", "PLRnX6J5CPQSwOHqOASvPKr_Uvbzddj7h4",
         "PL-TaHOq8pJ-a9S-EWx9MmQs-8Em1-vQ-k", "PLFfYcxV5z_c5zM2zPvGbFHfehUSIuvpx0",
         "PLRaYMMxEZyMXcSrQRh2xZulbfNpxYIAiJ", "PLzXmNUicjAvy_81u9RzZdMUpCFuXO1Ihl",
-        "PL8vL-_f27zDQl33vDZEdIT3vacbB17J3H"
     ).random()
 
-    val LOFI_BHAJAN =  arrayListOf(
+    val LOFI_BHAJAN =  arrayListOf( // tech videos
         "PLuH-I1ovyzeioJ_j4DcQgoxtAbgBc3YD2", "PL6pXmupaeNZ2q9xnEroqVyZwvwXygFWPJ",
         "PL5RtZw3_Rjtx-4F5obOXpSuAVWsfVzmbf", "PLhmcRXNItagwuwlaO3slDOOLsLZCmrusg",
         "PLvc9tfarNFkXRyEcWzsHecc8T4TcZY4kt", "PLPhN6_svX3lJL5t8qziY1EwfgyfbKOsYq",
@@ -76,7 +70,6 @@ object YoutubeClient {
         "PLgcK2qYcWCwRpG8CuuDSmIcKtzc426ukn", "PLPpmV2P0FYbLxP04VwXpZT4jDbUrUaX8v",
         "PLcMQbgxnh9hh9XK-y_0LCyU2N3FpAfDz2", "PLhwUrf4RX562HgDUMWiSrclejuBoCk7yD",
         "PLdbOyAhlSn6THjqQ263k8qnWOLkaAePP8", "PLiae937rUykQrQWLjNzDK4AA1OjS92v17",
-        "PLb2tT1CRI1O4vQ71L4G1qj-4uSSec_5AR"
     ).random()
 
     val INDIAN_BOLLEYWOOD_PLAYLIST = arrayListOf(

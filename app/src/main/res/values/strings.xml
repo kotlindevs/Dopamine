@@ -8,9 +8,9 @@
     <string name="video_title">Video Title</string>
     <string name="time">00:00</string>
     <string name="sign_out">Sign out</string>
-    <string name="edits_you_liked">Edits you liked</string>
-    <string name="gaming">Gaming</string>
-    <string name="lofi_bhajan">Lofi Bhajan</string>
+    <string name="edits_you_liked">Coding Videos</string>
+    <string name="gaming">Sports/E-Sports Videos</string>
+    <string name="lofi_bhajan">Tech Videos</string>
     <string name="dopamine_library">Dopamine Library</string>
     <string name="clear_all">Clear all</string>
     <string name="song_name">Song Name</string>
@@ -20,7 +20,7 @@
     <string name="like">Like</string>
     <string name="pip">PIP</string>
     <string name="copy">Copy</string>
-    <string name="your_favourites">Your Favourites</string>
+    <string name="your_favourites">Your Liked Videos</string>
     <string name="create_new_playlist">Create new playlist !</string>
     <string name="playlist_name">Playlist name</string>
     <string name="playlist_description">Playlist Description</string>
