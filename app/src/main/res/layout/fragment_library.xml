@@ -262,22 +262,6 @@
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"/>
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/yourFavouriteEffect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintTop_toBottomOf="@id/yourFavourite"
-            app:layout_constraintStart_toStartOf="parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <include layout="@layout/item_fragment_library_favorites_shimmer"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.facebook.shimmer.ShimmerFrameLayout>
         <ScrollView
             android:id="@+id/scrollable3"
             android:layout_width="match_parent"
