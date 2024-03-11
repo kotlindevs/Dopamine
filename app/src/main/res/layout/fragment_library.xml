@@ -49,7 +49,7 @@
             android:text="@string/edits_you_liked"
             android:layout_marginTop="12dp"
             android:textStyle="bold"
-            android:fontFamily="@font/proxima_nova"
+            android:fontFamily="@font/circular_spotify"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"/>
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/gaming"
-            android:fontFamily="@font/proxima_nova"
+            android:fontFamily="@font/circular_spotify"
             android:layout_marginTop="12dp"
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
@@ -169,7 +169,7 @@
             android:text="@string/lofi_bhajan"
             android:layout_marginTop="12dp"
             android:textStyle="bold"
-            android:fontFamily="@font/proxima_nova"
+            android:fontFamily="@font/circular_spotify"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scrollable1"/>
@@ -250,7 +250,7 @@
             android:text="@string/your_favourites"
             android:layout_marginTop="12dp"
             android:textStyle="bold"
-            android:fontFamily="@font/proxima_nova"
+            android:fontFamily="@font/circular_spotify"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/youtube_player_card"/>

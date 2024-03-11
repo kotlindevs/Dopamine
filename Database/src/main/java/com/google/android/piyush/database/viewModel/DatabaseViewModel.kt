@@ -132,12 +132,12 @@ class DatabaseViewModel(
         writableDatabase.execSQL(query)
     }
 
-    private val usersFavoritePlayListName = currentUser?.displayName+" Favorite 🧿❤️"
+    private val usersFavoritePlayListName = currentUser?.displayName+" Favorites"
     val newPlaylistName = stringify(usersFavoritePlayListName)
 
 
     fun defaultMasterDev() {
-        val usersFavoritePlayListDescription =  "Your favorites playlist is a reflection of your personality, showcasing your love for music and your zest for life "
+        val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
         val writableDatabase = database.writableDatabase
         writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
         writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
