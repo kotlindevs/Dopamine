@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -175,7 +176,6 @@ class YoutubePlayer : AppCompatActivity() {
                             }
                         }
                     }
-
                     databaseViewModel.isRecentVideo( videoId = video.items?.get(0)?.id.toString())
 
                     databaseViewModel.isRecent.observe(this){
@@ -200,6 +200,14 @@ class YoutubePlayer : AppCompatActivity() {
                             )
                         }
                     }
+
+                   getSharedPreferences("customPlaylist", MODE_PRIVATE).edit{
+                       putString("videoId", video.items?.get(0)?.id.toString())
+                       putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
+                       putString("title", video.items?.get(0)?.snippet?.title)
+                       putString("customName", video.items?.get(0)?.snippet?.customUrl)
+                       putString("channelId", video.items?.get(0)?.snippet?.channelId)
+                   }
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
@@ -276,10 +284,17 @@ class YoutubePlayer : AppCompatActivity() {
                 customDialog.show()
             }
 
+            if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
+                databaseViewModel.defaultMasterDev()
+            }else{
+                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+            }
+
             customPlaylists.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = CustomPlaylistsAdapter(
-                    databaseViewModel.getPlaylist()
+                    requireContext(),
+                    databaseViewModel.getPlaylist(),
                 )
             }
 

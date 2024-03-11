@@ -110,4 +110,22 @@ object YoutubeClient {
             )
         }
     }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    val AdvancedClient = HttpClient(CIO){
+        expectSuccess = false
+
+        install(ContentNegotiation){
+            json(
+                Json{
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    encodeDefaults = true
+                    prettyPrint = true
+                    explicitNulls = false
+                    coerceInputValues = true
+                }
+            )
+        }
+    }
 }

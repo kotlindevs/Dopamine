@@ -121,20 +121,38 @@ class Home : Fragment() {
                                     dialog?.dismiss()
                                 }
                                 this.setPositiveButton("Retry") { _, _ ->
-                                    homeViewModel.videos.observe(viewLifecycleOwner) {
-                                        if(it is YoutubeResource.Success) {
-                                            binding.shimmerRecyclerView.visibility = View.INVISIBLE
-                                            binding.shimmerRecyclerView.stopShimmer()
-                                            binding.recyclerView.apply {
-                                                setHasFixedSize(true)
-                                                layoutManager = LinearLayoutManager(context)
-                                                homeAdapter = HomeAdapter(requireContext(),it.data)
-                                                adapter = homeAdapter
+                                    homeViewModel.getAdvanceVideos()
+                                    homeViewModel.advanceVideos.observe(viewLifecycleOwner){ videos ->
+                                        when (videos) {
+                                            is YoutubeResource.Loading -> {
+                                                binding.shimmerRecyclerView.visibility = View.VISIBLE
+                                                binding.shimmerRecyclerView.startShimmer()
+                                                Log.d(TAG, "Loading: True")
                                             }
-                                        }else{
-                                            binding.shimmerRecyclerView.visibility = View.VISIBLE
-                                            binding.shimmerRecyclerView.startShimmer()
-                                            this.create().show()
+                                            is YoutubeResource.Success -> {
+                                                binding.shimmerRecyclerView.visibility = View.INVISIBLE
+                                                binding.shimmerRecyclerView.stopShimmer()
+                                                binding.recyclerView.apply {
+                                                    setHasFixedSize(true)
+                                                    layoutManager = LinearLayoutManager(context)
+                                                    homeAdapter = HomeAdapter(requireContext(), videos.data)
+                                                    adapter = homeAdapter
+                                                }
+                                                //Log.d(TAG, "Success: ${videos.data}")
+                                            }
+                                            is YoutubeResource.Error -> {
+                                                Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                                                MaterialAlertDialogBuilder(requireContext())
+                                                    .apply {
+                                                        this.setTitle("Something went wrong")
+                                                        this.setMessage(videos.exception.message.toString())
+                                                        this.setIcon(R.drawable.ic_dialog_error)
+                                                        this.setCancelable(false)
+                                                        this.setPositiveButton("Try again later") { dialog, _ ->
+                                                            dialog?.dismiss()
+                                                        }.create().show()
+                                                    }
+                                            }
                                         }
                                     }
                                 }.create().show()

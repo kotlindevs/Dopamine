@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/Widget.Material3.CardView.Filled">
@@ -34,7 +33,7 @@
             android:text="@string/app_name"
             android:textColor="?attr/colorControlActivated"
             android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+            app:layout_constraintEnd_toStartOf="@+id/selectedPlaylist"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toTopOf="@id/image" />
 
@@ -51,7 +50,7 @@
             android:textColor="?attr/colorControlActivated"
             android:textSize="16sp"
             app:fontFamily="@font/circular_spotify"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+            app:layout_constraintEnd_toStartOf="@+id/selectedPlaylist"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
@@ -70,7 +69,7 @@
 
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
+            android:id="@+id/selectedPlaylist"
             style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +80,7 @@
             app:layout_constraintTop_toTopOf="@+id/image">
 
             <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/selected_chk"
+                android:id="@+id/selectedPlaylistItem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
