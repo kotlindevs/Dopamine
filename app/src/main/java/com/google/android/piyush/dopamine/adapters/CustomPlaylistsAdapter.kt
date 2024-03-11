@@ -1,5 +1,6 @@
 package com.google.android.piyush.dopamine.adapters
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,34 +35,36 @@ class CustomPlaylistsAdapter(
     override fun onBindViewHolder(holder: CustomPlaylistsViewHolder, position: Int) {
         val databaseViewModel = DatabaseViewModel(context = context)
         val pref = context.getSharedPreferences("customPlaylist", Context.MODE_PRIVATE)
+        val playlistName = databaseViewModel.getPlaylistsFromDatabase()[position]
         val videoId = pref.getString("videoId", "")!!
         val title = pref.getString("title", "")!!
         val thumbnail = pref.getString("thumbnail", "")!!
         val customName = pref.getString("customName", "")!!
         val channelId = pref.getString("channelId", "")!!
+        val isVideoAlreadyAdded = databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)
+        Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
+
+        if(isVideoAlreadyAdded.equals(true)){
+            holder.selectedPlaylistItem.isChecked = true
+        }
+
         holder.title.text = playlists?.get(position)?.playListName
         holder.description.text = playlists?.get(position)?.playListDescription
         holder.selectedPlaylistItem.addOnCheckedStateChangedListener { _, isChecked ->
             if(isChecked == 1){
-                val playlistName = databaseViewModel.getPlaylistsFromDatabase()[position]
-                if(databaseViewModel.isExistsDataInPlaylist(playlistName, videoId).equals(true)){
-                    holder.selectedPlaylistItem.isChecked = true
-                }else{
+                if(isVideoAlreadyAdded.equals(false)){
                     databaseViewModel.addItemsInCustomPlaylist(
                         playlistName,
-                        CustomPlaylists(
+                        playlistsData = CustomPlaylists(
                             videoId = videoId,
-                            title =  title,
+                            title = title,
                             thumbnail = thumbnail,
                             customName = customName,
-                            channelId = channelId,
+                            channelId = channelId
                         )
                     )
-                    ToastUtilities.showToast(context, "Successfully added to playlist !")
-                    holder.selectedPlaylistItem.isChecked = true
                 }
-            }else{
-                ToastUtilities.showToast(context, "Successfully removed from playlist !")
+                ToastUtilities.showToast(context, "Successfully added to playlist :)")
             }
         }
     }

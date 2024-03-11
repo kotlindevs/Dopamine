@@ -114,7 +114,7 @@ class DatabaseViewModel(
             dopamineDatabaseRepository.updateRecentVideo(videoId,time)
         }
     }
-
+    //Custom Playlist
     val defaultMasterDev = database.writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS DopamineMastersDev (playlistName TEXT PRIMARY KEY, playlistDescription TEXT)")
     fun createCustomPlaylist(playlistsData: CustomPlaylistView) {
         val writableDatabase = database.writableDatabase
@@ -181,13 +181,13 @@ class DatabaseViewModel(
 
     fun isExistsDataInPlaylist(playlistName: String,videoId: String) : Boolean {
         val writableDatabase = database.writableDatabase
-        val query = writableDatabase.query("SELECT videoId FROM ${stringify(playlistName)} WHERE videoId = \"$videoId\" ")
-        while (query.moveToNext()) {
-            val dbTableVideoId= query.getString(0)
-            if (query.getString(0).isNotEmpty()) {
-                if (dbTableVideoId == videoId) {
-                    return true
-                }
+        val newPlaylistName = stringify(playlistName)
+        val query = "SELECT videoId FROM $newPlaylistName WHERE videoId = \"$videoId\" "
+        val data = writableDatabase.query(query)
+        while (data.moveToNext()) {
+            val dbTableVideoId= data.getString(0)
+            if(dbTableVideoId == videoId){
+                return true
             }
         }
        return false
