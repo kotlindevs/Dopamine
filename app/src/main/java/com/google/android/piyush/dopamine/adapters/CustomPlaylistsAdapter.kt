@@ -44,8 +44,10 @@ class CustomPlaylistsAdapter(
         val isVideoAlreadyAdded = databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)
         Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
 
-        if(isVideoAlreadyAdded.equals(true)){
-            holder.selectedPlaylistItem.isChecked = true
+        if(playlistName!=null) {
+            if (isVideoAlreadyAdded.equals(true)) {
+                holder.selectedPlaylistItem.isChecked = true
+            }
         }
 
         holder.title.text = playlists?.get(position)?.playListName

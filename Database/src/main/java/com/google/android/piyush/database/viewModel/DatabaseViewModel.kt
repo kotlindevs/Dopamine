@@ -136,7 +136,7 @@ class DatabaseViewModel(
     val newPlaylistName = stringify(usersFavoritePlayListName)
 
 
-    fun defaultMasterDev() {
+    fun defaultUserPlaylist() {
         val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
         val writableDatabase = database.writableDatabase
         writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")

@@ -75,6 +75,7 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
+
         databaseViewModel.isFavouriteVideo(
             intent?.getStringExtra("videoId").toString()
         )
@@ -285,7 +286,7 @@ class YoutubePlayer : AppCompatActivity() {
             }
 
             if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
-                databaseViewModel.defaultMasterDev()
+                databaseViewModel.defaultUserPlaylist()
             }else{
                 Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
             }
