@@ -8,9 +8,9 @@
     <string name="video_title">Video Title</string>
     <string name="time">00:00</string>
     <string name="sign_out">Sign out</string>
-    <string name="edits_you_liked">Coding Videos</string>
-    <string name="gaming">Sports/E-Sports Videos</string>
-    <string name="lofi_bhajan">Tech Videos</string>
+    <string name="codingVideos">Coding Videos</string>
+    <string name="sportsVideos">Sports/E-Sports Videos</string>
+    <string name="techVideos">Tech Videos</string>
     <string name="dopamine_library">Dopamine Library</string>
     <string name="clear_all">Clear all</string>
     <string name="song_name">Song Name</string>

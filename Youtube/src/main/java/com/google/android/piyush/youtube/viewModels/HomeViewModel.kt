@@ -17,8 +17,8 @@ class HomeViewModel(
     private val _videos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
     val videos : LiveData<YoutubeResource<Youtube>> = _videos
 
-    private val _advanceVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val advanceVideos : LiveData<YoutubeResource<Youtube>> = _advanceVideos
+    private val _reGetVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
+    val reGetVideos : LiveData<YoutubeResource<Youtube>> = _reGetVideos
 
     init {
         getHomeVideos()
@@ -55,15 +55,15 @@ class HomeViewModel(
         }
     }
 
-    fun getAdvanceVideos() {
+    fun reGetHomeVideos() {
         viewModelScope.launch {
             try {
-                _advanceVideos.postValue(
+                _reGetVideos.postValue(
                     YoutubeResource.Loading
                 )
-                val response = youtubeRepositoryImpl.advanceHome()
+                val response = youtubeRepositoryImpl.reGetHomeVideos()
                 if(response.items.isNullOrEmpty()) {
-                    _advanceVideos.postValue(
+                    _reGetVideos.postValue(
                         YoutubeResource.Error(
                             Exception(
                                 "The request cannot be completed because you have exceeded your quota."
@@ -71,14 +71,14 @@ class HomeViewModel(
                         )
                     )
                 }else{
-                    _advanceVideos.postValue(
+                    _reGetVideos.postValue(
                         YoutubeResource.Success(
                             response
                         )
                     )
                 }
             }catch (exception : Exception){
-                _advanceVideos.postValue(
+                _reGetVideos.postValue(
                     YoutubeResource.Error(
                         exception = exception
                     )

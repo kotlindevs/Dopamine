@@ -75,21 +75,21 @@ class Library : Fragment() {
             )
         }
 
-        viewModel.reverbAndSlowedVideos.observe(viewLifecycleOwner){ playListVideos ->
+        viewModel.codingVideos.observe(viewLifecycleOwner){ playListVideos ->
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
                     Log.d(ContentValues.TAG,playListVideos.data.toString())
                     fragmentLibraryBinding?.apply {
-                        editsYouLikedList.layoutManager =
+                        codingVideosList.layoutManager =
                             LinearLayoutManager(
                                 context,
-                                editsYouLikedList.horizontalFadingEdgeLength,
+                                codingVideosList.horizontalFadingEdgeLength,
                                 false
                             )
-                        editsYouLikedList.adapter = libraryAdapter
-                        binding.editsYouLikedEffect.stopShimmer()
-                        binding.editsYouLikedEffect.visibility = View.INVISIBLE
+                        codingVideosList.adapter = libraryAdapter
+                        binding.codingVideosEffect.stopShimmer()
+                        binding.codingVideosEffect.visibility = View.INVISIBLE
                     }
                 }
 
@@ -105,48 +105,75 @@ class Library : Fragment() {
                                 dialog?.dismiss()
                             }
                             this.setPositiveButton("Retry") { _, _ ->
-                                viewModel.reverbAndSlowedVideos.observe(viewLifecycleOwner) {
+                                viewModel.reGetCodingVideos.observe(viewLifecycleOwner) {
                                     if(it is YoutubeResource.Success) {
-                                        binding.editsYouLikedEffect.visibility = View.INVISIBLE
-                                        binding.editsYouLikedEffect.stopShimmer()
-                                        binding.editsYouLikedList.apply {
+                                        binding.codingVideosEffect.visibility = View.INVISIBLE
+                                        binding.codingVideosEffect.stopShimmer()
+                                        binding.codingVideosList.apply {
                                             setHasFixedSize(true)
-                                            layoutManager = LinearLayoutManager(context)
+                                            layoutManager = LinearLayoutManager(context, binding.codingVideosList.horizontalFadingEdgeLength,
+                                                false)
                                             libraryAdapter = LibraryAdapter(requireContext(),it.data)
                                             adapter = libraryAdapter
                                         }
-                                    }else{
-                                        binding.editsYouLikedEffect.visibility = View.VISIBLE
-                                        binding.editsYouLikedEffect.startShimmer()
-                                        this.create().show()
                                     }
                                 }
+
+                                viewModel.reGetSportsVideos.observe(viewLifecycleOwner) {
+                                    if(it is YoutubeResource.Success) {
+                                        binding.sportsVideosEffect.visibility = View.INVISIBLE
+                                        binding.sportsVideosEffect.stopShimmer()
+                                        binding.sportsVideosList.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = LinearLayoutManager(context, binding.sportsVideosList.horizontalFadingEdgeLength,
+                                                false)
+                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            adapter = libraryAdapter
+                                        }
+                                    }
+                                }
+
+                                viewModel.reGetTechnologyVideos.observe(viewLifecycleOwner) {
+                                    Log.d(ContentValues.TAG,it.toString())
+                                    if(it is YoutubeResource.Success) {
+                                        binding.techVideosEffect.visibility = View.INVISIBLE
+                                        binding.techVideosEffect.stopShimmer()
+                                        binding.techVideosList.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = LinearLayoutManager(context, binding.techVideosList.horizontalFadingEdgeLength,
+                                                false)
+                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            adapter = libraryAdapter
+                                        }
+                                    }
+                                }
+
                             }.create().show()
                         }
                 }
 
                 is YoutubeResource.Loading -> {
-                    binding.editsYouLikedEffect.startShimmer()
-                    binding.editsYouLikedEffect.visibility = View.VISIBLE
+                    binding.codingVideosEffect.startShimmer()
+                    binding.codingVideosEffect.visibility = View.VISIBLE
                 }
             }
         }
 
-        viewModel.gamingVideos.observe(viewLifecycleOwner){ playListVideos ->
+        viewModel.sportsVideos.observe(viewLifecycleOwner){ playListVideos ->
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
                     Log.d(ContentValues.TAG,playListVideos.data.toString())
                     fragmentLibraryBinding?.apply {
-                        gamingList.layoutManager =
+                        sportsVideosList.layoutManager =
                             LinearLayoutManager(
                                 context,
-                                gamingList.horizontalFadingEdgeLength,
+                                sportsVideosList.horizontalFadingEdgeLength,
                                 false
                             )
-                        gamingList.adapter = libraryAdapter
-                        binding.gamingEffect.stopShimmer()
-                        binding.gamingEffect.visibility = View.INVISIBLE
+                        sportsVideosList.adapter = libraryAdapter
+                        binding.sportsVideosEffect.stopShimmer()
+                        binding.sportsVideosEffect.visibility = View.INVISIBLE
                     }
                 }
 
@@ -155,27 +182,27 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Loading -> {
-                    binding.gamingEffect.startShimmer()
-                    binding.gamingEffect.visibility = View.VISIBLE
+                    binding.sportsVideosEffect.startShimmer()
+                    binding.sportsVideosEffect.visibility = View.VISIBLE
                 }
             }
         }
 
-        viewModel.lofiBhajan.observe(viewLifecycleOwner){ playListVideos ->
+        viewModel.technologyVideos.observe(viewLifecycleOwner){ playListVideos ->
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
                     Log.d(ContentValues.TAG,playListVideos.data.toString())
                     fragmentLibraryBinding?.apply {
-                        lofiBhajanList.layoutManager =
+                        techVideosList.layoutManager =
                             LinearLayoutManager(
                                 context,
-                                lofiBhajanList.horizontalFadingEdgeLength,
+                                techVideosList.horizontalFadingEdgeLength,
                                 false
                             )
-                        lofiBhajanList.adapter = libraryAdapter
-                        binding.lofiBhajanEffect.stopShimmer()
-                        binding.lofiBhajanEffect.visibility = View.INVISIBLE
+                        techVideosList.adapter = libraryAdapter
+                        binding.techVideosEffect.stopShimmer()
+                        binding.techVideosEffect.visibility = View.INVISIBLE
                     }
                 }
 
@@ -184,8 +211,8 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Loading -> {
-                    binding.lofiBhajanEffect.startShimmer()
-                    binding.lofiBhajanEffect.visibility = View.VISIBLE
+                    binding.techVideosEffect.startShimmer()
+                    binding.techVideosEffect.visibility = View.VISIBLE
                 }
             }
         }
@@ -228,11 +255,8 @@ class Library : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentLibraryBinding = null
-        viewModel.reverbAndSlowedVideos.removeObservers(viewLifecycleOwner)
-        viewModel.gamingVideos.removeObservers(viewLifecycleOwner)
-        viewModel.lofiBhajan.removeObservers(viewLifecycleOwner)
-    }
-    private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        viewModel.codingVideos.removeObservers(viewLifecycleOwner)
+        viewModel.sportsVideos.removeObservers(viewLifecycleOwner)
+        viewModel.technologyVideos.removeObservers(viewLifecycleOwner)
     }
 }

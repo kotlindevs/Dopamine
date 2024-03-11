@@ -112,8 +112,8 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         return response.body()
     }
 
-    suspend fun advanceHome() : Youtube {
-        val response = YoutubeClient.AdvancedClient.get(
+    suspend fun reGetHomeVideos() : Youtube {
+        val response = YoutubeClient.CLIENT.get(
             YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
         ){
             url {
@@ -121,7 +121,89 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("chart", YoutubeClient.CHART)
                 parameters.append("regionCode", YoutubeClient.REGION_CODE)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
+                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetLibraryVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c" )
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetSearchVideos(query: String): SearchTube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", query)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetChannelDetails(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", channelId)
+                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetChannelsPlaylists(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("channelId", channelId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetPlaylistVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetVideoDetails(videoId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", videoId)
+                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
             }
         }
         return response.body()

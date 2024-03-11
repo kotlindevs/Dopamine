@@ -66,7 +66,7 @@ class Home : Fragment() {
         Log.d(TAG, firebaseAuth.currentUser?.providerData.toString())
         Log.d(TAG, firebaseAuth.currentUser?.metadata.toString())
 
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
+        if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
             Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentHomeBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
@@ -121,8 +121,8 @@ class Home : Fragment() {
                                     dialog?.dismiss()
                                 }
                                 this.setPositiveButton("Retry") { _, _ ->
-                                    homeViewModel.getAdvanceVideos()
-                                    homeViewModel.advanceVideos.observe(viewLifecycleOwner){ videos ->
+                                    homeViewModel.reGetHomeVideos()
+                                    homeViewModel.reGetVideos.observe(viewLifecycleOwner){ videos ->
                                         when (videos) {
                                             is YoutubeResource.Loading -> {
                                                 binding.shimmerRecyclerView.visibility = View.VISIBLE

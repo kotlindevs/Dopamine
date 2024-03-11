@@ -47,27 +47,27 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/edits_you_liked"
+            android:id="@+id/codingVideos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/circular_spotify"
-            android:text="@string/edits_you_liked"
+            android:text="@string/codingVideos"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yourFavouriteList" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/editsYouLikedEffect"
+            android:id="@+id/codingVideosEffect"
             android:layout_width="wrap_content"
             android:layout_height="172dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edits_you_liked">
+            app:layout_constraintTop_toBottomOf="@id/codingVideos">
 
             <HorizontalScrollView
                 android:id="@+id/scrollView"
@@ -108,10 +108,10 @@
             android:overScrollMode="always"
             android:scrollbars="none"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edits_you_liked">
+            app:layout_constraintTop_toBottomOf="@id/codingVideos">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/editsYouLikedList"
+                android:id="@+id/codingVideosList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -119,27 +119,27 @@
         </ScrollView>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/gaming"
+            android:id="@+id/sportsVideos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/circular_spotify"
-            android:text="@string/gaming"
+            android:text="@string/sportsVideos"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scrollable" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/gamingEffect"
+            android:id="@+id/sportsVideosEffect"
             android:layout_width="wrap_content"
             android:layout_height="172dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gaming">
+            app:layout_constraintTop_toBottomOf="@id/sportsVideos">
 
             <HorizontalScrollView
                 android:id="@+id/scrollView1"
@@ -180,10 +180,10 @@
             android:overScrollMode="always"
             android:scrollbars="none"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gaming">
+            app:layout_constraintTop_toBottomOf="@id/sportsVideos">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/gamingList"
+                android:id="@+id/sportsVideosList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -191,27 +191,27 @@
         </ScrollView>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/lofiBhajan"
+            android:id="@+id/techVideos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/circular_spotify"
-            android:text="@string/lofi_bhajan"
+            android:text="@string/techVideos"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scrollable1" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/lofiBhajanEffect"
+            android:id="@+id/techVideosEffect"
             android:layout_width="wrap_content"
             android:layout_height="172dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lofiBhajan">
+            app:layout_constraintTop_toBottomOf="@id/techVideos">
 
             <HorizontalScrollView
                 android:id="@+id/scrollView2"
@@ -252,10 +252,10 @@
             android:overScrollMode="always"
             android:scrollbars="none"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lofiBhajan">
+            app:layout_constraintTop_toBottomOf="@id/techVideos">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lofiBhajanList"
+                android:id="@+id/techVideosList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -303,7 +303,6 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/yourFavouriteList"
             android:layout_width="match_parent"
