@@ -26,9 +26,9 @@
             android:layout_margin="8dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/no_data"
-            android:layout_width="128dp"
-            android:layout_height="128dp"/>
+            app:lottie_rawRes="@raw/playlist"
+            android:layout_width="256dp"
+            android:layout_height="256dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btCreatePlaylist"
