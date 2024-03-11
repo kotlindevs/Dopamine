@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="@string/messages_header">
 
@@ -31,5 +32,26 @@
             app:title="@string/attachment_title" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="Advanced">
+
+        <ListPreference app:title="Dark Mode"
+            app:key="dark_mode"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="1"
+            app:entries="@array/dark_mode_entries"
+            app:entryValues="@array/dark_mode_entries_values"/>
+
+    </PreferenceCategory>
+
+    <Preference
+        app:summary="Click To Reach Us"
+        app:title="About Us">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://www.instagram.com/rajatt.dev/"/>
+
+    </Preference>
 
 </PreferenceScreen>
