@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
-import com.google.android.piyush.dopamine.adapters.HomeAdapter
+import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
@@ -257,11 +257,13 @@ class Library : Fragment() {
         )
 
         if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
-            fragmentLibraryBinding!!.customPlaylistsEffect.visibility = View.VISIBLE
-            fragmentLibraryBinding!!.customPlaylistsEffect.startShimmer()
+            fragmentLibraryBinding!!.customPlaylistsList.visibility = View.GONE
         }else{
-            fragmentLibraryBinding!!.customPlaylistsEffect.stopShimmer()
-            fragmentLibraryBinding!!.customPlaylistsEffect.visibility = View.INVISIBLE
+            fragmentLibraryBinding!!.customPlaylistsList.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
+            }
         }
     }
 

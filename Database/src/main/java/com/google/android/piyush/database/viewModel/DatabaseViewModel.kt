@@ -1,16 +1,11 @@
 package com.google.android.piyush.database.viewModel
 
-import android.app.Application
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.piyush.database.dao.DopamineDao
 import com.google.android.piyush.database.DopamineDatabase
 import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
@@ -219,6 +214,26 @@ class DatabaseViewModel(
         }
         return false
     }
+
+    fun getPlaylistData(playlistName : String) : List<CustomPlaylists> {
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(playlistName)
+        val list = mutableListOf<CustomPlaylists>()
+        val query = writableDatabase.query("SELECT * FROM $newPlaylistName")
+        while (query.moveToNext()){
+            list.add(
+                CustomPlaylists(
+                    query.getString(0),
+                    query.getString(1),
+                    query.getString(2),
+                    query.getString(3),
+                    query.getString(4)
+                )
+            )
+        }
+        return list
+    }
+
 
     private fun stringify(playlistName: String): String {
         val name = if(playlistName.isNotEmpty()){
