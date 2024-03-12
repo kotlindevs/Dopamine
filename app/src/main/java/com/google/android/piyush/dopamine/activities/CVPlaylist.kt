@@ -1,13 +1,13 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.adapters.CustomPlaylistsVDataAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityCvplaylistBinding
 
 class CVPlaylist : AppCompatActivity() {
@@ -27,7 +27,12 @@ class CVPlaylist : AppCompatActivity() {
 
         val playlist = intent.getStringExtra("playlistName")
         if(playlist != null) {
-            Log.d("playlistData", databaseViewModel.getPlaylistData(playlist).toString()) //To make adapter pass the parameter  -> list<CustomPlaylists> add so on...
+            binding.materialTextView.text = playlist
+            binding.customPlayListVideos.apply {
+                setHasFixedSize(false)
+                layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+                adapter = CustomPlaylistsVDataAdapter(databaseViewModel.getPlaylistData(playlist),context)
+            }
         }
     }
 }
