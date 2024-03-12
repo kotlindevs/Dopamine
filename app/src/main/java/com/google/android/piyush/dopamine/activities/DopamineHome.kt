@@ -31,13 +31,6 @@ class DopamineHome : AppCompatActivity() {
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         onBackPressedDispatcher.addCallback {
             overridePendingTransition(
                 android.R.anim.fade_in, android.R.anim.fade_out
