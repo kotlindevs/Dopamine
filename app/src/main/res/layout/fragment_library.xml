@@ -352,17 +352,22 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/youtube_player_card" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/customPlaylistsList"
+            tools:listitem="@layout/item_frag_cust_lst_view"
+            tools:itemCount="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:scrollbars="none"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/customPlaylists"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/customPlaylists" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
