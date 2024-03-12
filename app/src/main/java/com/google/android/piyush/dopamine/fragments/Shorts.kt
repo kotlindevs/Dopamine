@@ -1,5 +1,6 @@
 package com.google.android.piyush.dopamine.fragments
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,6 +50,8 @@ class Shorts : Fragment() {
                         adapter = ShortsAdapter(it)
                     }
                 }
+                Log.d(ContentValues.TAG, " -> Fragment : Shorts || Shorts Videos : $it")
+
             }
         }
     }

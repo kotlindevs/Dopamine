@@ -1,6 +1,8 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,6 +39,7 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
                 adapter = RecentVideosAdapter(context,recentVideos)
             }
+            Log.d(ContentValues.TAG, " -> Activity : DopamineVideoWatchHistory || recentVideos : $recentVideos")
         }
 
         binding.topAppBar.setNavigationOnClickListener{

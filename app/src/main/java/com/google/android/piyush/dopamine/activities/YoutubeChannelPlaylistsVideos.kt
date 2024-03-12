@@ -56,7 +56,7 @@ class YoutubeChannelPlaylistsVideos : AppCompatActivity() {
         youtubeChannelPlaylistsVideosViewModel.playlistsVideos.observe(this) { playlistsVideos ->
             when (playlistsVideos) {
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "Loading: True")
+                    //Log.d(TAG, "Loading: True")
                 }
                 is YoutubeResource.Success -> {
                     binding.recyclerView.apply {
@@ -64,10 +64,9 @@ class YoutubeChannelPlaylistsVideos : AppCompatActivity() {
                         layoutManager = LinearLayoutManager(this@YoutubeChannelPlaylistsVideos)
                         adapter = YoutubePlaylistsVideosAdapter(context,playlistsVideos.data)
                     }
-                    //Log.d(TAG, "Success: ${playlistsVideos.data}")
-                }
+                    Log.d(TAG, " -> Activity : YoutubeChannelPlaylistsVideos || Playlist Videos : ${playlistsVideos.data}")                }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "Error: ${playlistsVideos.exception.message.toString()}")
+                    //Log.d(TAG, "Error: ${playlistsVideos.exception.message.toString()}")
                 }
             }
         }

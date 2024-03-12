@@ -49,7 +49,7 @@ class YoutubeChannel : AppCompatActivity() {
         youtubeChannelViewModel.channelDetails.observe(this){ channelDetails ->
             when(channelDetails){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "Loading: True")
+                    //Log.d(TAG, "Loading: True")
                 }
                 is YoutubeResource.Success -> {
                     Glide.with(this)
@@ -68,10 +68,10 @@ class YoutubeChannel : AppCompatActivity() {
                         this.text3.text = text
                         this.text4.text = channelDetails.data.items?.get(0)?.snippet?.description
                     }
-                    //Log.d(TAG, "Success: ${channelDetails.data}")
+                    Log.d(TAG, " -> Activity : YoutubeChannel || Channel Details : ${channelDetails.data}")
                 }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "Error: ${channelDetails.exception.message.toString()}")
+                    //Log.d(TAG, "Error: ${channelDetails.exception.message.toString()}")
                     MaterialAlertDialogBuilder(applicationContext)
                         .apply {
                             this.setTitle("Error")
@@ -93,7 +93,7 @@ class YoutubeChannel : AppCompatActivity() {
         youtubeChannelViewModel.channelsPlaylists.observe(this) { channelsPlaylists ->
             when(channelsPlaylists){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "Loading: True")
+                    //Log.d(TAG, "Loading: True")
                 }
                 is YoutubeResource.Success -> {
                     binding.recyclerview.apply {
@@ -102,12 +102,10 @@ class YoutubeChannel : AppCompatActivity() {
                         adapter = YoutubeChannelPlaylistsAdapter(
                             applicationContext, channelsPlaylists.data
                         )
-
                     }
-                    //Log.d(TAG, "Success: ${channelsPlaylists.data.items}")
-                }
+                    Log.d(TAG, " -> Activity : YoutubeChannel || Channels Playlists : ${channelsPlaylists.data}")                }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
+                    //Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
                 }
             }
         }

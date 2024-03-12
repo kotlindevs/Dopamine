@@ -1,5 +1,6 @@
 package com.google.android.piyush.database.viewModel
 
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -153,6 +154,7 @@ class DatabaseViewModel(
                 )
             )
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || GetPlaylist : $list")
         return list
     }
 
@@ -169,6 +171,7 @@ class DatabaseViewModel(
             )
             Log.d("list",list.toString())
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || GetAllPlaylist : $list")
         return list
     }
 
@@ -180,9 +183,11 @@ class DatabaseViewModel(
         while (data.moveToNext()) {
             val dbTableVideoId= data.getString(0)
             if(dbTableVideoId == videoId){
+                Log.d(ContentValues.TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || True")
                 return true
             }
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || False")
         return false
     }
 
@@ -196,8 +201,8 @@ class DatabaseViewModel(
         var count = 0
         while (data.moveToNext()){
             count = data.getInt(0)
-            Log.d("NumberOfOPlaylistsInDatabase",count.toString())
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || countTheNumberOfCustomPlaylist : $count")
         return count
     }
 
@@ -208,10 +213,12 @@ class DatabaseViewModel(
             val dbTableName = query.getString(0)
             if(query.getString(0).isNotEmpty()){
                 if(dbTableName == playlistName){
+                    Log.d(ContentValues.TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || True")
                     return true
                 }
             }
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || False")
         return false
     }
 
@@ -231,6 +238,7 @@ class DatabaseViewModel(
                 )
             )
         }
+        Log.d(ContentValues.TAG, " -> viewModel : Database || getPlaylistData : $list")
         return list
     }
 

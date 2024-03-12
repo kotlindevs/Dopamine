@@ -115,6 +115,7 @@ class Search : Fragment() {
                     adapter = SearchHistoryAdapter(it)
                 }
             }
+            Log.d(TAG, " -> Fragment : Search || Search History : $it")
         }
 
         binding.searchVideo.setOnQueryTextListener(
@@ -134,7 +135,7 @@ class Search : Fragment() {
                     searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
                         when (searchVideos) {
                             is YoutubeResource.Loading -> {
-                                Log.d(TAG, "Loading: True")
+                                //Log.d(TAG, "Loading: True")
                                 binding.utilList.visibility = View.GONE
                             }
 
@@ -144,11 +145,11 @@ class Search : Fragment() {
                                     visibility = View.VISIBLE
                                     adapter = SearchAdapter(context!!, searchVideos.data)
                                 }
-                                Log.d(TAG, "Success: ${ searchVideos.data}")
+                                Log.d(TAG, " -> Fragment : Search || Search Videos : ${searchVideos.data}")
                             }
 
                             is YoutubeResource.Error -> {
-                                Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                                //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
                                 MaterialAlertDialogBuilder(context!!)
                                     .apply {
                                         this.setTitle("Error")
@@ -226,6 +227,7 @@ class Search : Fragment() {
         if(requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK){
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             fragmentSearchBinding!!.searchVideo.setQuery(result?.get(0), true)
+            Log.d(TAG, " -> Fragment : Search || User Voice Search : ${result?.get(0)}")
         }
     }
 

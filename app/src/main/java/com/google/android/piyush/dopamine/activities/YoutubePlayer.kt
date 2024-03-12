@@ -99,6 +99,7 @@ class YoutubePlayer : AppCompatActivity() {
                         intent?.getStringExtra("videoId")!!,
                         0F
                     )
+                    Log.d(TAG, " -> Activity : YoutubePlayer || videoId : $intent.getStringExtra(\"videoId\") ")
                 }
             } },true,iFramePlayerOptions)
 
@@ -138,7 +139,7 @@ class YoutubePlayer : AppCompatActivity() {
         youtubePlayerViewModel.videoDetails.observe(this){ videoDetails ->
             when(videoDetails){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "YoutubePlayer || VideoDetails : True")
+                    //Log.d(TAG, "YoutubePlayer || VideoDetails : True")
                 }
                 is YoutubeResource.Success -> {
                     val video = videoDetails.data
@@ -209,9 +210,10 @@ class YoutubePlayer : AppCompatActivity() {
                        putString("customName", video.items?.get(0)?.snippet?.customUrl)
                        putString("channelId", video.items?.get(0)?.snippet?.channelId)
                    }
+                    Log.d(TAG, " -> Activity : YoutubePlayer || Video Details : ${videoDetails.data}")
                 }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
+                    //Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
                 }
             }
         }
@@ -223,7 +225,7 @@ class YoutubePlayer : AppCompatActivity() {
         youtubePlayerViewModel.channelDetails.observe(this){ channelDetails ->
             when(channelDetails){
                 is YoutubeResource.Loading -> {
-                    Log.d(TAG, "YoutubePlayer || ChannelDetails : True")
+                    //Log.d(TAG, "YoutubePlayer || ChannelDetails : True")
                 }
                 is YoutubeResource.Success -> {
                     val channel = channelDetails.data
@@ -237,9 +239,10 @@ class YoutubePlayer : AppCompatActivity() {
                         this.text3.text = subscriberData
                         this.text4.text = channel.items?.get(0)?.snippet?.description
                     }
+                    Log.d(TAG, " -> Activity : YoutubePlayer || Channel Details : $channel")
                 }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
+                    //Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
                 }
             }
         }
@@ -297,6 +300,7 @@ class YoutubePlayer : AppCompatActivity() {
                     requireContext(),
                     databaseViewModel.getPlaylist(),
                 )
+                Log.d(TAG, " -> Fragment : BottomSheetFragment || Custom Playlists : ${databaseViewModel.getPlaylist()}")
             }
 
             return view

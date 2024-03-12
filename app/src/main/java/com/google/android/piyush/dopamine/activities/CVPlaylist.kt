@@ -1,6 +1,8 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,6 +35,7 @@ class CVPlaylist : AppCompatActivity() {
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
                 adapter = CustomPlaylistsVDataAdapter(databaseViewModel.getPlaylistData(playlist),context)
             }
+            Log.d(TAG, " -> Activity : CVPlaylist || PlaylistData : $playlist")
         }
     }
 }

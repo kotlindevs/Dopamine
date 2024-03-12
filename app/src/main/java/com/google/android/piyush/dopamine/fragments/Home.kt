@@ -53,18 +53,19 @@ class Home : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         fragmentHomeBinding!!.greeting.text = getGreeting()
+        Log.d(TAG, " -> Fragment : Home || Greeting : ${getGreeting()}")
 
         //User details
-        Log.d(TAG, firebaseAuth.currentUser?.displayName.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.email.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.photoUrl.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.uid.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.phoneNumber.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.providerId.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.isAnonymous.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.isEmailVerified.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.providerData.toString())
-        Log.d(TAG, firebaseAuth.currentUser?.metadata.toString())
+        Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
+        Log.d(TAG, "User Email : " +firebaseAuth.currentUser?.email.toString())
+        Log.d(TAG, "User Photo : " +firebaseAuth.currentUser?.photoUrl.toString())
+        Log.d(TAG, "User Uid   : " +firebaseAuth.currentUser?.uid.toString())
+        Log.d(TAG, "User PhoneNumber : "  +firebaseAuth.currentUser?.phoneNumber.toString())
+        Log.d(TAG, "User ProviderId : "+firebaseAuth.currentUser?.providerId.toString())
+        Log.d(TAG, "IsUserAnonymous : "+firebaseAuth.currentUser?.isAnonymous.toString())
+        Log.d(TAG, "IsUserEmailVerified : "+firebaseAuth.currentUser?.isEmailVerified.toString())
+        Log.d(TAG, "User ProviderData : "+firebaseAuth.currentUser?.providerData.toString())
+        Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString())
 
         if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
             Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentHomeBinding!!.userImage)
@@ -96,7 +97,7 @@ class Home : Fragment() {
                     is YoutubeResource.Loading -> {
                         binding.shimmerRecyclerView.visibility = View.VISIBLE
                         binding.shimmerRecyclerView.startShimmer()
-                        Log.d(TAG, "Loading: True")
+                        //Log.d(TAG, "Loading: True")
                     }
                     is YoutubeResource.Success -> {
                         binding.shimmerRecyclerView.visibility = View.INVISIBLE
@@ -107,10 +108,10 @@ class Home : Fragment() {
                             homeAdapter = HomeAdapter(requireContext(), videos.data)
                             adapter = homeAdapter
                         }
-                        //Log.d(TAG, "Success: ${videos.data}")
+                        Log.d(TAG, " -> Fragment : Home || HomeView Data : ${videos.data}")
                     }
                     is YoutubeResource.Error -> {
-                        Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                        //Log.d(TAG, "Error: ${videos.exception.message.toString()}")
                         MaterialAlertDialogBuilder(requireContext())
                             .apply {
                                 this.setTitle("Something went wrong")
@@ -141,7 +142,7 @@ class Home : Fragment() {
                                                 //Log.d(TAG, "Success: ${videos.data}")
                                             }
                                             is YoutubeResource.Error -> {
-                                                Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                                                //Log.d(TAG, "Error: ${videos.exception.message.toString()}")
                                                 MaterialAlertDialogBuilder(requireContext())
                                                     .apply {
                                                         this.setTitle("Something went wrong")

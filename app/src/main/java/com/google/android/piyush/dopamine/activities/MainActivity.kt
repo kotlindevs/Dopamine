@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         userViewModel.signInResult.observe(this) { user ->
             when(user){
                 is GoogleAuth.Loading -> {
-                    Log.d(ContentValues.TAG, "Loading User !")
+                   // Log.d(ContentValues.TAG, "Loading User !")
                 }
                 is GoogleAuth.Success -> {
                     showToast("Welcome , ${user.data?.name} ❤️")
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                             DopamineHome::class.java
                         )
                     )
-                }
+                    Log.d(ContentValues.TAG, " -> Activity : MainActivity || UserName : ${user.data?.name}")                }
                 is GoogleAuth.Error -> {
                     showToast(user.message.toString())
                 }

@@ -61,8 +61,7 @@ class PhoneNumberAuthentication : AppCompatActivity() {
                     userViewModel.sendVerificationCode(
                         PhoneNumberUtils.formatNumber(phoneNumber, "IN")
                     )
-                    Log.d(ContentValues.TAG, "onCreate: $phoneNumber")
-                }
+                    Log.d(ContentValues.TAG, " -> Activity : PhoneNumberAuthentication || PhoneNumber : $phoneNumber")                }
             }else{
                 NetworkUtilities.showNetworkError(this)
             }
@@ -71,7 +70,7 @@ class PhoneNumberAuthentication : AppCompatActivity() {
         userViewModel.sendVerificationCodeResult.observe(this){
             when(it.status) {
                 Status.SUCCESS -> {
-                    Log.d(ContentValues.TAG, "onSendVerificationCode : Success")
+                    //Log.d(ContentValues.TAG, "onSendVerificationCode : Success")
                     startActivity(
                         Intent(
                             this,
@@ -85,7 +84,7 @@ class PhoneNumberAuthentication : AppCompatActivity() {
                 }
 
                 Status.LOADING -> {
-                    Log.d(ContentValues.TAG, "onSendVerificationCode : Loading")
+                    //Log.d(ContentValues.TAG, "onSendVerificationCode : Loading")
                 }
             }
         }

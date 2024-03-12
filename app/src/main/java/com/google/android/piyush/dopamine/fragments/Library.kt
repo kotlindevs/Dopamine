@@ -1,6 +1,7 @@
 package com.google.android.piyush.dopamine.fragments
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -79,7 +80,6 @@ class Library : Fragment() {
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    Log.d(ContentValues.TAG,playListVideos.data.toString())
                     fragmentLibraryBinding?.apply {
                         codingVideosList.layoutManager =
                             LinearLayoutManager(
@@ -91,10 +91,11 @@ class Library : Fragment() {
                         binding.codingVideosEffect.stopShimmer()
                         binding.codingVideosEffect.visibility = View.INVISIBLE
                     }
+                    Log.d(TAG, " -> Fragment : Library || Coding Videos : ${playListVideos.data}")
                 }
 
                 is YoutubeResource.Error -> {
-                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
+                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
                     MaterialAlertDialogBuilder(requireContext())
                         .apply {
                             this.setTitle("Something went wrong")
@@ -163,7 +164,7 @@ class Library : Fragment() {
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    Log.d(ContentValues.TAG,playListVideos.data.toString())
+                    Log.d(TAG, " -> Fragment : Library || Sports Videos : ${playListVideos.data}")
                     fragmentLibraryBinding?.apply {
                         sportsVideosList.layoutManager =
                             LinearLayoutManager(
@@ -178,7 +179,7 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Error -> {
-                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
+                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
                 }
 
                 is YoutubeResource.Loading -> {
@@ -192,7 +193,7 @@ class Library : Fragment() {
             when(playListVideos) {
                 is YoutubeResource.Success -> {
                     libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    Log.d(ContentValues.TAG,playListVideos.data.toString())
+                    Log.d(TAG, " -> Fragment : Library || Technology Videos : ${playListVideos.data}")
                     fragmentLibraryBinding?.apply {
                         techVideosList.layoutManager =
                             LinearLayoutManager(
@@ -207,7 +208,7 @@ class Library : Fragment() {
                 }
 
                 is YoutubeResource.Error -> {
-                    Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
+                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
                 }
 
                 is YoutubeResource.Loading -> {
@@ -234,6 +235,7 @@ class Library : Fragment() {
                     adapter = YourFavouriteVideosAdapter(requireContext(), yourFavouriteList)
                 }
             }
+            Log.d(TAG, " -> Fragment : Library || Favorite Videos : $yourFavouriteList")
         }
 
         val iFramePlayerOptions = IFramePlayerOptions.Builder()

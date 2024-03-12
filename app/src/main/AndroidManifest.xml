@@ -19,10 +19,10 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.CVPlaylist"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".activities.YoutubeChannelPlaylistsVideos"
