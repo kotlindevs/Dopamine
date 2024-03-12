@@ -201,9 +201,9 @@ class DatabaseViewModel(
         var count = 0
         while (data.moveToNext()){
             count = data.getInt(0)
-            Log.d("count",count.toString())
+            Log.d("NumberOfOPlaylistsInDatabase",count.toString())
         }
-        return 0
+        return count
     }
 
     fun isPlaylistExist(playlistName : String) : Boolean {

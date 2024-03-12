@@ -272,7 +272,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:background="?attr/colorTertiaryContainer"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scrollable2">
@@ -341,5 +340,76 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/yourFavourite" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/customPlaylists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circular_spotify"
+            android:text="@string/your_custom_playlists"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/youtube_player_card" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/customPlaylistsEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="172dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/customPlaylists">
+
+            <HorizontalScrollView
+                android:id="@+id/scrollView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="false"
+                android:overScrollMode="always"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+
+                    <include layout="@layout/shimmer_item_fragment_library" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <ScrollView
+            android:id="@+id/scrollable3"
+            android:layout_width="wrap_content"
+            android:layout_height="172dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:fitsSystemWindows="false"
+            android:overScrollMode="always"
+            android:scrollbars="none"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/customPlaylists">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/customPlaylistsList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_fragment_library" />
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -150,6 +150,7 @@ class Home : Fragment() {
                                                         this.setCancelable(false)
                                                         this.setPositiveButton("Try again later") { dialog, _ ->
                                                             dialog?.dismiss()
+                                                            System.exit(0)
                                                         }.create().show()
                                                     }
                                             }

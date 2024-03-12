@@ -255,6 +255,14 @@ class Library : Fragment() {
             true,
             iFramePlayerOptions
         )
+
+        if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
+            fragmentLibraryBinding!!.customPlaylistsEffect.visibility = View.VISIBLE
+            fragmentLibraryBinding!!.customPlaylistsEffect.startShimmer()
+        }else{
+            fragmentLibraryBinding!!.customPlaylistsEffect.stopShimmer()
+            fragmentLibraryBinding!!.customPlaylistsEffect.visibility = View.INVISIBLE
+        }
     }
 
     override fun onDestroyView() {
