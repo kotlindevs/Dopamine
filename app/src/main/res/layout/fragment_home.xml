@@ -48,6 +48,16 @@
                 android:layout_marginRight="14dp"
                 android:src="@drawable/ic_history" />
 
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialIconButtonFilledTonalStyle"
+                android:id="@+id/Experiments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="14dp"
+                app:icon="@drawable/ic_beta_app"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
+
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

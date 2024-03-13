@@ -17,6 +17,7 @@ import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
+import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -87,6 +88,15 @@ class Home : Fragment() {
                 Intent(
                     context,
                     DopamineUserProfile::class.java
+                )
+            )
+        }
+
+        fragmentHomeBinding!!.Experiments.setOnClickListener{
+            startActivity(
+                Intent(
+                    context,
+                    ExperimentsMode::class.java
                 )
             )
         }

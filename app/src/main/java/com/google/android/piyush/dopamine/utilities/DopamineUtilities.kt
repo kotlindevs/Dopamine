@@ -37,6 +37,10 @@ object ToastUtilities {
 
 object Utilities {
     const val REQUEST_CODE_SPEECH_INPUT = 100
+    const val VIDEO_WATCH_FROM_LINK = "https://cdn.iconscout.com/icon/premium/png-512-thumb/laptop-video-8319510-6888191.png?f=webp&w=512"
+    const val VIDEO_DOWNLOAD_FROM_LINK = "https://cdn.iconscout.com/icon/premium/png-512-thumb/download-video-1-499499.png?f=webp&w=512"
+    const val PROCESS_ID = "MyDlProcess"
+    const val PROJECT_ID = "com.google.android.piyush.dopamine"
 }
 
 class CustomDialog(context: Context) : Dialog(context) {

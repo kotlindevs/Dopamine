@@ -4,11 +4,15 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
 
     <application
         android:name=".beta.DopamineApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:extractNativeLibs="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,6 +21,15 @@
         android:theme="@style/Theme.Dopamine"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".beta.youtubedl.DownloadVideo"
+            android:exported="false" />
+        <activity
+            android:name=".beta.ExperimentsMode"
+            android:exported="false" />
+        <activity
+            android:name=".beta.youtubedl.StreamVideo"
+            android:exported="false" />
         <activity
             android:name=".activities.CVPlaylist"
             android:exported="true" />
