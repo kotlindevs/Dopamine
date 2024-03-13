@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDownloadVideoBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -59,6 +60,20 @@ class DownloadVideo : AppCompatActivity() {
         binding.stopVideo.setOnClickListener{
             stopDownload()
         }
+
+        binding.useAdvancedMode.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                MaterialAlertDialogBuilder(this).apply {
+                        this.setTitle("Alert")
+                        this.setMessage("You are about to use advanced mode. before start you set the config file in your application download directory 🫡")
+                        this.setIcon(R.drawable.ic_alert)
+                        this.setCancelable(false)
+                        this.setPositiveButton("Yes, I know") { dialog, _ ->
+                            dialog?.dismiss()
+                        }
+                    }.create().show()
+            }
+        }
     }
 
     private fun stopDownload() {
@@ -102,8 +117,20 @@ class DownloadVideo : AppCompatActivity() {
         val youtubeDLDir: File = getDownloadLocation()
         val config = File(youtubeDLDir, "config.txt")
 
-        if (binding.useAdvancedMode.isChecked && config.exists()) {
-            request.addOption("--config-location", config.absolutePath)
+        if (binding.useAdvancedMode.isChecked) {
+            if(config.exists()) {
+                request.addOption("--config-location", config.absolutePath)
+            }else{
+                MaterialAlertDialogBuilder(this).apply {
+                        this.setTitle("Error")
+                        this.setMessage("The config file is not found in your application download directory, please set the config file in your application download directory and try again.")
+                        this.setIcon(R.drawable.ic_dialog_error)
+                        this.setCancelable(false)
+                        this.setPositiveButton("Okay, I Understood") { dialog, _ ->
+                            dialog?.dismiss()
+                        }
+                    }.create().show()
+            }
         } else {
             request.addOption("--no-mtime")
             request.addOption("--downloader", "libaria2c.so")
