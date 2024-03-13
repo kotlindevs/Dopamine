@@ -1,4 +1,4 @@
-package com.google.android.piyush.dopamine
+package com.google.android.piyush.dopamine.beta
 
 import android.app.Application
 import com.google.android.material.color.DynamicColors
