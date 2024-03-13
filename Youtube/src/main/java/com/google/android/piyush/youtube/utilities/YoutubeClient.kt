@@ -11,11 +11,7 @@ object YoutubeClient {
 
     const val YOUTUBE = "https://youtube.googleapis.com/youtube/v3/"
 
-    val REGION_CODE = arrayListOf(
-        "IN",
-        "US",
-        "UK"
-    ).random()
+    val REGION_CODE = "IN"
 
     private val SHORTS = arrayListOf(
         "e0b088ecf082c9d119f9","df2a4f0cdf426639ff66","82a4bfb6062016fab407"
