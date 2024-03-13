@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -105,26 +106,28 @@ class YoutubePlayer : AppCompatActivity() {
 
         binding.YtPlayer.addFullscreenListener(object : FullscreenListener {
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    window.decorView.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_FULLSCREEN or
-                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                }
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                binding.YtPlayer.visibility = View.GONE
-                binding.addToPlayList.visibility = View.GONE
-                binding.addToCustomPlayList.visibility = View.GONE
-                //View.SYSTEM_UI_FLAG_FULLSCREEN
-                binding.frameLayout.addView(fullscreenView)
-            }
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
 
+                listOf(
+                    binding.YtPlayer,
+                    binding.addToPlayList,
+                    binding.addToCustomPlayList
+                ).forEach { it.visibility = View.GONE }
+
+                if (fullscreenView.parent == null) {
+                    binding.frameLayout.addView(fullscreenView)
+                }
+            }
             override fun onExitFullscreen() {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 binding.frameLayout.removeAllViews()
-                binding.YtPlayer.visibility = View.VISIBLE
-                binding.addToPlayList.visibility = View.VISIBLE
-                binding.addToCustomPlayList.visibility = View.VISIBLE
+                listOf(
+                    binding.YtPlayer,
+                    binding.addToPlayList,
+                    binding.addToCustomPlayList
+                ).forEach { it.visibility = View.VISIBLE }
             }
         })
 
