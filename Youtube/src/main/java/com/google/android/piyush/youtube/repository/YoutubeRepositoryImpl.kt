@@ -208,4 +208,33 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         }
         return response.body()
     }
+
+
+    //Experimental
+    suspend fun experimentalDefaultVideos(): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", YoutubeClient.REGION_CODE)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun experimentalSearchVideos(search : String): SearchTube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", search)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+            }
+        }
+        return response.body()
+    }
 }

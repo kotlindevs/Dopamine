@@ -12,23 +12,27 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
+import com.google.android.piyush.dopamine.fragments.ExperimentalSearch
 import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.fragments.Library
 import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
+import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import kotlin.system.exitProcess
 
 @Suppress("DEPRECATION")
 class DopamineHome : AppCompatActivity() {
 
     private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()
+    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: ActivityDopamineHomeBinding
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
+        sharedViewModel = SharedViewModel()
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback {
@@ -51,7 +55,11 @@ class DopamineHome : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    defaultScreen(Search())
+                    if(getSharedPreferences("DopamineApp", MODE_PRIVATE).getBoolean("ExperimentalSearch", false)){
+                        defaultScreen(ExperimentalSearch())
+                    }else{
+                        defaultScreen(Search())
+                    }
                     true
                 }
                 R.id.library -> {

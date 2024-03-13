@@ -15,7 +15,7 @@
         android:layout_marginTop="32dp"
         android:fontFamily="@font/circular_spotify"
         android:gravity="center"
-        android:text="Welcome To Experimental Mode"
+        android:text="@string/welcome_to_experimental_mode"
         android:textColor="?attr/colorControlNormal"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -156,32 +156,38 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView4"
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/proxima_nova"
-        android:text="Here In Experimental Mode Above Features Which Are Provide To You May Have Bugs If You Notice Any Please Give Us A FeedBack On It :)"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:layout_constraintTop_toBottomOf="@id/downloadVideoFromLink"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/downloadVideoFromLink" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/expSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_experimental_search"
+                app:fontFamily="@font/circular_spotify"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textColor="?colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/feedback_btn"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:drawableLeft="@drawable/round_local_phone_24"
-        android:fontFamily="@font/circular_spotify"
-        android:text="Feedback "
-        android:textColor="?attr/colorControlNormal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView4" />
-
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/useExpSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

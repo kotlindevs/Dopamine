@@ -53,5 +53,11 @@
     <string name="download_video">Download Video</string>
     <string name="i_want_to_stop_the_download_video">I want to stop the download video !</string>
     <string name="use_advanced_mode">Use Advanced Mode</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="use_experimental_search">Use Experimental Search</string>
+    <string name="welcome_to_experimental_mode">Welcome To Experimental Mode</string>
+    <string name="searchbar_hint">Search Something Here </string>
+    <string name="voice_search">Voice Search</string>
 
 </resources>

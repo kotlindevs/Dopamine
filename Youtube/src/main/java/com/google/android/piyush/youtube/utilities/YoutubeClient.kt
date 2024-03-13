@@ -11,7 +11,7 @@ object YoutubeClient {
 
     const val YOUTUBE = "https://youtube.googleapis.com/youtube/v3/"
 
-    val REGION_CODE = "IN"
+    const val REGION_CODE = "IN"
 
     private val SHORTS = arrayListOf(
         "e0b088ecf082c9d119f9","df2a4f0cdf426639ff66","82a4bfb6062016fab407"
@@ -45,6 +45,8 @@ object YoutubeClient {
     const val PLAYLISTS= "playlists"
 
     const val SEARCH_PART = "snippet"
+
+    const val EXPERIMENTAL_API = "https://yt.lemnoslife.com/noKey/"
 
     val CODING_VIDEOS = arrayListOf(
         "PLfqMhTWNBTe0PY9xunOzsP5kmYIz2Hu7i","PLfqMhTWNBTe0gqgFk-CUE-ktO5Cek1GdP",
