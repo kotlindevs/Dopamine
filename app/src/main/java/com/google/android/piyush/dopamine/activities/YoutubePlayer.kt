@@ -105,11 +105,17 @@ class YoutubePlayer : AppCompatActivity() {
 
         binding.YtPlayer.addFullscreenListener(object : FullscreenListener {
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    window.decorView.systemUiVisibility =
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                }
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 binding.YtPlayer.visibility = View.GONE
                 binding.addToPlayList.visibility = View.GONE
                 binding.addToCustomPlayList.visibility = View.GONE
-                View.SYSTEM_UI_FLAG_FULLSCREEN
+                //View.SYSTEM_UI_FLAG_FULLSCREEN
                 binding.frameLayout.addView(fullscreenView)
             }
 
