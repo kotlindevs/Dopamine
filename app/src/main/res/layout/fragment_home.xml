@@ -11,8 +11,8 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,32 +31,32 @@
                 android:text="Good Greetings"
                 android:textSize="22sp" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/userImage"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="right"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                android:layout_marginRight="14dp" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/watchHistory"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="right"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                android:layout_marginRight="14dp"
-                android:src="@drawable/ic_history" />
-
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialIconButtonFilledTonalStyle"
                 android:id="@+id/Experiments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="14dp"
+                android:layout_marginEnd="8dp"
                 app:icon="@drawable/ic_beta_app"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/userImage"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="right"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_marginRight="8dp" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/watchHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_history" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

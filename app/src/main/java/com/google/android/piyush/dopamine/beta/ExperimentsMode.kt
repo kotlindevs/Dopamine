@@ -1,6 +1,7 @@
 package com.google.android.piyush.dopamine.beta
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,15 @@ class ExperimentsMode : AppCompatActivity() {
                 Intent(
                     this,
                     DownloadVideo::class.java
+                )
+            )
+        }
+
+        binding.feedbackBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.instagram.com/rajatt.dev/")
                 )
             )
         }

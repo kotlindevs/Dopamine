@@ -5,18 +5,34 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".beta.youtubedl.DownloadVideo">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        style="@style/TextAppearance.Material3.TitleMedium"
+        app:fontFamily="@font/circular_spotify"
+        android:gravity="center"
+        android:text="Don't Panic If Progress Bar \n Looks Freeze Or Stuck :)"
+        android:textColor="?attr/colorControlActivated"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView2"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/no_data"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:lottie_rawRes="@raw/download_yt" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"
@@ -32,6 +48,7 @@
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:ems="10"
+            android:fontFamily="@font/circular_spotify"
             android:hint="@string/video_link"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/use_advanced_mode"
-                android:textStyle="bold"
+                app:fontFamily="@font/circular_spotify"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:textColor="?colorOnSurface"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/download_video"
+        android:fontFamily="@font/circular_spotify"
         android:layout_marginTop="12dp"
         app:icon="@drawable/ic_download"
         style="@style/Widget.Material3.Button.TonalButton.Icon"
@@ -90,6 +108,8 @@
         android:layout_height="wrap_content"
         android:text="@string/i_want_to_stop_the_download_video"
         android:layout_marginTop="4dp"
+        android:fontFamily="@font/proxima_nova"
+        android:textStyle="bold"
         style="@style/Widget.Material3.Button.TextButton"
         app:layout_constraintTop_toBottomOf="@id/startVideo"
         app:layout_constraintStart_toStartOf="parent"

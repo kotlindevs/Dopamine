@@ -8,58 +8,87 @@
     android:fitsSystemWindows="true"
     tools:context=".beta.ExperimentsMode">
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/circular_spotify"
+        android:gravity="center"
+        android:text="Welcome To Experimental Mode"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/playVideoFromLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView3">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
+                style="@style/ShapeAppearance.Material3.Corner.Medium"
                 android:layout_width="84dp"
                 android:layout_height="84dp"
                 android:layout_margin="6dp"
                 android:padding="4dp"
-                style="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="2dp"
                 android:text="@string/experimental"
-                android:textStyle="bold"
-                android:textColor="#FF0000"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                app:fontFamily="@font/circular_spotify"
                 app:layout_constraintStart_toEndOf="@id/image"
-                app:layout_constraintTop_toTopOf="@id/image"
-                android:layout_marginStart="6dp"/>
+                app:layout_constraintTop_toTopOf="@id/image" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="6dp"
                 android:text="@string/watch_video_from_your_link"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:textColor="?attr/colorSecondary"
+                android:textStyle="bold"
+                app:fontFamily="@font/proxima_nova"
                 app:layout_constraintStart_toEndOf="@id/image"
-                app:layout_constraintTop_toBottomOf="@id/text0"
-                android:layout_marginStart="6dp"/>
+                app:layout_constraintTop_toBottomOf="@id/text0" />
+
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="308dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/exp_1"
                 android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                android:textColor="?attr/colorTertiary"
+                app:fontFamily="@font/proxima_nova"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/image"
-                app:layout_constraintTop_toBottomOf="@id/text1"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"/>
+                app:layout_constraintTop_toBottomOf="@id/text1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -67,7 +96,7 @@
         android:id="@+id/downloadVideoFromLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
+        android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playVideoFromLink"
         app:layout_constraintEnd_toEndOf="parent">
@@ -91,7 +120,8 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/experimental"
                 android:textStyle="bold"
-                android:textColor="#FF0000"
+                android:textColor="?attr/colorPrimary"
+                app:fontFamily="@font/circular_spotify"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:layout_constraintStart_toEndOf="@id/image11"
                 app:layout_constraintTop_toTopOf="@id/image11"
@@ -102,19 +132,56 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="@string/download_video_free"
+                app:fontFamily="@font/proxima_nova"
+                android:textColor="?attr/colorSecondary"
+                android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:layout_constraintStart_toEndOf="@id/image11"
                 app:layout_constraintTop_toBottomOf="@id/text11"
                 android:layout_marginStart="6dp"/>
+
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="308dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"
+                app:fontFamily="@font/proxima_nova"
+                android:textColor="?attr/colorTertiary"
                 android:text="@string/download_video_without_ad_now_available_in_our_app_for_android"
                 android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/image11"
-                app:layout_constraintTop_toBottomOf="@id/text12"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"/>
+                app:layout_constraintTop_toBottomOf="@id/text12" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/proxima_nova"
+        android:text="Here In Experimental Mode Above Features Which Are Provide To You May Have Bugs If You Notice Any Please Give Us A FeedBack On It :)"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/downloadVideoFromLink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/feedback_btn"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/round_local_phone_24"
+        android:fontFamily="@font/circular_spotify"
+        android:text="Feedback "
+        android:textColor="?attr/colorControlNormal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
