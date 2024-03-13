@@ -109,6 +109,7 @@ class YoutubePlayer : AppCompatActivity() {
                 binding.YtPlayer.visibility = View.GONE
                 binding.addToPlayList.visibility = View.GONE
                 binding.addToCustomPlayList.visibility = View.GONE
+                View.SYSTEM_UI_FLAG_FULLSCREEN
                 binding.frameLayout.addView(fullscreenView)
             }
 
