@@ -38,14 +38,14 @@ android {
         viewBinding = true
     }
 
-    /* splits {
+     splits {
         abi {
             isEnable = true
             reset()
             include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
             isUniversalApk = true
         }
-    } */
+    }
 
 }
 
@@ -66,9 +66,9 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.core)
     implementation(libs.lottie)
-    implementation ("com.github.yausername.youtubedl-android:library:0.15.+")
-    implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation ("com.devbrackets.android:exomedia:5.1.0")
+    implementation (libs.library)
+    implementation (libs.rxandroid)
+    implementation (libs.exomedia)
     implementation(project(":Youtube"))
     implementation(project(":Database"))
     implementation(libs.androidx.preference)

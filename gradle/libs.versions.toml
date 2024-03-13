@@ -1,15 +1,19 @@
 [versions]
 agp = "8.3.0"
+exomedia = "5.1.0"
 kotlin = "1.9.23"
 googleGmsGoogleServices = "4.4.1"
 firebaseAuthKtx = "22.3.1"
+library = "23b26d55f8"
 preference = "1.2.0"
+rxandroid = "2.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.0-alpha05" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.6.1" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.6.1" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version = "12.1.0" }
+exomedia = { module = "com.devbrackets.android:exomedia", version.ref = "exomedia" }
 glide = { module = "com.github.bumptech.glide:glide", version = "5.0.0-rc01" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.0-alpha03" }
@@ -20,6 +24,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version = "3.0.0-beta-1"
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version = "3.0.0-beta-1" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version = "3.0.0-beta-1" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version = "3.0.0-beta-1" }
+library = { module = "com.github.yausername.youtubedl-android:library", version.ref = "library" }
 lottie = { module = "com.airbnb.android:lottie", version = "6.4.0" }
 material = { group = "com.google.android.material", name = "material", version = "1.12.0-alpha03" }
 androidx-activity = { group = "androidx.activity", name = "activity", version = "1.9.0-alpha03" }
@@ -30,6 +35,7 @@ androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version = "2.8.0-alpha02" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.0-alpha02" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.7.0-alpha10" }
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version = "0.5.0" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.6.1" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
