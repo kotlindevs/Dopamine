@@ -45,6 +45,7 @@ import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -218,7 +219,7 @@ class YoutubePlayer : AppCompatActivity() {
                                         thumbnail = video.items!![0].snippet?.thumbnails?.high?.url,
                                         title = video.items!![0].snippet?.title,
                                         customName = video.items!![0].snippet?.customUrl,
-                                        channelId = video.items!![0].snippet?.channelId!!
+                                        channelId = video.items!![0].snippet?.channelId!!,
                                     )
                                 )
                             } else {
@@ -269,6 +270,9 @@ class YoutubePlayer : AppCompatActivity() {
                         putString("title", video.items?.get(0)?.snippet?.title)
                         putString("customName", video.items?.get(0)?.snippet?.customUrl)
                         putString("channelId", video.items?.get(0)?.snippet?.channelId)
+                        putString("channelTitle", video.items?.get(0)?.snippet?.channelTitle)
+                        putString("viewCount", video.items?.get(0)?.statistics?.viewCount)
+                        putString("publishedAt",  video.items?.get(0)?.snippet?.publishedAt)
                     }
                     Log.d(
                         TAG,
@@ -472,10 +476,18 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
             customDialog.show()
         }
 
-        if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
-            databaseViewModel.defaultUserPlaylist()
+        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            if(databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth).equals(false)){
+                databaseViewModel.defaultUserPlaylist()
+            }else{
+                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+            }
         }else{
-            Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+            if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
+                databaseViewModel.defaultUserPlaylist()
+            }else{
+                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+            }
         }
 
         customPlaylists.apply {

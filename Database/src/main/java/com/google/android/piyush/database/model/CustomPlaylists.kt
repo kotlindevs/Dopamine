@@ -5,5 +5,8 @@ data class CustomPlaylists (
     val title: String?,
     val customName: String?,
     val thumbnail: String?,
-    val channelId : String?
+    val channelId : String?,
+    val publishedAt : String?,
+    val viewCount : String?,
+    val channelTitle : String?
 )

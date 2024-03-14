@@ -130,13 +130,18 @@ class DatabaseViewModel(
 
     private val usersFavoritePlayListName = currentUser?.displayName+" Favorites"
     val newPlaylistName = stringify(usersFavoritePlayListName)
-
+    val isUserFromPhoneAuth = currentUser?.uid.toString()
 
     fun defaultUserPlaylist() {
         val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
         val writableDatabase = database.writableDatabase
-        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
-        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
+        if(currentUser?.email.toString().isNullOrEmpty()){
+            writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS ${currentUser?.uid} (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
+            writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"${currentUser?.uid}\",\"$usersFavoritePlayListDescription\")")
+        }else {
+            writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
+            writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
+        }
     }
 
 
@@ -234,7 +239,10 @@ class DatabaseViewModel(
                     query.getString(1),
                     query.getString(2),
                     query.getString(3),
-                    query.getString(4)
+                    query.getString(4),
+                    query.getString(5),
+                    query.getString(6),
+                    query.getString(7)
                 )
             )
         }

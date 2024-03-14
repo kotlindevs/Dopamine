@@ -14,6 +14,9 @@ import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.viewHolders.CustomPlaylistsVDataHolder
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class CustomPlaylistsVDataAdapter(
     private val playlists: List<CustomPlaylists>,
@@ -29,20 +32,22 @@ class CustomPlaylistsVDataAdapter(
         return playlists.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CustomPlaylistsVDataHolder, position: Int) {
-//        val publishedTime = formatDuration(
-//            ChronoUnit.SECONDS.between(
-//                LocalDateTime.parse(
-//                    youtube?.items?.get(position)?.snippet!!.publishedAt, DateTimeFormatter.ISO_DATE_TIME),
-//                LocalDateTime.now()
-//            )
-//        )
-//        val publishedViews = viewsCount(
-//            youtube!!.items?.get(position)?.statistics!!.viewCount!!.toInt()
-//        )
-//
-//        val channelTitle = "${
-//            youtube!!.items?.get(position)?.snippet!!.channelTitle} • $publishedViews • $publishedTime"
+        val publishedTime = formatDuration(
+            ChronoUnit.SECONDS.between(
+                LocalDateTime.parse(
+                    playlists[position].publishedAt, DateTimeFormatter.ISO_DATE_TIME),
+                LocalDateTime.now()
+            )
+        )
+        val publishedViews = viewsCount(
+            playlists[position].viewCount!!.toInt()
+        )
+
+        val channelTitle = "${
+            playlists[position].channelTitle
+        } • $publishedViews • $publishedTime"
 
         holder.videoTitle.text = playlists[position].title
 
