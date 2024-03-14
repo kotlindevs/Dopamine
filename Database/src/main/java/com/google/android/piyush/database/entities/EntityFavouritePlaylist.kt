@@ -9,5 +9,6 @@ data class EntityFavouritePlaylist (
     val title: String?,
     val customName: String?,
     val thumbnail: String?,
+    val channelTitle: String?,
     val channelId : String? = null
 )

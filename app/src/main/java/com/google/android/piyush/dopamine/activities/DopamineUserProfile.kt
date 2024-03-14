@@ -43,7 +43,7 @@ class DopamineUserProfile : AppCompatActivity() {
             insets
         }
 
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
+        if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
             Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(binding.userImage)
             binding.userName.text = getString(R.string.app_name)
             binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
@@ -118,8 +118,5 @@ class DopamineUserProfile : AppCompatActivity() {
             return view
         }
 
-        private fun showToast(message: String) {
-            Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
-        }
     }
 }

@@ -1,6 +1,5 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ClipData
@@ -10,7 +9,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +17,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
@@ -39,8 +36,6 @@ import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
-import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -50,14 +45,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
-import com.yausername.youtubedl_android.YoutubeDL
-import com.yausername.youtubedl_android.YoutubeDLRequest
-import com.yausername.youtubedl_android.YoutubeDLResponse
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import java.io.File
 import java.text.DecimalFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -194,8 +182,12 @@ class YoutubePlayer : AppCompatActivity() {
                     val videoLinkData =
                         "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
                     val textLikedData =
-                        counter(video.items?.get(0)?.statistics?.likeCount!!.toInt())
-                    val textViewData = counter(video.items?.get(0)?.statistics?.viewCount!!.toInt())
+                        counter(
+                            if(video.items?.get(0)?.statistics?.likeCount == null) 0 else video.items?.get(0)?.statistics?.likeCount!!
+                        )
+                    val textViewData = counter(
+                        if(video.items?.get(0)?.statistics?.viewCount == null) 0 else video.items?.get(0)?.statistics?.viewCount!!
+                    )
                     binding.apply {
                         textTitle.text = video.items?.get(0)?.snippet?.title
                         textKind.text = video.items?.get(0)?.kind
@@ -220,6 +212,7 @@ class YoutubePlayer : AppCompatActivity() {
                                         title = video.items!![0].snippet?.title,
                                         customName = video.items!![0].snippet?.customUrl,
                                         channelId = video.items!![0].snippet?.channelId!!,
+                                        channelTitle = video.items!![0].snippet?.channelTitle
                                     )
                                 )
                             } else {
@@ -271,7 +264,7 @@ class YoutubePlayer : AppCompatActivity() {
                         putString("customName", video.items?.get(0)?.snippet?.customUrl)
                         putString("channelId", video.items?.get(0)?.snippet?.channelId)
                         putString("channelTitle", video.items?.get(0)?.snippet?.channelTitle)
-                        putString("viewCount", video.items?.get(0)?.statistics?.viewCount)
+                        putInt("viewCount", video.items?.get(0)?.statistics?.viewCount!!)
                         putString("publishedAt",  video.items?.get(0)?.snippet?.publishedAt)
                     }
                     Log.d(
@@ -281,7 +274,7 @@ class YoutubePlayer : AppCompatActivity() {
                 }
 
                 is YoutubeResource.Error -> {
-                    //Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
+                    Log.d("YoutubePlayer", "YoutubePlayer: ${videoDetails.exception.message.toString()}")
                 }
             }
         }
@@ -300,7 +293,7 @@ class YoutubePlayer : AppCompatActivity() {
                     val channel = channelDetails.data
                     val subscriberData = "${
                         channel.items?.get(0)?.statistics?.subscriberCount?.let { subscriber ->
-                            counter(subscriber.toInt())
+                            counter(subscriber)
                         }
                     } subscribers"
                     Glide.with(this)
@@ -343,95 +336,6 @@ class YoutubePlayer : AppCompatActivity() {
                 }
             }
         }
-
-        fun dwc() {
-            val url = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
-            val request = YoutubeDLRequest(url)
-            val youtubeDLDir: File = getDownloadLocation()
-            if (downloading) {
-                ToastUtilities.showToast(
-                    this@YoutubePlayer,
-                    "cannot start download. a download is already in progress",
-                )
-            }
-
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_MEDIA_VIDEO
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.POST_NOTIFICATIONS,
-                        Manifest.permission.READ_MEDIA_VIDEO
-                    ),
-                    Utilities.REQUEST_CODE_SPEECH_INPUT
-                )
-            } else {
-                val notification = notificationBuilder.build()
-                notificationManager.notify(1, notification)
-
-                request.addOption("--no-mtime")
-                request.addOption("--downloader", "libaria2c.so")
-                request.addOption("--external-downloader-args", "aria2c:\"--summary-interval=1\"")
-                request.addOption("-f", "best")
-                request.addOption("-o", youtubeDLDir.absolutePath + "/%(title)s.%(ext)s")
-                downloading = true
-                val disposable = Observable.fromCallable<YoutubeDLResponse> {
-                    YoutubeDL.getInstance().execute(
-                        request,
-                        Utilities.PROCESS_ID,
-                        callback
-                    )
-                }
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ _: YoutubeDLResponse ->
-                        ToastUtilities.showToast(
-                            this@YoutubePlayer,
-                            "Download Successfully",
-                        )
-                        downloading = false
-                    }, { e: Throwable ->
-                        Log.e(TAG, "failed to download", e)
-                        downloading = false
-                    })
-                compositeDisposable.add(disposable)
-            }
-        }
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val notification = notificationBuilder.build()
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return
-                }
-                notificationManager.notify(1, notification)
-            } else {
-                ToastUtilities.showToast(
-                    this@YoutubePlayer,
-                    "grant storage permission and retry",
-                )
-            }
-        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -460,14 +364,6 @@ class YoutubePlayer : AppCompatActivity() {
             data = "${num}K"
         }
         return data
-    }
-
-    private fun getDownloadLocation(): File {
-        val downloadsDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val dir = File(downloadsDir, Utilities.PROJECT_ID)
-        if (!dir.exists()) dir.mkdir()
-        return dir
     }
 }
 

@@ -33,7 +33,7 @@ class YourFavouriteVideosAdapter(
     override fun onBindViewHolder(holder: YourFavouriteVideosViewHolder, position: Int) {
         val favouriteVideo = videos?.get(position)
         holder.title.text = favouriteVideo?.title
-        holder.customName.text = favouriteVideo?.customName
+        holder.customName.text = favouriteVideo?.channelTitle
         Glide.with(context).load(favouriteVideo?.thumbnail).into(holder.image)
         holder.videoCard.setOnClickListener {
             context.startActivity(

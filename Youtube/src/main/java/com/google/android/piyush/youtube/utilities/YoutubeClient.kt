@@ -92,4 +92,14 @@ object YoutubeClient {
             )
         }
     }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    val JsonFeature = Json{
+        ignoreUnknownKeys = true
+        isLenient = true
+        encodeDefaults = true
+        prettyPrint = true
+        explicitNulls = false
+        coerceInputValues = true
+    }
 }

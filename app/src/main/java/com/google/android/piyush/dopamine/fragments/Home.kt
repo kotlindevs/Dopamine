@@ -26,6 +26,7 @@ import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
+import kotlin.system.exitProcess
 
 class Home : Fragment() {
 
@@ -118,10 +119,9 @@ class Home : Fragment() {
                             homeAdapter = HomeAdapter(requireContext(), videos.data)
                             adapter = homeAdapter
                         }
-                        Log.d(TAG, " -> Fragment : Home || HomeView Data : ${videos.data}")
                     }
                     is YoutubeResource.Error -> {
-                        //Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                        Log.d(TAG, "Error: ${videos.exception.message.toString()}")
                         MaterialAlertDialogBuilder(requireContext())
                             .apply {
                                 this.setTitle("Something went wrong")
@@ -152,7 +152,7 @@ class Home : Fragment() {
                                                 //Log.d(TAG, "Success: ${videos.data}")
                                             }
                                             is YoutubeResource.Error -> {
-                                                //Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                                                Log.d(TAG, "Error: ${videos.exception.message.toString()}")
                                                 MaterialAlertDialogBuilder(requireContext())
                                                     .apply {
                                                         this.setTitle("Something went wrong")
@@ -161,7 +161,7 @@ class Home : Fragment() {
                                                         this.setCancelable(false)
                                                         this.setPositiveButton("Try again later") { dialog, _ ->
                                                             dialog?.dismiss()
-                                                            System.exit(0)
+                                                            exitProcess(0)
                                                         }.create().show()
                                                     }
                                             }

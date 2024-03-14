@@ -77,11 +77,12 @@ class HomeAdapter(
                         .putExtra("videoId", youtube!!.items?.get(position)?.id)
                         .putExtra("channelId", youtube!!.items?.get(position)?.snippet!!.channelId)
                 )
-                Log.d(TAG, "onBindViewHolder: ${youtube!!.items?.get(position)?.id}")
-                Log.d(TAG, "onBindViewHolder: ${youtube!!.items?.get(position)?.snippet!!.channelId}")
+                Log.d("FragmentHome", "videoId: ${youtube!!.items?.get(position)?.id}")
+                Log.d("FragmentHome", "channelId: ${youtube!!.items?.get(position)?.snippet!!.channelId}")
             }else{
                 NetworkUtilities.showNetworkError(context)
             }
+            Log.d("FragmentHome", "videoData: ${youtube!!.items?.get(position)}")
         }
     }
 

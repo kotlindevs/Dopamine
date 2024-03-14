@@ -25,9 +25,9 @@ data class Thumbnails(
 
 @Serializable
 data class Statistics(
-    val viewCount: String? = null,
-    val subscriberCount: String? = null,
-    val likeCount: String? = null
+    val viewCount: Int? = null,
+    val subscriberCount: Int? = null,
+    val likeCount: Int? = null
 )
 
 @Serializable
