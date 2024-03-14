@@ -283,7 +283,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/video_link_button"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:backgroundTint="?attr/colorTertiaryContainer"
+                android:backgroundTint="?attr/colorSecondaryContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -416,7 +416,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/channelsPlaylist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
