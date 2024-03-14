@@ -85,7 +85,7 @@ class YoutubePlayer : AppCompatActivity() {
         databaseViewModel = DatabaseViewModel(applicationContext)
         compositeDisposable = CompositeDisposable()
         notificationManager = NotificationManagerCompat.from(this)
-        notificationBuilder = NotificationCompat.Builder(this,"download_channel")
+        notificationBuilder = NotificationCompat.Builder(this, "download_channel")
         youtubePlayerViewModel = ViewModelProvider(
             this, youtubePlayerViewModelFactory
         )[YoutubePlayerViewModel::class.java]
@@ -109,7 +109,7 @@ class YoutubePlayer : AppCompatActivity() {
         databaseViewModel.isFavouriteVideo(
             intent?.getStringExtra("videoId").toString()
         )
-        databaseViewModel.isFavourite.observe(this){
+        databaseViewModel.isFavourite.observe(this) {
             binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
         }
 
@@ -121,7 +121,8 @@ class YoutubePlayer : AppCompatActivity() {
             .fullscreen(1)
             .build()
 
-        binding.YtPlayer.initialize(youTubePlayerListener = object : AbstractYouTubePlayerListener(){
+        binding.YtPlayer.initialize(youTubePlayerListener = object :
+            AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 super.onReady(youTubePlayer)
                 youTubePlayer.apply {
@@ -129,14 +130,19 @@ class YoutubePlayer : AppCompatActivity() {
                         intent?.getStringExtra("videoId")!!,
                         0F
                     )
-                    Log.d(TAG, " -> Activity : YoutubePlayer || videoId : $intent.getStringExtra(\"videoId\") ")
+                    Log.d(
+                        TAG,
+                        " -> Activity : YoutubePlayer || videoId : $intent.getStringExtra(\"videoId\") "
+                    )
                 }
-            } },true,iFramePlayerOptions)
+            }
+        }, true, iFramePlayerOptions)
 
         binding.YtPlayer.addFullscreenListener(object : FullscreenListener {
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+                window.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
 
                 listOf(
                     binding.YtPlayer,
@@ -148,6 +154,7 @@ class YoutubePlayer : AppCompatActivity() {
                     binding.frameLayout.addView(fullscreenView)
                 }
             }
+
             override fun onExitFullscreen() {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -168,40 +175,44 @@ class YoutubePlayer : AppCompatActivity() {
 
         binding.addToCustomPlayList.setOnClickListener {
             val bottomSheetFragment = MyBottomSheetFragment()
-            bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
         youtubePlayerViewModel.getVideoDetails(
             intent?.getStringExtra("videoId").toString()
         )
 
-        youtubePlayerViewModel.videoDetails.observe(this){ videoDetails ->
-            when(videoDetails){
+        youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
+            when (videoDetails) {
                 is YoutubeResource.Loading -> {
                     //Log.d(TAG, "YoutubePlayer || VideoDetails : True")
                 }
+
                 is YoutubeResource.Success -> {
                     val video = videoDetails.data
-                    val videoLinkData = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
-                    val textLikedData = counter(video.items?.get(0)?.statistics?.likeCount!!.toInt())
-                    val textViewData  = counter(video.items?.get(0)?.statistics?.viewCount!!.toInt())
+                    val videoLinkData =
+                        "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
+                    val textLikedData =
+                        counter(video.items?.get(0)?.statistics?.likeCount!!.toInt())
+                    val textViewData = counter(video.items?.get(0)?.statistics?.viewCount!!.toInt())
                     binding.apply {
                         textTitle.text = video.items?.get(0)?.snippet?.title
-                        textKind.text  = video.items?.get(0)?.kind
-                        textTags.text  = video.items?.get(0)?.snippet?.tags.toString()
+                        textKind.text = video.items?.get(0)?.kind
+                        textTags.text = video.items?.get(0)?.snippet?.tags.toString()
                         videoLink.text = videoLinkData
                         textLiked.text = textLikedData
-                        textView.text  = textViewData
+                        textView.text = textViewData
                         textDescription.text = video.items?.get(0)?.snippet?.description
-                        copyVideoLink.setOnClickListener{
-                            val clipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                        copyVideoLink.setOnClickListener {
+                            val clipboardManager =
+                                getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val clipData = ClipData.newPlainText("Text Copied", videoLink.text)
                             clipboardManager.setPrimaryClip(clipData)
-                            Toast.makeText(applicationContext,"Copied", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "Copied", Toast.LENGTH_SHORT).show()
                         }
                         addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
-                            if(isFavourite == 1){
-                               databaseViewModel.insertFavouriteVideos(
+                            if (isFavourite == 1) {
+                                databaseViewModel.insertFavouriteVideos(
                                     EntityFavouritePlaylist(
                                         videoId = intent.getStringExtra("videoId").toString(),
                                         thumbnail = video.items!![0].snippet?.thumbnails?.high?.url,
@@ -209,23 +220,24 @@ class YoutubePlayer : AppCompatActivity() {
                                         customName = video.items!![0].snippet?.customUrl,
                                         channelId = video.items!![0].snippet?.channelId!!
                                     )
-                               )
-                            }else{
+                                )
+                            } else {
                                 databaseViewModel.deleteFavouriteVideo(
                                     intent.getStringExtra("videoId").toString()
                                 )
                             }
                         }
                     }
-                    databaseViewModel.isRecentVideo( videoId = video.items?.get(0)?.id.toString())
+                    databaseViewModel.isRecentVideo(videoId = video.items?.get(0)?.id.toString())
 
-                    databaseViewModel.isRecent.observe(this){
-                        if(it == intent.getStringExtra("videoId").toString()){
+                    databaseViewModel.isRecent.observe(this) {
+                        if (it == intent.getStringExtra("videoId").toString()) {
                             databaseViewModel.updateRecentVideo(
                                 videoId = intent.getStringExtra("videoId").toString(),
-                                time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")).toString()
+                                time = LocalTime.now()
+                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString()
                             )
-                        }else{
+                        } else {
                             databaseViewModel.insertRecentVideos(
                                 EntityRecentVideos(
                                     id = Random.nextInt(1, 100000),
@@ -251,15 +263,19 @@ class YoutubePlayer : AppCompatActivity() {
                     notificationBuilder.setSmallIcon(R.drawable.ic_download)
                     notificationBuilder.setOngoing(true)
 
-                   getSharedPreferences("customPlaylist", MODE_PRIVATE).edit{
-                       putString("videoId", video.items?.get(0)?.id.toString())
-                       putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
-                       putString("title", video.items?.get(0)?.snippet?.title)
-                       putString("customName", video.items?.get(0)?.snippet?.customUrl)
-                       putString("channelId", video.items?.get(0)?.snippet?.channelId)
-                   }
-                    Log.d(TAG, " -> Activity : YoutubePlayer || Video Details : ${videoDetails.data}")
+                    getSharedPreferences("customPlaylist", MODE_PRIVATE).edit {
+                        putString("videoId", video.items?.get(0)?.id.toString())
+                        putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
+                        putString("title", video.items?.get(0)?.snippet?.title)
+                        putString("customName", video.items?.get(0)?.snippet?.customUrl)
+                        putString("channelId", video.items?.get(0)?.snippet?.channelId)
+                    }
+                    Log.d(
+                        TAG,
+                        " -> Activity : YoutubePlayer || Video Details : ${videoDetails.data}"
+                    )
                 }
+
                 is YoutubeResource.Error -> {
                     //Log.d(TAG, "YoutubePlayer: ${videoDetails.exception.message.toString()}")
                 }
@@ -270,14 +286,19 @@ class YoutubePlayer : AppCompatActivity() {
             intent?.getStringExtra("channelId").toString()
         )
 
-        youtubePlayerViewModel.channelDetails.observe(this){ channelDetails ->
-            when(channelDetails){
+        youtubePlayerViewModel.channelDetails.observe(this) { channelDetails ->
+            when (channelDetails) {
                 is YoutubeResource.Loading -> {
                     //Log.d(TAG, "YoutubePlayer || ChannelDetails : True")
                 }
+
                 is YoutubeResource.Success -> {
                     val channel = channelDetails.data
-                    val subscriberData =  "${channel.items?.get(0)?.statistics?.subscriberCount?.let { subscriber -> counter(subscriber.toInt()) }} subscribers"
+                    val subscriberData = "${
+                        channel.items?.get(0)?.statistics?.subscriberCount?.let { subscriber ->
+                            counter(subscriber.toInt())
+                        }
+                    } subscribers"
                     Glide.with(this)
                         .load(channel.items?.get(0)?.snippet?.thumbnails?.high?.url)
                         .into(binding.imageView)
@@ -289,6 +310,7 @@ class YoutubePlayer : AppCompatActivity() {
                     }
                     Log.d(TAG, " -> Activity : YoutubePlayer || Channel Details : $channel")
                 }
+
                 is YoutubeResource.Error -> {
                     //Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
                 }
@@ -299,24 +321,26 @@ class YoutubePlayer : AppCompatActivity() {
             intent?.getStringExtra("channelId").toString()
         )
 
-        youtubePlayerViewModel.channelsPlaylist.observe(this){ channelsPlaylist ->
-            when(channelsPlaylist){
+        youtubePlayerViewModel.channelsPlaylist.observe(this) { channelsPlaylist ->
+            when (channelsPlaylist) {
                 is YoutubeResource.Loading -> {
                     Log.d(TAG, "YoutubePlayer || ChannelsPlaylist : True")
                 }
+
                 is YoutubeResource.Success -> {
                     binding.channelsPlaylist.apply {
                         layoutManager = LinearLayoutManager(this@YoutubePlayer)
-                        adapter = YoutubeChannelPlaylistsAdapter (context,channelsPlaylist.data)
+                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
                     }
                 }
+
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${channelsPlaylist.exception.message.toString()}")
                 }
             }
         }
 
-        binding.downloadVideo.setOnClickListener {
+        fun dwc() {
             val url = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
             val request = YoutubeDLRequest(url)
             val youtubeDLDir: File = getDownloadLocation()
@@ -327,20 +351,23 @@ class YoutubePlayer : AppCompatActivity() {
                 )
             }
 
-            if(ActivityCompat.checkSelfPermission(
+            if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_MEDIA_VIDEO
                 ) != PackageManager.PERMISSION_GRANTED
-            ){
+            ) {
                 ActivityCompat.requestPermissions(
                     this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS,Manifest.permission.READ_MEDIA_VIDEO),
+                    arrayOf(
+                        Manifest.permission.POST_NOTIFICATIONS,
+                        Manifest.permission.READ_MEDIA_VIDEO
+                    ),
                     Utilities.REQUEST_CODE_SPEECH_INPUT
                 )
-            }else{
+            } else {
                 val notification = notificationBuilder.build()
                 notificationManager.notify(1, notification)
 
@@ -365,11 +392,12 @@ class YoutubePlayer : AppCompatActivity() {
                             "Download Successfully",
                         )
                         downloading = false
-                    }, { e: Throwable -> Log.e(TAG, "failed to download",e)
+                    }, { e: Throwable ->
+                        Log.e(TAG, "failed to download", e)
                         downloading = false
                     })
                 compositeDisposable.add(disposable)
-           }
+            }
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
