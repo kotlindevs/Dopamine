@@ -3,6 +3,7 @@ package com.google.android.piyush.dopamine.fragments
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -10,10 +11,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.search.SearchView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
@@ -49,6 +53,25 @@ class ExperimentalSearch : Fragment() {
         viewModelFactory = ExperimentalVideosViewModelFactory(repository)
         viewModel = viewModelFactory.create(ExperimentalDefaultVideosViewModel::class.java)
 
+        if(requireContext().getSharedPreferences("DopamineApp", AppCompatActivity.MODE_PRIVATE)
+                .getBoolean("ExperimentalNotice", false).equals(true)) {
+            Log.d(TAG, "onViewCreated: ExperimentalNotice || true")
+        }else{
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                this.setTitle("NOTICES")
+                this.setMessage("You are using experimental features, please be careful because they may not work as expected or even crash the app due to bugs but they are still in development our developers are working on it.")
+                this.setIcon(R.drawable.ic_info)
+                this.setCancelable(true)
+                this.setPositiveButton("Don't show again") { _, _ ->
+                    requireContext().getSharedPreferences(
+                        "DopamineApp",
+                        AppCompatActivity.MODE_PRIVATE
+                    )
+                        .edit().putBoolean("ExperimentalNotice", true).apply()
+                }
+            }.create().show()
+        }
+
         /*
         binding.searchView.inflateMenu(R.menu.search_menu)
         binding.searchView.setOnMenuItemClickListener {
@@ -62,31 +85,29 @@ class ExperimentalSearch : Fragment() {
         }
         */
 
-        binding.searchBar.setOnMenuItemClickListener{
-            when(it.itemId){
-                R.id.search -> {
-                    voiceSearchUtility()
-                    true
-                }
-                else -> false
-            }
-        }
 
         binding.searchView
             .editText
             .setOnEditorActionListener { _, _, _ ->
-                binding.searchBar.setText(binding.searchView.text)
                 binding.searchView.hide()
                 true
             }
 
-        /*
+
         binding.searchView.addTransitionListener { _, _, newState ->
-            if (newState === TransitionState.SHOWING) {
-                ToastUtilities.showToast(requireContext(),"Showing")
+            if (newState === SearchView.TransitionState.HIDING) {
+                binding.searchView.visibility = View.GONE
+                binding.searchBar.visibility = View.VISIBLE
             }
         }
-        */
+
+        binding.searchBar.setOnClickListener {
+            binding.searchView.show()
+            binding.searchView.requestFocus()
+            binding.searchView.visibility = View.VISIBLE
+            binding.searchBar.visibility = View.GONE
+        }
+
 
         viewModel.defaultVideos.observe(viewLifecycleOwner){ defaultVideos ->
             when(defaultVideos){
@@ -99,7 +120,10 @@ class ExperimentalSearch : Fragment() {
                     }
                 }
                 is YoutubeResource.Error -> {
-                    Log.d(TAG, "onViewCreated: ${defaultVideos.exception}")
+                    ToastUtilities.showToast(
+                        requireContext(),
+                        defaultVideos.exception.message.toString()
+                    )
                 }
             }
         }
@@ -117,7 +141,10 @@ class ExperimentalSearch : Fragment() {
                             }
                     }
                     is YoutubeResource.Error -> {
-                        Log.d(TAG, "onViewCreated: ${searchVideos.exception}")
+                       ToastUtilities.showToast(
+                           requireContext(),
+                           searchVideos.exception.message.toString()
+                       )
                     }
                 }
             }

@@ -19,6 +19,7 @@ import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewM
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
 import com.google.android.piyush.dopamine.databinding.ActivityMainBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,10 +49,11 @@ class MainActivity : AppCompatActivity() {
                 showToast("Press Back Again To Exit")
                 backPressed = true
             }else{
+                @Suppress("DEPRECATION")
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finishAffinity()
                 finish()
-                System.exit(0)
+                exitProcess(0)
             }
         }
 
