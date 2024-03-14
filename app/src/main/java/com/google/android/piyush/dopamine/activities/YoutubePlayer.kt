@@ -1,5 +1,8 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentValues.TAG
@@ -7,15 +10,18 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +39,8 @@ import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -41,6 +49,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.yausername.youtubedl_android.YoutubeDL
+import com.yausername.youtubedl_android.YoutubeDLRequest
+import com.yausername.youtubedl_android.YoutubeDLResponse
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import java.io.File
 import java.text.DecimalFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -54,6 +70,10 @@ class YoutubePlayer : AppCompatActivity() {
     private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
     private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var compositeDisposable: CompositeDisposable
+    private lateinit var notificationManager : NotificationManagerCompat
+    private lateinit var notificationBuilder : NotificationCompat.Builder
+    private var downloading = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +83,9 @@ class YoutubePlayer : AppCompatActivity() {
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         youtubePlayerViewModelFactory = YoutubePlayerViewModelFactory(youtubeRepositoryImpl)
         databaseViewModel = DatabaseViewModel(applicationContext)
+        compositeDisposable = CompositeDisposable()
+        notificationManager = NotificationManagerCompat.from(this)
+        notificationBuilder = NotificationCompat.Builder(this,"download_channel")
         youtubePlayerViewModel = ViewModelProvider(
             this, youtubePlayerViewModelFactory
         )[YoutubePlayerViewModel::class.java]
@@ -76,6 +99,12 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
+        val callback: Function3<Float, Long, String, Unit> =
+            { progress: Float, _: Long?, _: String? ->
+                runOnUiThread {
+                    notificationBuilder.setContentText("${progress.toInt()}%")
+                }
+            }
 
         databaseViewModel.isFavouriteVideo(
             intent?.getStringExtra("videoId").toString()
@@ -213,6 +242,15 @@ class YoutubePlayer : AppCompatActivity() {
                         }
                     }
 
+                    val channelId = "download_channel"
+                    val channelName = "Download"
+                    val importance = NotificationManager.IMPORTANCE_HIGH
+                    val channel = NotificationChannel(channelId, channelName, importance)
+                    notificationManager.createNotificationChannel(channel)
+                    notificationBuilder.setContentTitle("${video.items?.get(0)?.snippet?.title}.mp4")
+                    notificationBuilder.setSmallIcon(R.drawable.ic_download)
+                    notificationBuilder.setOngoing(true)
+
                    getSharedPreferences("customPlaylist", MODE_PRIVATE).edit{
                        putString("videoId", video.items?.get(0)?.id.toString())
                        putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
@@ -277,43 +315,76 @@ class YoutubePlayer : AppCompatActivity() {
                 }
             }
         }
-    }
 
-    class MyBottomSheetFragment : BottomSheetDialogFragment(){
-        private lateinit var databaseViewModel: DatabaseViewModel
-
-        override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
-            val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
-            val customPlaylists : RecyclerView = view.findViewById(R.id.recyclerViewLocalPlaylist)
-            databaseViewModel = DatabaseViewModel(requireContext())
-            databaseViewModel.defaultMasterDev
-
-            createNewPlaylist.setOnClickListener {
-                val customDialog = CustomDialog(requireContext())
-                customDialog.show()
-            }
-
-            if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
-                databaseViewModel.defaultUserPlaylist()
-            }else{
-                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
-            }
-
-            customPlaylists.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = CustomPlaylistsAdapter(
-                    requireContext(),
-                    databaseViewModel.getPlaylist(),
+        binding.downloadVideo.setOnClickListener {
+            val url = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
+            val request = YoutubeDLRequest(url)
+            val youtubeDLDir: File = getDownloadLocation()
+            if (downloading) {
+                ToastUtilities.showToast(
+                    this@YoutubePlayer,
+                    "cannot start download. a download is already in progress",
                 )
-                Log.d(TAG, " -> Fragment : BottomSheetFragment || Custom Playlists : ${databaseViewModel.getPlaylist()}")
             }
 
-            return view
+            if(ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                ) != PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS,Manifest.permission.READ_MEDIA_VIDEO),
+                    Utilities.REQUEST_CODE_SPEECH_INPUT
+                )
+            }else{
+                val notification = notificationBuilder.build()
+                notificationManager.notify(1, notification)
+
+                request.addOption("--no-mtime")
+                request.addOption("--downloader", "libaria2c.so")
+                request.addOption("--external-downloader-args", "aria2c:\"--summary-interval=1\"")
+                request.addOption("-f", "best")
+                request.addOption("-o", youtubeDLDir.absolutePath + "/%(title)s.%(ext)s")
+                downloading = true
+                val disposable = Observable.fromCallable<YoutubeDLResponse> {
+                    YoutubeDL.getInstance().execute(
+                        request,
+                        Utilities.PROCESS_ID,
+                        callback
+                    )
+                }
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ _: YoutubeDLResponse ->
+                        ToastUtilities.showToast(
+                            this@YoutubePlayer,
+                            "Download Successfully",
+                        )
+                        downloading = false
+                    }, { e: Throwable -> Log.e(TAG, "failed to download",e)
+                        downloading = false
+                    })
+                compositeDisposable.add(disposable)
+           }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val notification = notificationBuilder.build()
+                notificationManager.notify(1, notification)
+            } else {
+                ToastUtilities.showToast(
+                    this@YoutubePlayer,
+                    "grant storage permission and retry",
+                )
+            }
         }
     }
 
@@ -343,5 +414,51 @@ class YoutubePlayer : AppCompatActivity() {
             data = "${num}K"
         }
         return data
+    }
+
+    private fun getDownloadLocation(): File {
+        val downloadsDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val dir = File(downloadsDir, Utilities.PROJECT_ID)
+        if (!dir.exists()) dir.mkdir()
+        return dir
+    }
+}
+
+class MyBottomSheetFragment : BottomSheetDialogFragment(){
+    private lateinit var databaseViewModel: DatabaseViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
+        val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
+        val customPlaylists : RecyclerView = view.findViewById(R.id.recyclerViewLocalPlaylist)
+        databaseViewModel = DatabaseViewModel(requireContext())
+        databaseViewModel.defaultMasterDev
+
+        createNewPlaylist.setOnClickListener {
+            val customDialog = CustomDialog(requireContext())
+            customDialog.show()
+        }
+
+        if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
+            databaseViewModel.defaultUserPlaylist()
+        }else{
+            Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+        }
+
+        customPlaylists.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = CustomPlaylistsAdapter(
+                requireContext(),
+                databaseViewModel.getPlaylist(),
+            )
+            Log.d(TAG, " -> Fragment : BottomSheetFragment || Custom Playlists : ${databaseViewModel.getPlaylist()}")
+        }
+
+        return view
     }
 }
