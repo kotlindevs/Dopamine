@@ -69,7 +69,7 @@ dependencies {
     implementation (libs.library)
     implementation (libs.rxandroid)
     implementation (libs.exomedia)
-    implementation("com.github.TutorialsAndroid:AppXUpdater:v2.0.20")
+    implementation(libs.appxupdater)
     implementation(project(":Youtube"))
     implementation(project(":Database"))
     implementation(libs.androidx.preference)

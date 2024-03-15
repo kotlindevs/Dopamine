@@ -38,31 +38,31 @@ class ExperimentsMode : AppCompatActivity() {
         Glide.with(this).load(Utilities.VIDEO_WATCH_FROM_LINK).into(binding.image)
         Glide.with(this).load(Utilities.VIDEO_DOWNLOAD_FROM_LINK).into(binding.image11)
 
-//        binding.playVideoFromLink.setOnClickListener {
-//            startActivity(
-//                Intent(
-//                    this,
-//                    StreamVideo::class.java
-//                )
-//            )
-//        }
-//
-//        binding.downloadVideoFromLink.setOnClickListener {
-//            startActivity(
-//                Intent(
-//                    this,
-//                    DownloadVideo::class.java
-//                )
-//            )
-//        }
-//
-//        binding.useExpSearch.setOnCheckedChangeListener { _, isChecked ->
-//            if(isChecked.equals(true)){
-//                sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
-//            }else{
-//                sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
-//            }
-//        }
+        binding.playVideoFromLink.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    StreamVideo::class.java
+                )
+            )
+        }
+
+        binding.downloadVideoFromLink.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    DownloadVideo::class.java
+                )
+            )
+        }
+
+        binding.useExpSearch.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
+            }else{
+                sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
+            }
+        }
 
         binding.checkForUpdate.setOnClickListener {
             val appUpdater = AppUpdater(this)

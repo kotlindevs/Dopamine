@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.0"
+appxupdater = "v2.0.20"
 exomedia = "5.1.0"
 kotlin = "1.9.23"
 googleGmsGoogleServices = "4.4.1"
@@ -12,6 +13,7 @@ rxandroid = "2.1.1"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.0-alpha05" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.6.1" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.6.1" }
+appxupdater = { module = "com.github.TutorialsAndroid:AppXUpdater", version.ref = "appxupdater" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version = "12.1.0" }
 exomedia = { module = "com.devbrackets.android:exomedia", version.ref = "exomedia" }
 glide = { module = "com.github.bumptech.glide:glide", version = "5.0.0-rc01" }
