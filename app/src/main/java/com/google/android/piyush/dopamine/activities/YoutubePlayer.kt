@@ -248,15 +248,6 @@ class YoutubePlayer : AppCompatActivity() {
                         }
                     }
 
-                    val channelId = "download_channel"
-                    val channelName = "Download"
-                    val importance = NotificationManager.IMPORTANCE_HIGH
-                    val channel = NotificationChannel(channelId, channelName, importance)
-                    notificationManager.createNotificationChannel(channel)
-                    notificationBuilder.setContentTitle("${video.items?.get(0)?.snippet?.title}.mp4")
-                    notificationBuilder.setSmallIcon(R.drawable.ic_download)
-                    notificationBuilder.setOngoing(true)
-
                     getSharedPreferences("customPlaylist", MODE_PRIVATE).edit {
                         putString("videoId", video.items?.get(0)?.id.toString())
                         putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
@@ -389,14 +380,14 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
 
         if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
             if(databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth).equals(false)){
-                databaseViewModel.defaultUserPlaylist()
+                databaseViewModel.userFromPhoneAuth()
             }else{
-                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
+                Log.d(TAG, "${databaseViewModel.isUserFromPhoneAuth} : Exists")
             }
-        }else{
-            if(databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)){
+        }else {
+            if (databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)) {
                 databaseViewModel.defaultUserPlaylist()
-            }else{
+            } else {
                 Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
             }
         }

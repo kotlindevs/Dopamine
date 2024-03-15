@@ -142,7 +142,7 @@ class DatabaseViewModel(
     fun userFromPhoneAuth() {
         val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
         val writableDatabase = database.writableDatabase
-        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $isUserFromPhoneAuth (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT)")
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $isUserFromPhoneAuth (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)")
         writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$isUserFromPhoneAuth\",\"$usersFavoritePlayListDescription\")")
     }
 
@@ -171,7 +171,7 @@ class DatabaseViewModel(
         val list = mutableListOf<String>()
         val query = "SELECT name FROM sqlite_master Where type=\"table\" except \n" +
                 "select name from sqlite_master where name=\"android_metadata\" Except  select name from sqlite_master where name= \"recent_videos\" except  select name from sqlite_master where name= \"room_master_table\" except  \n" +
-                " select name from sqlite_master where name= \"sqlite_sequence\" except  select name from sqlite_master where name= \"search_table\" except  select name from sqlite_master where name= \"favourite_videos\" except  select name from sqlite_master where name= \"DopamineMastersDev\" "
+                " select name from sqlite_master where name= \"sqlite_sequence\" except  select name from sqlite_master where name= \"search_table\" except  select name from sqlite_master where name= \"favorite_playlist\" except  select name from sqlite_master where name= \"DopamineMastersDev\" "
         val data  = writableDatabase.query(query)
         while(data.moveToNext()){
             list.add(

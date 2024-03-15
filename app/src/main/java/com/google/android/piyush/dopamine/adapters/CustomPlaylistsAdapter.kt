@@ -48,10 +48,15 @@ class CustomPlaylistsAdapter(
 
         val isVideoAlreadyAdded = databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)
         Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
+        Log.d(TAG, "currentPlaylists : ${databaseViewModel.getPlaylistsFromDatabase()}")
 
-        if(playlistName!=null) {
+        if(playlistName.isNullOrEmpty()) {
+            Log.d(TAG, "playlistName : $playlistName")
+        }else{
             if (isVideoAlreadyAdded.equals(true)) {
                 holder.selectedPlaylistItem.isChecked = true
+            }else{
+                holder.selectedPlaylistItem.isChecked = false
             }
         }
 
@@ -74,6 +79,7 @@ class CustomPlaylistsAdapter(
                             duration = duration
                         )
                     )
+                    Log.d(TAG, "videoId : $videoId || playlistName : $playlistName")
                 }
                 ToastUtilities.showToast(context, "Successfully added to playlist :)")
             }
