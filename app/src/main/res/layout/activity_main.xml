@@ -19,11 +19,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:src="@drawable/ic_dopamine"
+        <com.airbnb.lottie.LottieAnimationView
+            app:lottie_rawRes="@raw/auth"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
             android:layout_width="256dp"
             android:layout_height="256dp"
-            android:padding="52dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:gravity="center"
