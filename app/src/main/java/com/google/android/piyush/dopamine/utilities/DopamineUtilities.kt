@@ -42,7 +42,7 @@ object Utilities {
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val PROJECT_NAME = "Dopamine"
-    const val PROJECT_VERSION = "dopamine_20241503_04.phone.stable.dynamic"
+    const val PROJECT_VERSION = "dopamine_20241503_03.phone.stable.dynamic"
 }
 
 class CustomDialog(context: Context) : Dialog(context) {

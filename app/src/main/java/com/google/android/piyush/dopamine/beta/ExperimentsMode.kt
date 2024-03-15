@@ -89,8 +89,8 @@ class ExperimentsMode : AppCompatActivity() {
                         }else {
                             val downloadApk = DownloadApk(this@ExperimentsMode)
                             downloadApk.startDownloadingApk(update.data.url.toString())
-                            Log.d(TAG, update.data.toString())
                         }
+                        Log.d(TAG, update.data.toString())
                     }
                     is YoutubeResource.Error -> {
                         Log.d(TAG, update.exception.message.toString())
