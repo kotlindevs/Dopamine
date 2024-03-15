@@ -1,0 +1,10 @@
+{
+  "latestVersion": "dopamine_20241503_02.phone.stable.dynamic",
+  "latestVersionCode": "1",
+  "url": "https://github.com/kotlindevs/Dopamine/releases",
+  "releaseNotes": [
+    "- First evolution",
+    "- Second evolution",
+    "- Bug fixes"
+  ]
+}
