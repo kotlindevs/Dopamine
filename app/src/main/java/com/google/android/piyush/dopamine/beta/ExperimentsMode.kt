@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.github.tutorialsandroid.appxupdater.AppUpdater
+import com.github.tutorialsandroid.appxupdater.enums.Display
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.beta.youtubedl.DownloadVideo
 import com.google.android.piyush.dopamine.beta.youtubedl.StreamVideo
@@ -60,6 +62,23 @@ class ExperimentsMode : AppCompatActivity() {
             }else{
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
             }
+        }
+
+        binding.checkForUpdate.setOnClickListener {
+            val appUpdater = AppUpdater(this)
+                .setDisplay(Display.DIALOG)
+                .setUpdateJSON("https://api.npoint.io/0178e5b07792668c9a58")
+                .showEvery(5)
+                .showAppUpdated(true)
+                .setTitleOnUpdateAvailable("Update available")
+                .setContentOnUpdateAvailable("Check out the latest version available dopamine!")
+                .setTitleOnUpdateNotAvailable("Update not available")
+                .setContentOnUpdateNotAvailable("No update available. Check for updates again later!")
+                .setButtonUpdate("Update now?")
+                .setButtonDismiss("Maybe later")
+                .setButtonDoNotShowAgain("Huh, not interested")
+                .setCancelable(false)
+            appUpdater.start()
         }
     }
 }
