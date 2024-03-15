@@ -266,6 +266,7 @@ class YoutubePlayer : AppCompatActivity() {
                         putString("channelTitle", video.items?.get(0)?.snippet?.channelTitle)
                         putInt("viewCount", video.items?.get(0)?.statistics?.viewCount!!)
                         putString("publishedAt",  video.items?.get(0)?.snippet?.publishedAt)
+                        putString("duration", video.items?.get(0)?.contentDetails?.duration)
                     }
                     Log.d(
                         TAG,

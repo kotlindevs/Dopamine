@@ -51,7 +51,13 @@ class CustomPlaylistsVDataAdapter(
 
         holder.videoTitle.text = playlists[position].title
 
-        holder.channelTitle.text = playlists[position].customName
+        holder.channelTitle.text = channelTitle
+
+        holder.videoDuration.text = formatDuration(
+            Duration.parse(
+                playlists[position].duration
+            )
+        )
 
         Glide.with(context)
             .load(playlists[position].thumbnail)

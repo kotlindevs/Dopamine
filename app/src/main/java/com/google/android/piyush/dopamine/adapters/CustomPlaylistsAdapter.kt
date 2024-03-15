@@ -41,9 +41,10 @@ class CustomPlaylistsAdapter(
         val thumbnail = pref.getString("thumbnail", "")!!
         val customName = pref.getString("customName", "")!!
         val channelId = pref.getString("channelId", "")!!
-        val viewCount = pref.getString("viewCount", "")!!
+        val viewCount = pref.getInt("viewCount", 0).toString()
         val channelTitle = pref.getString("channelTitle", "")!!
         val publishedAt = pref.getString("publishedAt", "")!!
+        val duration = pref.getString("duration", "")!!
 
         val isVideoAlreadyAdded = databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)
         Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
@@ -69,7 +70,8 @@ class CustomPlaylistsAdapter(
                             channelId = channelId,
                             viewCount = viewCount,
                             channelTitle = channelTitle ,
-                            publishedAt = publishedAt
+                            publishedAt = publishedAt,
+                            duration = duration
                         )
                     )
                 }

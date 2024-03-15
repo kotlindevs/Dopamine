@@ -8,5 +8,6 @@ data class CustomPlaylists (
     val channelId : String?,
     val publishedAt : String?,
     val viewCount : String?,
-    val channelTitle : String?
+    val channelTitle : String?,
+    val duration : String?
 )

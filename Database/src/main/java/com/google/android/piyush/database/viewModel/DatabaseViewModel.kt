@@ -115,7 +115,7 @@ class DatabaseViewModel(
     fun createCustomPlaylist(playlistsData: CustomPlaylistView) {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistsData.playListName)
-        val query = "CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)"
+        val query = "CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)"
         writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS DopamineMastersDev (playlistName TEXT PRIMARY KEY, playlistDescription TEXT)")
         writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"${stringify(playlistsData.playListName)}\",\"${playlistsData.playListDescription}\") ")
         writableDatabase.execSQL(query)
@@ -124,7 +124,7 @@ class DatabaseViewModel(
     fun addItemsInCustomPlaylist(playlistName: String,playlistsData: CustomPlaylists) {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistName)
-        val query = "INSERT INTO $newPlaylistName VALUES (\"${playlistsData.videoId}\",\"${playlistsData.title}\",\"${playlistsData.customName}\",\"${playlistsData.thumbnail}\",\"${playlistsData.channelId}\")"
+        val query = "INSERT INTO $newPlaylistName VALUES (\"${playlistsData.videoId}\",\"${playlistsData.title}\",\"${playlistsData.customName}\",\"${playlistsData.thumbnail}\",\"${playlistsData.channelId}\",\"${playlistsData.publishedAt}\",\"${playlistsData.viewCount}\",\"${playlistsData.channelTitle}\",\"${playlistsData.duration}\")"
         writableDatabase.execSQL(query)
     }
 
@@ -135,14 +135,17 @@ class DatabaseViewModel(
     fun defaultUserPlaylist() {
         val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
         val writableDatabase = database.writableDatabase
-        if(currentUser?.email.toString().isNullOrEmpty()){
-            writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS ${currentUser?.uid} (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
-            writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"${currentUser?.uid}\",\"$usersFavoritePlayListDescription\")")
-        }else {
-            writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT)")
-            writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
-        }
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $newPlaylistName (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)")
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"$usersFavoritePlayListDescription\")")
     }
+
+    fun userFromPhoneAuth() {
+        val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
+        val writableDatabase = database.writableDatabase
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $isUserFromPhoneAuth (videoId TEXT PRIMARY KEY, title TEXT, customName TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT)")
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$isUserFromPhoneAuth\",\"$usersFavoritePlayListDescription\")")
+    }
+
 
 
     fun getPlaylist() : List<CustomPlaylistView>{
@@ -242,7 +245,8 @@ class DatabaseViewModel(
                     query.getString(4),
                     query.getString(5),
                     query.getString(6),
-                    query.getString(7)
+                    query.getString(7),
+                    query.getString(8)
                 )
             )
         }
