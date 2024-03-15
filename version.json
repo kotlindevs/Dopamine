@@ -1,8 +1,10 @@
 {
-  "latestVersion": "dopamine_20241503_04.phone.stable.dynamic",
-  "latestVersionCode": "1",
-  "url": "https://github.com/kotlindevs/Dopamine/releases/download/dopamine_20241503_03.phone.stable.dynamic/dopamine_20241503_03.phone.stable.dynamic-arm64-v8a-debug.apk",
-  "releaseNotes": [
-
-  ]
+  "applicationId" : "com.google.android.piyush.dopamine",
+  "minSdk" : 24,
+  "targetsdk" : 34,
+  "versionCode" : 1,
+  "versionName" : "dopamine_20241503_04.phone.stable.dynamic",
+  "jvmTarget" : 1.8,
+  "url": "https://github.com/kotlindevs/Dopamine/releases/download/dopamine_20241503_04.phone.stable.dynamic/dopamine_20241503_04.phone.stable.dynamic-arm64-v8a-debug.apk",
+  "inherit": true
 }

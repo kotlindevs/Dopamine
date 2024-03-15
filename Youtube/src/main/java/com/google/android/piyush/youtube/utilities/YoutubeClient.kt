@@ -1,10 +1,17 @@
 package com.google.android.piyush.youtube.utilities
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 object YoutubeClient {
@@ -45,6 +52,8 @@ object YoutubeClient {
     const val PLAYLISTS= "playlists"
 
     const val SEARCH_PART = "snippet"
+
+    const val DOPAMINE_UPDATE = "https://api.npoint.io/0178e5b07792668c9a58"
 
     const val EXPERIMENTAL_API = "https://yt.lemnoslife.com/noKey/"
 
@@ -92,14 +101,36 @@ object YoutubeClient {
             )
         }
     }
+}
 
-    @OptIn(ExperimentalSerializationApi::class)
-    val JsonFeature = Json{
-        ignoreUnknownKeys = true
-        isLenient = true
-        encodeDefaults = true
-        prettyPrint = true
-        explicitNulls = false
-        coerceInputValues = true
+@Serializable
+data class DopamineVersion(
+    val versionName : String? = null,
+    val url : String? = null
+)
+
+class DopamineVersionViewModel() : ViewModel() {
+    private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
+    val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
+
+    init{
+        try {
+            _update.postValue(YoutubeResource.Loading)
+            viewModelScope.launch {
+                _update.postValue(
+                    YoutubeResource.Success(
+                        getVersion()
+                    )
+                )
+            }
+        }catch (e : Exception){
+            _update.postValue(YoutubeResource.Error(e))
+        }
     }
+}
+
+suspend fun getVersion() : DopamineVersion {
+    return YoutubeClient.CLIENT.get(
+        YoutubeClient.DOPAMINE_UPDATE
+    ).body()
 }
