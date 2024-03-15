@@ -6,5 +6,6 @@
     "- First evolution",
     "- Second evolution",
     "- Bug fixes"
-  ]
+  ],
+  "inherit": true
 }
