@@ -1,22 +1,22 @@
 package com.google.android.piyush.dopamine.beta
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.github.tutorialsandroid.appxupdater.AppUpdater
-import com.github.tutorialsandroid.appxupdater.enums.Display
+import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.beta.youtubedl.DownloadVideo
 import com.google.android.piyush.dopamine.beta.youtubedl.StreamVideo
 import com.google.android.piyush.dopamine.databinding.ActivityExperimentsModeBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.dopamine.viewModels.SharedViewModel
+
 
 class ExperimentsMode : AppCompatActivity() {
     private lateinit var binding: ActivityExperimentsModeBinding
@@ -65,20 +65,10 @@ class ExperimentsMode : AppCompatActivity() {
         }
 
         binding.checkForUpdate.setOnClickListener {
-            val appUpdater = AppUpdater(this)
-                .setDisplay(Display.SNACKBAR)
-                .setUpdateJSON("https://raw.githubusercontent.com/kotlindevs/Dopamine/Stable/version.json")
-                .showEvery(5)
-                .showAppUpdated(true)
-                .setTitleOnUpdateAvailable("Update available")
-                .setContentOnUpdateAvailable("Check out the latest version available dopamine!")
-                .setTitleOnUpdateNotAvailable("Update not available")
-                .setContentOnUpdateNotAvailable("No update available. Check for updates again later!")
-                .setButtonUpdate("Update now?")
-                .setButtonDismiss("Maybe later")
-                .setButtonDoNotShowAgain("Huh, not interested")
-                .setCancelable(false)
-            appUpdater.start()
+            val url = "https://github.com/Piashsarker/AndroidAppUpdateLibrary/raw/master/app-debug.apk"
+            val downloadApk = DownloadApk(this@ExperimentsMode)
+            downloadApk.startDownloadingApk(url)
+            Log.d(TAG,"")
         }
     }
 }
