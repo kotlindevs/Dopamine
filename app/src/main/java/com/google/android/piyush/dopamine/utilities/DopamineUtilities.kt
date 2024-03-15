@@ -41,6 +41,8 @@ object Utilities {
     const val VIDEO_DOWNLOAD_FROM_LINK = "https://cdn.iconscout.com/icon/premium/png-512-thumb/download-video-1-499499.png?f=webp&w=512"
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
+    const val PROJECT_NAME = "Dopamine"
+    const val PROJECT_VERSION = "dopamine_20241503_04.phone.stable.dynamic"
 }
 
 class CustomDialog(context: Context) : Dialog(context) {

@@ -1,10 +1,8 @@
 {
-  "latestVersion": "dopamine_20241503_03.phone.stable.dynamic",
+  "latestVersion": "dopamine_20241503_04.phone.stable.dynamic",
   "latestVersionCode": "1",
   "url": "https://github.com/kotlindevs/Dopamine/releases/download/dopamine_20241503_03.phone.stable.dynamic/dopamine_20241503_03.phone.stable.dynamic-arm64-v8a-debug.apk",
   "releaseNotes": [
-    "- First evolution",
-    "- Second evolution",
-    "- Bug fixes"
+
   ]
 }
