@@ -22,6 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="52dp">
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/userImage"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="left"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_marginRight="8dp" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/greeting"
                 android:layout_width="wrap_content"
@@ -40,14 +48,6 @@
                 android:layout_marginEnd="8dp"
                 app:icon="@drawable/ic_beta_app"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/userImage"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="right"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                android:layout_marginRight="8dp" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/watchHistory"
