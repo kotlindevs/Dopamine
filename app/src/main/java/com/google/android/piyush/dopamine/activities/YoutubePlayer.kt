@@ -319,7 +319,7 @@ class YoutubePlayer : AppCompatActivity() {
                 is YoutubeResource.Success -> {
                     binding.channelsPlaylist.apply {
                         layoutManager = LinearLayoutManager(this@YoutubePlayer)
-                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
+//                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
                     }
                 }
 

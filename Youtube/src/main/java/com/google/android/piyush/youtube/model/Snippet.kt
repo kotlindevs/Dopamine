@@ -19,15 +19,16 @@ data class Snippet(
 @Serializable
 data class Thumbnails(
     val default: Default? = null,
+    val medium: Medium? = null,
     val high: High? = null,
     val standard: Standard? = null
 )
 
 @Serializable
 data class Statistics(
-    val viewCount: Int? = null,
-    val subscriberCount: Int? = null,
-    val likeCount: Int? = null
+    val viewCount: Int? = 0,
+    val subscriberCount: Int? = 0,
+    val likeCount: Int? = 0
 )
 
 @Serializable
@@ -42,5 +43,10 @@ data class High(
 
 @Serializable
 data class Default(
+    val url: String? = null,
+)
+
+@Serializable
+data class Medium(
     val url: String? = null,
 )

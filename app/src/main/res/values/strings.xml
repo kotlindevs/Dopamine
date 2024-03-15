@@ -59,5 +59,8 @@
     <string name="welcome_to_experimental_mode">Welcome To Experimental Mode</string>
     <string name="searchbar_hint">Search Something Here </string>
     <string name="voice_search">Voice Search</string>
+    <string name="custom_url">Custom URL</string>
+    <string name="channel_description">Channel Description</string>
+    <string name="subscribers">Subscribers</string>
 
 </resources>

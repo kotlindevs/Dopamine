@@ -11,10 +11,11 @@ import com.google.android.piyush.dopamine.activities.YoutubeChannelPlaylistsVide
 import com.google.android.piyush.dopamine.viewHolders.YoutubeChannelPlaylistsViewHolder
 import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 
 class YoutubeChannelPlaylistsAdapter(
     private val context: Context,
-    private val playlists: Youtube?
+    private val playlists: ChannelPlaylists?
 ) : RecyclerView.Adapter<YoutubeChannelPlaylistsViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -33,20 +34,23 @@ class YoutubeChannelPlaylistsAdapter(
 
     override fun onBindViewHolder(holder: YoutubeChannelPlaylistsViewHolder, position: Int) {
         val playListData = playlists?.items?.get(position)
-        Glide.with(context)
-            .load(playListData?.snippet?.thumbnails?.default?.url)
-            .into(holder.image)
-        holder.text1.text = playListData?.snippet?.title
-        holder.text2.text = playListData?.snippet?.channelTitle
-        holder.video.setOnClickListener {
-            if (playListData != null) {
+        val playlistImage = playListData?.snippet?.thumbnails?.default?.url
+        val playlistTitle = playListData?.snippet?.title
+        val playlistChannelTitle = playListData?.snippet?.channelTitle
+
+        Glide.with(context).load(playlistImage).into(holder.playlistImage)
+
+        holder.playlistTitle.text = playlistTitle
+        holder.playlistChannelTitle.text = playlistChannelTitle
+        holder.playlist.setOnClickListener {
+            if (!playlists?.items.isNullOrEmpty()) {
                 context.startActivity(
                     Intent(
                         context, YoutubeChannelPlaylistsVideos::class.java
                     ).addFlags(
                         Intent.FLAG_ACTIVITY_NEW_TASK
                     ).putExtra(
-                        "playlistId", playListData.id
+                        "playlistId", playListData?.id
                     )
                 )
             }

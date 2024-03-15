@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playlist"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/video"
-    style="@style/Widget.Material3.CardView.Filled"
-    android:layout_margin="8dp">
+    style="@style/Widget.Material3.CardView.Filled">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image"
+            android:id="@+id/playlistImage"
             android:layout_width="123dp"
             android:layout_height="92dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +20,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text1"
+            android:id="@+id/playlistTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -26,14 +28,14 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/circular_spotify"
             android:gravity="start"
-            app:layout_constraintBottom_toTopOf="@id/text2"
+            app:layout_constraintBottom_toTopOf="@id/playlistChannelTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintStart_toEndOf="@id/playlistImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/text2"
+            android:id="@+id/playlistChannelTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -43,7 +45,7 @@
             android:maxLines="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toBottomOf="@id/text1" />
+            app:layout_constraintStart_toEndOf="@id/playlistImage"
+            app:layout_constraintTop_toBottomOf="@id/playlistTitle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

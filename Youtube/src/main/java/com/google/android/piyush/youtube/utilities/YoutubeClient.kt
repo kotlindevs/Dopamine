@@ -34,6 +34,8 @@ object YoutubeClient {
 
     const val PART = "snippet,contentDetails,statistics"
 
+    const val CHANNEL_PART = "snippet,contentDetails,statistics,brandingSettings"
+
     const val PLAYLIST_PART = "snippet,contentDetails"
 
     const val MAX_RESULTS = "50"

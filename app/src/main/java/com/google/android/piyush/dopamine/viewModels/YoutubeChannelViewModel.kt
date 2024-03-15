@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.model.channelDetails.YoutubeChannel
+import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import kotlinx.coroutines.launch
@@ -13,11 +15,11 @@ class YoutubeChannelViewModel(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModel() {
 
-    private val _channelDetails : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val channelDetails : MutableLiveData<YoutubeResource<Youtube>> = _channelDetails
+    private val _channelDetails : MutableLiveData<YoutubeResource<YoutubeChannel>> = MutableLiveData()
+    val channelDetails : MutableLiveData<YoutubeResource<YoutubeChannel>> = _channelDetails
 
-    private val _channelsPlaylists : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val channelsPlaylists : MutableLiveData<YoutubeResource<Youtube>> = _channelsPlaylists
+    private val _channelsPlaylists : MutableLiveData<YoutubeResource<ChannelPlaylists>> = MutableLiveData()
+    val channelsPlaylists : MutableLiveData<YoutubeResource<ChannelPlaylists>> = _channelsPlaylists
 
     fun getChannelDetails(channelId : String) {
        viewModelScope.launch {

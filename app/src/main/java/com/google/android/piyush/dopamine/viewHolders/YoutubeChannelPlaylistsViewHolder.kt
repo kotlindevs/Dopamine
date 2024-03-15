@@ -11,9 +11,9 @@ class YoutubeChannelPlaylistsViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
-    var image : ImageView = itemView.findViewById(R.id.image)
-    var text1 : MaterialTextView = itemView.findViewById(R.id.text1)
-    var text2 : MaterialTextView = itemView.findViewById(R.id.text2)
-    var video : MaterialCardView = itemView.findViewById(R.id.video)
+    var playlistImage : ImageView = itemView.findViewById(R.id.playlistImage)
+    var playlistTitle : MaterialTextView = itemView.findViewById(R.id.playlistTitle)
+    var playlistChannelTitle : MaterialTextView = itemView.findViewById(R.id.playlistChannelTitle)
+    var playlist : MaterialCardView = itemView.findViewById(R.id.playlist)
 
 }

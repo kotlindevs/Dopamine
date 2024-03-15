@@ -59,7 +59,7 @@ class YoutubePlayerViewModel(
                         )
                     )
                 }else{
-                    _channelDetails.postValue(YoutubeResource.Success(response))
+//                    _channelDetails.postValue())
                 }
             }catch (exception : Exception){
                 _channelDetails.postValue(YoutubeResource.Error(exception))
@@ -81,7 +81,7 @@ class YoutubePlayerViewModel(
                         )
                     )
                 }else{
-                    _channelsPlaylist.postValue(YoutubeResource.Success(response))
+//                    _channelsPlaylist.postValue(YoutubeResource.Success(response))
                 }
             }catch (exception : Exception){
                 _channelsPlaylist.postValue(YoutubeResource.Error(exception))

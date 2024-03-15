@@ -4,6 +4,8 @@ import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Shorts
 import com.google.android.piyush.youtube.utilities.YoutubeClient
 import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.model.channelDetails.YoutubeChannel
+import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
@@ -58,12 +60,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         return response.body()
     }
 
-    override suspend fun getChannelDetails(channelId: String): Youtube {
+    override suspend fun getChannelDetails(channelId: String): YoutubeChannel {
         val response = YoutubeClient.CLIENT.get(
             YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
         ){
             url {
-                parameters.append("part", YoutubeClient.PART)
+                parameters.append("part", YoutubeClient.CHANNEL_PART)
                 parameters.append("id", channelId)
                 parameters.append("key", YoutubeClient.API_KEY)
             }
@@ -71,7 +73,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         return response.body()
     }
 
-    override suspend fun getChannelsPlaylists(channelId: String): Youtube {
+    override suspend fun getChannelsPlaylists(channelId: String): ChannelPlaylists {
         val response = YoutubeClient.CLIENT.get(
             YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
         ) {

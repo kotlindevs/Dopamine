@@ -9,77 +9,98 @@
     tools:context=".activities.YoutubeChannel">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
+        android:id="@+id/channelBanner"
+        android:layout_width="match_parent"
+        android:layout_height="212dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.None"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/channelLogo"
         android:layout_width="92dp"
         android:layout_height="92dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/channelBanner"/>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text1"
+        android:id="@+id/channelTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/circular_spotify"
-        android:text="@string/app_name"
+        android:text="@string/channel_title"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="@id/imageView" />
+        app:layout_constraintStart_toEndOf="@id/channelLogo"
+        app:layout_constraintTop_toTopOf="@id/channelLogo" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text2"
+        android:id="@+id/channelCustomUrl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/proxima_nova"
-        android:text="@string/app_name"
+        android:text="@string/custom_url"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toBottomOf="@id/text1" />
+        app:layout_constraintStart_toEndOf="@id/channelLogo"
+        app:layout_constraintTop_toBottomOf="@id/channelTitle" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text3"
+        android:id="@+id/channelSubscribers"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/proxima_nova"
-        android:text="@string/app_name"
+        android:text="@string/subscribers"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageView"
-        app:layout_constraintTop_toBottomOf="@id/text2" />
+        app:layout_constraintStart_toEndOf="@id/channelLogo"
+        app:layout_constraintTop_toBottomOf="@id/channelCustomUrl" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text4"
+        android:id="@+id/channelDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:maxLines="3"
-        android:text="Youtube Data"
+        android:text="@string/channel_description"
         android:fontFamily="@font/proxima_nova"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"/>
+        app:layout_constraintTop_toBottomOf="@id/channelLogo"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/channelPlaylistLoader"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/channelDescription"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/channelsPlaylist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text4"
+        app:layout_constraintTop_toBottomOf="@id/channelDescription"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="8dp" />
 
