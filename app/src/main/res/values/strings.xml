@@ -62,5 +62,9 @@
     <string name="custom_url">Custom URL</string>
     <string name="channel_description">Channel Description</string>
     <string name="subscribers">Subscribers</string>
+    <string name="stream_any_video_n_ad_free_on_dopamine">Stream Any Video \n Ad-Free on Dopamine</string>
+    <string name="continue_with_phone_number">Continue with phone number</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
 
 </resources>

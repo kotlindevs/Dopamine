@@ -39,6 +39,25 @@ class ExperimentsMode : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        if(this.getSharedPreferences("DopamineApp", MODE_PRIVATE)
+                .getBoolean("ExperimentalMode", false).equals(true)) {
+            Log.d(TAG, "ExperimentalMode: true")
+        }else{
+            MaterialAlertDialogBuilder(this).apply {
+                this.setTitle("NOTICES")
+                this.setMessage("This feature is currently available in limited users if this feature not working in your device don't panic , we will fix it soon ! ")
+                this.setIcon(R.drawable.ic_info)
+                this.setCancelable(true)
+                this.setPositiveButton("Don't show again") { _, _ ->
+                    context.getSharedPreferences(
+                        "DopamineApp",
+                        MODE_PRIVATE
+                    )
+                        .edit().putBoolean("ExperimentalMode", true).apply()
+                }
+            }.create().show()
+        }
+
 
         binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
 
@@ -87,23 +106,6 @@ class ExperimentsMode : AppCompatActivity() {
                                 }
                             }.create().show()
                         }else {
-                            if(this.getSharedPreferences("DopamineApp", MODE_PRIVATE)
-                                    .getBoolean("ExperimentalUpdate", false).equals(true)) {
-                            }else{
-                                MaterialAlertDialogBuilder(this).apply {
-                                    this.setTitle("NOTICES")
-                                    this.setMessage("This feature is currently available in limited users if this feature not working in your device don't panic , we will fix it soon ! ")
-                                    this.setIcon(R.drawable.ic_info)
-                                    this.setCancelable(true)
-                                    this.setPositiveButton("Don't show again") { _, _ ->
-                                        context.getSharedPreferences(
-                                            "DopamineApp",
-                                            MODE_PRIVATE
-                                        )
-                                            .edit().putBoolean("ExperimentalUpdate", true).apply()
-                                    }
-                                }.create().show()
-                            }
                             val downloadApk = DownloadApk(this@ExperimentsMode)
                             downloadApk.startDownloadingApk(update.data.url.toString())
                         }
