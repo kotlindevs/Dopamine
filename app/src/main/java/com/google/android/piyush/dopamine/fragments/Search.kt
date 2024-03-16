@@ -125,7 +125,6 @@ class Search : Fragment() {
                     searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
                         when (searchVideos) {
                             is YoutubeResource.Loading -> {
-                                //Log.d(TAG, "Loading: True")
                                 binding.utilList.visibility = View.GONE
                             }
 
@@ -135,7 +134,6 @@ class Search : Fragment() {
                                     visibility = View.VISIBLE
                                     adapter = SearchAdapter(context!!, searchVideos.data)
                                 }
-                                Log.d(TAG, " -> Fragment : Search || Search Videos : ${searchVideos.data}")
                             }
 
                             is YoutubeResource.Error -> {
@@ -150,7 +148,22 @@ class Search : Fragment() {
                                             dialog?.dismiss()
                                         }
                                         this.setPositiveButton("Retry") { _, _ ->
-                                            searchViewModel.searchVideos(query)
+                                            searchViewModel.reSearchVideos(query)
+                                            searchViewModel.reGetSearchVideos.observe(viewLifecycleOwner) { searchVideos->
+                                                when (searchVideos) {
+                                                    is YoutubeResource.Loading -> {}
+                                                    is YoutubeResource.Success -> {
+                                                        binding.utilList.apply {
+                                                            layoutManager = LinearLayoutManager(context)
+                                                            visibility = View.VISIBLE
+                                                            adapter = SearchAdapter(context!!, searchVideos.data)
+                                                        }
+                                                    }
+                                                    is YoutubeResource.Error -> {
+                                                        Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                                                    }
+                                                }
+                                            }
                                         }.create().show()
                                     }
 

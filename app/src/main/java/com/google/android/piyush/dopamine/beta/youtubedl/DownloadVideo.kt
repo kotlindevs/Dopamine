@@ -53,6 +53,25 @@ class DownloadVideo : AppCompatActivity() {
             insets
         }
 
+        if(this.getSharedPreferences("DopamineApp", MODE_PRIVATE)
+                .getBoolean("ExperimentalDownload", false).equals(true)) {
+        }else{
+            MaterialAlertDialogBuilder(this).apply {
+                this.setTitle("NOTICES")
+                this.setMessage("This functionality is experimental and currently it is not available for all users , android 13 and above users are recommended to use this feature.")
+                this.setIcon(R.drawable.ic_info)
+                this.setCancelable(true)
+                this.setPositiveButton("Okay , I Understood ❤️") { _, _ ->
+                    context.getSharedPreferences(
+                        "DopamineApp",
+                        MODE_PRIVATE
+                    )
+                        .edit().putBoolean("ExperimentalDownload", true).apply()
+                }
+            }.create().show()
+        }
+
+
         binding.startVideo.setOnClickListener {
             startDownload()
         }
@@ -182,7 +201,7 @@ class DownloadVideo : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun isStoragePermissionGranted(): Boolean {
         if (checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO)
-            == PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            == PackageManager.PERMISSION_GRANTED
         ) {
             return true
         } else {
@@ -190,12 +209,6 @@ class DownloadVideo : AppCompatActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
-                    Utilities.PERMISSION_REQUEST_CODE
-                )
-            }else{
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     Utilities.PERMISSION_REQUEST_CODE
                 )
             }

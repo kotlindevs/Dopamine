@@ -36,6 +36,7 @@ import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -265,7 +266,11 @@ class YoutubePlayer : AppCompatActivity() {
                     val customUrl = channelDetails.data.items?.get(0)?.snippet?.customUrl
                     val channelDescription = channelDetails.data.items?.get(0)?.snippet?.description
 
-                    Glide.with(this).load(channelLogo).into(binding.imageView)
+                    if(channelLogo.isNullOrEmpty()){
+                        Glide.with(this).load(Utilities.DEFAULT_LOGO).into(binding.imageView)
+                    }else {
+                        Glide.with(this).load(channelLogo).into(binding.imageView)
+                    }
                     binding.apply {
                         this.text1.text = channelTitle
                         this.text2.text = customUrl

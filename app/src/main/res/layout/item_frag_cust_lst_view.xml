@@ -10,15 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp">
-        <com.google.android.material.imageview.ShapeableImageView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/custom_playlist_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/ic_dopamine"
             android:padding="12dp"
+            style="@style/Widget.Material3.CardView.Elevated"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/playlist_logo_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AB"
+                    android:textSize="24sp"
+                    android:textColor="#FFFFFF"
+                    app:fontFamily="@font/circular_spotify"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
