@@ -106,7 +106,7 @@ class YoutubeChannel : AppCompatActivity() {
                     Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
                     binding.channelPlaylistLoader.apply {
                         visibility = View.VISIBLE
-                        setAnimation(R.raw.no_data)
+                        setAnimation(R.raw.playlist)
                         playAnimation()
                         playSoundEffect(SoundEffectConstants.CLICK)  //sound effect
                         speed = 1.5f        //speed of animation

@@ -85,10 +85,10 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/channelPlaylistLoader"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
         android:layout_margin="8dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/channelDescription"

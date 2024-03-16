@@ -3,6 +3,8 @@ package com.google.android.piyush.dopamine.activities
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
+import android.view.SoundEffectConstants
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -65,6 +67,15 @@ class YoutubeChannelPlaylistsVideos : AppCompatActivity() {
                 }
                 is YoutubeResource.Error -> {
                     Log.d(TAG, "Error: ${playlistsVideos.exception.message.toString()}")
+                    binding.channelPlaylistVideosLoader.apply {
+                        visibility = View.VISIBLE
+                        setAnimation(R.raw.playlist)
+                        playAnimation()
+                        playSoundEffect(SoundEffectConstants.CLICK)  //sound effect
+                        speed = 1.5f        //speed of animation
+                        @Suppress("DEPRECATION")
+                        loop(true)
+                    }
                 }
             }
         }
