@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 data class EntityFavouritePlaylist (
     @PrimaryKey val videoId: String,
     val title: String?,
-    val customName: String?,
     val thumbnail: String?,
     val channelTitle: String?,
     val channelId : String? = null

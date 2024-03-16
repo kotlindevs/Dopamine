@@ -41,9 +41,7 @@ class CustomPlaylistsVDataAdapter(
                 LocalDateTime.now()
             )
         )
-        val publishedViews = viewsCount(
-            playlists[position].viewCount!!.toInt()
-        )
+        val publishedViews = playlists[position].viewCount
 
         val channelTitle = "${
             playlists[position].channelTitle
@@ -80,27 +78,6 @@ class CustomPlaylistsVDataAdapter(
             }
         }
     }
-
-    private fun viewsCount(views: Int): String {
-        return when {
-            views >= 1000000000 -> {
-                val formattedViews = views / 1000000000
-                "${formattedViews}B views"
-            }
-            views >= 1000000 -> {
-                val formattedViews = views / 1000000
-                "${formattedViews}M views"
-            }
-            views >= 1000 -> {
-                val formattedViews = views / 1000
-                "${formattedViews}K views"
-            }
-            else -> {
-                "$views views"
-            }
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun formatDuration(duration: Duration): String {
         val hours = duration.toHours()

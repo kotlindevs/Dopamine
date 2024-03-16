@@ -12,12 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,18 +28,11 @@ import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.dopamine.utilities.Utilities.REQUEST_CODE_SPEECH_INPUT
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
 import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.cancelFutureOnCompletion
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.random.Random
 
@@ -186,14 +176,14 @@ class Search : Fragment() {
                 ActivityCompat.requestPermissions(
                     requireActivity(),
                     arrayOf(Manifest.permission.RECORD_AUDIO),
-                    REQUEST_CODE_SPEECH_INPUT
+                    Utilities.PERMISSION_REQUEST_CODE
                 )
             }else{
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
-                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
             }
         }
     }
@@ -206,13 +196,13 @@ class Search : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == REQUEST_CODE_SPEECH_INPUT){
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
-                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
             }
         }
     }
@@ -224,7 +214,7 @@ class Search : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK){
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE && resultCode == RESULT_OK){
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             fragmentSearchBinding!!.searchVideo.setQuery(result?.get(0), true)
             Log.d(TAG, " -> Fragment : Search || User Voice Search : ${result?.get(0)}")

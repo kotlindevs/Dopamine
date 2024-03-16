@@ -59,10 +59,6 @@ class YoutubePlayer : AppCompatActivity() {
     private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
     private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
-    private lateinit var compositeDisposable: CompositeDisposable
-    private lateinit var notificationManager : NotificationManagerCompat
-    private lateinit var notificationBuilder : NotificationCompat.Builder
-    private var downloading = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,9 +68,6 @@ class YoutubePlayer : AppCompatActivity() {
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         youtubePlayerViewModelFactory = YoutubePlayerViewModelFactory(youtubeRepositoryImpl)
         databaseViewModel = DatabaseViewModel(applicationContext)
-        compositeDisposable = CompositeDisposable()
-        notificationManager = NotificationManagerCompat.from(this)
-        notificationBuilder = NotificationCompat.Builder(this, "download_channel")
         youtubePlayerViewModel = ViewModelProvider(
             this, youtubePlayerViewModelFactory
         )[YoutubePlayerViewModel::class.java]
@@ -88,12 +81,6 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
-        val callback: Function3<Float, Long, String, Unit> =
-            { progress: Float, _: Long?, _: String? ->
-                runOnUiThread {
-                    notificationBuilder.setContentText("${progress.toInt()}%")
-                }
-            }
 
         databaseViewModel.isFavouriteVideo(
             intent?.getStringExtra("videoId").toString()
@@ -167,35 +154,37 @@ class YoutubePlayer : AppCompatActivity() {
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
-        youtubePlayerViewModel.getVideoDetails(
-            intent?.getStringExtra("videoId").toString()
-        )
+        val videoId = intent?.getStringExtra("videoId").toString()
+        val channelId = intent?.getStringExtra("channelId").toString()
+
+        youtubePlayerViewModel.getVideoDetails(videoId)
 
         youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
             when (videoDetails) {
-                is YoutubeResource.Loading -> {
-                    //Log.d(TAG, "YoutubePlayer || VideoDetails : True")
-                }
+                is YoutubeResource.Loading -> {}
 
                 is YoutubeResource.Success -> {
-                    val video = videoDetails.data
-                    val videoLinkData =
-                        "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
-                    val textLikedData =
-                        counter(
-                            if(video.items?.get(0)?.statistics?.likeCount == null) 0 else video.items?.get(0)?.statistics?.likeCount!!
-                        )
-                    val textViewData = counter(
-                        if(video.items?.get(0)?.statistics?.viewCount == null) 0 else video.items?.get(0)?.statistics?.viewCount!!
-                    )
+                    val videoTitle = videoDetails.data.items?.get(0)?.snippet?.title
+                    val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
+                    val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
+                    val videoDuration = videoDetails.data.items?.get(0)?.contentDetails?.duration
+                    val videoKind = videoDetails.data.items?.get(0)?.kind
+                    val videoPublishedAt = videoDetails.data.items?.get(0)?.snippet?.publishedAt
+                    val channelTitle = videoDetails.data.items?.get(0)?.snippet?.channelTitle
+                    val videoUrl = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
+                    val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
+                    val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
+                    val videoTags = videoDetails.data.items?.get(0)?.snippet?.tags.toString()
+
                     binding.apply {
-                        textTitle.text = video.items?.get(0)?.snippet?.title
-                        textKind.text = video.items?.get(0)?.kind
-                        textTags.text = video.items?.get(0)?.snippet?.tags.toString()
-                        videoLink.text = videoLinkData
-                        textLiked.text = textLikedData
-                        textView.text = textViewData
-                        textDescription.text = video.items?.get(0)?.snippet?.description
+                        textTitle.text  = videoTitle
+                        textKind.text   = videoKind
+                        textTags.text   = videoTags
+                        videoLink.text  = videoUrl
+                        textLiked.text  = videoLikes
+                        textView.text   = videoViews
+                        textDescription.text = videoDescription
+
                         copyVideoLink.setOnClickListener {
                             val clipboardManager =
                                 getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
@@ -207,62 +196,54 @@ class YoutubePlayer : AppCompatActivity() {
                             if (isFavourite == 1) {
                                 databaseViewModel.insertFavouriteVideos(
                                     EntityFavouritePlaylist(
-                                        videoId = intent.getStringExtra("videoId").toString(),
-                                        thumbnail = video.items!![0].snippet?.thumbnails?.high?.url,
-                                        title = video.items!![0].snippet?.title,
-                                        customName = video.items!![0].snippet?.customUrl,
-                                        channelId = video.items!![0].snippet?.channelId!!,
-                                        channelTitle = video.items!![0].snippet?.channelTitle
+                                        videoId = videoId,
+                                        thumbnail = videoThumbnail,
+                                        title = videoTitle,
+                                        channelId = channelId,
+                                        channelTitle = channelTitle
                                     )
                                 )
                             } else {
                                 databaseViewModel.deleteFavouriteVideo(
-                                    intent.getStringExtra("videoId").toString()
+                                    videoId = videoId
                                 )
                             }
                         }
                     }
-                    databaseViewModel.isRecentVideo(videoId = video.items?.get(0)?.id.toString())
+                    databaseViewModel.isRecentVideo(videoId = videoId)
 
                     databaseViewModel.isRecent.observe(this) {
-                        if (it == intent.getStringExtra("videoId").toString()) {
+                        if (it == videoId) {
                             databaseViewModel.updateRecentVideo(
-                                videoId = intent.getStringExtra("videoId").toString(),
+                                videoId = videoId,
                                 time = LocalTime.now()
-                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString()
-                            )
+                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString())
                         } else {
                             databaseViewModel.insertRecentVideos(
                                 EntityRecentVideos(
                                     id = Random.nextInt(1, 100000),
-                                    videoId = video.items?.get(0)?.id,
-                                    thumbnail = video.items?.get(0)?.snippet?.thumbnails?.high?.url,
-                                    title = video.items?.get(0)?.snippet?.title,
-                                    customName = video.items?.get(0)?.snippet?.customUrl,
+                                    videoId = videoId,
+                                    thumbnail = videoThumbnail,
+                                    title = videoTitle,
                                     timing = LocalTime.now()
                                         .format(DateTimeFormatter.ofPattern("hh:mm a"))
                                         .toString(),
-                                    channelId = video.items?.get(0)?.snippet?.channelId
+                                    channelId = channelId
                                 )
                             )
                         }
                     }
 
                     getSharedPreferences("customPlaylist", MODE_PRIVATE).edit {
-                        putString("videoId", video.items?.get(0)?.id.toString())
-                        putString("thumbnail", video.items?.get(0)?.snippet?.thumbnails?.high?.url)
-                        putString("title", video.items?.get(0)?.snippet?.title)
-                        putString("customName", video.items?.get(0)?.snippet?.customUrl)
-                        putString("channelId", video.items?.get(0)?.snippet?.channelId)
-                        putString("channelTitle", video.items?.get(0)?.snippet?.channelTitle)
-                        putInt("viewCount", video.items?.get(0)?.statistics?.viewCount!!)
-                        putString("publishedAt",  video.items?.get(0)?.snippet?.publishedAt)
-                        putString("duration", video.items?.get(0)?.contentDetails?.duration)
+                        putString("videoId", videoId)
+                        putString("thumbnail", videoThumbnail)
+                        putString("title", videoTitle)
+                        putString("channelId", channelId)
+                        putString("channelTitle", channelTitle)
+                        putString("viewCount", videoViews)
+                        putString("publishedAt",  videoPublishedAt)
+                        putString("duration", videoDuration)
                     }
-                    Log.d(
-                        TAG,
-                        " -> Activity : YoutubePlayer || Video Details : ${videoDetails.data}"
-                    )
                 }
 
                 is YoutubeResource.Error -> {
@@ -271,55 +252,44 @@ class YoutubePlayer : AppCompatActivity() {
             }
         }
 
-        youtubePlayerViewModel.getChannelDetails(
-            intent?.getStringExtra("channelId").toString()
-        )
+        youtubePlayerViewModel.getChannelDetails(channelId)
 
         youtubePlayerViewModel.channelDetails.observe(this) { channelDetails ->
             when (channelDetails) {
-                is YoutubeResource.Loading -> {
-                    //Log.d(TAG, "YoutubePlayer || ChannelDetails : True")
-                }
+                is YoutubeResource.Loading -> {}
 
                 is YoutubeResource.Success -> {
-                    val channel = channelDetails.data
-                    val subscriberData = "${
-                        channel.items?.get(0)?.statistics?.subscriberCount?.let { subscriber ->
-                            counter(subscriber)
-                        }
-                    } subscribers"
-                    Glide.with(this)
-                        .load(channel.items?.get(0)?.snippet?.thumbnails?.high?.url)
-                        .into(binding.imageView)
+                    val channelLogo = channelDetails.data.items?.get(0)?.snippet?.thumbnails?.default?.url
+                    val channelSubscribers = "${counter(channelDetails.data.items?.get(0)?.statistics?.subscriberCount!!.toInt())} Subscribers"
+                    val channelTitle = channelDetails.data.items?.get(0)?.snippet?.title
+                    val customUrl = channelDetails.data.items?.get(0)?.snippet?.customUrl
+                    val channelDescription = channelDetails.data.items?.get(0)?.snippet?.description
+
+                    Glide.with(this).load(channelLogo).into(binding.imageView)
                     binding.apply {
-                        this.text1.text = channel.items?.get(0)?.snippet?.title
-                        this.text2.text = channel.items?.get(0)?.snippet?.customUrl
-                        this.text3.text = subscriberData
-                        this.text4.text = channel.items?.get(0)?.snippet?.description
+                        this.text1.text = channelTitle
+                        this.text2.text = customUrl
+                        this.text3.text = channelSubscribers
+                        this.text4.text = channelDescription
                     }
-                    Log.d(TAG, " -> Activity : YoutubePlayer || Channel Details : $channel")
                 }
 
                 is YoutubeResource.Error -> {
-                    //Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
+                    Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
                 }
             }
         }
 
-        youtubePlayerViewModel.getChannelsPlaylist(
-            intent?.getStringExtra("channelId").toString()
-        )
+        youtubePlayerViewModel.getChannelsPlaylist(channelId)
 
-        youtubePlayerViewModel.channelsPlaylist.observe(this) { channelsPlaylist ->
+        youtubePlayerViewModel.channelsPlaylists.observe(this) { channelsPlaylist ->
             when (channelsPlaylist) {
-                is YoutubeResource.Loading -> {
-                    Log.d(TAG, "YoutubePlayer || ChannelsPlaylist : True")
-                }
+                is YoutubeResource.Loading -> {}
 
                 is YoutubeResource.Success -> {
                     binding.channelsPlaylist.apply {
                         layoutManager = LinearLayoutManager(this@YoutubePlayer)
-//                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
+                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
                     }
                 }
 
@@ -398,9 +368,7 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
                 requireContext(),
                 databaseViewModel.getPlaylist(),
             )
-            Log.d(TAG, " -> Fragment : BottomSheetFragment || Custom Playlists : ${databaseViewModel.getPlaylist()}")
         }
-
         return view
     }
 }

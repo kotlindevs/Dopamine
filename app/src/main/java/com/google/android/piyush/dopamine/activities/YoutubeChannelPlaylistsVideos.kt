@@ -49,24 +49,22 @@ class YoutubeChannelPlaylistsVideos : AppCompatActivity() {
             insets
         }
 
-        youtubeChannelPlaylistsVideosViewModel.getPlaylistsVideos(
-            intent.getStringExtra("playlistId").toString()
-        )
+        val playlistId = intent.getStringExtra("playlistId").toString()
+
+        youtubeChannelPlaylistsVideosViewModel.getPlaylistsVideos(playlistId)
 
         youtubeChannelPlaylistsVideosViewModel.playlistsVideos.observe(this) { playlistsVideos ->
             when (playlistsVideos) {
-                is YoutubeResource.Loading -> {
-                    //Log.d(TAG, "Loading: True")
-                }
+                is YoutubeResource.Loading -> {}
                 is YoutubeResource.Success -> {
                     binding.recyclerView.apply {
                         setHasFixedSize(true)
                         layoutManager = LinearLayoutManager(this@YoutubeChannelPlaylistsVideos)
                         adapter = YoutubePlaylistsVideosAdapter(context,playlistsVideos.data)
                     }
-                    Log.d(TAG, " -> Activity : YoutubeChannelPlaylistsVideos || Playlist Videos : ${playlistsVideos.data}")                }
+                }
                 is YoutubeResource.Error -> {
-                    //Log.d(TAG, "Error: ${playlistsVideos.exception.message.toString()}")
+                    Log.d(TAG, "Error: ${playlistsVideos.exception.message.toString()}")
                 }
             }
         }
@@ -85,7 +83,7 @@ class YoutubeChannelPlaylistsVideos : AppCompatActivity() {
                 IFramePlayerOptions.Builder()
                     .controls(1)
                     .listType("playlist")
-                    .list(intent.getStringExtra("playlistId").toString())
+                    .list(playlistId)
                     .build()
             )
         }

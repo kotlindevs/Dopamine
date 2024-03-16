@@ -101,7 +101,7 @@ class DownloadVideo : AppCompatActivity() {
         if (!isStoragePermissionGranted()) {
             Toast.makeText(
                 this@DownloadVideo,
-                "grant storage permission and retry",
+                "Please grant storage permission to continue",
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -182,15 +182,23 @@ class DownloadVideo : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun isStoragePermissionGranted(): Boolean {
         if (checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO)
-            == PackageManager.PERMISSION_GRANTED
+            == PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         ) {
             return true
         } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
-                1
-            )
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
+                    Utilities.PERMISSION_REQUEST_CODE
+                )
+            }else{
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    Utilities.PERMISSION_REQUEST_CODE
+                )
+            }
             return false
         }
     }

@@ -41,7 +41,7 @@ class CustomPlaylistsAdapter(
         val thumbnail = pref.getString("thumbnail", "")!!
         val customName = pref.getString("customName", "")!!
         val channelId = pref.getString("channelId", "")!!
-        val viewCount = pref.getInt("viewCount", 0).toString()
+        val viewCount = pref.getString("viewCount", "")!!
         val channelTitle = pref.getString("channelTitle", "")!!
         val publishedAt = pref.getString("publishedAt", "")!!
         val duration = pref.getString("duration", "")!!
@@ -71,7 +71,6 @@ class CustomPlaylistsAdapter(
                             videoId = videoId,
                             title = title,
                             thumbnail = thumbnail,
-                            customName = customName,
                             channelId = channelId,
                             viewCount = viewCount,
                             channelTitle = channelTitle ,

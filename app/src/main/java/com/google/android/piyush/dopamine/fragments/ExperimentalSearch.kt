@@ -162,14 +162,14 @@ class ExperimentalSearch : Fragment() {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.RECORD_AUDIO),
-                Utilities.REQUEST_CODE_SPEECH_INPUT
+                Utilities.PERMISSION_REQUEST_CODE
             )
         }else{
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search 😊")
-            startActivityForResult(intent, Utilities.REQUEST_CODE_SPEECH_INPUT)
+            startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
         }
     }
     @Suppress("DEPRECATION")
@@ -181,13 +181,13 @@ class ExperimentalSearch : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == Utilities.REQUEST_CODE_SPEECH_INPUT){
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search 😊")
-                startActivityForResult(intent, Utilities.REQUEST_CODE_SPEECH_INPUT)
+                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
             }
         }
     }
@@ -196,9 +196,11 @@ class ExperimentalSearch : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == Utilities.REQUEST_CODE_SPEECH_INPUT && resultCode == Activity.RESULT_OK){
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            //experimentalSearchBinding!!.searchView.setQuery(result?.get(0), true)
+            experimentalSearchBinding!!.searchView.setText(
+                result?.get(0)
+            )
         }
     }
 

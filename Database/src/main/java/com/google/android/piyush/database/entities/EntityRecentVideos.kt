@@ -8,7 +8,6 @@ data class EntityRecentVideos(
     @PrimaryKey val id : Int,
     val videoId: String?,
     val title: String?,
-    val customName: String?,
     val thumbnail: String?,
     val timing : String?,
     val channelId : String? = null,
