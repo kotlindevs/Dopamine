@@ -63,9 +63,6 @@ class ExperimentsMode : AppCompatActivity() {
         binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
 
-        Glide.with(this).load(Utilities.VIDEO_WATCH_FROM_LINK).into(binding.image)
-        Glide.with(this).load(Utilities.VIDEO_DOWNLOAD_FROM_LINK).into(binding.image11)
-
         binding.playVideoFromLink.setOnClickListener {
             startActivity(
                 Intent(
