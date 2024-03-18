@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth

@@ -66,5 +66,10 @@
     <string name="continue_with_phone_number">Continue with phone number</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="dynamic_colors_android_12">Dynamic Colors (Android 12+)</string>
+    <string name="canary">Canary</string>
+    <string name="beta">Beta</string>
+    <string name="this_dynamic_color_is_available_on_android_14_but_it_s_a_different">This feature is available on Android 14 but currently unavailable.</string>
+    <string name="dynamic_colors_android_14">Users Dynamic Colors (Android 14)</string>
 
 </resources>

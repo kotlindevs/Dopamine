@@ -39,11 +39,12 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
-                style="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
                 android:layout_width="84dp"
                 android:layout_height="84dp"
                 android:layout_margin="6dp"
                 android:padding="4dp"
+                android:src="@drawable/video"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="2dp"
-                android:text="@string/experimental"
+                android:text="@string/beta"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
@@ -109,7 +110,8 @@
                 android:layout_height="84dp"
                 android:layout_margin="6dp"
                 android:padding="4dp"
-                style="@style/ShapeAppearance.Material3.Corner.Medium"
+                android:src="@drawable/download_circle"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -118,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="@string/experimental"
+                android:text="@string/beta"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"
                 app:fontFamily="@font/circular_spotify"
@@ -157,12 +159,79 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/expUserPhotoColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:visibility="visible"
+        android:clickable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/downloadVideoFromLink"
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image112"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_margin="6dp"
+                android:padding="4dp"
+                android:src="@drawable/google_material_design_logo"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text112"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/canary"
+                android:textStyle="bold"
+                android:textColor="?attr/colorTertiary"
+                app:fontFamily="@font/circular_spotify"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:layout_constraintStart_toEndOf="@id/image112"
+                app:layout_constraintTop_toTopOf="@id/image112"
+                android:layout_marginStart="6dp"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text122"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/dynamic_colors_android_14"
+                app:fontFamily="@font/proxima_nova"
+                android:textColor="?attr/colorSecondary"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:layout_constraintStart_toEndOf="@id/image112"
+                app:layout_constraintTop_toBottomOf="@id/text112"
+                android:layout_marginStart="6dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"
+                app:fontFamily="@font/proxima_nova"
+                android:textColor="?attr/colorTertiary"
+                android:text="@string/this_dynamic_color_is_available_on_android_14_but_it_s_a_different"
+                android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image112"
+                app:layout_constraintTop_toBottomOf="@id/text122" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         style="@style/Widget.Material3.CardView.Filled"
-        app:layout_constraintTop_toBottomOf="@id/downloadVideoFromLink"
+        app:layout_constraintTop_toBottomOf="@id/expUserPhotoColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -191,12 +260,46 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/checkForUpdate"
+        android:id="@+id/cardView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         style="@style/Widget.Material3.CardView.Filled"
         app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/expDynamicUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dynamic_colors_android_12"
+                app:fontFamily="@font/circular_spotify"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textColor="?colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/useExpDynamicUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/checkForUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:layout_constraintTop_toBottomOf="@id/cardView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout

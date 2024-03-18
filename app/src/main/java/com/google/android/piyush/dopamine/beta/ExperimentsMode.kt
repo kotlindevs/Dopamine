@@ -59,7 +59,9 @@ class ExperimentsMode : AppCompatActivity() {
         }
 
 
+        binding.expUserPhotoColor.isEnabled = false
         binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
+        binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
 
         Glide.with(this).load(Utilities.VIDEO_WATCH_FROM_LINK).into(binding.image)
         Glide.with(this).load(Utilities.VIDEO_DOWNLOAD_FROM_LINK).into(binding.image11)
@@ -87,6 +89,32 @@ class ExperimentsMode : AppCompatActivity() {
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
             }else{
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
+            }
+        }
+
+        binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("ExperimentalUserColor", true).apply()
+                MaterialAlertDialogBuilder(this).apply {
+                    this.setTitle("NOTICE")
+                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
+                    this.setIcon(R.drawable.ic_alert)
+                    this.setCancelable(true)
+                    this.setPositiveButton("Okay") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
+            }else{
+                sharedPreferences.edit().putBoolean("ExperimentalUserColor", false).apply()
+                MaterialAlertDialogBuilder(this).apply {
+                    this.setTitle("NOTICE")
+                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
+                    this.setIcon(R.drawable.ic_alert)
+                    this.setCancelable(true)
+                    this.setPositiveButton("Okay") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
             }
         }
 

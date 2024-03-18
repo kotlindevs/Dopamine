@@ -2,10 +2,16 @@ package com.google.android.piyush.dopamine.beta
 
 import android.app.Application
 import android.content.ContentValues.TAG
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.util.Log
 import android.widget.Toast
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import com.google.android.piyush.dopamine.beta.youtubedl.YoutubeDLException
+import com.google.firebase.auth.FirebaseAuth
 import com.yausername.youtubedl_android.YoutubeDL
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,11 +19,31 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
+import java.net.URL
+
 
 class DopamineApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this)
+ /*
+        val policy = ThreadPolicy.Builder().permitAll().build()
+
+        StrictMode.setThreadPolicy(policy)
+        val image = getBitmapFromUrl(FirebaseAuth.getInstance().currentUser?.photoUrl.toString())
+
+        if(image != null) {
+            DynamicColors.applyToActivitiesIfAvailable(
+                this, DynamicColorsOptions.Builder().setContentBasedSource(
+                    image
+                ).build()
+            )
+        } */
+
+        if(applicationContext.getSharedPreferences("DopamineApp", MODE_PRIVATE).
+            getBoolean("ExperimentalUserColor", false).equals(true)){
+            DynamicColors.applyToActivitiesIfAvailable(this)
+        }
 
         configureRxJavaErrorHandler()
         Completable.fromAction { this.initLibraries() }.subscribeOn(Schedulers.io())
@@ -55,5 +81,16 @@ class DopamineApp : Application() {
     @Throws(YoutubeDLException::class)
     private fun initLibraries() {
         YoutubeDL.getInstance().init(this)
+    }
+
+    private fun getBitmapFromUrl(imageUrl: String): Bitmap? {
+        try {
+            val url = URL(imageUrl)
+            val inputStream = url.openStream()
+            return BitmapFactory.decodeStream(inputStream)
+        } catch (e: IOException) {
+            Log.e(TAG, "Error downloading image", e)
+            return null
+        }
     }
 }
