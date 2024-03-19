@@ -57,6 +57,8 @@ object YoutubeClient {
 
     const val DOPAMINE_UPDATE = "https://api.npoint.io/0178e5b07792668c9a58"
 
+    const val PRE_RELEASE = "https://api.npoint.io/255cbfc840e9bf199c9d"
+
     const val EXPERIMENTAL_API = "https://yt.lemnoslife.com/noKey/"
 
     val CODING_VIDEOS = arrayListOf(
@@ -108,12 +110,16 @@ object YoutubeClient {
 @Serializable
 data class DopamineVersion(
     val versionName : String? = null,
-    val url : String? = null
+    val url : String? = null,
+    val changelog : String? = null
 )
 
 class DopamineVersionViewModel() : ViewModel() {
     private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
     val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
+
+    private val _preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
+    val preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = _preRelease
 
     init{
         try {
@@ -129,10 +135,33 @@ class DopamineVersionViewModel() : ViewModel() {
             _update.postValue(YoutubeResource.Error(e))
         }
     }
+
+    fun preReleaseUpdate() {
+        viewModelScope.launch {
+            try {
+                _preRelease.postValue(YoutubeResource.Loading)
+                viewModelScope.launch {
+                    _preRelease.postValue(
+                        YoutubeResource.Success(
+                            getPreRelease()
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                _preRelease.postValue(YoutubeResource.Error(e))
+            }
+        }
+    }
 }
 
 suspend fun getVersion() : DopamineVersion {
     return YoutubeClient.CLIENT.get(
         YoutubeClient.DOPAMINE_UPDATE
+    ).body()
+}
+
+suspend fun getPreRelease() : DopamineVersion {
+    return YoutubeClient.CLIENT.get(
+        YoutubeClient.PRE_RELEASE
     ).body()
 }

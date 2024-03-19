@@ -22,6 +22,7 @@ import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.piyush.dopamine.R
@@ -58,6 +59,7 @@ class DopamineUserProfile : AppCompatActivity() {
         }
         binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
+        binding.applyForPreReleaseUpdate.isChecked = sharedPreferences.getBoolean("PreReleaseUpdate", false)
         dopamineVersionViewModel = DopamineVersionViewModel()
 
 
@@ -110,6 +112,45 @@ class DopamineUserProfile : AppCompatActivity() {
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
             }else{
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
+            }
+        }
+
+        binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
+                if(sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
+                    dopamineVersionViewModel.preReleaseUpdate()
+                    dopamineVersionViewModel.preRelease.observe(this) {
+                        if (it is YoutubeResource.Success) {
+                            if (it.data.versionName == Utilities.PRE_RELEASE_VERSION) {
+                                if (sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
+                                    MaterialAlertDialogBuilder(this).apply {
+                                        this.setTitle(it.data.versionName)
+                                        this.setMessage(it.data.changelog)
+                                        this.setIcon(R.drawable.ic_info)
+                                        this.setCancelable(true)
+                                        this.setPositiveButton("Don't show again") { _, _ ->
+                                            context.getSharedPreferences(
+                                                "DopamineApp",
+                                                MODE_PRIVATE
+                                            )
+                                                .edit().putBoolean("PreReleaseUpdate", true).apply()
+                                        }
+                                    }.create().show()
+                                }
+                            } else {
+                                val downloadApk = DownloadApk(this@DopamineUserProfile)
+                                downloadApk.startDownloadingApk(it.data.url.toString())
+                            }
+                        }
+
+                    }
+                }
+            }else{
+                sharedPreferences.edit().putBoolean("PreReleaseUpdate", false).apply()
+                Snackbar.make(
+                    binding.main,"Application rollback feature is currently unavailable",Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 

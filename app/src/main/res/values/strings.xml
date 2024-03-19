@@ -77,4 +77,5 @@
     <string name="dark"> 🌙 Night Theme </string>
     <string name="system"> 🤖 System Theme </string>
     <string name="choose_dopamine_theme">Choose dopamine theme</string>
+    <string name="i_m_developer_pre_release">I\'m Developer (Pre-Release)</string>
 </resources>
