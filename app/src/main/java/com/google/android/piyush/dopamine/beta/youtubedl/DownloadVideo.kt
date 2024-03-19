@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDownloadVideoBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -83,14 +84,14 @@ class DownloadVideo : AppCompatActivity() {
         binding.useAdvancedMode.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
                 MaterialAlertDialogBuilder(this).apply {
-                        this.setTitle("Alert")
-                        this.setMessage("You are about to use advanced mode. before start you set the config file in your application download directory 🫡")
-                        this.setIcon(R.drawable.ic_alert)
-                        this.setCancelable(false)
-                        this.setPositiveButton("Yes, I know") { dialog, _ ->
-                            dialog?.dismiss()
-                        }
-                    }.create().show()
+                    this.setTitle("Alert")
+                    this.setMessage("You are about to use advanced mode. before start you set the config file in your application download directory 🫡")
+                    this.setIcon(R.drawable.ic_alert)
+                    this.setCancelable(false)
+                    this.setPositiveButton("Yes, I know") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
             }
         }
     }
@@ -110,8 +111,8 @@ class DownloadVideo : AppCompatActivity() {
     private fun startDownload() {
         if (downloading) {
             Toast.makeText(
-                this@DownloadVideo,
-                "cannot start download. a download is already in progress",
+               this@DownloadVideo,
+                "Download already in progress..",
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -120,7 +121,7 @@ class DownloadVideo : AppCompatActivity() {
         if (!isStoragePermissionGranted()) {
             Toast.makeText(
                 this@DownloadVideo,
-                "Please grant storage permission to continue",
+                "Grant Storage Permission",
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -141,14 +142,14 @@ class DownloadVideo : AppCompatActivity() {
                 request.addOption("--config-location", config.absolutePath)
             }else{
                 MaterialAlertDialogBuilder(this).apply {
-                        this.setTitle("Error")
-                        this.setMessage("The config file is not found in your application download directory, please set the config file in your application download directory and try again.")
-                        this.setIcon(R.drawable.ic_dialog_error)
-                        this.setCancelable(false)
-                        this.setPositiveButton("Okay, I Understood") { dialog, _ ->
-                            dialog?.dismiss()
-                        }
-                    }.create().show()
+                    this.setTitle("Error")
+                    this.setMessage("The config file is not found in your application download directory, please set the config file in your application download directory and try again.")
+                    this.setIcon(R.drawable.ic_dialog_error)
+                    this.setCancelable(false)
+                    this.setPositiveButton("Okay, I Understood") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
             }
         } else {
             request.addOption("--no-mtime")
@@ -162,6 +163,9 @@ class DownloadVideo : AppCompatActivity() {
 
         downloading = true
         val disposable = Observable.fromCallable<YoutubeDLResponse> {
+            Snackbar.make(
+                binding.main,"Downloading...",Snackbar.LENGTH_LONG
+            ).show()
             getInstance().execute(
                 request,
                 Utilities.PROCESS_ID,
@@ -172,10 +176,10 @@ class DownloadVideo : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _: YoutubeDLResponse ->
                 binding.progressBar.progress = 100
-                Toast.makeText(
-                    this@DownloadVideo,
+                Snackbar.make(
+                    binding.main,
                     "Download Successfully",
-                    Toast.LENGTH_LONG
+                    Snackbar.LENGTH_LONG
                 ).show()
                 downloading = false
             }, { e: Throwable -> Log.e(TAG, "failed to download",e)
