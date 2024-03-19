@@ -118,15 +118,26 @@ class DopamineUserProfile : AppCompatActivity() {
         binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
                 sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
+
                 if(sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
                     dopamineVersionViewModel.preReleaseUpdate()
                     dopamineVersionViewModel.preRelease.observe(this) {
                         if (it is YoutubeResource.Success) {
                             if (it.data.versionName == Utilities.PRE_RELEASE_VERSION) {
-                                if (sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
+                                if (sharedPreferences.getBoolean("ExperimentalPreUpdate", false).equals(true)) {
                                     MaterialAlertDialogBuilder(this).apply {
                                         this.setTitle(it.data.versionName)
                                         this.setMessage(it.data.changelog)
+                                        this.setIcon(R.drawable.ic_info)
+                                        this.setCancelable(true)
+                                        this.setPositiveButton("Okay") { dialog, _ ->
+                                            dialog?.dismiss()
+                                        }
+                                    }.create().show()
+                                } else {
+                                    MaterialAlertDialogBuilder(this).apply {
+                                        this.setTitle("Thanks for your interest !")
+                                        this.setMessage("You successfully registered for pre-release update. once you upgrade the app, you will be able to use pre-release feature.")
                                         this.setIcon(R.drawable.ic_info)
                                         this.setCancelable(true)
                                         this.setPositiveButton("Don't show again") { _, _ ->
@@ -134,7 +145,7 @@ class DopamineUserProfile : AppCompatActivity() {
                                                 "DopamineApp",
                                                 MODE_PRIVATE
                                             )
-                                                .edit().putBoolean("PreReleaseUpdate", true).apply()
+                                                .edit().putBoolean("ExperimentalPreUpdate", true).apply()
                                         }
                                     }.create().show()
                                 }
@@ -213,7 +224,7 @@ class DopamineUserProfile : AppCompatActivity() {
             bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
         }
 
-        binding.cardView2.setOnClickListener {
+        binding.cardView3.setOnClickListener {
             MaterialAlertDialogBuilder(this).apply {
                 this.setTitle("Choose dopamine theme")
                 this.setIcon(R.drawable.ic_info)
