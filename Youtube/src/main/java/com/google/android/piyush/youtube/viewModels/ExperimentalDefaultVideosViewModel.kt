@@ -71,6 +71,7 @@ class ExperimentalDefaultVideosViewModel(
 class ExperimentalVideosViewModelFactory(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory{
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(ExperimentalDefaultVideosViewModel::class.java)) {
             return ExperimentalDefaultVideosViewModel(youtubeRepositoryImpl) as T

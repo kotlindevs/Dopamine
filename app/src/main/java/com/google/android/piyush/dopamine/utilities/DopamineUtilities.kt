@@ -37,14 +37,20 @@ object ToastUtilities {
 
 object Utilities {
 const val PERMISSION_REQUEST_CODE = 100
-    const val VIDEO_WATCH_FROM_LINK = "https://cdn.iconscout.com/icon/premium/png-512-thumb/laptop-video-8319510-6888191.png?f=webp&w=512"
-    const val VIDEO_DOWNLOAD_FROM_LINK = "https://cdn.iconscout.com/icon/premium/png-512-thumb/download-video-1-499499.png?f=webp&w=512"
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val PROJECT_NAME = "Dopamine"
     const val PROJECT_VERSION = "dopamine_20241803_03.phone.stable.dynamic"
     const val DEFAULT_LOGO = "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*3tLD4Ve66pbBpuawm9Fu9Q.png"
     const val DEFAULT_BANNER = "https://developer.android.com/static/images/social/android-developers.png"
+    const val LIGHT_MODE = "light"
+    const val DARK_MODE = "dark"
+    const val SYSTEM_MODE = "system"
+    val THEME = arrayOf(
+        LIGHT_MODE,
+        DARK_MODE,
+        SYSTEM_MODE
+    )
 }
 
 class CustomDialog(context: Context) : Dialog(context) {

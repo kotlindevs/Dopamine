@@ -71,5 +71,10 @@
     <string name="beta">Beta</string>
     <string name="this_dynamic_color_is_available_on_android_14_but_it_s_a_different">This feature is available on Android 14 but currently unavailable.</string>
     <string name="dynamic_colors_android_14">Users Dynamic Colors (Android 14)</string>
-
+    <string name="check_for_updates">Check for updates</string>
+    <string name="dopamine_theme_mode">Dopamine Theme</string>
+    <string name="light"> ☀️ Day Theme </string>
+    <string name="dark"> 🌙 Night Theme </string>
+    <string name="system"> 🤖 System Theme </string>
+    <string name="choose_dopamine_theme">Choose dopamine theme</string>
 </resources>

@@ -8,9 +8,11 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 import com.google.android.piyush.dopamine.beta.youtubedl.YoutubeDLException
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.firebase.auth.FirebaseAuth
 import com.yausername.youtubedl_android.YoutubeDL
 import io.reactivex.Completable
@@ -40,8 +42,17 @@ class DopamineApp : Application() {
             )
         } */
 
-        if(applicationContext.getSharedPreferences("DopamineApp", MODE_PRIVATE).
-            getBoolean("ExperimentalUserColor", false).equals(true)){
+        val dopamineApp = applicationContext.getSharedPreferences("DopamineApp", MODE_PRIVATE)
+
+        if(dopamineApp.getString("Theme", Utilities.LIGHT_MODE) == Utilities.LIGHT_MODE){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }else if(dopamineApp.getString("Theme", Utilities.DARK_MODE) == Utilities.DARK_MODE){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+
+        if(dopamineApp.getBoolean("ExperimentalUserColor", false).equals(true)){
             DynamicColors.applyToActivitiesIfAvailable(this)
         }
 

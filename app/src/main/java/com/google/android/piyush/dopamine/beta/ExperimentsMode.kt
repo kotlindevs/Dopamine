@@ -25,24 +25,24 @@ import kotlin.system.exitProcess
 
 class ExperimentsMode : AppCompatActivity() {
     private lateinit var binding: ActivityExperimentsModeBinding
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExperimentsModeBinding.inflate(layoutInflater)
-        sharedPreferences = getSharedPreferences("DopamineApp", MODE_PRIVATE)
-        dopamineVersionViewModel = DopamineVersionViewModel()
+
         setContentView(binding.root)
         enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if(this.getSharedPreferences("DopamineApp", MODE_PRIVATE)
-                .getBoolean("ExperimentalMode", false).equals(true)) {
+
+        if (this.getSharedPreferences("DopamineApp", MODE_PRIVATE)
+                .getBoolean("ExperimentalMode", false).equals(true)
+        ) {
             Log.d(TAG, "ExperimentalMode: true")
-        }else{
+        } else {
             MaterialAlertDialogBuilder(this).apply {
                 this.setTitle("NOTICES")
                 this.setMessage("This feature is currently available in limited users if this feature not working in your device don't panic , we will fix it soon ! ")
@@ -60,8 +60,7 @@ class ExperimentsMode : AppCompatActivity() {
 
 
         binding.expUserPhotoColor.isEnabled = false
-        binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
-        binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
+
 
         binding.playVideoFromLink.setOnClickListener {
             startActivity(
@@ -79,68 +78,6 @@ class ExperimentsMode : AppCompatActivity() {
                     DownloadVideo::class.java
                 )
             )
-        }
-
-        binding.useExpSearch.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked.equals(true)){
-                sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
-            }else{
-                sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
-            }
-        }
-
-        binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked.equals(true)){
-                sharedPreferences.edit().putBoolean("ExperimentalUserColor", true).apply()
-                MaterialAlertDialogBuilder(this).apply {
-                    this.setTitle("NOTICE")
-                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
-                    this.setIcon(R.drawable.ic_alert)
-                    this.setCancelable(true)
-                    this.setPositiveButton("Okay") { dialog, _ ->
-                        dialog?.dismiss()
-                    }
-                }.create().show()
-            }else{
-                sharedPreferences.edit().putBoolean("ExperimentalUserColor", false).apply()
-                MaterialAlertDialogBuilder(this).apply {
-                    this.setTitle("NOTICE")
-                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
-                    this.setIcon(R.drawable.ic_alert)
-                    this.setCancelable(true)
-                    this.setPositiveButton("Okay") { dialog, _ ->
-                        dialog?.dismiss()
-                    }
-                }.create().show()
-            }
-        }
-
-        binding.checkForUpdate.setOnClickListener {
-            dopamineVersionViewModel.update.observe(this) { update ->
-                when (update) {
-                    is YoutubeResource.Loading -> {}
-                    is YoutubeResource.Success -> {
-                        if(update.data.versionName == Utilities.PROJECT_VERSION) {
-                            MaterialAlertDialogBuilder(this).apply {
-                                this.setTitle("Wow ! 🫡")
-                                this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
-                                this.setIcon(R.drawable.ic_alert)
-                                this.setCancelable(true)
-                                this.setPositiveButton("Okay") { dialog, _ ->
-                                    dialog?.dismiss()
-                                }
-                            }.create().show()
-                        }else {
-                            val downloadApk = DownloadApk(this@ExperimentsMode)
-                            downloadApk.startDownloadingApk(update.data.url.toString())
-                        }
-                        Log.d(TAG, update.data.toString())
-                    }
-                    is YoutubeResource.Error -> {
-                        Log.d(TAG, update.exception.message.toString())
-                    }
-                }
-            }
         }
     }
 }

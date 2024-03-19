@@ -1,17 +1,24 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,12 +29,18 @@ import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
+import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
 
 class DopamineUserProfile : AppCompatActivity() {
 
     private lateinit var binding: ActivityDopamineUserProfileBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +48,7 @@ class DopamineUserProfile : AppCompatActivity() {
         binding = ActivityDopamineUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
+        sharedPreferences = getSharedPreferences("DopamineApp", MODE_PRIVATE)
 
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -42,6 +56,10 @@ class DopamineUserProfile : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
+        binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
+        dopamineVersionViewModel = DopamineVersionViewModel()
+
 
         if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
             Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(binding.userImage)
@@ -87,11 +105,66 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
-        binding.dopamineSettingsCard.setOnClickListener {
-            startActivity(Intent(
-                applicationContext,
-                SettingsActivity :: class.java
-            ))
+        binding.useExpSearch.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
+            }else{
+                sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
+            }
+        }
+
+        binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("ExperimentalUserColor", true).apply()
+                MaterialAlertDialogBuilder(this).apply {
+                    this.setTitle("NOTICE")
+                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
+                    this.setIcon(R.drawable.ic_alert)
+                    this.setCancelable(true)
+                    this.setPositiveButton("Okay") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
+            }else{
+                sharedPreferences.edit().putBoolean("ExperimentalUserColor", false).apply()
+                MaterialAlertDialogBuilder(this).apply {
+                    this.setTitle("NOTICE")
+                    this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
+                    this.setIcon(R.drawable.ic_alert)
+                    this.setCancelable(true)
+                    this.setPositiveButton("Okay") { dialog, _ ->
+                        dialog?.dismiss()
+                    }
+                }.create().show()
+            }
+        }
+
+        binding.checkForUpdate.setOnClickListener {
+            dopamineVersionViewModel.update.observe(this) { update ->
+                when (update) {
+                    is YoutubeResource.Loading -> {}
+                    is YoutubeResource.Success -> {
+                        if(update.data.versionName == Utilities.PROJECT_VERSION) {
+                            MaterialAlertDialogBuilder(this).apply {
+                                this.setTitle("Wow ! 🫡")
+                                this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
+                                this.setIcon(R.drawable.ic_alert)
+                                this.setCancelable(true)
+                                this.setPositiveButton("Okay") { dialog, _ ->
+                                    dialog?.dismiss()
+                                }
+                            }.create().show()
+                        }else {
+                            val downloadApk = DownloadApk(this@DopamineUserProfile)
+                            downloadApk.startDownloadingApk(update.data.url.toString())
+                        }
+                        Log.d(ContentValues.TAG, update.data.toString())
+                    }
+                    is YoutubeResource.Error -> {
+                        Log.d(ContentValues.TAG, update.exception.message.toString())
+                    }
+                }
+            }
         }
 
         binding.customPlayList.setOnClickListener {
@@ -99,6 +172,33 @@ class DopamineUserProfile : AppCompatActivity() {
             bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
         }
 
+        binding.cardView2.setOnClickListener {
+            MaterialAlertDialogBuilder(this).apply {
+                this.setTitle("Choose dopamine theme")
+                this.setIcon(R.drawable.ic_info)
+                this.setSingleChoiceItems(Utilities.THEME,if(sharedPreferences.getString("Theme", Utilities.SYSTEM_MODE) == Utilities.LIGHT_MODE) 0 else if(sharedPreferences.getString("Theme", Utilities.SYSTEM_MODE) == Utilities.DARK_MODE) 1 else 2
+                ) { dialog, which ->
+                    when(which){
+                        0 -> {
+                            sharedPreferences.edit().putString("Theme", Utilities.LIGHT_MODE).apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                            dialog.dismiss()
+                        }
+                        1 -> {
+                            sharedPreferences.edit().putString("Theme", Utilities.DARK_MODE).apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            dialog.dismiss()
+                        }
+                        2 -> {
+                            sharedPreferences.edit().putString("Theme", Utilities.SYSTEM_MODE).apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                            dialog.dismiss()
+                        }
+                    }
+                }
+                this.setCancelable(true)
+            }.create().show()
+        }
     }
 
     class MyBottomSheetFragment : BottomSheetDialogFragment(){
