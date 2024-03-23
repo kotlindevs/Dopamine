@@ -81,4 +81,10 @@
     <string name="about_us">About Us</string>
     <string name="developers">Developers</string>
     <string name="about_dopamine">About Dopamine</string>
+    <string name="description">Dopamine is a cutting-edge YouTube clone designed to provide users with an immersive video-sharing experience. It is built using Kotlin for the backend and XML for the frontend, and leverages the power of Room Database, the official YouTube API, and the MVVM architecture to deliver seamless performance and a user-friendly interface.</string>
+    <string name="app_version">App version</string>
+    <string name="build_type">Build type</string>
+    <string name="release_date">Release Date</string>
+    <string name="for_more_information">For more information</string>
+    <string name="github">Github</string>
 </resources>

@@ -23,6 +23,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.AboutDopamine"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AboutDeveloper"
+            android:exported="false" />
+        <activity
             android:name=".activities.AboutUs"
             android:exported="false" />
         <activity

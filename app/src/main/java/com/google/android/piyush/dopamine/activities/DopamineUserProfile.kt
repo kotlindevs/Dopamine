@@ -108,7 +108,11 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
-        binding.cardView2.isEnabled = false
+        false.also {
+            binding.cardView2.isEnabled = it
+            binding.applyForPreReleaseUpdate.isEnabled = it
+            binding.applyForPreRelease.isEnabled = it
+        }
 
         binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
