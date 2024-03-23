@@ -78,7 +78,6 @@ dependencies {
     implementation(project(":Database"))
     implementation(libs.androidx.preference)
     implementation(libs.androidappupdatelibrary)
-    implementation("com.daimajia.androidanimations:library:2.4@aar")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

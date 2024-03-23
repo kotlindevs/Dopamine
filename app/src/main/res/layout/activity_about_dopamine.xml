@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:fitsSystemWindows="true"
     tools:context=".activities.AboutDopamine">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -141,14 +143,36 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/github"
-            android:layout_width="wrap_content"
+            android:layout_width="118dp"
             android:layout_height="wrap_content"
             android:text="@string/github"
             style="@style/Widget.Material3.Button.TonalButton.Icon"
+            android:layout_margin="12dp"
             app:icon="@drawable/github"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintTop_toBottomOf="@id/SocialsTextView"
             app:layout_constraintStart_toStartOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/email"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_margin="12dp"
+            app:icon="@drawable/mail"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:layout_constraintTop_toBottomOf="@id/github"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/shareApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:layout_margin="12dp"
+            android:src="@drawable/share"
+            app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

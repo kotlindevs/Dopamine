@@ -87,4 +87,6 @@
     <string name="release_date">Release Date</string>
     <string name="for_more_information">For more information</string>
     <string name="github">Github</string>
+    <string name="help_me">Help me</string>
+    <string name="email">Email</string>
 </resources>

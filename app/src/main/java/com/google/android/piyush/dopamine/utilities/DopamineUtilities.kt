@@ -52,6 +52,9 @@ const val PERMISSION_REQUEST_CODE = 100
         DARK_MODE,
         SYSTEM_MODE
     )
+    const val GITHUB = "https://github.com/kotlindevs/dopamine"
+    const val EMAIL = "kotlindevslife@gmail.com"
+    const val EMAIL1 = "piyushmakwana5617@gmail.com"
 }
 
 class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
