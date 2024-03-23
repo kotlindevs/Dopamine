@@ -6,6 +6,7 @@ Dopamine is an unofficial YouTube clone that aims to replicate the functionality
 ## Authors
 
 🧿 [Piyush Makwana](https://mpiyush3510.carrd.co/)
+🌊 [Rajat_Kevat](https://zaap.bio/httpsGitHubcomLike-Google/)
 
 
 
