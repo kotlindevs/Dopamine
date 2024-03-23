@@ -1,7 +1,6 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,28 +8,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -114,6 +107,8 @@ class DopamineUserProfile : AppCompatActivity() {
                 sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
             }
         }
+
+        binding.cardView2.isEnabled = false
 
         binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
@@ -250,6 +245,10 @@ class DopamineUserProfile : AppCompatActivity() {
                 }
                 this.setCancelable(true)
             }.create().show()
+        }
+
+        binding.cardView4.setOnClickListener{
+            AboutUs(context = this).create().show()
         }
     }
 

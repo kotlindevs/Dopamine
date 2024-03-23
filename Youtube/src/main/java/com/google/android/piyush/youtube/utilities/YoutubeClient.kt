@@ -47,6 +47,8 @@ object YoutubeClient {
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
 
+    const val DEVELOPER = "https://api.npoint.io/7479b06945cacafcad89/developers"
+
     const val SHORTS_PART = "shorts"
 
     const val SEARCH= "search"
@@ -164,4 +166,42 @@ suspend fun getPreRelease() : DopamineVersion {
     return YoutubeClient.CLIENT.get(
         YoutubeClient.PRE_RELEASE
     ).body()
+}
+
+@Serializable
+data class Developer(
+    val userId : String? = null,
+    val userName : String? = null,
+    val userDesignation : String? = null,
+    val userImage : String? = null,
+    val userBanner : String? = null,
+    val userEmail : String? = null,
+    val userAbout : String? = null,
+    val userWebsite : String? = null,
+    val userFacebook : String? = null,
+    val userInstagram : String? = null,
+    val userWhatsapp : String? = null,
+    val userLocation : String? = null,
+)
+
+class DevelopersViewModel : ViewModel() {
+
+    private val _devModel : MutableLiveData<YoutubeResource<List<Developer>>> = MutableLiveData()
+    val devModel : MutableLiveData<YoutubeResource<List<Developer>>> = _devModel
+
+    init {
+        viewModelScope.launch {
+            try {
+                _devModel.postValue(YoutubeResource.Loading)
+                val response = YoutubeClient.CLIENT.get(
+                    YoutubeClient.DEVELOPER
+                ).body<List<Developer>>()
+                if(response.isNotEmpty()){
+                    _devModel.postValue(YoutubeResource.Success(response))
+                }
+            }catch (exception : Exception){
+                _devModel.postValue(YoutubeResource.Error(exception))
+            }
+        }
+    }
 }

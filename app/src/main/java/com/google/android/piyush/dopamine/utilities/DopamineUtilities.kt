@@ -1,9 +1,8 @@
 package com.google.android.piyush.dopamine.utilities
 
-import android.app.Dialog
 import android.content.Context
 import android.net.ConnectivityManager
-import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,7 +39,7 @@ const val PERMISSION_REQUEST_CODE = 100
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val PROJECT_NAME = "Dopamine"
-    const val PROJECT_VERSION = "dopamine_20241903_05.phone.stable.dynamic"
+    const val PROJECT_VERSION = "dopamine_20242303_01.phone.stable.dynamic"
     const val PRE_RELEASE_VERSION = "dopamine_20241903_03.phone.prerelease.dynamic"
     const val PRE_RELEASE_CHANGELOG = "dopamine_20241903_03.phone.stable.dynamic"
     const val DEFAULT_LOGO = "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*3tLD4Ve66pbBpuawm9Fu9Q.png"
@@ -55,18 +54,15 @@ const val PERMISSION_REQUEST_CODE = 100
     )
 }
 
-class CustomDialog(context: Context) : Dialog(context) {
-    private lateinit var binding: ItemCustomDialogBinding
-    private lateinit var databaseViewModel: DatabaseViewModel
+class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
+    private var binding: ItemCustomDialogBinding
+    private var databaseViewModel: DatabaseViewModel
     init {
         setCancelable(true)
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         databaseViewModel = DatabaseViewModel(context)
-        binding = ItemCustomDialogBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
+        binding = ItemCustomDialogBinding.inflate(LayoutInflater.from(context)).also {
+            setView(it.root)
+        }
         val playlistName = binding.text1.text
         val playlistDescription = binding.text2.text
 
@@ -85,10 +81,18 @@ class CustomDialog(context: Context) : Dialog(context) {
                     )
                     playlistName?.clear()
                     playlistDescription?.clear()
-                    dismiss()
                     ToastUtilities.showToast(context, "$playlistName Created ✅")
                 }
             }
         }
     }
+}
+
+object Developers{
+    const val PIYUSH = "devPiyush"
+    const val RAJAT = "devRajat"
+    const val MEET = "devMeet"
+    const val AJITH = "devAjith"
+    const val AKSHAR = "devAkshar"
+    const val BHAJAN = "devBhajan"
 }
