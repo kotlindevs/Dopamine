@@ -42,7 +42,7 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                                 Intent(
                                     context,
                                     AboutDeveloper::class.java
-                                )
+                                ).putExtra("userId",piyush.userId)
                             )
                         }
 
@@ -60,6 +60,14 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                             .into(binding.devRajatImage)
                         binding.devRajatName.text = rajat.userName
                         binding.devRajatDesignation.text = rajat.userDesignation
+                        binding.devRajat.setOnClickListener {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AboutDeveloper::class.java
+                                    ).putExtra("userId",rajat.userId)
+                            )
+                        }
 
                         val meet = it.data[2]
                         binding.devMeetEffect.apply {
@@ -73,6 +81,14 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                             .into(binding.devMeetImage)
                         binding.devMeetName.text = meet.userName
                         binding.devMeetDesignation.text = meet.userDesignation
+                        binding.devMeet.setOnClickListener {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AboutDeveloper::class.java
+                                    ).putExtra("userId",meet.userId)
+                            )
+                        }
 
                         val ajith = it.data[3]
 
@@ -88,6 +104,14 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
 
                         binding.devAjithName.text = ajith.userName
                         binding.devAjithDesignation.text = ajith.userDesignation
+                        binding.devAjith.setOnClickListener {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AboutDeveloper::class.java
+                                    ).putExtra("userId",ajith.userId)
+                            )
+                        }
 
                         val bhajan = it.data[4]
 
@@ -103,6 +127,14 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
 
                         binding.devBhajanName.text = bhajan.userName
                         binding.devBhajanDesignation.text = bhajan.userDesignation
+                        binding.devBhajan.setOnClickListener {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AboutDeveloper::class.java
+                                    ).putExtra("userId",bhajan.userId)
+                            )
+                        }
 
                         val akshar = it.data[5]
 
@@ -118,6 +150,14 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
 
                         binding.devAksharName.text = akshar.userName
                         binding.devAksharDesignation.text = akshar.userDesignation
+                        binding.devAkshar.setOnClickListener {
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    AboutDeveloper::class.java
+                                    ).putExtra("userId",akshar.userId)
+                            )
+                        }
 
                         val dopamine = it.data[6]
 
