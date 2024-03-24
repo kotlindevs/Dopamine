@@ -1,8 +1,6 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,9 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.ShortsAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentShortsBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
+import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.ShortsViewModel
 import com.google.android.piyush.youtube.viewModels.ShortsViewModelFactory
 
@@ -39,20 +39,38 @@ class Shorts : Fragment() {
         shortsViewModelFactory = ShortsViewModelFactory(youtubeRepositoryImpl)
         shortsViewModel = ViewModelProvider(this, shortsViewModelFactory).get(ShortsViewModel::class.java)
 
-        if(NetworkUtilities.isNetworkAvailable(requireContext())) {
-            shortsViewModel.shorts.observe(viewLifecycleOwner){
-                if(it != null){
-                    binding.playWithShortsEffect.apply {
-                        stopShimmer()
-                        visibility = View.GONE
+        if(NetworkUtilities.isNetworkAvailable(requireContext()).equals(true)){
+            shortsViewModel.shorts.observe(viewLifecycleOwner){ shorts ->
+                when(shorts){
+                    is YoutubeResource.Loading -> {}
+                    is YoutubeResource.Success -> {
+                        if(shorts.data.isEmpty()){
+                            binding.playWithShortsEffect.apply {
+                                startShimmer()
+                                visibility = View.VISIBLE
+                            }
+                        }else{
+                            binding.playWithShortsEffect.apply {
+                                stopShimmer()
+                                visibility = View.GONE
+                            }
+                            binding.playWithShorts.apply {
+                                adapter = ShortsAdapter(
+                                    shorts.data
+                                )
+                            }
+                        }
                     }
-                    binding.playWithShorts.apply {
-                        adapter = ShortsAdapter(it)
+                    is YoutubeResource.Error -> {
+                        binding.playWithShortsEffect.apply {
+                            startShimmer()
+                            visibility = View.VISIBLE
+                        }
                     }
                 }
-                Log.d(ContentValues.TAG, " -> Fragment : Shorts || Shorts Videos : $it")
-
             }
+        }else{
+           Utilities.turnOnNetworkDialog(requireContext(),"Shorts")
         }
     }
 }

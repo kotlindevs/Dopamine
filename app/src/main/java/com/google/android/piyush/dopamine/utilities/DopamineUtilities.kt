@@ -1,7 +1,9 @@
 package com.google.android.piyush.dopamine.utilities
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +57,24 @@ const val PERMISSION_REQUEST_CODE = 100
     const val GITHUB = "https://github.com/kotlindevs/dopamine"
     const val EMAIL = "kotlindevslife@gmail.com"
     const val EMAIL1 = "piyushmakwana5617@gmail.com"
+
+
+    fun turnOnNetworkDialog(context: Context, message: String) = MaterialAlertDialogBuilder(context).also {
+        it.setTitle("Network not detected")
+        it.setMessage("Please turn on network to view the $message.")
+        it.setIcon(R.drawable.wifi_off)
+        it.setCancelable(true)
+        it.setNegativeButton("Cancel") {
+            dialog, _ ->
+            dialog.dismiss()
+        }
+        it.setPositiveButton("Turn on") { dialog, _ ->
+            dialog.dismiss()
+            Intent(Settings.ACTION_WIRELESS_SETTINGS).also { intent ->
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+        }
+    }.create().show()
 }
 
 class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
