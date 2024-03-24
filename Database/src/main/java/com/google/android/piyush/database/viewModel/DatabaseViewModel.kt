@@ -110,6 +110,13 @@ class DatabaseViewModel(
             dopamineDatabaseRepository.updateRecentVideo(videoId,time)
         }
     }
+
+    fun deleteRecentVideo() {
+        viewModelScope.launch {
+            dopamineDatabaseRepository.deleteRecentVideo()
+        }
+    }
+
     //Custom Playlist
     val defaultMasterDev = database.writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS DopamineMastersDev (playlistName TEXT PRIMARY KEY, playlistDescription TEXT)")
     fun createCustomPlaylist(playlistsData: CustomPlaylistView) {

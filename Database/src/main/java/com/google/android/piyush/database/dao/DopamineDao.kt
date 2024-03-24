@@ -32,5 +32,7 @@ interface DopamineDao {
     suspend fun  isRecentVideo(videoId : String) : String
     @Query("Update recent_videos SET timing = :time WHERE videoId = :videoId")
     suspend fun updateRecentVideo(videoId: String, time: String)
+    @Query("DELETE FROM recent_videos")
+    suspend fun deleteRecentVideo()
 
 }

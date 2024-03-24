@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -109,20 +108,11 @@ class DownloadVideo : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun startDownload() {
-        if (downloading) {
-            Toast.makeText(
-               this@DownloadVideo,
-                "Download already in progress..",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
-
         if (!isStoragePermissionGranted()) {
-            Toast.makeText(
-                this@DownloadVideo,
+            Snackbar.make(
+                binding.main,
                 "Grant Storage Permission",
-                Toast.LENGTH_LONG
+                Snackbar.LENGTH_LONG
             ).show()
             return
         }
@@ -162,10 +152,7 @@ class DownloadVideo : AppCompatActivity() {
         binding.progressBar.progress = 0
 
         downloading = true
-        val disposable = Observable.fromCallable<YoutubeDLResponse> {
-            Snackbar.make(
-                binding.main,"Downloading...",Snackbar.LENGTH_LONG
-            ).show()
+        val disposable = Observable.fromCallable {
             getInstance().execute(
                 request,
                 Utilities.PROCESS_ID,
@@ -183,10 +170,10 @@ class DownloadVideo : AppCompatActivity() {
                 ).show()
                 downloading = false
             }, { e: Throwable -> Log.e(TAG, "failed to download",e)
-                Toast.makeText(
-                    this@DownloadVideo,
+                Snackbar.make(
+                    binding.main,
                     "Download Failed",
-                    Toast.LENGTH_LONG
+                    Snackbar.LENGTH_LONG
                 ).show()
                 downloading = false
             })

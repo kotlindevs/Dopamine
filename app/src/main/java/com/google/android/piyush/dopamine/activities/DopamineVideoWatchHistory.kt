@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
@@ -44,6 +45,20 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
 
         binding.topAppBar.setNavigationOnClickListener{
             finish()
+        }
+
+        binding.clearWatchHistory.setOnClickListener {
+            databaseViewModel.deleteRecentVideo()
+            Snackbar.make(binding.root, "Watch History Cleared", Snackbar.LENGTH_SHORT).show()
+            binding.recyclerView.visibility = android.view.View.GONE
+            binding.clearWatchHistory.visibility = android.view.View.GONE
+            binding.lottieAnimationView.apply {
+                visibility = android.view.View.VISIBLE
+                setAnimation(R.raw.no_data)
+                @Suppress("DEPRECATION")
+                loop(true)
+                playAnimation()
+            }
         }
     }
 }

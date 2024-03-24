@@ -5,10 +5,45 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ExperimentalSearch">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerSearchDataEffect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                                <include layout="@layout/shimmer_item_fragment_home"/>
+                        </LinearLayout>
+                </ScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_data"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_fragment_home"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_bar"

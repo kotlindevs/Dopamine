@@ -51,4 +51,7 @@ class DopamineDatabaseRepository(
     suspend fun updateRecentVideo(videoId: String, time: String) {
         dopamineDao.updateRecentVideo(videoId, time)
     }
+    suspend fun deleteRecentVideo() {
+        dopamineDao.deleteRecentVideo()
+    }
 }

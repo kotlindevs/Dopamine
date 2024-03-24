@@ -1,6 +1,5 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +21,7 @@ import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.LibraryViewModel
@@ -76,144 +76,156 @@ class Library : Fragment() {
             )
         }
 
-        viewModel.codingVideos.observe(viewLifecycleOwner){ playListVideos ->
-            when(playListVideos) {
-                is YoutubeResource.Success -> {
-                    libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    fragmentLibraryBinding?.apply {
-                        codingVideosList.layoutManager =
-                            LinearLayoutManager(
-                                context,
-                                codingVideosList.horizontalFadingEdgeLength,
-                                false
-                            )
-                        codingVideosList.adapter = libraryAdapter
-                        binding.codingVideosEffect.stopShimmer()
-                        binding.codingVideosEffect.visibility = View.INVISIBLE
+        if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+            viewModel.codingVideos.observe(viewLifecycleOwner) { playListVideos ->
+                when (playListVideos) {
+                    is YoutubeResource.Success -> {
+                        libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
+                        fragmentLibraryBinding?.apply {
+                            codingVideosList.layoutManager =
+                                LinearLayoutManager(
+                                    context,
+                                    codingVideosList.horizontalFadingEdgeLength,
+                                    false
+                                )
+                            codingVideosList.adapter = libraryAdapter
+                            binding.codingVideosEffect.stopShimmer()
+                            binding.codingVideosEffect.visibility = View.INVISIBLE
+                        }
                     }
-                    Log.d(TAG, " -> Fragment : Library || Coding Videos : ${playListVideos.data}")
-                }
 
-                is YoutubeResource.Error -> {
-                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
-                    MaterialAlertDialogBuilder(requireContext())
-                        .apply {
-                            this.setTitle("Something went wrong")
-                            this.setMessage(playListVideos.exception.message.toString())
-                            this.setIcon(R.drawable.ic_dialog_error)
-                            this.setCancelable(false)
+                    is YoutubeResource.Error -> {
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            this.setTitle("Oops!")
+                            this.setMessage("Oh no! Something went wrong. Please try again.")
+                            this.setIcon(R.drawable.get_data_problem)
+                            this.setCancelable(true)
                             this.setNegativeButton("Cancel") { dialog, _ ->
                                 dialog?.dismiss()
                             }
                             this.setPositiveButton("Retry") { _, _ ->
                                 viewModel.reGetCodingVideos.observe(viewLifecycleOwner) {
-                                    if(it is YoutubeResource.Success) {
+                                    if (it is YoutubeResource.Success) {
                                         binding.codingVideosEffect.visibility = View.INVISIBLE
                                         binding.codingVideosEffect.stopShimmer()
                                         binding.codingVideosList.apply {
                                             setHasFixedSize(true)
-                                            layoutManager = LinearLayoutManager(context, binding.codingVideosList.horizontalFadingEdgeLength,
-                                                false)
-                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            layoutManager = LinearLayoutManager(
+                                                context,
+                                                binding.codingVideosList.horizontalFadingEdgeLength,
+                                                false
+                                            )
+                                            libraryAdapter =
+                                                LibraryAdapter(requireContext(), it.data)
                                             adapter = libraryAdapter
                                         }
                                     }
                                 }
 
                                 viewModel.reGetSportsVideos.observe(viewLifecycleOwner) {
-                                    if(it is YoutubeResource.Success) {
+                                    if (it is YoutubeResource.Success) {
                                         binding.sportsVideosEffect.visibility = View.INVISIBLE
                                         binding.sportsVideosEffect.stopShimmer()
                                         binding.sportsVideosList.apply {
                                             setHasFixedSize(true)
-                                            layoutManager = LinearLayoutManager(context, binding.sportsVideosList.horizontalFadingEdgeLength,
-                                                false)
-                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            layoutManager = LinearLayoutManager(
+                                                context,
+                                                binding.sportsVideosList.horizontalFadingEdgeLength,
+                                                false
+                                            )
+                                            libraryAdapter =
+                                                LibraryAdapter(requireContext(), it.data)
                                             adapter = libraryAdapter
                                         }
                                     }
                                 }
 
                                 viewModel.reGetTechnologyVideos.observe(viewLifecycleOwner) {
-                                    Log.d(ContentValues.TAG,it.toString())
-                                    if(it is YoutubeResource.Success) {
+                                    Log.d(TAG, it.toString())
+                                    if (it is YoutubeResource.Success) {
                                         binding.techVideosEffect.visibility = View.INVISIBLE
                                         binding.techVideosEffect.stopShimmer()
                                         binding.techVideosList.apply {
                                             setHasFixedSize(true)
-                                            layoutManager = LinearLayoutManager(context, binding.techVideosList.horizontalFadingEdgeLength,
-                                                false)
-                                            libraryAdapter = LibraryAdapter(requireContext(),it.data)
+                                            layoutManager = LinearLayoutManager(
+                                                context,
+                                                binding.techVideosList.horizontalFadingEdgeLength,
+                                                false
+                                            )
+                                            libraryAdapter =
+                                                LibraryAdapter(requireContext(), it.data)
                                             adapter = libraryAdapter
                                         }
                                     }
                                 }
 
-                            }.create().show()
+                            }
+
+                        }.create().show()
+                    }
+
+                    is YoutubeResource.Loading -> {
+                        binding.codingVideosEffect.startShimmer()
+                        binding.codingVideosEffect.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            viewModel.sportsVideos.observe(viewLifecycleOwner) { playListVideos ->
+                when (playListVideos) {
+                    is YoutubeResource.Success -> {
+                        libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
+                        fragmentLibraryBinding?.apply {
+                            sportsVideosList.layoutManager =
+                                LinearLayoutManager(
+                                    context,
+                                    sportsVideosList.horizontalFadingEdgeLength,
+                                    false
+                                )
+                            sportsVideosList.adapter = libraryAdapter
+                            binding.sportsVideosEffect.stopShimmer()
+                            binding.sportsVideosEffect.visibility = View.INVISIBLE
                         }
-                }
+                    }
 
-                is YoutubeResource.Loading -> {
-                    binding.codingVideosEffect.startShimmer()
-                    binding.codingVideosEffect.visibility = View.VISIBLE
-                }
-            }
-        }
+                    is YoutubeResource.Error -> {
+                        binding.sportsVideosEffect.startShimmer()
+                        binding.sportsVideosEffect.visibility = View.VISIBLE
+                    }
 
-        viewModel.sportsVideos.observe(viewLifecycleOwner){ playListVideos ->
-            when(playListVideos) {
-                is YoutubeResource.Success -> {
-                    libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    Log.d(TAG, " -> Fragment : Library || Sports Videos : ${playListVideos.data}")
-                    fragmentLibraryBinding?.apply {
-                        sportsVideosList.layoutManager =
-                            LinearLayoutManager(
-                                context,
-                                sportsVideosList.horizontalFadingEdgeLength,
-                                false
-                            )
-                        sportsVideosList.adapter = libraryAdapter
-                        binding.sportsVideosEffect.stopShimmer()
-                        binding.sportsVideosEffect.visibility = View.INVISIBLE
+                    is YoutubeResource.Loading -> {
+                        binding.sportsVideosEffect.startShimmer()
+                        binding.sportsVideosEffect.visibility = View.VISIBLE
                     }
                 }
-
-                is YoutubeResource.Error -> {
-                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
-                }
-
-                is YoutubeResource.Loading -> {
-                    binding.sportsVideosEffect.startShimmer()
-                    binding.sportsVideosEffect.visibility = View.VISIBLE
-                }
             }
-        }
 
-        viewModel.technologyVideos.observe(viewLifecycleOwner){ playListVideos ->
-            when(playListVideos) {
-                is YoutubeResource.Success -> {
-                    libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
-                    Log.d(TAG, " -> Fragment : Library || Technology Videos : ${playListVideos.data}")
-                    fragmentLibraryBinding?.apply {
-                        techVideosList.layoutManager =
-                            LinearLayoutManager(
-                                context,
-                                techVideosList.horizontalFadingEdgeLength,
-                                false
-                            )
-                        techVideosList.adapter = libraryAdapter
-                        binding.techVideosEffect.stopShimmer()
-                        binding.techVideosEffect.visibility = View.INVISIBLE
+            viewModel.technologyVideos.observe(viewLifecycleOwner) { playListVideos ->
+                when (playListVideos) {
+                    is YoutubeResource.Success -> {
+                        libraryAdapter = LibraryAdapter(requireContext(), playListVideos.data)
+                        fragmentLibraryBinding?.apply {
+                            techVideosList.layoutManager =
+                                LinearLayoutManager(
+                                    context,
+                                    techVideosList.horizontalFadingEdgeLength,
+                                    false
+                                )
+                            techVideosList.adapter = libraryAdapter
+                            binding.techVideosEffect.stopShimmer()
+                            binding.techVideosEffect.visibility = View.INVISIBLE
+                        }
                     }
-                }
 
-                is YoutubeResource.Error -> {
-                    //Log.d(ContentValues.TAG,playListVideos.exception.message.toString())
-                }
+                    is YoutubeResource.Error -> {
+                        binding.techVideosEffect.startShimmer()
+                        binding.techVideosEffect.visibility = View.VISIBLE
+                    }
 
-                is YoutubeResource.Loading -> {
-                    binding.techVideosEffect.startShimmer()
-                    binding.techVideosEffect.visibility = View.VISIBLE
+                    is YoutubeResource.Loading -> {
+                        binding.techVideosEffect.startShimmer()
+                        binding.techVideosEffect.visibility = View.VISIBLE
+                    }
                 }
             }
         }
@@ -235,7 +247,6 @@ class Library : Fragment() {
                     adapter = YourFavouriteVideosAdapter(requireContext(), yourFavouriteList)
                 }
             }
-            Log.d(TAG, " -> Fragment : Library || Favorite Videos : $yourFavouriteList")
         }
 
         val iFramePlayerOptions = IFramePlayerOptions.Builder()
@@ -243,20 +254,22 @@ class Library : Fragment() {
             .build()
 
         fragmentLibraryBinding!!.youtubePlayerView.enableAutomaticInitialization = false
-        fragmentLibraryBinding!!.youtubePlayerView.initialize(
-            object :
-                AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    super.onReady(youTubePlayer)
-                    youTubePlayer.loadVideo(
-                        "l2UDgpLz20M", 0.0F
-                    )
-                    youTubePlayer.mute()
-                }
-            },
-            true,
-            iFramePlayerOptions
-        )
+        if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+            fragmentLibraryBinding!!.youtubePlayerView.initialize(
+                object :
+                    AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        super.onReady(youTubePlayer)
+                        youTubePlayer.loadVideo(
+                            "l2UDgpLz20M", 0.0F
+                        )
+                        youTubePlayer.mute()
+                    }
+                },
+                true,
+                iFramePlayerOptions
+            )
+        }
 
         if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
             fragmentLibraryBinding!!.customPlaylistsList.visibility = View.GONE

@@ -2,8 +2,8 @@ package com.google.android.piyush.dopamine.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -22,7 +22,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentExperimentalSearchBinding
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -32,7 +32,6 @@ import java.util.Locale
 
 
 class ExperimentalSearch : Fragment() {
-    private val TAG = "ExperimentalSearch"
     private var experimentalSearchBinding: FragmentExperimentalSearchBinding? = null
     private lateinit var viewModel : ExperimentalDefaultVideosViewModel
     private lateinit var repository : YoutubeRepositoryImpl
@@ -109,43 +108,44 @@ class ExperimentalSearch : Fragment() {
         }
 
 
-        viewModel.defaultVideos.observe(viewLifecycleOwner){ defaultVideos ->
-            when(defaultVideos){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
-                    Log.d(TAG, "onViewCreated: ${defaultVideos.data}")
-                    binding.searchData.apply {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = HomeAdapter(context,defaultVideos.data)
+        if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+
+            viewModel.defaultVideos.observe(viewLifecycleOwner) { defaultVideos ->
+                when (defaultVideos) {
+                    is YoutubeResource.Loading -> {}
+                    is YoutubeResource.Success -> {
+                        binding.shimmerSearchDataEffect.apply {
+                            visibility = View.INVISIBLE
+                            stopShimmer()
+                        }
+                        binding.searchData.apply {
+                            layoutManager = LinearLayoutManager(context)
+                            adapter = HomeAdapter(context, defaultVideos.data)
+                        }
                     }
+
+                    is YoutubeResource.Error -> {}
                 }
-                is YoutubeResource.Error -> {
-                    ToastUtilities.showToast(
-                        requireContext(),
-                        defaultVideos.exception.message.toString()
-                    )
-                }
+            }
+        }else{
+            binding.shimmerSearchDataEffect.apply {
+                visibility = View.VISIBLE
+                startShimmer()
             }
         }
 
         binding.searchView.editText.addTextChangedListener {
             viewModel.getSearchVideos(it.toString())
-            viewModel.searchVideos.observe(viewLifecycleOwner){ searchVideos ->
-                when(searchVideos){
+            viewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
+                when (searchVideos) {
                     is YoutubeResource.Loading -> {}
                     is YoutubeResource.Success -> {
-                        Log.d(TAG, "onViewCreated: ${searchVideos.data}")
                         binding.searchResults.apply {
                             layoutManager = LinearLayoutManager(context)
-                            adapter = SearchAdapter(context,searchVideos.data)
-                            }
+                            adapter = SearchAdapter(context, searchVideos.data)
+                        }
                     }
-                    is YoutubeResource.Error -> {
-                       ToastUtilities.showToast(
-                           requireContext(),
-                           searchVideos.exception.message.toString()
-                       )
-                    }
+                    is YoutubeResource.Error -> {}
                 }
             }
         }
