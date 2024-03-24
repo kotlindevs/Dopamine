@@ -26,6 +26,7 @@ import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
@@ -51,6 +52,7 @@ class Search : Fragment() {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,7 +61,7 @@ class Search : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         searchViewModelFactory = SearchViewModelFactory(youtubeRepositoryImpl)
-        searchViewModel = ViewModelProvider(this, searchViewModelFactory).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this, searchViewModelFactory)[SearchViewModel::class.java]
         databaseViewModel = DatabaseViewModel(context?.applicationContext!!)
 
         if(firebaseAuth.currentUser?.email.toString().isEmpty()){
@@ -120,55 +122,66 @@ class Search : Fragment() {
                         )
                     )
 
-                    searchViewModel.searchVideos(query!!)
+                    if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+                        searchViewModel.searchVideos(query!!)
 
-                    searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
-                        when (searchVideos) {
-                            is YoutubeResource.Loading -> {
-                                binding.utilList.visibility = View.GONE
-                            }
-
-                            is YoutubeResource.Success -> {
-                                binding.utilList.apply {
-                                    layoutManager = LinearLayoutManager(context)
-                                    visibility = View.VISIBLE
-                                    adapter = SearchAdapter(context!!, searchVideos.data)
+                        searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
+                            when (searchVideos) {
+                                is YoutubeResource.Loading -> {
+                                    binding.utilList.visibility = View.GONE
                                 }
-                            }
 
-                            is YoutubeResource.Error -> {
-                                //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
-                                MaterialAlertDialogBuilder(context!!)
-                                    .apply {
-                                        this.setTitle("Error")
-                                        this.setMessage(searchVideos.exception.message.toString())
-                                        this.setIcon(R.drawable.ic_dialog_error)
-                                        this.setCancelable(false)
-                                        this.setNegativeButton("Cancel") { dialog, _ ->
-                                            dialog?.dismiss()
-                                        }
-                                        this.setPositiveButton("Retry") { _, _ ->
-                                            searchViewModel.reSearchVideos(query)
-                                            searchViewModel.reGetSearchVideos.observe(viewLifecycleOwner) { searchVideos->
-                                                when (searchVideos) {
-                                                    is YoutubeResource.Loading -> {}
-                                                    is YoutubeResource.Success -> {
-                                                        binding.utilList.apply {
-                                                            layoutManager = LinearLayoutManager(context)
-                                                            visibility = View.VISIBLE
-                                                            adapter = SearchAdapter(context!!, searchVideos.data)
+                                is YoutubeResource.Success -> {
+                                    binding.utilList.apply {
+                                        layoutManager = LinearLayoutManager(context)
+                                        visibility = View.VISIBLE
+                                        adapter = SearchAdapter(context!!, searchVideos.data)
+                                    }
+                                }
+
+                                is YoutubeResource.Error -> {
+                                    //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                                    MaterialAlertDialogBuilder(context!!)
+                                        .apply {
+                                            this.setTitle("Oops!")
+                                            this.setMessage("Oh no! Something went wrong. Please try again.")
+                                            this.setIcon(R.drawable.ic_dialog_error)
+                                            this.setCancelable(false)
+                                            this.setNegativeButton("Cancel") { dialog, _ ->
+                                                dialog?.dismiss()
+                                            }
+                                            this.setPositiveButton("Retry") { _, _ ->
+                                                searchViewModel.reSearchVideos(query)
+                                                searchViewModel.reGetSearchVideos.observe(
+                                                    viewLifecycleOwner
+                                                ) { searchVideos ->
+                                                    when (searchVideos) {
+                                                        is YoutubeResource.Loading -> {}
+                                                        is YoutubeResource.Success -> {
+                                                            binding.utilList.apply {
+                                                                layoutManager =
+                                                                    LinearLayoutManager(context)
+                                                                visibility = View.VISIBLE
+                                                                adapter = SearchAdapter(
+                                                                    context!!,
+                                                                    searchVideos.data
+                                                                )
+                                                            }
                                                         }
-                                                    }
-                                                    is YoutubeResource.Error -> {
-                                                        Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                                                        is YoutubeResource.Error -> {}
                                                     }
                                                 }
-                                            }
-                                        }.create().show()
-                                    }
+                                            }.create().show()
+                                        }
 
+                                }
                             }
                         }
+                    }else{
+                        Utilities.turnOnNetworkDialog(
+                            requireContext(),
+                            "search videos in your application"
+                        )
                     }
                     return true
                 }
@@ -201,6 +214,7 @@ class Search : Fragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -220,6 +234,7 @@ class Search : Fragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java", ReplaceWith(
         "super.onActivityResult(requestCode, resultCode, data)",
         "androidx.fragment.app.Fragment")

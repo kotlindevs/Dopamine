@@ -20,6 +20,7 @@ import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
@@ -172,6 +173,10 @@ class Home : Fragment() {
                     }
                 }
             }
+        }else{
+            Utilities.turnOnNetworkDialog(
+                context = requireContext(),"home videos"
+            )
         }
     }
 
