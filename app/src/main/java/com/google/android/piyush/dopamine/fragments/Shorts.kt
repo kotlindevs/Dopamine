@@ -10,7 +10,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.ShortsAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentShortsBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
-import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.ShortsViewModel
@@ -69,8 +68,6 @@ class Shorts : Fragment() {
                     }
                 }
             }
-        }else{
-           Utilities.turnOnNetworkDialog(requireContext(),"Shorts")
         }
     }
 }

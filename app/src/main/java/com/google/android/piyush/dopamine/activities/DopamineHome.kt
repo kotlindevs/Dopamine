@@ -3,12 +3,9 @@ package com.google.android.piyush.dopamine.activities
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
@@ -17,6 +14,8 @@ import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.fragments.Library
 import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import kotlin.system.exitProcess
@@ -42,6 +41,10 @@ class DopamineHome : AppCompatActivity() {
             finishAffinity()
             finish()
             exitProcess(0)
+        }
+
+        if(!NetworkUtilities.isNetworkAvailable(this)){
+            Utilities.turnOnNetworkDialog(this,"No Internet Connection")
         }
 
         if (savedInstanceState == null) {
@@ -74,12 +77,14 @@ class DopamineHome : AppCompatActivity() {
             }
         }
     }
+
     private fun defaultScreen(fragment: Fragment){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout,fragment)
         fragmentTransaction.commit()
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         viewModel.selectedFragment.value?.let {

@@ -67,7 +67,6 @@ class DopamineUserProfile : AppCompatActivity() {
                 binding.userEmail.text = firebaseAuth.currentUser?.email
             }
         }else{
-            Utilities.turnOnNetworkDialog(context = this,"full user profile")
             applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).apply {
                 getString("name","").also { binding.userName.text = it }
                 getString("email","").also { binding.userEmail.text = it }
@@ -75,6 +74,9 @@ class DopamineUserProfile : AppCompatActivity() {
                     setImageResource(R.drawable.default_user)
                 }
             }
+            Snackbar.make(
+                binding.main,"You are not connected to the internet",Snackbar.LENGTH_LONG
+            ).show()
         }
 
         binding.topAppBar.setNavigationOnClickListener {
