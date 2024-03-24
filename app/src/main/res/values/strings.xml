@@ -89,4 +89,10 @@
     <string name="github">Github</string>
     <string name="help_me">Help me</string>
     <string name="email">Email</string>
+    <string name="about_me">About Me</string>
+    <string name="website">Website</string>
+    <string name="contact_me">Contact Me</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="send_email">Send Email</string>
+    <string name="no_contact_available">No Contact Available</string>
 </resources>

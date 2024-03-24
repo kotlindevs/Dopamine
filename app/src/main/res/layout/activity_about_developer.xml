@@ -173,4 +173,179 @@
         android:background="?attr/colorTertiaryContainer"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
   </com.facebook.shimmer.ShimmerFrameLayout>
+
+  <com.google.android.material.card.MaterialCardView
+      android:id="@+id/developerDescriptionCard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginEnd="12dp"
+      android:layout_marginTop="24dp"
+      style="@style/Widget.Material3.CardView.Filled"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/iconLocation"
+      app:layout_constraintEnd_toEndOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/developerDescriptionText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="12dp"
+          android:textStyle="bold"
+          android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+          android:text="@string/about_me"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"/>
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/developerDescription"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_margin="12dp"
+          app:layout_constraintTop_toBottomOf="@id/developerDescriptionText"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </com.google.android.material.card.MaterialCardView>
+
+  <com.facebook.shimmer.ShimmerFrameLayout
+      android:id="@+id/developerDescriptionEffect"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginEnd="12dp"
+      android:layout_marginTop="24dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/iconLocation"
+      app:layout_constraintEnd_toEndOf="parent">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/developerDescriptionTextEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:textStyle="bold"
+            android:text="@string/about_me"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="?attr/colorTertiaryContainer"
+            app:layout_constraintTop_toBottomOf="@id/developerDescriptionTextEffect"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+  </com.facebook.shimmer.ShimmerFrameLayout>
+
+  <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/contactMeText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/contact_me"
+      android:layout_margin="12dp"
+      android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+      android:textStyle="bold"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintTop_toBottomOf="@id/developerDescriptionCard"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/website"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="6dp"
+      style="@style/Widget.Material3.Button.IconButton.Filled"
+      app:icon="@drawable/website"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintTop_toBottomOf="@id/contactMeText"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/whatsapp"/>
+
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/whatsapp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="6dp"
+      app:backgroundTint="?attr/colorSecondaryContainer"
+      app:iconTint="?attr/colorOnSecondaryContainer"
+      style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+      app:icon="@drawable/whatsapp"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintStart_toEndOf="@id/website"
+      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
+
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+      android:id="@+id/sendMail"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/send_email"
+      android:layout_margin="16dp"
+      app:icon="@drawable/mail_outline"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/facebook"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginEnd="6dp"
+      android:layout_marginTop="6dp"
+      app:backgroundTint="?attr/colorTertiaryContainer"
+      app:iconTint="?attr/colorOnTertiaryContainer"
+      style="@style/Widget.Material3.Button.IconButton.Filled"
+      app:icon="@drawable/facebook"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintStart_toEndOf="@id/whatsapp"
+      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
+
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/instagram"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginEnd="6dp"
+      android:layout_marginTop="6dp"
+      app:backgroundTint="?attr/colorPrimaryContainer"
+      app:iconTint="?attr/colorOnPrimaryContainer"
+      style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+      app:icon="@drawable/instagram"
+      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+      app:layout_constraintStart_toEndOf="@id/facebook"
+      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
+
+  <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/noContactAvailable"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textStyle="normal"
+      android:layout_marginStart="12dp"
+      android:layout_marginEnd="6dp"
+      android:layout_marginTop="6dp"
+      android:visibility="gone"
+      android:text="@string/no_contact_available"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
