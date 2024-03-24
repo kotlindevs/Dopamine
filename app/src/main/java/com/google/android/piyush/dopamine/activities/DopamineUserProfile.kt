@@ -24,6 +24,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -53,17 +54,27 @@ class DopamineUserProfile : AppCompatActivity() {
         binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
         binding.applyForPreReleaseUpdate.isChecked = sharedPreferences.getBoolean("PreReleaseUpdate", false)
-        dopamineVersionViewModel = DopamineVersionViewModel()
 
-
-        if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
-            Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(binding.userImage)
-            binding.userName.text = getString(R.string.app_name)
-            binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
+        if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
+            dopamineVersionViewModel = DopamineVersionViewModel()
+            if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
+                Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(binding.userImage)
+                binding.userName.text = getString(R.string.app_name)
+                binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
+            } else {
+                Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(binding.userImage)
+                binding.userName.text = firebaseAuth.currentUser?.displayName
+                binding.userEmail.text = firebaseAuth.currentUser?.email
+            }
         }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(binding.userImage)
-            binding.userName.text = firebaseAuth.currentUser?.displayName
-            binding.userEmail.text = firebaseAuth.currentUser?.email
+            Utilities.turnOnNetworkDialog(context = this,"full user profile")
+            applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).apply {
+                getString("name","").also { binding.userName.text = it }
+                getString("email","").also { binding.userEmail.text = it }
+                binding.userImage.apply {
+                    setImageResource(R.drawable.default_user)
+                }
+            }
         }
 
         binding.topAppBar.setNavigationOnClickListener {
@@ -82,12 +93,22 @@ class DopamineUserProfile : AppCompatActivity() {
                         .setCancelable(true)
                         .setPositiveButton("Yes"){
                                 dialog, _ ->
-                            firebaseAuth.signOut()
-                            Toast.makeText(applicationContext,"See you soon 🫡", Toast.LENGTH_LONG).show()
-                            startActivity(
-                                Intent(this, MainActivity::class.java)
-                            )
-                            dialog.dismiss()
+                            if(NetworkUtilities.isNetworkAvailable(context = this)) {
+                                firebaseAuth.signOut()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "See you soon 🫡",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                startActivity(
+                                    Intent(this, MainActivity::class.java)
+                                )
+                                dialog.dismiss()
+                            }else{
+                                Snackbar.make(
+                                    binding.main,"Please check your internet connection",Snackbar.LENGTH_LONG
+                                ).show()
+                            }
                         }
                         .setNegativeButton("No"){
                                 dialog, _ ->
@@ -114,6 +135,7 @@ class DopamineUserProfile : AppCompatActivity() {
             binding.applyForPreRelease.isEnabled = it
         }
 
+        /*
         binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
                 sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
@@ -162,7 +184,7 @@ class DopamineUserProfile : AppCompatActivity() {
                     binding.main,"Application rollback feature is currently unavailable",Snackbar.LENGTH_LONG
                 ).show()
             }
-        }
+        } */
 
         binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
@@ -191,30 +213,37 @@ class DopamineUserProfile : AppCompatActivity() {
         }
 
         binding.checkForUpdate.setOnClickListener {
-            dopamineVersionViewModel.update.observe(this) { update ->
-                when (update) {
-                    is YoutubeResource.Loading -> {}
-                    is YoutubeResource.Success -> {
-                        if(update.data.versionName == Utilities.PROJECT_VERSION) {
-                            MaterialAlertDialogBuilder(this).apply {
-                                this.setTitle("Wow ! 🫡")
-                                this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
-                                this.setIcon(R.drawable.ic_alert)
-                                this.setCancelable(true)
-                                this.setPositiveButton("Okay") { dialog, _ ->
-                                    dialog?.dismiss()
-                                }
-                            }.create().show()
-                        }else {
-                            val downloadApk = DownloadApk(this@DopamineUserProfile)
-                            downloadApk.startDownloadingApk(update.data.url.toString())
+            if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
+                dopamineVersionViewModel.update.observe(this) { update ->
+                    when (update) {
+                        is YoutubeResource.Loading -> {}
+                        is YoutubeResource.Success -> {
+                            if (update.data.versionName == Utilities.PROJECT_VERSION) {
+                                MaterialAlertDialogBuilder(this).apply {
+                                    this.setTitle("Wow ! 🫡")
+                                    this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
+                                    this.setIcon(R.drawable.ic_alert)
+                                    this.setCancelable(true)
+                                    this.setPositiveButton("Okay") { dialog, _ ->
+                                        dialog?.dismiss()
+                                    }
+                                }.create().show()
+                            } else {
+                                val downloadApk = DownloadApk(this@DopamineUserProfile)
+                                downloadApk.startDownloadingApk(update.data.url.toString())
+                            }
+                            Log.d(ContentValues.TAG, update.data.toString())
                         }
-                        Log.d(ContentValues.TAG, update.data.toString())
-                    }
-                    is YoutubeResource.Error -> {
-                        Log.d(ContentValues.TAG, update.exception.message.toString())
+
+                        is YoutubeResource.Error -> {
+                            Log.d(ContentValues.TAG, update.exception.message.toString())
+                        }
                     }
                 }
+            }else{
+                Snackbar.make(
+                    binding.main,"Please check your internet connection",Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 

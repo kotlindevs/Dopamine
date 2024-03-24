@@ -11,12 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.color.DynamicColors
-import com.google.android.material.color.DynamicColorsOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
+import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
 import com.google.android.piyush.dopamine.databinding.ActivityMainBinding
@@ -93,7 +91,14 @@ class MainActivity : AppCompatActivity() {
                             DopamineHome::class.java
                         )
                     )
-                    Log.d(ContentValues.TAG, " -> Activity : MainActivity || UserName : ${user.data?.name}")                }
+                    applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).edit()
+                        .putString("id", user.data?.uid)
+                        .putString("name", user.data?.name)
+                        .putString("email", user.data?.email)
+                        .putString("photoUrl", user.data?.imageUrl)
+                        .apply()
+                    Log.d(ContentValues.TAG, " -> Activity : MainActivity || UserName : ${user.data?.name}")
+                }
                 is GoogleAuth.Error -> {
                     showToast(user.message.toString())
                 }
