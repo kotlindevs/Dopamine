@@ -84,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:fontFamily="@font/circular_spotify"
         android:background="?attr/colorTertiaryContainer"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
   </com.facebook.shimmer.ShimmerFrameLayout>
@@ -127,6 +128,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/circular_spotify"
         android:background="?attr/colorTertiaryContainer"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"/>
   </com.facebook.shimmer.ShimmerFrameLayout>
@@ -170,6 +172,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/proxima_nova"
         android:background="?attr/colorTertiaryContainer"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
   </com.facebook.shimmer.ShimmerFrameLayout>
@@ -237,8 +240,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:textStyle="bold"
             android:text="@string/about_me"
+            android:fontFamily="@font/circular_spotify"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -247,6 +250,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
+            android:fontFamily="@font/proxima_nova"
             android:background="?attr/colorTertiaryContainer"
             app:layout_constraintTop_toBottomOf="@id/developerDescriptionTextEffect"
             app:layout_constraintStart_toStartOf="parent"
@@ -260,6 +264,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/contact_me"
+      android:fontFamily="@font/circular_spotify"
       android:layout_margin="12dp"
       android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
       android:textStyle="bold"
@@ -299,6 +304,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/send_email"
+      android:fontFamily="@font/circular_spotify"
       android:layout_margin="16dp"
       app:icon="@drawable/mail_outline"
       app:layout_constraintBottom_toBottomOf="parent"
