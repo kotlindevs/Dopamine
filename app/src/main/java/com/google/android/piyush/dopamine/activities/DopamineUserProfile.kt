@@ -21,7 +21,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -58,7 +57,7 @@ class DopamineUserProfile : AppCompatActivity() {
         if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
             dopamineVersionViewModel = DopamineVersionViewModel()
             if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
-                Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(binding.userImage)
+                Glide.with(this).load(R.drawable.default_user).into(binding.userImage)
                 binding.userName.text = getString(R.string.app_name)
                 binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
             } else {
@@ -68,8 +67,9 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }else{
             applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).apply {
-                getString("name","").also { binding.userName.text = it }
-                getString("email","").also { binding.userEmail.text = it }
+                getString("id","").also { binding.userName.text = it?.substring(0,10) }
+                getString("email","").also { binding.userEmail.text = if(it.isNullOrEmpty()) "No Email" else it }
+
                 binding.userImage.apply {
                     setImageResource(R.drawable.default_user)
                 }

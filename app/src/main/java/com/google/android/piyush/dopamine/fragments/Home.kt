@@ -16,7 +16,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
-import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -70,7 +69,7 @@ class Home : Fragment() {
         Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString())
 
         if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
-            Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentHomeBinding!!.userImage)
+            Glide.with(this).load(R.drawable.default_user).into(fragmentHomeBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
         }

@@ -1,24 +1,22 @@
 package com.google.android.piyush.dopamine.authentication.repository
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineHome
+import com.google.android.piyush.dopamine.authentication.SignInResult
+import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
 import com.google.android.piyush.dopamine.authentication.utilities.PhoneNumberAuth
-import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
-import com.google.android.piyush.dopamine.authentication.User
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,80 +24,84 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 class UserAuthRepositoryImpl(
     private val context: Context
 ) : UserAuthRepository {
 
-    private lateinit var signInClient: GoogleSignInClient
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-
+    private val oneTapClient: SignInClient = Identity.getSignInClient(context)
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val activity: AppCompatActivity = context as AppCompatActivity
     private var verificationId : String? = null
     private val sharedPreferences = context.getSharedPreferences("verificationId", Context.MODE_PRIVATE)
+    private val auth = Firebase.auth
 
-    private val _signInResult : MutableLiveData<GoogleAuth<User>> = MutableLiveData()
-    val signInResult : LiveData<GoogleAuth<User>> = _signInResult
-
-    init {
-        setUpGoogleSignInClient()
-    }
-
-    private fun setUpGoogleSignInClient() {
-        val signInOptions = GoogleSignInOptions.Builder(
-            GoogleSignInOptions.DEFAULT_SIGN_IN
-        ).requestIdToken(SignInUtils.REQUEST_TOKEN)
-            .requestEmail()
+    private fun buildSignInRequest(): BeginSignInRequest {
+        return BeginSignInRequest.Builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId(context.getString(R.string.web_client_id))
+                    .build()
+            )
+            .setAutoSelectEnabled(false)
             .build()
-        signInClient = GoogleSignIn.getClient(context, signInOptions)
-        activityResultLauncher = (context as AppCompatActivity).registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            ::handleSignInResult
-        )
     }
 
-    private fun handleSignInResult(result: ActivityResult) {
-        if(result.resultCode == Activity.RESULT_OK){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                if(account != null){
-                    getSignUserData(account.idToken!!)
-                }else{
-                    _signInResult.value = GoogleAuth.Error("Account is null", null)
-                }
-            }catch (e : Exception){
-                _signInResult.value = GoogleAuth.Error(e.message!!, null)
-            }
-        }else{
-            _signInResult.value = GoogleAuth.Error("Sign in failed", null)
+    suspend fun googleSignIn(): IntentSender? {
+        val result = try {
+            oneTapClient.beginSignIn(
+                buildSignInRequest()
+            ).await()
+        } catch(e: Exception) {
+            e.printStackTrace()
+            if(e is CancellationException) throw e
+            null
+        }
+        return result?.pendingIntent?.intentSender
+    }
+
+    suspend fun signInWithIntent(intent: Intent): SignInResult {
+        val credential = oneTapClient.getSignInCredentialFromIntent(intent)
+        val googleIdToken = credential.googleIdToken
+        val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
+        return try {
+            val user = auth.signInWithCredential(googleCredentials).await().user
+            SignInResult(
+                userData = user?.run {
+                    User(
+                        userId = uid,
+                        userName = displayName!!,
+                        userEmail = email!!,
+                        userImage = photoUrl?.toString()
+                    )
+                },
+                errorMessage = null
+            )
+        } catch(e: Exception) {
+            e.printStackTrace()
+            if(e is CancellationException) throw e
+            SignInResult(
+                userData = null,
+                errorMessage = e.message
+            )
         }
     }
 
-    private fun getSignUserData(idToken: String){
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val firebaseUser = firebaseAuth.currentUser
-                    val userInfo = User(
-                        firebaseUser!!.uid,
-                        firebaseUser.displayName!!,
-                        firebaseUser.email!!,
-                        firebaseUser.photoUrl.toString()
-                    )
-                    _signInResult.value = GoogleAuth.Success(userInfo)
-                } else {
-                    _signInResult.value = GoogleAuth.Error(task.exception!!.message!!, null)
-                }
-            }
-    }
-
-    fun signInWithGoogle(){
-        val signInIntent = signInClient.signInIntent
-        activityResultLauncher.launch(signInIntent)
+    suspend fun signOut() {
+        try {
+            oneTapClient.signOut().await()
+            auth.signOut()
+        } catch(e: Exception) {
+            e.printStackTrace()
+            if(e is CancellationException) throw e
+        }
     }
 
     override suspend fun sendVerificationCode(phoneNumber: String): PhoneNumberAuth<Unit> {

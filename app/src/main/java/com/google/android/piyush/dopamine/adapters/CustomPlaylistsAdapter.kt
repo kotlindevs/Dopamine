@@ -39,7 +39,6 @@ class CustomPlaylistsAdapter(
         val videoId = pref.getString("videoId", "")!!
         val title = pref.getString("title", "")!!
         val thumbnail = pref.getString("thumbnail", "")!!
-        val customName = pref.getString("customName", "")!!
         val channelId = pref.getString("channelId", "")!!
         val viewCount = pref.getString("viewCount", "")!!
         val channelTitle = pref.getString("channelTitle", "")!!
@@ -81,6 +80,14 @@ class CustomPlaylistsAdapter(
                     Log.d(TAG, "videoId : $videoId || playlistName : $playlistName")
                 }
                 ToastUtilities.showToast(context, "Successfully added to playlist :)")
+            }else{
+                if(isVideoAlreadyAdded.equals(true)){
+                    Log.d(TAG, "videoId : $videoId || playlistName : $playlistName")
+                    databaseViewModel.deleteVideoFromPlaylist(
+                        playlistName,
+                        videoId
+                    )
+                }
             }
         }
     }

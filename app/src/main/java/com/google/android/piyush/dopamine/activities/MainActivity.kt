@@ -7,11 +7,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
@@ -19,6 +23,10 @@ import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewM
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
 import com.google.android.piyush.dopamine.databinding.ActivityMainBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.ToastUtilities.showToast
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -45,8 +53,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         onBackPressedDispatcher.addCallback {
-            if(backPressed!=true){
-                showToast("Press Back Again To Exit")
+            if(!backPressed){
+                showToast(context = applicationContext,"Press Back Again To Exit")
                 backPressed = true
             }else{
                 @Suppress("DEPRECATION")
@@ -66,59 +74,53 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        binding.phoneNumberLogin.setOnClickListener{
-            startActivity(Intent(applicationContext, PhoneNumberAuthentication::class.java))
+        val launcher = registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ){ result ->
+            if(result.resultCode == RESULT_OK) {
+                lifecycleScope.launch {
+                    val signInResult = userRepository.signInWithIntent(
+                        intent = result.data ?: return@launch
+                    )
+                    userViewModel.onSignInResult(signInResult)
+                }
+            }else{
+                Snackbar.make(
+                    binding.main, "Something went wrong", Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        lifecycleScope.launch {
+            userViewModel.state.collect { state ->
+                if(state.isSignInSuccessful){
+                    startActivity(
+                        Intent(this@MainActivity, DopamineHome::class.java)
+                    )
+                    userViewModel.resetSignInState()
+                }
+
+                state.signInError?.let { error ->
+                    Snackbar.make(
+                        binding.main, error, Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
 
         binding.googleSignIn.setOnClickListener{
-            if(NetworkUtilities.isNetworkAvailable(this)){
-                userViewModel.signInWithGoogle()
-            }else{
-                NetworkUtilities.showNetworkError(this)
+            lifecycleScope.launch {
+                val signInIntentSender = userRepository.googleSignIn()
+                launcher.launch(
+                    IntentSenderRequest.Builder(
+                        signInIntentSender ?: return@launch
+                    ).build()
+                )
             }
         }
 
-        userViewModel.signInResult.observe(this) { user ->
-            when(user){
-                is GoogleAuth.Loading -> {
-                   // Log.d(ContentValues.TAG, "Loading User !")
-                }
-                is GoogleAuth.Success -> {
-                    showToast("Welcome , ${user.data?.name} ❤️")
-                    startActivity(
-                        Intent(
-                            this,
-                            DopamineHome::class.java
-                        )
-                    )
-                    applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).edit()
-                        .putString("id", user.data?.uid)
-                        .putString("name", user.data?.name)
-                        .putString("email", user.data?.email)
-                        .putString("photoUrl", user.data?.imageUrl)
-                        .apply()
-                    Log.d(ContentValues.TAG, " -> Activity : MainActivity || UserName : ${user.data?.name}")
-                }
-                is GoogleAuth.Error -> {
-                    showToast(user.message.toString())
-                }
-            }
+        binding.phoneNumberLogin.setOnClickListener{
+            startActivity(Intent(applicationContext, PhoneNumberAuthentication::class.java))
         }
-
-        binding.facebookSignIn.setOnClickListener{
-            val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
-            materialAlertDialogBuilder.setMessage("Facebook Login Is Currently Under Development. You Can Try Google Login Or OTP Login To Enjoy Dopamine .")
-                .setTitle("Under Development")
-                .setCancelable(false)
-                .setNegativeButton("Ok"){
-                        dialog, _ ->
-                    dialog.dismiss()
-                }
-            materialAlertDialogBuilder.create().show()
-        }
-    }
-
-    private fun showToast(string : String){
-        Toast.makeText(applicationContext,string, Toast.LENGTH_LONG).show()
     }
 }

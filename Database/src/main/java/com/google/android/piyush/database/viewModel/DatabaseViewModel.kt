@@ -221,6 +221,13 @@ class DatabaseViewModel(
         return count
     }
 
+    fun deleteVideoFromPlaylist(playlistName: String,videoId: String){
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(playlistName)
+        val query = "DELETE FROM $newPlaylistName WHERE videoId = \"$videoId\" "
+        writableDatabase.execSQL(query)
+    }
+
     fun isPlaylistExist(playlistName : String) : Boolean {
         val writableDatabase = database.writableDatabase
         val query = writableDatabase.query("SELECT playlistName FROM DopamineMastersDev WHERE playlistName = \"$playlistName\" ")

@@ -24,7 +24,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
-import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
@@ -65,7 +64,7 @@ class Search : Fragment() {
         databaseViewModel = DatabaseViewModel(context?.applicationContext!!)
 
         if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentSearchBinding!!.userImage)
+            Glide.with(this).load(R.drawable.default_user).into(fragmentSearchBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentSearchBinding!!.userImage)
         }

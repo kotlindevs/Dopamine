@@ -19,7 +19,6 @@ import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
-import com.google.android.piyush.dopamine.authentication.utilities.SignInUtils
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -63,7 +62,7 @@ class Library : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(SignInUtils.DEFAULT_IMAGE).into(fragmentLibraryBinding!!.userImage)
+            Glide.with(this).load(R.drawable.default_user).into(fragmentLibraryBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentLibraryBinding!!.userImage)
         }

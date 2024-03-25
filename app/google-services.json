@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "328744831606",
+    "firebase_url": "https://ytdopamine-default-rtdb.firebaseio.com",
     "project_id": "ytdopamine",
     "storage_bucket": "ytdopamine.appspot.com"
   },
@@ -14,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "328744831606-2o9kf1brdidcf0psdsjcm21qvstrq4ra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.android.piyush.dopamine",
+            "certificate_hash": "16883a787f7619499ff926e71f859c5799e5907d"
+          }
+        },
+        {
           "client_id": "328744831606-dldmp8lfg2dm1at09fjs6836gr05ngjl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.google.android.piyush.dopamine",
             "certificate_hash": "e3e3e66d36b9be65e2e5015ac48a454150a05afe"
+          }
+        },
+        {
+          "client_id": "328744831606-fvkeqqptd0d2b86fb2a79ojgb4gau4ni.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.android.piyush.dopamine",
+            "certificate_hash": "f56c231dfad536ed92dc494ae23dbac7d3b12781"
           }
         },
         {

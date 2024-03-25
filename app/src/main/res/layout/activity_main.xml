@@ -61,19 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/facebookSignIn"
-            android:drawableLeft="@drawable/ic_facebook"
-            android:paddingLeft="12dp"
-            android:fontFamily="@font/gotham"
-            android:text="Continue with Facebook"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_marginStart="34dp"
-            android:layout_marginEnd="34dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"/>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
