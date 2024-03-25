@@ -267,7 +267,7 @@
       android:id="@+id/photosFromUserText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Photos from User"
+      android:text="@string/photos_from_user"
       android:fontFamily="@font/circular_spotify"
       android:layout_margin="12dp"
       android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
@@ -295,10 +295,9 @@
       android:visibility="gone"
       android:layout_margin="16dp"
       android:src="@drawable/mail"
+      android:contentDescription="@string/app_name"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
-
-
 
   </androidx.constraintlayout.widget.ConstraintLayout>

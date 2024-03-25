@@ -96,4 +96,5 @@
     <string name="send_email">Send Email</string>
     <string name="web_client_id">328744831606-g4gees2nj81o498p6s88n69s3ra4abb1.apps.googleusercontent.com</string>
     <string name="no_contact_available">No Contact Available</string>
+    <string name="photos_from_user">Photos from User</string>
 </resources>
