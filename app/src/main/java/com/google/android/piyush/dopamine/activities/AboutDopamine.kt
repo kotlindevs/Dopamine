@@ -18,10 +18,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.FullScreenCarouselStrategy
+import com.google.android.material.carousel.HeroCarouselStrategy
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDopamineBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.youtube.utilities.Developer
+import com.google.android.piyush.youtube.utilities.Photos
 import kotlin.random.Random
 
 class AboutDopamine : AppCompatActivity() {
@@ -37,7 +41,7 @@ class AboutDopamine : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.dopamineImageView.setLayoutManager(CarouselLayoutManager(MultiBrowseCarouselStrategy()))
+        binding.dopamineImageView.setLayoutManager(CarouselLayoutManager(FullScreenCarouselStrategy()))
         val snapHelper = CarouselSnapHelper()
         snapHelper.attachToRecyclerView(binding.dopamineImageView)
 
@@ -83,6 +87,7 @@ class AboutDopamine : AppCompatActivity() {
         }
     }
 }
+
 class AboutDopamineRecyclerViewAdapter(val context: Context, private val imageList : ArrayList<Int>)
     : RecyclerView.Adapter<AboutDopamineRecyclerViewAdapter.RCHolder>() {
 
@@ -101,5 +106,25 @@ class AboutDopamineRecyclerViewAdapter(val context: Context, private val imageLi
     override fun onBindViewHolder(holder: RCHolder, position: Int) {
         Glide.with(context).load(imageList[position]).into(holder.image)
         holder.image.background = ColorDrawable(Color.rgb(Random.nextInt(256),Random.nextInt(256),Random.nextInt(256)))
+    }
+}
+
+class AboutDeveloperRecyclerViewAdapter(val context: Context, private val devImage : List<Photos>)
+    : RecyclerView.Adapter<AboutDeveloperRecyclerViewAdapter.DevHolder>() {
+
+    class DevHolder(v: View) : RecyclerView.ViewHolder(v){
+        val image: ImageView = v.findViewById(R.id.image)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevHolder {
+        return DevHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.app_dopamine_image,parent,false)
+        )
+    }
+
+    override fun getItemCount(): Int = devImage.size
+
+    override fun onBindViewHolder(holder: DevHolder, position: Int) {
+        Glide.with(context).load(devImage[position].photo).into(holder.image)
     }
 }

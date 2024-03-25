@@ -3,12 +3,15 @@ package com.google.android.piyush.dopamine.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.google.android.material.carousel.CarouselLayoutManager
+import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDeveloperBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -38,128 +41,64 @@ class AboutDeveloper : AppCompatActivity() {
                             for(dev in it.data){
                                 if(dev.userId == intent.getStringExtra("userId")){
                                     if(dev.userBanner.isNullOrEmpty()){
-                                       // Glide.with(this).load(Utilities.DEFAULT_BANNER).into(binding.developerBanner)
                                         binding.developerBannerEffect.apply {
-                                            visibility = android.view.View.VISIBLE
+                                            visibility = View.VISIBLE
                                             startShimmer()
                                         }
                                     }else{
                                         binding.developerBannerEffect.apply {
-                                            visibility = android.view.View.GONE
+                                            visibility = View.GONE
                                             stopShimmer()
                                         }
                                         Glide.with(this).load(dev.userBanner).into(binding.developerBanner)
                                     }
 
                                     if(dev.userImage.isNullOrEmpty()){
-                                        //Glide.with(this).load(Utilities.DEFAULT_LOGO).into(binding.developerImage)
                                         binding.developerImageEffect.apply {
-                                            visibility = android.view.View.VISIBLE
+                                            visibility = View.VISIBLE
                                             startShimmer()
                                         }
                                     }else {
                                         binding.developerImageEffect.apply {
-                                            visibility = android.view.View.GONE
+                                            visibility = View.GONE
                                             stopShimmer()
                                         }
                                         Glide.with(this).load(dev.userImage).into(binding.developerImage)
                                     }
                                     binding.apply {
                                         developerNameEffect.apply {
-                                            visibility = android.view.View.INVISIBLE
+                                            visibility = View.INVISIBLE
                                             stopShimmer()
                                         }
                                         developerDesignationEffect.apply {
-                                            visibility = android.view.View.INVISIBLE
+                                            visibility = View.INVISIBLE
                                             stopShimmer()
                                         }
                                         developerLocationEffect.apply {
-                                            visibility = android.view.View.INVISIBLE
+                                            visibility = View.INVISIBLE
                                             stopShimmer()
                                         }
                                         developerName.text = dev.userName
                                         developerDesignation.text = dev.userDesignation
                                         developerLocation.text = dev.userLocation
                                         if(dev.userAbout.isNullOrEmpty()){
+                                            developerDescription.text = "No Description"
                                             developerDescriptionEffect.apply {
-                                                visibility = android.view.View.VISIBLE
-                                                startShimmer()
+                                                visibility = View.GONE
+                                                stopShimmer()
                                             }
                                         }else{
                                             developerDescriptionEffect.apply {
-                                                visibility = android.view.View.GONE
+                                                visibility = View.GONE
                                                 stopShimmer()
                                             }
                                             developerDescription.text = dev.userAbout
                                         }
 
-                                        if(dev.userWebsite.isNullOrEmpty()){
-                                            binding.website.isVisible = false
-                                        }else{
-                                            binding.website.isVisible = true
-                                            binding.website.setOnClickListener {
-                                                startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW
-                                                    ).apply {
-                                                        data = android.net.Uri.parse(dev.userWebsite)
-                                                    }
-                                                )
-                                            }
-                                        }
-
-                                        if(dev.userWhatsapp.isNullOrEmpty()){
-                                            binding.whatsapp.isVisible = false
-                                        }else{
-                                            binding.whatsapp.isVisible = true
-                                            binding.whatsapp.setOnClickListener {
-                                                startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW
-                                                    ).apply {
-                                                        data =
-                                                            android.net.Uri.parse("https://api.whatsapp.com/send?phone=${dev.userWhatsapp}&text=Hello "+dev.userName)
-                                                    }
-                                                )
-                                            }
-                                        }
-
-                                        if(dev.userFacebook.isNullOrEmpty()){
-                                            binding.facebook.isVisible = false
-                                        }else{
-                                            binding.facebook.isVisible = true
-                                            binding.facebook.setOnClickListener {
-                                                startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW
-                                                    ).apply {
-                                                        data = android.net.Uri.parse(dev.userFacebook)
-                                                    }
-                                                )
-                                            }
-                                        }
-
-                                        if(dev.userInstagram.isNullOrEmpty()){
-                                            binding.instagram.isVisible = false
-                                        }else{
-                                            binding.instagram.isVisible = true
-
-                                            binding.instagram.setOnClickListener {
-                                                startActivity(
-                                                    Intent(
-                                                        Intent.ACTION_VIEW
-                                                    ).apply {
-                                                        data = android.net.Uri.parse(dev.userInstagram)
-                                                    }
-                                                )
-                                            }
-                                        }
-
                                         if(dev.userEmail.isNullOrEmpty()){
-                                            binding.sendMail.isVisible = false
+                                            binding.sendMail.visibility = View.GONE
                                         }else{
-                                            binding.sendMail.isVisible = true
-
+                                            binding.sendMail.visibility = View.VISIBLE
                                             binding.sendMail.setOnClickListener {
                                                 startActivity(
                                                     Intent(
@@ -173,21 +112,24 @@ class AboutDeveloper : AppCompatActivity() {
                                             }
                                         }
 
-                                        if(dev.userWhatsapp.isNullOrEmpty() &&
-                                            dev.userFacebook.isNullOrEmpty() &&
-                                            dev.userInstagram.isNullOrEmpty() &&
-                                            dev.userEmail.isNullOrEmpty() &&
-                                            dev.userWebsite.isNullOrEmpty()){
-                                            binding.noContactAvailable.isVisible = true
+                                        if(!dev.userPhotos.isNullOrEmpty()){
+                                            binding.photosFromUserText.visibility = View.VISIBLE
+                                            binding.photosFromUser.visibility = View.VISIBLE
+                                            binding.photosFromUser.layoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy())
+                                            val snapHelper = CarouselSnapHelper()
+                                            snapHelper.attachToRecyclerView(binding.photosFromUser)
+                                            binding.photosFromUser.apply {
+                                                adapter = AboutDeveloperRecyclerViewAdapter(
+                                                    context = applicationContext,dev.userPhotos!!
+                                                )
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    is YoutubeResource.Error -> {
-
-                    }
+                    is YoutubeResource.Error -> {}
                 }
             }
         }

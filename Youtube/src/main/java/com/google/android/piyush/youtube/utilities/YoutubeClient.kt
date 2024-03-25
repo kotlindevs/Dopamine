@@ -177,11 +177,13 @@ data class Developer(
     val userBanner : String? = null,
     val userEmail : String? = null,
     val userAbout : String? = null,
-    val userWebsite : String? = null,
-    val userFacebook : String? = null,
-    val userInstagram : String? = null,
-    val userWhatsapp : String? = null,
     val userLocation : String? = null,
+    val userPhotos : List<Photos>? = null
+)
+
+@Serializable
+data class Photos(
+    val photo : String? = null
 )
 
 class DevelopersViewModel : ViewModel() {

@@ -264,98 +264,41 @@
   </com.facebook.shimmer.ShimmerFrameLayout>
 
   <com.google.android.material.textview.MaterialTextView
-      android:id="@+id/contactMeText"
+      android:id="@+id/photosFromUserText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/contact_me"
+      android:text="Photos from User"
       android:fontFamily="@font/circular_spotify"
       android:layout_margin="12dp"
       android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
       android:textStyle="bold"
+      android:visibility="gone"
       app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
       app:layout_constraintTop_toBottomOf="@id/developerDescriptionCard"
       app:layout_constraintStart_toStartOf="parent" />
 
-  <com.google.android.material.button.MaterialButton
-      android:id="@+id/website"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="12dp"
-      android:layout_marginTop="6dp"
-      style="@style/Widget.Material3.Button.IconButton.Filled"
-      app:icon="@drawable/website"
-      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-      app:layout_constraintTop_toBottomOf="@id/contactMeText"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/whatsapp"/>
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/photosFromUser"
+      android:layout_width="match_parent"
+      android:layout_height="196dp"
+      android:clipChildren="false"
+      android:clipToPadding="false"
+      android:layout_margin="12dp"
+      android:visibility="gone"
+      app:layout_constraintTop_toBottomOf="@id/photosFromUserText"
+      app:layout_constraintStart_toStartOf="parent"/>
 
-  <com.google.android.material.button.MaterialButton
-      android:id="@+id/whatsapp"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="12dp"
-      android:layout_marginTop="6dp"
-      app:backgroundTint="?attr/colorSecondaryContainer"
-      app:iconTint="?attr/colorOnSecondaryContainer"
-      style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-      app:icon="@drawable/whatsapp"
-      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-      app:layout_constraintStart_toEndOf="@id/website"
-      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
-
-  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/sendMail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/send_email"
-      android:fontFamily="@font/circular_spotify"
+      android:visibility="gone"
       android:layout_margin="16dp"
-      app:icon="@drawable/mail_outline"
+      android:src="@drawable/mail"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
 
-  <com.google.android.material.button.MaterialButton
-      android:id="@+id/facebook"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="12dp"
-      android:layout_marginEnd="6dp"
-      android:layout_marginTop="6dp"
-      app:backgroundTint="?attr/colorTertiaryContainer"
-      app:iconTint="?attr/colorOnTertiaryContainer"
-      style="@style/Widget.Material3.Button.IconButton.Filled"
-      app:icon="@drawable/facebook"
-      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-      app:layout_constraintStart_toEndOf="@id/whatsapp"
-      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
 
-  <com.google.android.material.button.MaterialButton
-      android:id="@+id/instagram"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="12dp"
-      android:layout_marginEnd="6dp"
-      android:layout_marginTop="6dp"
-      app:backgroundTint="?attr/colorPrimaryContainer"
-      app:iconTint="?attr/colorOnPrimaryContainer"
-      style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-      app:icon="@drawable/instagram"
-      app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-      app:layout_constraintStart_toEndOf="@id/facebook"
-      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
-
-  <com.google.android.material.textview.MaterialTextView
-      android:id="@+id/noContactAvailable"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textStyle="normal"
-      android:layout_marginStart="12dp"
-      android:layout_marginEnd="6dp"
-      android:layout_marginTop="6dp"
-      android:visibility="gone"
-      android:text="@string/no_contact_available"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/contactMeText"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
