@@ -9,6 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutUsBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.utilities.DevelopersViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
@@ -206,6 +207,7 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                         aboutDopamineEffect.visibility = View.VISIBLE
                         aboutDopamineEffect.startShimmer()
                     }
+                    ToastUtilities.showToast(context,it.exception.message.toString())
                 }
             }
         }

@@ -24,6 +24,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -238,7 +239,10 @@ class DopamineUserProfile : AppCompatActivity() {
                         }
 
                         is YoutubeResource.Error -> {
-                            Log.d(ContentValues.TAG, update.exception.message.toString())
+                            ToastUtilities.showToast(
+                                context = this,
+                                message = update.exception.message.toString()
+                            )
                         }
                     }
                 }

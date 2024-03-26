@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDeveloperBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -129,7 +130,9 @@ class AboutDeveloper : AppCompatActivity() {
                             }
                         }
                     }
-                    is YoutubeResource.Error -> {}
+                    is YoutubeResource.Error -> {
+                        Snackbar.make(binding.root, it.exception.message.toString(), Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }
         }

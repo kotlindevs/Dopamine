@@ -41,7 +41,7 @@ object YoutubeClient {
     const val MAX_RESULTS = "50"
 
     val API_KEY = arrayListOf(
-        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8",
+        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c",
         "AIzaSyDMQuMItUqW2QrSQUtLtCpKmdCfniKD1zE","AIzaSyDaHGB5Z5nq29U46YGINN4Xjku3f-U8AIs"
     ).random()
 
@@ -58,8 +58,6 @@ object YoutubeClient {
     const val SEARCH_PART = "snippet"
 
     const val DOPAMINE_UPDATE = "https://api.npoint.io/0178e5b07792668c9a58"
-
-    const val PRE_RELEASE = "https://api.npoint.io/255cbfc840e9bf199c9d"
 
     const val EXPERIMENTAL_API = "https://yt.lemnoslife.com/noKey/"
 
@@ -119,39 +117,27 @@ data class DopamineVersion(
 class DopamineVersionViewModel() : ViewModel() {
     private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
     val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
-
-    private val _preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
-    val preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = _preRelease
-
     init{
         try {
-            _update.postValue(YoutubeResource.Loading)
             viewModelScope.launch {
-                _update.postValue(
-                    YoutubeResource.Success(
-                        getVersion()
+                _update.postValue(YoutubeResource.Loading)
+                val response = getVersion()
+                if(response.url.isNullOrEmpty()) {
+                    _update.postValue(
+                        YoutubeResource.Error(
+                            Exception("Code 521 : Web server is down")
+                        )
                     )
-                )
-            }
-        }catch (e : Exception){
-            _update.postValue(YoutubeResource.Error(e))
-        }
-    }
-
-    fun preReleaseUpdate() {
-        viewModelScope.launch {
-            try {
-                _preRelease.postValue(YoutubeResource.Loading)
-                viewModelScope.launch {
-                    _preRelease.postValue(
+                }else {
+                    _update.postValue(
                         YoutubeResource.Success(
-                            getPreRelease()
+                            getVersion()
                         )
                     )
                 }
-            }catch (e : Exception){
-                _preRelease.postValue(YoutubeResource.Error(e))
             }
+        }catch (e : Exception){
+            _update.postValue(YoutubeResource.Error(e))
         }
     }
 }
@@ -159,12 +145,6 @@ class DopamineVersionViewModel() : ViewModel() {
 suspend fun getVersion() : DopamineVersion {
     return YoutubeClient.CLIENT.get(
         YoutubeClient.DOPAMINE_UPDATE
-    ).body()
-}
-
-suspend fun getPreRelease() : DopamineVersion {
-    return YoutubeClient.CLIENT.get(
-        YoutubeClient.PRE_RELEASE
     ).body()
 }
 
@@ -200,6 +180,8 @@ class DevelopersViewModel : ViewModel() {
                 ).body<List<Developer>>()
                 if(response.isNotEmpty()){
                     _devModel.postValue(YoutubeResource.Success(response))
+                }else{
+                    _devModel.postValue(YoutubeResource.Error(Exception("Code 521 : Web server is down")))
                 }
             }catch (exception : Exception){
                 _devModel.postValue(YoutubeResource.Error(exception))

@@ -123,7 +123,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("chart", YoutubeClient.CHART)
                 parameters.append("regionCode", YoutubeClient.REGION_CODE)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key", "AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
@@ -137,7 +137,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c" )
+                parameters.append("key","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8" )
             }
         }
         return response.body()
@@ -151,7 +151,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("part", YoutubeClient.SEARCH_PART)
                 parameters.append("q", query)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
@@ -164,7 +164,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", channelId)
-                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key", "AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
@@ -178,7 +178,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("channelId", channelId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key", "AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
@@ -192,7 +192,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key", "AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
@@ -205,7 +205,7 @@ class YoutubeRepositoryImpl : YoutubeRepository {
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", videoId)
-                parameters.append("key", "AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c")
+                parameters.append("key", "AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8")
             }
         }
         return response.body()
