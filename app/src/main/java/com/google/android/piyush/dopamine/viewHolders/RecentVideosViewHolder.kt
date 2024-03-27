@@ -10,8 +10,8 @@ import com.google.android.piyush.dopamine.R
 class RecentVideosViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
+    val video : MaterialCardView = itemView.findViewById(R.id.video)
     val image : ShapeableImageView = itemView.findViewById(R.id.image)
-    val title : MaterialTextView = itemView.findViewById(R.id.text)
-    val customName : MaterialTextView = itemView.findViewById(R.id.text1)
-    val videoCard : MaterialCardView = itemView.findViewById(R.id.video_card)
+    val title : MaterialTextView = itemView.findViewById(R.id.text1)
+    val subtitle : MaterialTextView = itemView.findViewById(R.id.text2)
 }

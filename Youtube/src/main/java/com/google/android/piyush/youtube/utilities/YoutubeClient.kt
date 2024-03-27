@@ -20,6 +20,8 @@ object YoutubeClient {
 
     const val REGION_CODE = "IN"
 
+    const val NOTIFICATION= "https://api.npoint.io/59fea5744e8600c3a6d4/notifications"
+
     private val SHORTS = arrayListOf(
         "e0b088ecf082c9d119f9","df2a4f0cdf426639ff66","82a4bfb6062016fab407"
     ).random()
@@ -200,6 +202,40 @@ class DevelopersViewModel : ViewModel() {
                 }
             }catch (exception : Exception){
                 _devModel.postValue(YoutubeResource.Error(exception))
+            }
+        }
+    }
+}
+
+@Serializable
+data class Notifications(
+     val id : Int = 0,
+     val build : String? = null,
+     val title : String? = null,
+     val description : String? = null,
+    val time : String? = null,
+    val date : String? = null,
+)
+
+
+class NotificationViewModel() : ViewModel() {
+
+    private val _notifications : MutableLiveData<YoutubeResource<List<Notifications>>> = MutableLiveData()
+    val notifications : MutableLiveData<YoutubeResource<List<Notifications>>> = _notifications
+
+    init {
+        viewModelScope.launch {
+            try {
+                _notifications.postValue(YoutubeResource.Loading)
+                _notifications.postValue(
+                    YoutubeResource.Success(
+                        YoutubeClient.CLIENT.get(
+                            YoutubeClient.NOTIFICATION
+                        ).body<List<Notifications>>()
+                    )
+                )
+            }catch (exception : Exception) {
+                _notifications.postValue(YoutubeResource.Error(exception))
             }
         }
     }

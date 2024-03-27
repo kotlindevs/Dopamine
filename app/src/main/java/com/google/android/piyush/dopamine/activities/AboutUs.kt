@@ -9,6 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutUsBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DevelopersViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
@@ -172,7 +173,7 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                             .into(binding.aboutDopamineImage)
 
                         binding.aboutDopamineName.text = dopamine.userName
-                        binding.aboutDopamineDescription.text = dopamine.userDesignation
+                        binding.aboutDopamineDescription.text = Utilities.PRE_RELEASE_VERSION
                         binding.aboutDopamine.setOnClickListener {
                             context.startActivity(
                                 Intent(

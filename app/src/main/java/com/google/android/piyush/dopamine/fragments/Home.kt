@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.activities.AppNotificationView
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
-import com.google.android.piyush.dopamine.activities.DopamineVideoWatchHistory
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
@@ -74,15 +74,6 @@ class Home : Fragment() {
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
         }
 
-        fragmentHomeBinding!!.watchHistory.setOnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    DopamineVideoWatchHistory::class.java
-                )
-            )
-        }
-
         fragmentHomeBinding!!.userImage.setOnClickListener {
             startActivity(
                 Intent(
@@ -92,11 +83,11 @@ class Home : Fragment() {
             )
         }
 
-        fragmentHomeBinding!!.Experiments.setOnClickListener{
+        fragmentHomeBinding!!.Notifications.setOnClickListener{
             startActivity(
                 Intent(
                     context,
-                    ExperimentsMode::class.java
+                    AppNotificationView::class.java
                 )
             )
         }

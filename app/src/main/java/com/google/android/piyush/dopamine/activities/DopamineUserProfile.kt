@@ -3,12 +3,14 @@ package com.google.android.piyush.dopamine.activities
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +30,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
+import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -44,6 +49,7 @@ class DopamineUserProfile : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
+    private lateinit var databaseViewModel: DatabaseViewModel
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +58,7 @@ class DopamineUserProfile : AppCompatActivity() {
         binding = ActivityDopamineUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
+        databaseViewModel = DatabaseViewModel(applicationContext)
         sharedPreferences = getSharedPreferences("DopamineApp", MODE_PRIVATE)
 
         enableEdgeToEdge()
@@ -141,6 +148,21 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
+        if(NetworkUtilities.isNetworkAvailable(applicationContext).equals(true)) {
+            databaseViewModel.getRecentVideos()
+
+            databaseViewModel.recentVideos.observe(this) { recentVideos ->
+                binding.recentWatchHistory.apply {
+                    setHasFixedSize(true)
+                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, binding.recentWatchHistory.horizontalFadingEdgeLength, false)
+                    adapter = RecentVideosAdapter(context, recentVideos)
+                }
+                if (recentVideos.isNullOrEmpty()) {
+                    binding.recentWatchHistory.visibility = View.GONE
+                }
+            }
+        }
+
 
         binding.topAppBar.setNavigationOnClickListener {
             startActivity(Intent(this, DopamineHome::class.java))
@@ -214,6 +236,14 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
+        binding.expFeaturesCard.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,ExperimentsMode::class.java
+                )
+            )
+        }
+
         binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
                 sharedPreferences.edit().putBoolean("ExperimentalUserColor", true).apply()
@@ -280,11 +310,6 @@ class DopamineUserProfile : AppCompatActivity() {
                     binding.main,"Please check your internet connection",Snackbar.LENGTH_LONG
                 ).show()
             }
-        }
-
-        binding.customPlayList.setOnClickListener {
-            val bottomSheetFragment = MyBottomSheetFragment()
-            bottomSheetFragment.show(supportFragmentManager,bottomSheetFragment.tag)
         }
 
         binding.cardView3.setOnClickListener {
@@ -362,24 +387,5 @@ class DopamineUserProfile : AppCompatActivity() {
         }else {
             notificationManager.notify(0, notificationBuilder.build())
         }
-    }
-
-    class MyBottomSheetFragment : BottomSheetDialogFragment(){
-        override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-
-            val view = inflater.inflate(R.layout.bottom_sheet_add_playlist,container,false)
-
-            val createPlaylist = view.findViewById<MaterialButton>(R.id.btCreatePlaylist)
-            createPlaylist.setOnClickListener {
-                val customDialog = CustomDialog(requireContext())
-                customDialog.show()
-            }
-            return view
-        }
-
     }
 }

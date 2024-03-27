@@ -41,10 +41,11 @@ object Utilities {
 const val PERMISSION_REQUEST_CODE = 100
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
-    const val RELEASE_DATE = "26/03/2024"
+    const val RELEASE_DATE = "27/03/2024"
     const val PROJECT_VERSION = "dopamine_20242703_03.phone.stable.dynamic"
-    const val PRE_RELEASE_VERSION = "dopamine_20242003_01.phone.prerelease.dynamic"
+    const val PRE_RELEASE_VERSION = "dopamine_20242703_02.phone.prerelease.dynamic"
     const val STABLE = "stable"
+    const val PRE_RELEASE = "prerelease"
     const val DEFAULT_LOGO = "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*3tLD4Ve66pbBpuawm9Fu9Q.png"
     const val DEFAULT_BANNER = "https://developer.android.com/static/images/social/android-developers.png"
     const val LIGHT_MODE = "light"

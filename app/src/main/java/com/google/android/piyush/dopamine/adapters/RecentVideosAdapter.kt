@@ -18,7 +18,7 @@ class RecentVideosAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentVideosViewHolder {
         return RecentVideosViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_activity_video_views_history, parent, false)
+                .inflate(R.layout.item_fragment_library, parent, false)
         )
     }
 
@@ -27,16 +27,18 @@ class RecentVideosAdapter(
     }
 
     override fun onBindViewHolder(holder: RecentVideosViewHolder, position: Int) {
-        val recentVideo = videos?.get(position)
-        holder.title.text = recentVideo?.title
-        holder.customName.text = recentVideo?.timing
-        Glide.with(context).load(recentVideo?.thumbnail).into(holder.image)
-        holder.videoCard.setOnClickListener {
+        val videos = videos?.get(position)
+        Glide.with(context)
+            .load(videos?.thumbnail)
+            .into(holder.image)
+        holder.title.text = videos?.title
+        holder.subtitle.text = videos?.timing
+        holder.video.setOnClickListener {
             context.startActivity(
                 Intent(context, YoutubePlayer::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("videoId",recentVideo?.videoId)
-                    .putExtra("channelId",recentVideo?.channelId)
+                    .putExtra("videoId",videos?.videoId)
+                    .putExtra("channelId",videos?.channelId)
             )
         }
     }

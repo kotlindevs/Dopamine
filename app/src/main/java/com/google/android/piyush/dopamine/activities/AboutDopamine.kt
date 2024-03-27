@@ -51,8 +51,8 @@ class AboutDopamine : AppCompatActivity() {
         }
         val adapter = AboutDopamineRecyclerViewAdapter(this, imageList)
         binding.dopamineImageView.setAdapter(adapter)
-        binding.appVersion.text = Utilities.PROJECT_VERSION
-        binding.appRelease.text = Utilities.STABLE
+        binding.appVersion.text = Utilities.PRE_RELEASE_VERSION
+        binding.appRelease.text = Utilities.PRE_RELEASE
         binding.appReleaseDate.text = Utilities.RELEASE_DATE
         binding.github.setOnClickListener{
             startActivity(

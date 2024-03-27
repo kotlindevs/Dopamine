@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".beta.DopamineApp"
@@ -24,14 +24,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.AppNotificationView"
+            android:exported="true" />
+        <activity
             android:name=".activities.AboutDopamine"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.AboutDeveloper"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.AboutUs"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".beta.youtubedl.DownloadVideo"
             android:exported="true" />
@@ -45,10 +48,6 @@
             android:name=".activities.CVPlaylist"
             android:exported="true" />
         <activity
-            android:name=".activities.SettingsActivity"
-            android:exported="true"
-            android:label="@string/title_activity_settings" />
-        <activity
             android:name=".activities.YoutubeChannelPlaylistsVideos"
             android:exported="true" />
         <activity
@@ -59,9 +58,6 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:supportsPictureInPicture="true" />
-        <activity
-            android:name=".activities.DopamineVideoWatchHistory"
-            android:exported="true" />
         <activity
             android:name=".activities.DopamineUserProfile"
             android:exported="true" />
