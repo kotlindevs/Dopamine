@@ -40,6 +40,16 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
                 adapter = RecentVideosAdapter(context,recentVideos)
             }
+            if(recentVideos.isNullOrEmpty()){
+                binding.recyclerView.visibility = android.view.View.GONE
+                binding.clearWatchHistory.visibility = android.view.View.GONE
+                binding.lottieAnimationView.apply {
+                    visibility = android.view.View.VISIBLE
+                    setAnimation(R.raw.no_data)
+                    @Suppress("DEPRECATION")
+                    loop(true)
+                }
+            }
             Log.d(ContentValues.TAG, " -> Activity : DopamineVideoWatchHistory || recentVideos : $recentVideos")
         }
 

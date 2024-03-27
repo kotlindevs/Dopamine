@@ -13,6 +13,7 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ItemCustomDialogBinding
 
+@Suppress("DEPRECATION")
 object NetworkUtilities {
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(AppCompatActivity.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -41,7 +42,8 @@ const val PERMISSION_REQUEST_CODE = 100
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val RELEASE_DATE = "26/03/2024"
-    const val PROJECT_VERSION = "dopamine_20242603_01.phone.stable.dynamic"
+    const val PROJECT_VERSION = "dopamine_20242703_03.phone.stable.dynamic"
+    const val PRE_RELEASE_VERSION = "dopamine_20242003_01.phone.prerelease.dynamic"
     const val STABLE = "stable"
     const val DEFAULT_LOGO = "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*3tLD4Ve66pbBpuawm9Fu9Q.png"
     const val DEFAULT_BANNER = "https://developer.android.com/static/images/social/android-developers.png"
@@ -89,8 +91,9 @@ class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
         val playlistDescription = binding.text2.text
 
         binding.button.setOnClickListener {
-            if(databaseViewModel.isPlaylistExist(playlistName.toString()).equals(true)){
-                //insert in playlist
+            if(databaseViewModel.isPlaylistExist(playlistName.toString())){
+                binding.textInputLayout1.isErrorEnabled = true
+                binding.textInputLayout1.error = "Playlist Already Exists"
             }else{
                 if(playlistName.toString().isEmpty()){
                     ToastUtilities.showToast(context, "Please Fill All Fields")
@@ -108,13 +111,4 @@ class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
             }
         }
     }
-}
-
-object Developers{
-    const val PIYUSH = "devPiyush"
-    const val RAJAT = "devRajat"
-    const val MEET = "devMeet"
-    const val AJITH = "devAjith"
-    const val AKSHAR = "devAkshar"
-    const val BHAJAN = "devBhajan"
 }

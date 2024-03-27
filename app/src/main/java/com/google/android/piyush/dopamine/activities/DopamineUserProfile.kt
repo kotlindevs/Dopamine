@@ -1,17 +1,25 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ContentValues
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -24,11 +32,11 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
+import kotlin.system.exitProcess
 
 class DopamineUserProfile : AppCompatActivity() {
 
@@ -37,6 +45,7 @@ class DopamineUserProfile : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,6 +64,10 @@ class DopamineUserProfile : AppCompatActivity() {
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
         binding.applyForPreReleaseUpdate.isChecked = sharedPreferences.getBoolean("PreReleaseUpdate", false)
 
+        onBackPressedDispatcher.addCallback {
+            startActivity(Intent(this@DopamineUserProfile, DopamineHome::class.java))
+        }
+
         if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
             dopamineVersionViewModel = DopamineVersionViewModel()
             if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
@@ -68,9 +81,8 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }else{
             applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).apply {
-                getString("id","").also { binding.userName.text = it?.substring(0,10) }
-                getString("email","").also { binding.userEmail.text = if(it.isNullOrEmpty()) "No Email" else it }
-
+                getString("uid","").also { binding.userName.text = if(it.isNullOrEmpty()) "No User Id" else it.substring(0,15) }
+                getString("email","").also { binding.userEmail.text = if(it.isNullOrEmpty()) "Empty Email" else it }
                 binding.userImage.apply {
                     setImageResource(R.drawable.default_user)
                 }
@@ -79,6 +91,56 @@ class DopamineUserProfile : AppCompatActivity() {
                 binding.main,"You are not connected to the internet",Snackbar.LENGTH_LONG
             ).show()
         }
+
+        val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
+        if (preReleaseUpdates.equals(true)) {
+            dopamineVersionViewModel.preReleaseUpdate()
+            dopamineVersionViewModel.preRelease.observe(this@DopamineUserProfile) {
+                if (it is YoutubeResource.Success) {
+                    sharedPreferences.edit().apply {
+                        putString("PreReleaseVersion", it.data.versionName)
+                        putString("PreReleaseUrl", it.data.url)
+                        apply()
+                    }
+                    if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
+                        createDefaultNotification(
+                            applicationContext,
+                            it.data.versionName.toString()
+                        )
+                    }
+                }
+            }
+        }else {
+            if (NetworkUtilities.isNetworkAvailable(applicationContext).equals(true)) {
+                dopamineVersionViewModel.update.observe(this) { update ->
+                    when (update) {
+                        is YoutubeResource.Loading -> {}
+                        is YoutubeResource.Success -> {
+                            sharedPreferences.edit().apply {
+                                putString("Version", update.data.versionName)
+                                putString("Url", update.data.url)
+                                apply()
+                            }
+                            if (update.data.versionName != Utilities.PROJECT_VERSION) {
+                                createDefaultNotification(
+                                    applicationContext,
+                                    update.data.versionName.toString()
+                                )
+                            }
+                        }
+
+                        is YoutubeResource.Error -> {
+                            Snackbar.make(
+                                binding.main,
+                                "Oh no! Something went wrong",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }
+
 
         binding.topAppBar.setNavigationOnClickListener {
             startActivity(Intent(this, DopamineHome::class.java))
@@ -132,62 +194,25 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
-        false.also {
-            binding.cardView2.isEnabled = it
-            binding.applyForPreReleaseUpdate.isEnabled = it
-            binding.applyForPreRelease.isEnabled = it
-        }
-
-        /*
         binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked.equals(true)){
-                sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
-
-                if(sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
-                    dopamineVersionViewModel.preReleaseUpdate()
-                    dopamineVersionViewModel.preRelease.observe(this) {
-                        if (it is YoutubeResource.Success) {
-                            if (it.data.versionName == Utilities.PRE_RELEASE_VERSION) {
-                                if (sharedPreferences.getBoolean("ExperimentalPreUpdate", false).equals(true)) {
-                                    MaterialAlertDialogBuilder(this).apply {
-                                        this.setTitle(it.data.versionName)
-                                        this.setMessage(it.data.changelog)
-                                        this.setIcon(R.drawable.ic_info)
-                                        this.setCancelable(true)
-                                        this.setPositiveButton("Okay") { dialog, _ ->
-                                            dialog?.dismiss()
-                                        }
-                                    }.create().show()
-                                } else {
-                                    MaterialAlertDialogBuilder(this).apply {
-                                        this.setTitle("Thanks for your interest !")
-                                        this.setMessage("You successfully registered for pre-release update. once you upgrade the app, you will be able to use pre-release feature.")
-                                        this.setIcon(R.drawable.ic_info)
-                                        this.setCancelable(true)
-                                        this.setPositiveButton("Don't show again") { _, _ ->
-                                            context.getSharedPreferences(
-                                                "DopamineApp",
-                                                MODE_PRIVATE
-                                            )
-                                                .edit().putBoolean("ExperimentalPreUpdate", true).apply()
-                                        }
-                                    }.create().show()
-                                }
-                            } else {
-                                val downloadApk = DownloadApk(this@DopamineUserProfile)
-                                downloadApk.startDownloadingApk(it.data.url.toString())
-                            }
-                        }
-
+            if(isChecked){
+                MaterialAlertDialogBuilder(this).apply {
+                    this.setTitle("Thanks for your interest !")
+                    this.setMessage("You are now successfully registered for pre-release update. once you upgrade the app, you will be able to use pre-release feature but you wants to restart the app after you can upgrade it !")
+                    this.setIcon(R.drawable.ic_info)
+                    this.setCancelable(true)
+                    this.setPositiveButton("Restart 🐬") { _, _ ->
+                        exitProcess(0)
                     }
-                }
+                }.create().show()
+                sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
             }else{
                 sharedPreferences.edit().putBoolean("PreReleaseUpdate", false).apply()
                 Snackbar.make(
                     binding.main,"Application rollback feature is currently unavailable",Snackbar.LENGTH_LONG
                 ).show()
             }
-        } */
+        }
 
         binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked.equals(true)){
@@ -217,32 +242,36 @@ class DopamineUserProfile : AppCompatActivity() {
 
         binding.checkForUpdate.setOnClickListener {
             if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
-                dopamineVersionViewModel.update.observe(this) { update ->
-                    when (update) {
-                        is YoutubeResource.Loading -> {}
-                        is YoutubeResource.Success -> {
-                            if (update.data.versionName == Utilities.PROJECT_VERSION) {
-                                MaterialAlertDialogBuilder(this).apply {
-                                    this.setTitle("Wow ! 🫡")
-                                    this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
-                                    this.setIcon(R.drawable.ic_alert)
-                                    this.setCancelable(true)
-                                    this.setPositiveButton("Okay") { dialog, _ ->
-                                        dialog?.dismiss()
-                                    }
-                                }.create().show()
-                            } else {
-                                val downloadApk = DownloadApk(this@DopamineUserProfile)
-                                downloadApk.startDownloadingApk(update.data.url.toString())
+                if(sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
+                    if (sharedPreferences.getString("PreReleaseVersion" , "") == Utilities.PRE_RELEASE_VERSION) {
+                        MaterialAlertDialogBuilder(this).apply {
+                            this.setTitle("Congratulations !")
+                            this.setMessage("You are already using the latest pre-release version of Dopamine. Thank you for your interest❤️")
+                            this.setIcon(R.drawable.ic_alert)
+                            this.setCancelable(true)
+                            this.setPositiveButton("Got it !") { dialog, _ ->
+                                dialog?.dismiss()
                             }
-                            Log.d(ContentValues.TAG, update.data.toString())
-                        }
-
-                        is YoutubeResource.Error -> {
-                            ToastUtilities.showToast(
-                                context = this,
-                                message = update.exception.message.toString()
-                            )
+                        }.create().show()
+                    } else {
+                       DownloadApk(this@DopamineUserProfile).apply {
+                            startDownloadingApk(sharedPreferences.getString("PreReleaseUrl", "")!!)
+                       }
+                    }
+                }else{
+                    if (sharedPreferences.getString("Version", "") == Utilities.PROJECT_VERSION) {
+                        MaterialAlertDialogBuilder(this).apply {
+                            this.setTitle("Wow ! 🫡")
+                            this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
+                            this.setIcon(R.drawable.ic_alert)
+                            this.setCancelable(true)
+                            this.setPositiveButton("Okay") { dialog, _ ->
+                                dialog?.dismiss()
+                            }
+                        }.create().show()
+                    } else {
+                        DownloadApk(this@DopamineUserProfile).apply {
+                            startDownloadingApk(sharedPreferences.getString("Url", "")!!)
                         }
                     }
                 }
@@ -288,6 +317,50 @@ class DopamineUserProfile : AppCompatActivity() {
 
         binding.cardView4.setOnClickListener{
             AboutUs(context = this).create().show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun createDefaultNotification(
+        context: Context, content: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "dopamineUpdateChannel",
+                "Update Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val updateApp: PendingIntent =
+            PendingIntent.getActivity(this, 0, Intent(
+                this,
+                DopamineUserProfile::class.java
+            ), PendingIntent.FLAG_IMMUTABLE)
+
+        val notificationBuilder = NotificationCompat.Builder(context, "dopamineUpdateChannel")
+            .setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(R.drawable.ic_update)
+            .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(true)
+            .addAction(
+                R.drawable.ic_update,
+                "Update",
+                updateApp
+            )
+
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+            ){
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
+        }else {
+            notificationManager.notify(0, notificationBuilder.build())
         }
     }
 

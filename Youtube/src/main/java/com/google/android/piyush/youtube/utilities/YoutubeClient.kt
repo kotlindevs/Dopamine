@@ -40,9 +40,14 @@ object YoutubeClient {
 
     const val MAX_RESULTS = "50"
 
+    const val PRE_RELEASE = "https://api.npoint.io/255cbfc840e9bf199c9d"
+
     val API_KEY = arrayListOf(
-        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c",
-        "AIzaSyDMQuMItUqW2QrSQUtLtCpKmdCfniKD1zE","AIzaSyDaHGB5Z5nq29U46YGINN4Xjku3f-U8AIs"
+        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c","AIzaSyDaHGB5Z5nq29U46YGINN4Xjku3f-U8AIs"
+    ).random()
+
+    val EXTRA_KEYS = arrayListOf(
+        "AIzaSyDMQuMItUqW2QrSQUtLtCpKmdCfniKD1zE","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8"
     ).random()
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
@@ -117,35 +122,45 @@ data class DopamineVersion(
 class DopamineVersionViewModel() : ViewModel() {
     private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
     val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
+
+    private val _preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
+    val preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = _preRelease
+
     init{
         try {
             viewModelScope.launch {
                 _update.postValue(YoutubeResource.Loading)
-                val response = getVersion()
-                if(response.url.isNullOrEmpty()) {
-                    _update.postValue(
-                        YoutubeResource.Error(
-                            Exception("Code 521 : Web server is down")
-                        )
+                _update.postValue(
+                    YoutubeResource.Success(
+                        YoutubeClient.CLIENT.get(
+                            YoutubeClient.DOPAMINE_UPDATE
+                        ).body()
                     )
-                }else {
-                    _update.postValue(
-                        YoutubeResource.Success(
-                            getVersion()
-                        )
-                    )
-                }
+                )
             }
         }catch (e : Exception){
             _update.postValue(YoutubeResource.Error(e))
         }
     }
-}
 
-suspend fun getVersion() : DopamineVersion {
-    return YoutubeClient.CLIENT.get(
-        YoutubeClient.DOPAMINE_UPDATE
-    ).body()
+    fun preReleaseUpdate() {
+        viewModelScope.launch {
+            try {
+                viewModelScope.launch {
+                    _preRelease.postValue(YoutubeResource.Loading)
+                    _preRelease.postValue(
+                        YoutubeResource.Success(
+                            YoutubeClient.CLIENT.get(
+                                YoutubeClient.PRE_RELEASE
+                            ).body()
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                _preRelease.postValue(YoutubeResource.Error(e))
+            }
+        }
+    }
 }
 
 @Serializable

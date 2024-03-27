@@ -1,11 +1,13 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
@@ -42,6 +44,17 @@ class DopamineHome : AppCompatActivity() {
             finish()
             exitProcess(0)
         }
+
+        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
+
 
         if(!NetworkUtilities.isNetworkAvailable(this)){
             Utilities.turnOnNetworkDialog(this,"No Internet Connection")

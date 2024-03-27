@@ -94,6 +94,12 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             userViewModel.state.collect { state ->
                 if(state.isSignInSuccessful){
+                    applicationContext.getSharedPreferences("currentUser", MODE_PRIVATE).edit()
+                        .putString("uid",Firebase.auth.currentUser?.uid)
+                        .putString("name",Firebase.auth.currentUser?.displayName)
+                        .putString("email",Firebase.auth.currentUser?.email)
+                        .putString("photoUrl",Firebase.auth.currentUser?.photoUrl.toString())
+                        .apply()
                     startActivity(
                         Intent(this@MainActivity, DopamineHome::class.java)
                     )
