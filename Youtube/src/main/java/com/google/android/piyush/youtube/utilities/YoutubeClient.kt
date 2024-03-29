@@ -54,7 +54,7 @@ object YoutubeClient {
 
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
 
-    const val DEVELOPER = "https://api.npoint.io/7479b06945cacafcad89/developers"
+    const val DEVELOPER = "https://api.npoint.io/a46779f358ad86851acb"
 
     const val SHORTS_PART = "shorts"
 
@@ -185,8 +185,8 @@ data class Photos(
 
 class DevelopersViewModel : ViewModel() {
 
-    private val _devModel : MutableLiveData<YoutubeResource<List<Developer>>> = MutableLiveData()
-    val devModel : MutableLiveData<YoutubeResource<List<Developer>>> = _devModel
+    private val _devModel : MutableLiveData<YoutubeResource<Developer>> = MutableLiveData()
+    val devModel : MutableLiveData<YoutubeResource<Developer>> = _devModel
 
     init {
         viewModelScope.launch {
@@ -194,12 +194,8 @@ class DevelopersViewModel : ViewModel() {
                 _devModel.postValue(YoutubeResource.Loading)
                 val response = YoutubeClient.CLIENT.get(
                     YoutubeClient.DEVELOPER
-                ).body<List<Developer>>()
-                if(response.isNotEmpty()){
-                    _devModel.postValue(YoutubeResource.Success(response))
-                }else{
-                    _devModel.postValue(YoutubeResource.Error(Exception("Code 521 : Web server is down")))
-                }
+                ).body<Developer>()
+                _devModel.postValue(YoutubeResource.Success(response))
             }catch (exception : Exception){
                 _devModel.postValue(YoutubeResource.Error(exception))
             }

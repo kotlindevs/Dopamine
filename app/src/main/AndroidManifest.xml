@@ -59,9 +59,6 @@
             android:exported="true"
             android:supportsPictureInPicture="true" />
         <activity
-            android:name=".activities.DopamineUserProfile"
-            android:exported="true" />
-        <activity
             android:name=".activities.PhoneNumberVerifyCode"
             android:exported="true" />
         <activity

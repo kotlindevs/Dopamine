@@ -103,6 +103,7 @@
     <string name="user_email">User Email</string>
     <string name="appearance">Appearance</string>
     <string name="theme">theme</string>
+    <string name="no_description">No Description</string>
     <string name="get_unlimited_search_results">Get unlimited search results !</string>
     <string name="use_beta_updates_to_improve_your_experience">Use beta updates to improve your experience</string>
     <string name="available_in_android_12_and_above">Available in android 12 and above</string>
@@ -113,4 +114,6 @@
     <string name="copy_paste_your_link_and_watch_any_video_free">Copy paste your link and watch any video free !</string>
     <string name="download_any_video">Download any video</string>
     <string name="all_videos_are_available_for_download">All videos are available for download</string>
+    <string name="about_developer">About Developer</string>
+    <string name="developed_by_me">Developed By Piyush Makwana ❤️</string>
 </resources>
