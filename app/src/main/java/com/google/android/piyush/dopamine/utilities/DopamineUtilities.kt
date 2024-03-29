@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.utilities
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -112,4 +113,8 @@ class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
             }
         }
     }
+}
+
+fun dopamineSharedPreferences(context: Context) : SharedPreferences{
+    return context.getSharedPreferences("DopamineApp", Context.MODE_PRIVATE)
 }

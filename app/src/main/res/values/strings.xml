@@ -107,4 +107,6 @@
     <string name="use_beta_updates_to_improve_your_experience">Use beta updates to improve your experience</string>
     <string name="available_in_android_12_and_above">Available in android 12 and above</string>
     <string name="you_can_view_more_about_dopamine_here">You can view more about Dopamine here</string>
+    <string name="options">Options</string>
+    <string name="you_will_be_signed_out_from_dopamine">You will be signed out from Dopamine</string>
 </resources>

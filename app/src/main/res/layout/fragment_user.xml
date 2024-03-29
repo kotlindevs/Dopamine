@@ -80,16 +80,18 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/useSystemColor"
-            app:layout_constraintBottom_toBottomOf="@id/useSystemColor"
-            app:layout_constraintEnd_toStartOf="@id/useSystemColor"/>
+            app:layout_constraintEnd_toStartOf="@id/useSystemColor"
+            app:layout_constraintBottom_toTopOf="@id/textUseSystemColorDesc"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textUseSystemColorDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/available_in_android_12_and_above"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintTop_toBottomOf="@id/useSystemColorText"
-            app:layout_constraintStart_toStartOf="@id/useSystemColorText"/>
+            app:layout_constraintStart_toStartOf="@id/useSystemColorText"
+            app:layout_constraintBottom_toBottomOf="@id/useSystemColor"
+            app:layout_constraintEnd_toStartOf="@id/useSystemColor" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/useSystemColor"
@@ -144,23 +146,23 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/useLiveSearch"
-            app:layout_constraintBottom_toBottomOf="@id/useLiveSearch"
-            app:layout_constraintEnd_toStartOf="@id/useLiveSearch"/>
+            app:layout_constraintEnd_toStartOf="@id/useLiveSearch"
+            app:layout_constraintBottom_toTopOf="@id/textLiveSearchDesc"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textLiveSearchDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/get_unlimited_search_results"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintTop_toBottomOf="@id/useLiveSearchText"
-            app:layout_constraintStart_toStartOf="@id/useLiveSearchText"/>
-
+            app:layout_constraintStart_toStartOf="@id/useLiveSearchText"
+            app:layout_constraintBottom_toBottomOf="@id/useLiveSearch"
+            app:layout_constraintEnd_toStartOf="@id/useLiveSearch" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/useLiveSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -176,27 +178,63 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/installPreReleaseUpdate"
-            app:layout_constraintBottom_toBottomOf="@id/installPreReleaseUpdate"
-            app:layout_constraintEnd_toStartOf="@id/installPreReleaseUpdate"/>
+            app:layout_constraintEnd_toStartOf="@id/installPreReleaseUpdate"
+            app:layout_constraintBottom_toTopOf="@id/textInstallPreReleaseUpdateDesc"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textInstallPreReleaseUpdateDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/use_beta_updates_to_improve_your_experience"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdateText"
-            app:layout_constraintStart_toStartOf="@id/installPreReleaseUpdateText"/>
+            app:layout_constraintStart_toStartOf="@id/installPreReleaseUpdateText"
+            app:layout_constraintBottom_toBottomOf="@id/installPreReleaseUpdate"
+            app:layout_constraintEnd_toStartOf="@id/installPreReleaseUpdate" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/installPreReleaseUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/installPreReleaseUpdateText"
             app:layout_constraintTop_toBottomOf="@id/useLiveSearch"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorPrimary"
+            android:text="@string/options"
+            app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/googleSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_out"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/options"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/googleSignOutText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/you_will_be_signed_out_from_dopamine"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/googleSignOut"
+            app:layout_constraintStart_toStartOf="@id/googleSignOut"/>
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/aboutUs"
@@ -208,7 +246,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
             android:text="@string/about_us"
-            app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
+            app:layout_constraintTop_toBottomOf="@id/googleSignOutText"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -243,6 +281,13 @@
             app:icon="@drawable/ic_update"
             app:layout_constraintTop_toBottomOf="@id/viewAboutUsDesc"
             app:layout_constraintStart_toStartOf="@id/viewAboutUsDesc" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkForUpdate"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

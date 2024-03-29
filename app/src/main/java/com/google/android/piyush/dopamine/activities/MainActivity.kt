@@ -1,29 +1,26 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
-import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
 import com.google.android.piyush.dopamine.databinding.ActivityMainBinding
-import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities.showToast
+import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
@@ -127,6 +124,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.phoneNumberLogin.setOnClickListener{
             startActivity(Intent(applicationContext, PhoneNumberAuthentication::class.java))
+        }
+
+        val theme = dopamineSharedPreferences(applicationContext).getString("Theme", "")
+        if(theme.isNullOrEmpty()){
+            dopamineSharedPreferences(context = applicationContext).edit().putString("Theme", Utilities.SYSTEM_MODE).apply()
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 }

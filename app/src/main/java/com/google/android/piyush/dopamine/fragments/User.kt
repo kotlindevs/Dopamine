@@ -9,15 +9,18 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,7 +28,10 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AboutUs
 import com.google.android.piyush.dopamine.activities.DopamineHome
+import com.google.android.piyush.dopamine.activities.MainActivity
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
+import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
+import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -34,6 +40,7 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 class User : Fragment() {
@@ -247,6 +254,9 @@ class User : Fragment() {
             }
         }
 
+        val theme = sharedPreferences.getString("Theme", Utilities.SYSTEM_MODE)
+        binding.useSystemThemeText.text = theme
+
         binding.useSystemTheme.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 this.setTitle("Choose dopamine theme")
@@ -280,6 +290,39 @@ class User : Fragment() {
 
         binding.viewAboutUs.setOnClickListener{
             AboutUs(context = requireContext()).create().show()
+        }
+
+        binding.googleSignOut.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Sign out from your account ?")
+                .setIcon(R.drawable.ic_dopamine)
+                .setMessage("Logging out will remove your account from the app and you will not be able to access it's features. To access it, please sign in again 😊")
+                .setCancelable(true)
+                .setPositiveButton("Yes"){
+                        dialog, _ ->
+                    if(NetworkUtilities.isNetworkAvailable(context = requireContext())) {
+                        firebaseAuth.signOut()
+                        lifecycleScope.launch {
+                           UserAuthRepositoryImpl(
+                               requireContext()
+                           ).signOut()
+                        }
+                        ToastUtilities.showToast(
+                            requireContext(),"You have successfully signed out from your account"
+                        )
+                        startActivity(
+                            Intent(requireContext(), MainActivity::class.java)
+                        )
+                        dialog.dismiss()
+                    }else{
+                        ToastUtilities.showToast(requireContext(),"Please check your internet connection")
+                    }
+                }
+                .setNegativeButton("No"){
+                        dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create().show()
         }
     }
 
