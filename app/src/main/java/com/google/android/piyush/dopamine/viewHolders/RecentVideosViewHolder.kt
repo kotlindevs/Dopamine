@@ -14,4 +14,6 @@ class RecentVideosViewHolder(
     val image : ShapeableImageView = itemView.findViewById(R.id.image)
     val title : MaterialTextView = itemView.findViewById(R.id.text1)
     val subtitle : MaterialTextView = itemView.findViewById(R.id.text2)
+    val videoLength : MaterialTextView = itemView.findViewById(R.id.videoLength)
+    val videoOptions : ShapeableImageView = itemView.findViewById(R.id.videoOption)
 }

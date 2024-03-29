@@ -33,6 +33,8 @@ import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.beta.ExperimentsMode
+import com.google.android.piyush.dopamine.beta.youtubedl.DownloadVideo
+import com.google.android.piyush.dopamine.beta.youtubedl.StreamVideo
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
@@ -156,6 +158,22 @@ class User : Fragment() {
                     binding.recentWatchHistory.visibility = View.GONE
                 }
             }
+        }
+
+        binding.tryVideoStreaming.setOnClickListener {
+            context?.startActivity(
+                Intent(
+                    requireContext(),StreamVideo::class.java
+                )
+            )
+        }
+
+        binding.tryVideoDownloading.setOnClickListener {
+            context?.startActivity(
+                Intent(
+                    requireContext(),DownloadVideo::class.java
+                )
+            )
         }
 
         binding.useLiveSearch.setOnCheckedChangeListener { _, isChecked ->

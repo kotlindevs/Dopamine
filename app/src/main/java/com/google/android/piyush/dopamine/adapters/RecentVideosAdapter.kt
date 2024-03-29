@@ -18,7 +18,7 @@ class RecentVideosAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentVideosViewHolder {
         return RecentVideosViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_fragment_library, parent, false)
+                .inflate(R.layout.item_recent_history, parent, false)
         )
     }
 
@@ -41,5 +41,6 @@ class RecentVideosAdapter(
                     .putExtra("channelId",videos?.channelId)
             )
         }
+        holder.videoLength.text = videos?.length
     }
 }

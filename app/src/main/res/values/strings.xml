@@ -109,4 +109,8 @@
     <string name="you_can_view_more_about_dopamine_here">You can view more about Dopamine here</string>
     <string name="options">Options</string>
     <string name="you_will_be_signed_out_from_dopamine">You will be signed out from Dopamine</string>
+    <string name="stream_video">Stream Video</string>
+    <string name="copy_paste_your_link_and_watch_any_video_free">Copy paste your link and watch any video free !</string>
+    <string name="download_any_video">Download any video</string>
+    <string name="all_videos_are_available_for_download">All videos are available for download</string>
 </resources>

@@ -48,6 +48,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Ful
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import io.reactivex.disposables.CompositeDisposable
 import java.text.DecimalFormat
+import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -176,6 +177,7 @@ class YoutubePlayer : AppCompatActivity() {
                     val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
                     val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
                     val videoTags = videoDetails.data.items?.get(0)?.snippet?.tags.toString()
+                    val videoLength = formatDuration(Duration.parse(videoDetails.data.items?.get(0)?.contentDetails?.duration))
 
                     binding.apply {
                         textTitle.text  = videoTitle
@@ -229,7 +231,8 @@ class YoutubePlayer : AppCompatActivity() {
                                     timing = LocalTime.now()
                                         .format(DateTimeFormatter.ofPattern("hh:mm a"))
                                         .toString(),
-                                    channelId = channelId
+                                    channelId = channelId,
+                                    length = videoLength
                                 )
                             )
                         }
@@ -331,6 +334,18 @@ class YoutubePlayer : AppCompatActivity() {
             data = "${num}K"
         }
         return data
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun formatDuration(duration: Duration): String {
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+        val seconds = duration.seconds % 60
+        return if (hours > 0) {
+            "%02d:%02d:%02d".format(hours, minutes, seconds)
+        } else {
+            "%02d:%02d".format(minutes, seconds)
+        }
     }
 }
 

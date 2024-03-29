@@ -11,4 +11,5 @@ data class EntityRecentVideos(
     val thumbnail: String?,
     val timing : String?,
     val channelId : String? = null,
+    val length : String? = null
 )

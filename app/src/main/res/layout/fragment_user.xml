@@ -14,7 +14,7 @@
             android:id="@+id/userImage"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:layout_margin="16dp"
+            android:layout_margin="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
@@ -26,6 +26,7 @@
             android:layout_marginStart="12dp"
             android:hint="@string/user_name"
             android:maxLines="2"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintStart_toEndOf="@id/userImage"
             app:layout_constraintTop_toTopOf="@id/userImage"
@@ -97,7 +98,7 @@
             android:id="@+id/useSystemColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/useSystemColorText"
@@ -111,7 +112,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/textUseSystemColorDesc"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -164,7 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/useLiveSearchText"
             app:layout_constraintTop_toBottomOf="@id/experimentalFeatures"/>
@@ -196,10 +197,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/installPreReleaseUpdateText"
             app:layout_constraintTop_toBottomOf="@id/useLiveSearch"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryVideoStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stream_video"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryVideoStreamingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy_paste_your_link_and_watch_any_video_free"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/tryVideoStreaming"
+            app:layout_constraintStart_toStartOf="@id/tryVideoStreaming"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryVideoDownloading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/download_any_video"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tryVideoStreamingText"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryVideoDownloadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_videos_are_available_for_download"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/tryVideoDownloading"
+            app:layout_constraintStart_toStartOf="@id/tryVideoDownloading"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/options"
@@ -211,7 +254,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
             android:text="@string/options"
-            app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
+            app:layout_constraintTop_toBottomOf="@id/tryVideoDownloadingText"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -222,7 +265,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/options"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -257,7 +300,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/aboutUs"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -275,7 +318,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/check_for_updates"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             style="@style/Widget.Material3.Button.TonalButton.Icon"
             app:icon="@drawable/ic_update"
