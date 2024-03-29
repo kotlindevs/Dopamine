@@ -55,7 +55,7 @@
     <string name="use_advanced_mode">Use Advanced Mode</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="use_experimental_search">Use Experimental Search</string>
+    <string name="use_live_search">Use Live Search</string>
     <string name="welcome_to_experimental_mode">Welcome To Experimental Mode</string>
     <string name="searchbar_hint">Search Something Here </string>
     <string name="voice_search">Voice Search</string>
@@ -66,7 +66,7 @@
     <string name="continue_with_phone_number">Continue with phone number</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
-    <string name="dynamic_colors_android_12">Dynamic Colors (Android 12+)</string>
+    <string name="system_theme_color">Use system theme color</string>
     <string name="canary">Canary</string>
     <string name="beta">Beta</string>
     <string name="this_dynamic_color_is_available_on_android_14_but_it_s_a_different">This feature is available on Android 14 but currently unavailable.</string>
@@ -76,8 +76,8 @@
     <string name="light"> ☀️ Day Theme </string>
     <string name="dark"> 🌙 Night Theme </string>
     <string name="system"> 🤖 System Theme </string>
-    <string name="choose_dopamine_theme">Choose dopamine theme</string>
-    <string name="i_m_developer_pre_release">Developer Pre-Release Build</string>
+    <string name="current_theme">Current Theme</string>
+    <string name="install_pre_release_update">Install Pre-Release Update</string>
     <string name="about_us">About Us</string>
     <string name="developers">Developers</string>
     <string name="about_dopamine">About Dopamine</string>
@@ -98,4 +98,13 @@
     <string name="no_contact_available">No Contact Available</string>
     <string name="photos_from_user">Photos from User</string>
     <string name="experimental_features">Experimental Features</string>
+    <string name="user">User</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">User Email</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme">theme</string>
+    <string name="get_unlimited_search_results">Get unlimited search results !</string>
+    <string name="use_beta_updates_to_improve_your_experience">Use beta updates to improve your experience</string>
+    <string name="available_in_android_12_and_above">Available in android 12 and above</string>
+    <string name="you_can_view_more_about_dopamine_here">You can view more about Dopamine here</string>
 </resources>

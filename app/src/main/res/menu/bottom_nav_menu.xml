@@ -19,4 +19,9 @@
         android:id="@+id/library"
         android:title="@string/library"
         android:icon="@drawable/ic_library"/>
+
+    <item
+        android:id="@+id/user"
+        android:title="@string/user"
+        android:icon="@drawable/default_user"/>
 </menu>

@@ -1,13 +1,11 @@
 package com.google.android.piyush.dopamine.fragments
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
@@ -65,14 +62,6 @@ class Library : Fragment() {
             Glide.with(this).load(R.drawable.default_user).into(fragmentLibraryBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentLibraryBinding!!.userImage)
-        }
-
-        fragmentLibraryBinding!!.userImage.setOnClickListener {
-            Toast.makeText(context,firebaseAuth.currentUser!!.displayName,
-                Toast.LENGTH_SHORT).show()
-            startActivity(
-                Intent(context, DopamineUserProfile::class.java)
-            )
         }
 
         if(NetworkUtilities.isNetworkAvailable(requireContext())) {

@@ -16,6 +16,7 @@ import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.fragments.Library
 import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
+import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
@@ -86,6 +87,11 @@ class DopamineHome : AppCompatActivity() {
                     defaultScreen(Shorts())
                     true
                 }
+                R.id.user -> {
+                    defaultScreen(User())
+                    true
+                }
+
                 else -> false
             }
         }

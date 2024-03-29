@@ -21,7 +21,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
@@ -67,15 +66,6 @@ class Search : Fragment() {
             Glide.with(this).load(R.drawable.default_user).into(fragmentSearchBinding!!.userImage)
         }else{
             Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentSearchBinding!!.userImage)
-        }
-
-        fragmentSearchBinding!!.userImage.setOnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    DopamineUserProfile::class.java
-                )
-            )
         }
 
         binding.clearAll.setOnClickListener {
