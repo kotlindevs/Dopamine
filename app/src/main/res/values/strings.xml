@@ -116,4 +116,7 @@
     <string name="all_videos_are_available_for_download">All videos are available for download</string>
     <string name="about_developer">About Developer</string>
     <string name="developed_by_me">Developed By Piyush Makwana ❤️</string>
+    <string name="title_activity_dopamine_settings">DopamineSettings</string>
+    <string name="setting">Setting</string>
+    <string name="open_settings">Open settings</string>
 </resources>

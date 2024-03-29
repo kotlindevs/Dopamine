@@ -28,6 +28,7 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AboutUs
 import com.google.android.piyush.dopamine.activities.DopamineHome
+import com.google.android.piyush.dopamine.activities.DopamineSettings
 import com.google.android.piyush.dopamine.activities.MainActivity
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
@@ -341,6 +342,23 @@ class User : Fragment() {
                     dialog.dismiss()
                 }
                 .create().show()
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.setting -> {
+                    startActivity(
+                        Intent(
+                            requireContext(), DopamineSettings::class.java
+                        )
+                    )
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
         }
     }
 

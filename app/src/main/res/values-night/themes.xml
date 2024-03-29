@@ -30,10 +30,4 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-
-    <style name="Widget.BottomNavigationView"
-        parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/circular_spotify</item>
-    </style>
-
 </resources>
