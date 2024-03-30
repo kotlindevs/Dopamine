@@ -25,6 +25,7 @@ import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
+import com.google.android.piyush.youtube.viewModels.MoreViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 import kotlin.system.exitProcess
@@ -277,8 +278,20 @@ class Home : Fragment() {
                         binding.recyclerView.apply {
                             setHasFixedSize(true)
                             layoutManager = LinearLayoutManager(context)
-                            homeAdapter = HomeAdapter(requireContext(), videos.data)
+                            homeAdapter = HomeAdapter(requireContext(), videos.data.items)
+                            homeAdapter.notifyDataSetChanged()
                             adapter = homeAdapter
+
+                            val totalResults = videos.data.pageInfo?.totalResults!!
+                            val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
+                            val totalPages = totalResults.div(resultsPerPage).toInt()
+
+                            dopamineSharedPreferences(
+                                requireContext()
+                            ).edit()
+                                .putString("pageToken", videos.data.nextPageToken)
+                                .putInt("totalPages", totalPages)
+                                .apply()
                         }
                     }
 
@@ -314,7 +327,7 @@ class Home : Fragment() {
                                                     setHasFixedSize(true)
                                                     layoutManager = LinearLayoutManager(context)
                                                     homeAdapter =
-                                                        HomeAdapter(requireContext(), videos.data)
+                                                        HomeAdapter(requireContext(), videos.data.items)
                                                     adapter = homeAdapter
                                                 }
                                                 //Log.d(TAG, "Success: ${videos.data}")

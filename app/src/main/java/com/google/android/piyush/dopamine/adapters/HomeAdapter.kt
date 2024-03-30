@@ -13,8 +13,12 @@ import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewHolders.HomeViewHolder
+import com.google.android.piyush.youtube.model.Item
 import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.viewModels.MoreViewModel
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,8 +26,21 @@ import java.time.temporal.ChronoUnit
 
 class HomeAdapter(
     private val context: Context,
-    private var youtube : Youtube?
+    private var youtube : List<Item>?
 ) : RecyclerView.Adapter<HomeViewHolder>() {
+
+    private fun addVideos(videos: List<Item>?) {
+        if(youtube?.containsAll(videos!!)!!.equals(false)){
+            youtube.let {
+                youtube = it?.plus(videos!!)
+            }
+        }
+        notifyItemRangeInserted(
+            youtube?.size ?: 0,
+            videos?.size ?: 0
+        )
+        Log.d(TAG, "Success: ${this.itemCount}")
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         return HomeViewHolder(
@@ -34,7 +51,7 @@ class HomeAdapter(
     }
 
     override fun getItemCount(): Int {
-       return youtube?.items?.size!!
+       return youtube?.size!!
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -42,31 +59,31 @@ class HomeAdapter(
         val publishedTime = formatDuration(
             ChronoUnit.SECONDS.between(
                 LocalDateTime.parse(
-                    youtube?.items?.get(position)?.snippet!!.publishedAt, DateTimeFormatter.ISO_DATE_TIME),
+                    youtube?.get(position)?.snippet!!.publishedAt, DateTimeFormatter.ISO_DATE_TIME),
                 LocalDateTime.now()
             )
         )
         val publishedViews = viewsCount(
-            youtube!!.items?.get(position)?.statistics!!.viewCount!!.toInt()
+            youtube?.get(position)?.statistics!!.viewCount!!.toInt()
         )
 
         val channelTitle = "${
-            youtube!!.items?.get(position)?.snippet!!.channelTitle} • $publishedViews • $publishedTime"
+            youtube?.get(position)?.snippet!!.channelTitle} • $publishedViews • $publishedTime"
 
-        holder.videoTitle.text = youtube!!.items?.get(position)?.snippet!!.title
+        holder.videoTitle.text = youtube?.get(position)?.snippet!!.title
 
         holder.channelTitle.text = channelTitle
 
         Glide.with(context)
-            .load(youtube!!.items?.get(position)?.snippet!!.thumbnails!!.default!!.url)
+            .load(youtube?.get(position)?.snippet!!.thumbnails!!.default!!.url)
             .into(holder.imageView)
 
         Glide.with(context)
-            .load(youtube!!.items?.get(position)?.snippet!!.thumbnails!!.high!!.url)
+            .load(youtube?.get(position)?.snippet!!.thumbnails!!.high!!.url)
             .into(holder.youTubePlayerView)
 
         holder.videoDuration.text = formatDuration(
-            Duration.parse(youtube!!.items?.get(position)?.contentDetails!!.duration!!)
+            Duration.parse(youtube?.get(position)?.contentDetails!!.duration!!)
         )
 
         holder.youTubePlayer.setOnClickListener {
@@ -74,15 +91,39 @@ class HomeAdapter(
                 context.startActivity(
                     Intent(context, YoutubePlayer::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("videoId", youtube!!.items?.get(position)?.id)
-                        .putExtra("channelId", youtube!!.items?.get(position)?.snippet!!.channelId)
+                        .putExtra("videoId", youtube?.get(position)?.id)
+                        .putExtra("channelId", youtube?.get(position)?.snippet!!.channelId)
                 )
-                Log.d("FragmentHome", "videoId: ${youtube!!.items?.get(position)?.id}")
-                Log.d("FragmentHome", "channelId: ${youtube!!.items?.get(position)?.snippet!!.channelId}")
+                Log.d("FragmentHome", "videoId: ${youtube?.get(position)?.id}")
+                Log.d("FragmentHome", "channelId: ${youtube?.get(position)?.snippet!!.channelId}")
             }else{
                 NetworkUtilities.showNetworkError(context)
             }
-            Log.d("FragmentHome", "videoData: ${youtube!!.items?.get(position)}")
+            Log.d("FragmentHome", "videoData: ${youtube?.get(position)}")
+        }
+
+        val moreViewModel = MoreViewModel()
+        val regionCode = dopamineSharedPreferences(context).getString("region", "").toString()
+        val pageToken = dopamineSharedPreferences(context).getString("pageToken", "").toString()
+        val totalPage = dopamineSharedPreferences(context).getInt("totalPages", 0)
+
+        for(i in 0 until totalPage) {
+            if (position.equals(youtube?.size?.minus(1))) {
+                Log.d(TAG, "regionCode: $regionCode || pageToken: $pageToken")
+                if(pageToken.isNotEmpty()) {
+                    moreViewModel.loadVideos(
+                        regionCode = regionCode,
+                        pageToken = pageToken
+                    )
+                    moreViewModel.video.observeForever {
+                        if (it is YoutubeResource.Success) {
+                            addVideos(it.data.items)
+                            dopamineSharedPreferences(context).edit()
+                                .putString("pageToken", it.data.nextPageToken).apply()
+                        }
+                    }
+                }
+            }
         }
     }
 

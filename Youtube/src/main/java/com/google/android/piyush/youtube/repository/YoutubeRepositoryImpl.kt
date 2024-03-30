@@ -1,5 +1,6 @@
 package com.google.android.piyush.youtube.repository
 
+import android.util.Log
 import com.google.android.piyush.youtube.model.SearchTube
 import com.google.android.piyush.youtube.model.Shorts
 import com.google.android.piyush.youtube.utilities.YoutubeClient
@@ -109,6 +110,21 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", videoId)
                 parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
+
+    override suspend fun getLoadMoreVideos(regionCode: String, pageToken: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", regionCode)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("pageToken", pageToken)
             }
         }
         return response.body()

@@ -97,3 +97,33 @@ class HomeViewModelFactory(
         )
     }
 }
+
+
+class MoreViewModel : ViewModel () {
+    private val repository = YoutubeRepositoryImpl()
+    private val _video : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
+    val video : LiveData<YoutubeResource<Youtube>> = _video
+
+    fun loadVideos(regionCode : String, pageToken : String) = viewModelScope.launch {
+        try {
+            _video.postValue(
+                YoutubeResource.Loading
+            )
+            val response = repository.getLoadMoreVideos(
+                regionCode =  regionCode,
+                pageToken =  pageToken
+            )
+            _video.postValue(
+                YoutubeResource.Success(
+                    response
+                )
+            )
+        }catch (exception : Exception){
+            _video.postValue(
+                YoutubeResource.Error(
+                    exception = exception
+                )
+            )
+        }
+    }
+}

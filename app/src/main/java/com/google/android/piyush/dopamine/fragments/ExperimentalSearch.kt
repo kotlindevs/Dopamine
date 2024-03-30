@@ -120,7 +120,7 @@ class ExperimentalSearch : Fragment() {
                         }
                         binding.searchData.apply {
                             layoutManager = LinearLayoutManager(context)
-                            adapter = HomeAdapter(context, defaultVideos.data)
+                            adapter = HomeAdapter(context, defaultVideos.data.items)
                         }
                     }
 
