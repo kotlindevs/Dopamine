@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,8 @@ import com.google.android.piyush.dopamine.activities.AppNotificationView
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
@@ -81,14 +84,54 @@ class Home : Fragment() {
             )
         }
 
+        val regionPref = dopamineSharedPreferences(requireContext())
+        if(regionPref.getBoolean("saveRegion", false).equals(true)){
+            val code = regionPref.getString("region", "").toString()
+            homeViewModel.getHomeVideos(
+                regionCode = code
+            )
+        }else {
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                this.setTitle("Select your home region")
+                this.setIcon(R.drawable.home_region)
+                this.setSingleChoiceItems(
+                    Utilities.REGIONS,
+                    if (regionPref.getString("region", "") == Utilities.DEFAULT_REGION) 0
+                    else if (regionPref.getString("region", "") == Utilities.USA) 1
+                    else if (regionPref.getString("region", "") == Utilities.AUSTRALIA) 2
+                    else if (regionPref.getString("region", "") == Utilities.CANADA) 3
+                    else 0
+                ) { _, which ->
+                    when (which) {
+                        0 -> regionPref.edit().putString("region", Utilities.DEFAULT_REGION).apply()
+                        1 -> regionPref.edit().putString("region", Utilities.USA).apply()
+                        2 -> regionPref.edit().putString("region", Utilities.AUSTRALIA).apply()
+                        3 -> regionPref.edit().putString("region", Utilities.CANADA).apply()
+                    }
+                }
+                this.setCancelable(true)
+                this.setPositiveButton("Save") { dialog, _ ->
+                    regionPref.edit().putBoolean("saveRegion", true).apply()
+                    val code = regionPref.getString("region", "").toString()
+                    homeViewModel.getHomeVideos(
+                        regionCode = code
+                    )
+                    dialog.dismiss()
+                }
+                this.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.create().show()
+        }
+
         if(NetworkUtilities.isNetworkAvailable(requireContext())) {
-            homeViewModel.videos.observe(viewLifecycleOwner) {videos ->
+            homeViewModel.videos.observe(viewLifecycleOwner) { videos ->
                 when (videos) {
                     is YoutubeResource.Loading -> {
                         binding.shimmerRecyclerView.visibility = View.VISIBLE
                         binding.shimmerRecyclerView.startShimmer()
-                        //Log.d(TAG, "Loading: True")
                     }
+
                     is YoutubeResource.Success -> {
                         binding.shimmerRecyclerView.visibility = View.INVISIBLE
                         binding.shimmerRecyclerView.stopShimmer()
@@ -99,6 +142,7 @@ class Home : Fragment() {
                             adapter = homeAdapter
                         }
                     }
+
                     is YoutubeResource.Error -> {
                         Log.d(TAG, "Error: ${videos.exception.message.toString()}")
                         MaterialAlertDialogBuilder(requireContext())
@@ -111,27 +155,37 @@ class Home : Fragment() {
                                     dialog?.dismiss()
                                 }
                                 this.setPositiveButton("Retry") { _, _ ->
-                                    homeViewModel.reGetHomeVideos()
-                                    homeViewModel.reGetVideos.observe(viewLifecycleOwner){ videos ->
+                                    homeViewModel.reGetHomeVideos(
+                                        regionPref.getString("region", "").toString()
+                                    )
+                                    homeViewModel.reGetVideos.observe(viewLifecycleOwner) { videos ->
                                         when (videos) {
                                             is YoutubeResource.Loading -> {
-                                                binding.shimmerRecyclerView.visibility = View.VISIBLE
+                                                binding.shimmerRecyclerView.visibility =
+                                                    View.VISIBLE
                                                 binding.shimmerRecyclerView.startShimmer()
                                                 Log.d(TAG, "Loading: True")
                                             }
+
                                             is YoutubeResource.Success -> {
-                                                binding.shimmerRecyclerView.visibility = View.INVISIBLE
+                                                binding.shimmerRecyclerView.visibility =
+                                                    View.INVISIBLE
                                                 binding.shimmerRecyclerView.stopShimmer()
                                                 binding.recyclerView.apply {
                                                     setHasFixedSize(true)
                                                     layoutManager = LinearLayoutManager(context)
-                                                    homeAdapter = HomeAdapter(requireContext(), videos.data)
+                                                    homeAdapter =
+                                                        HomeAdapter(requireContext(), videos.data)
                                                     adapter = homeAdapter
                                                 }
                                                 //Log.d(TAG, "Success: ${videos.data}")
                                             }
+
                                             is YoutubeResource.Error -> {
-                                                Log.d(TAG, "Error: ${videos.exception.message.toString()}")
+                                                Log.d(
+                                                    TAG,
+                                                    "Error: ${videos.exception.message.toString()}"
+                                                )
                                                 MaterialAlertDialogBuilder(requireContext())
                                                     .apply {
                                                         this.setTitle("Something went wrong")

@@ -60,6 +60,17 @@ const val PERMISSION_REQUEST_CODE = 100
     const val GITHUB = "https://github.com/kotlindevs/dopamine"
     const val EMAIL = "kotlindevslife@gmail.com"
     const val EMAIL1 = "piyushmakwana5617@gmail.com"
+    const val DEFAULT_REGION = "IN"
+    const val USA = "US"
+    const val AUSTRALIA = "AU"
+    const val CANADA = "CA"
+    val REGIONS = arrayOf(
+        DEFAULT_REGION,
+        USA,
+        AUSTRALIA,
+        CANADA
+    )
+
 
 
     fun turnOnNetworkDialog(context: Context, message: String) = MaterialAlertDialogBuilder(context).also {

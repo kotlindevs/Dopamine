@@ -239,4 +239,19 @@ class YoutubeRepositoryImpl : YoutubeRepository {
         }
         return response.body()
     }
+
+    suspend fun experimentalRegionWiseVideos(regionCode: String): Youtube{
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", regionCode)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
 }

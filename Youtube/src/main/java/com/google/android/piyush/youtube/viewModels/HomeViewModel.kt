@@ -20,16 +20,12 @@ class HomeViewModel(
     private val _reGetVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
     val reGetVideos : LiveData<YoutubeResource<Youtube>> = _reGetVideos
 
-    init {
-        getHomeVideos()
-    }
-
-    private fun getHomeVideos() = viewModelScope.launch {
+    fun getHomeVideos(regionCode : String) = viewModelScope.launch {
         try {
             _videos.postValue(
                 YoutubeResource.Loading
             )
-            val response = youtubeRepositoryImpl.getHomeVideos()
+            val response = youtubeRepositoryImpl.experimentalRegionWiseVideos(regionCode)
             if(response.items.isNullOrEmpty()){
                 _videos.postValue(
                     YoutubeResource.Error(
@@ -55,13 +51,13 @@ class HomeViewModel(
         }
     }
 
-    fun reGetHomeVideos() {
+    fun reGetHomeVideos(regionCode: String) {
         viewModelScope.launch {
             try {
                 _reGetVideos.postValue(
                     YoutubeResource.Loading
                 )
-                val response = youtubeRepositoryImpl.reGetHomeVideos()
+                val response = youtubeRepositoryImpl.experimentalRegionWiseVideos(regionCode)
                 if(response.items.isNullOrEmpty()) {
                     _reGetVideos.postValue(
                         YoutubeResource.Error(
@@ -91,6 +87,7 @@ class HomeViewModel(
 class HomeViewModelFactory(
     private val repository: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(HomeViewModel::class.java)){
             return HomeViewModel(repository) as T

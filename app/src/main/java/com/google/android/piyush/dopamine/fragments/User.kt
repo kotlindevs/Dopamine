@@ -9,11 +9,9 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -28,18 +26,16 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AboutUs
 import com.google.android.piyush.dopamine.activities.DopamineHome
-import com.google.android.piyush.dopamine.activities.DopamineSettings
 import com.google.android.piyush.dopamine.activities.MainActivity
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
-import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
-import com.google.android.piyush.dopamine.beta.ExperimentsMode
 import com.google.android.piyush.dopamine.beta.youtubedl.DownloadVideo
 import com.google.android.piyush.dopamine.beta.youtubedl.StreamVideo
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
@@ -310,6 +306,44 @@ class User : Fragment() {
         binding.viewAboutUs.setOnClickListener{
             AboutUs(context = requireContext()).create().show()
         }
+        val regionPref = dopamineSharedPreferences(requireContext())
+        val region = regionPref.getString("region", "").toString()
+        if(region.isNotEmpty()){
+            binding.currentRegionText.text = region
+        }else{
+            binding.currentRegionText.text = "No Region Selected"
+        }
+
+        binding.currentRegion.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                this.setTitle("Select your home region")
+                this.setIcon(R.drawable.home_region)
+                this.setSingleChoiceItems(
+                    Utilities.REGIONS,
+                    if (regionPref.getString("region", "") == Utilities.DEFAULT_REGION) 0
+                    else if (regionPref.getString("region", "") == Utilities.USA) 1
+                    else if (regionPref.getString("region", "") == Utilities.AUSTRALIA) 2
+                    else if (regionPref.getString("region", "") == Utilities.CANADA) 3
+                    else 0
+                ) { _, which ->
+                    when (which) {
+                        0 -> regionPref.edit().putString("region", Utilities.DEFAULT_REGION).apply()
+                        1 -> regionPref.edit().putString("region", Utilities.USA).apply()
+                        2 -> regionPref.edit().putString("region", Utilities.AUSTRALIA).apply()
+                        3 -> regionPref.edit().putString("region", Utilities.CANADA).apply()
+                    }
+                }
+                this.setCancelable(true)
+                this.setPositiveButton("Save") { dialog, _ ->
+                    regionPref.edit().putBoolean("saveRegion", true).apply()
+                    binding.currentRegionText.text = regionPref.getString("region", "")
+                    dialog.dismiss()
+                }
+                this.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.create().show()
+        }
 
         binding.googleSignOut.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
@@ -342,23 +376,6 @@ class User : Fragment() {
                     dialog.dismiss()
                 }
                 .create().show()
-        }
-
-        binding.topAppBar.setOnMenuItemClickListener {
-            when(it.itemId) {
-                R.id.setting -> {
-                    startActivity(
-                        Intent(
-                            requireContext(), DopamineSettings::class.java
-                        )
-                    )
-                    true
-                }
-
-                else -> {
-                    false
-                }
-            }
         }
     }
 

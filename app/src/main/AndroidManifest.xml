@@ -24,10 +24,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.DopamineSettings"
-            android:exported="false"
-            android:label="@string/title_activity_dopamine_settings" />
-        <activity
             android:name=".activities.AppNotificationView"
             android:exported="true" />
         <activity

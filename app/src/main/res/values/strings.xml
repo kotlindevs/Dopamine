@@ -119,4 +119,6 @@
     <string name="title_activity_dopamine_settings">DopamineSettings</string>
     <string name="setting">Setting</string>
     <string name="open_settings">Open settings</string>
+    <string name="current_region">Current Region</string>
+    <string name="your_home_region">Your home region</string>
 </resources>
