@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -320,17 +321,155 @@ class User : Fragment() {
                 this.setIcon(R.drawable.home_region)
                 this.setSingleChoiceItems(
                     Utilities.REGIONS,
-                    if (regionPref.getString("region", "") == Utilities.DEFAULT_REGION) 0
-                    else if (regionPref.getString("region", "") == Utilities.USA) 1
-                    else if (regionPref.getString("region", "") == Utilities.AUSTRALIA) 2
-                    else if (regionPref.getString("region", "") == Utilities.CANADA) 3
+                    if (regionPref.getString("region", "") == Utilities.DEFAULT_REGION[0]) 0
+                    else if (regionPref.getString("region", "") == Utilities.ARGENTINA[0]) 1
+                    else if (regionPref.getString("region", "") == Utilities.AUSTRALIA[0]) 2
+                    else if (regionPref.getString("region", "") == Utilities.BANGLADESH[0]) 3
+                    else if (regionPref.getString("region", "") == Utilities.BRAZIL[0]) 4
+                    else if (regionPref.getString("region", "") == Utilities.BHUTAN[0]) 5
+                    else if (regionPref.getString("region", "") == Utilities.CANADA[0]) 6
+                    else if (regionPref.getString("region", "") == Utilities.CHINA[0]) 7
+                    else if (regionPref.getString("region", "") == Utilities.COLOMBIA[0]) 8
+                    else if (regionPref.getString("region", "") == Utilities.DENMARK[0]) 9
+                    else if (regionPref.getString("region", "") == Utilities.EGYPT[0]) 10
+                    else if (regionPref.getString("region", "") == Utilities.FRANCE[0]) 11
+                    else if (regionPref.getString("region", "") == Utilities.GERMANY[0]) 12
+                    else if (regionPref.getString("region", "") == Utilities.HONG_KONG[0]) 13
+                    else if (regionPref.getString("region", "") == Utilities.ISRAEL[0]) 14
+                    else if (regionPref.getString("region", "") == Utilities.ITALY[0]) 15
+                    else if (regionPref.getString("region", "") == Utilities.IRAN[0]) 16
+                    else if (regionPref.getString("region", "") == Utilities.JAPAN[0]) 17
+                    else if (regionPref.getString("region", "") == Utilities.JERSEY[0]) 18
+                    else if (regionPref.getString("region", "") == Utilities.KENYA[0]) 19
+                    else if (regionPref.getString("region", "") == Utilities.KOREA[0]) 20
+                    else if (regionPref.getString("region", "") == Utilities.LEBANON[0]) 21
+                    else if (regionPref.getString("region", "") == Utilities.MALAYSIA[0]) 22
+                    else if (regionPref.getString("region", "") == Utilities.MALDIVES[0]) 23
+                    else if (regionPref.getString("region", "") == Utilities.MEXICO[0]) 24
+                    else if (regionPref.getString("region", "") == Utilities.MONGOLIA[0]) 25
+                    else if (regionPref.getString("region", "") == Utilities.MYANMAR[0]) 26
+                    else if (regionPref.getString("region", "") == Utilities.NETHERLANDS[0]) 27
+                    else if (regionPref.getString("region", "") == Utilities.NEPAL[0]) 28
+                    else if (regionPref.getString("region", "") == Utilities.NEW_ZEALAND[0]) 29
+                    else if (regionPref.getString("region", "") == Utilities.NIGERIA[0]) 30
+                    else if (regionPref.getString("region", "") == Utilities.NORWAY[0]) 31
+                    else if (regionPref.getString("region", "") == Utilities.PAKISTAN[0]) 32
+                    else if (regionPref.getString("region", "") == Utilities.PANAMA[0]) 33
+                    else if (regionPref.getString("region", "") == Utilities.PARAGUAY[0]) 34
+                    else if (regionPref.getString("region", "") == Utilities.PERU[0]) 35
+                    else if (regionPref.getString("region", "") == Utilities.PHILIPPINES[0]) 36
+                    else if (regionPref.getString("region", "") == Utilities.POLAND[0]) 37
+                    else if (regionPref.getString("region", "") == Utilities.PORTUGAL[0]) 38
+                    else if (regionPref.getString("region", "") == Utilities.RUSSIA[0]) 39
+                    else if (regionPref.getString("region", "") == Utilities.ROMANIA[0]) 40
+                    else if (regionPref.getString("region", "") == Utilities.SAUDI_ARABIA[0]) 41
+                    else if (regionPref.getString("region", "") == Utilities.SINGAPORE[0]) 42
+                    else if (regionPref.getString("region", "") == Utilities.SPAIN[0]) 43
+                    else if (regionPref.getString("region", "") == Utilities.SRI_LANKA[0]) 44
+                    else if (regionPref.getString("region", "") == Utilities.SWEDEN[0]) 45
+                    else if (regionPref.getString("region", "") == Utilities.SWITZERLAND[0]) 46
+                    else if (regionPref.getString("region", "") == Utilities.TAIWAN[0]) 47
+                    else if (regionPref.getString("region", "") == Utilities.UKRAINE[0]) 48
+                    else if (regionPref.getString("region", "") == Utilities.UNITED_KINGDOM[0]) 49
+                    else if (regionPref.getString("region", "") == Utilities.UNITED_STATES[0]) 50
+                    else if (regionPref.getString("region", "") == Utilities.ZIMBABWE[0]) 51
                     else 0
                 ) { _, which ->
                     when (which) {
-                        0 -> regionPref.edit().putString("region", Utilities.DEFAULT_REGION).apply()
-                        1 -> regionPref.edit().putString("region", Utilities.USA).apply()
-                        2 -> regionPref.edit().putString("region", Utilities.AUSTRALIA).apply()
-                        3 -> regionPref.edit().putString("region", Utilities.CANADA).apply()
+                        0 -> regionPref.edit().putString("region", Utilities.DEFAULT_REGION[0]).apply()
+                        1 -> {
+                            regionPref.edit().putString("region", Utilities.ARGENTINA[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        2 -> regionPref.edit().putString("region", Utilities.AUSTRALIA[0]).apply()
+                        3 -> regionPref.edit().putString("region", Utilities.BANGLADESH[0]).apply()
+                        4 -> regionPref.edit().putString("region", Utilities.BRAZIL[0]).apply()
+                        5 -> {
+                            regionPref.edit().putString("region", Utilities.BHUTAN[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        6 -> regionPref.edit().putString("region", Utilities.CANADA[0]).apply()
+                        7 -> {
+                            regionPref.edit().putString("region", Utilities.CHINA[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        8 -> regionPref.edit().putString("region", Utilities.COLOMBIA[0]).apply()
+                        9 -> regionPref.edit().putString("region", Utilities.DENMARK[0]).apply()
+                        10 -> regionPref.edit().putString("region", Utilities.EGYPT[0]).apply()
+                        11 -> regionPref.edit().putString("region", Utilities.FRANCE[0]).apply()
+                        12 -> regionPref.edit().putString("region", Utilities.GERMANY[0]).apply()
+                        13 -> regionPref.edit().putString("region", Utilities.HONG_KONG[0]).apply()
+                        14 -> regionPref.edit().putString("region", Utilities.ISRAEL[0]).apply()
+                        15 -> regionPref.edit().putString("region", Utilities.ITALY[0]).apply()
+                        16 -> {
+                            regionPref.edit().putString("region", Utilities.IRAN[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        17 -> regionPref.edit().putString("region", Utilities.JAPAN[0]).apply()
+                        18 -> {
+                            regionPref.edit().putString("region", Utilities.JERSEY[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        19 -> regionPref.edit().putString("region", Utilities.KENYA[0]).apply()
+                        20 -> regionPref.edit().putString("region", Utilities.KOREA[0]).apply()
+                        21 -> regionPref.edit().putString("region", Utilities.LEBANON[0]).apply()
+                        22 -> regionPref.edit().putString("region", Utilities.MALAYSIA[0]).apply()
+                        23 -> {
+                            regionPref.edit().putString("region", Utilities.MALDIVES[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        24 -> regionPref.edit().putString("region", Utilities.MEXICO[0]).apply()
+                        25 -> regionPref.edit().putString("region", Utilities.MONGOLIA[0]).apply()
+                        26 -> {
+                            regionPref.edit().putString("region", Utilities.MYANMAR[0]).apply()
+                            ToastUtilities.showToast(
+                                requireContext(),
+                                "Service not available yet for this region"
+                            )
+                        }
+                        27 -> regionPref.edit().putString("region", Utilities.NETHERLANDS[0]).apply()
+                        28 -> regionPref.edit().putString("region", Utilities.NEPAL[0]).apply()
+                        29 -> regionPref.edit().putString("region", Utilities.NEW_ZEALAND[0]).apply()
+                        30 -> regionPref.edit().putString("region", Utilities.NIGERIA[0]).apply()
+                        31 -> regionPref.edit().putString("region", Utilities.NORWAY[0]).apply()
+                        32 -> regionPref.edit().putString("region", Utilities.PAKISTAN[0]).apply()
+                        33 -> regionPref.edit().putString("region", Utilities.PANAMA[0]).apply()
+                        34 -> regionPref.edit().putString("region", Utilities.PARAGUAY[0]).apply()
+                        35 -> regionPref.edit().putString("region", Utilities.PERU[0]).apply()
+                        36 -> regionPref.edit().putString("region", Utilities.PHILIPPINES[0]).apply()
+                        37 -> regionPref.edit().putString("region", Utilities.POLAND[0]).apply()
+                        38 -> regionPref.edit().putString("region", Utilities.PORTUGAL[0]).apply()
+                        39 -> regionPref.edit().putString("region", Utilities.RUSSIA[0]).apply()
+                        40 -> regionPref.edit().putString("region", Utilities.ROMANIA[0]).apply()
+                        41 -> regionPref.edit().putString("region", Utilities.SAUDI_ARABIA[0]).apply()
+                        42 -> regionPref.edit().putString("region", Utilities.SINGAPORE[0]).apply()
+                        43 -> regionPref.edit().putString("region", Utilities.SPAIN[0]).apply()
+                        44 -> regionPref.edit().putString("region", Utilities.SRI_LANKA[0]).apply()
+                        45 -> regionPref.edit().putString("region", Utilities.SWEDEN[0]).apply()
+                        46 -> regionPref.edit().putString("region", Utilities.SWITZERLAND[0]).apply()
+                        47 -> regionPref.edit().putString("region", Utilities.TAIWAN[0]).apply()
+                        48 -> regionPref.edit().putString("region", Utilities.UKRAINE[0]).apply()
+                        49 -> regionPref.edit().putString("region", Utilities.UNITED_KINGDOM[0]).apply()
+                        50 -> regionPref.edit().putString("region", Utilities.UNITED_STATES[0]).apply()
+                        51 -> regionPref.edit().putString("region", Utilities.ZIMBABWE[0]).apply()
                     }
                 }
                 this.setCancelable(true)

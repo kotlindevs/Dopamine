@@ -60,15 +60,113 @@ const val PERMISSION_REQUEST_CODE = 100
     const val GITHUB = "https://github.com/kotlindevs/dopamine"
     const val EMAIL = "kotlindevslife@gmail.com"
     const val EMAIL1 = "piyushmakwana5617@gmail.com"
-    const val DEFAULT_REGION = "IN"
-    const val USA = "US"
-    const val AUSTRALIA = "AU"
-    const val CANADA = "CA"
+
+    val DEFAULT_REGION = arrayListOf("IN","India")
+    val ARGENTINA = arrayListOf("AG","Argentina")           // Service not available
+    val AUSTRALIA = arrayListOf("AU","Australia")
+    val BANGLADESH = arrayListOf("BD","Bangladesh")
+    val BRAZIL = arrayListOf("BR","Brazil")
+    val BHUTAN = arrayListOf("BT","Bhutan")                 // Service not available
+    val CANADA = arrayListOf("CA","Canada")
+    val CHINA = arrayListOf("CN","China")                   // Service not available
+    val COLOMBIA = arrayListOf("CO","Colombia")
+    val DENMARK = arrayListOf("DK","Denmark")
+    val EGYPT = arrayListOf("EG","Egypt")
+    val FRANCE = arrayListOf("FR","France")
+    val GERMANY = arrayListOf("DE","Germany")
+    val HONG_KONG = arrayListOf("HK","Hong Kong")
+    val ISRAEL = arrayListOf("IL","Israel")
+    val ITALY = arrayListOf("IT","Italy")
+    val IRAN = arrayListOf("IR","Iran")                 // Service not available
+    val JAPAN = arrayListOf("JP","Japan")
+    val JERSEY = arrayListOf("JE","Jersey")             // Service not available
+    val KENYA = arrayListOf("KE","Kenya")
+    val KOREA = arrayListOf("KR","Korea")
+    val LEBANON = arrayListOf("LB","Lebanon")
+    val MALAYSIA = arrayListOf("MY","Malaysia")
+    val MALDIVES = arrayListOf("MV","Maldives")         // Service not available
+    val MEXICO = arrayListOf("MX","Mexico")
+    val MONGOLIA = arrayListOf("MN","Mongolia")
+    val MYANMAR = arrayListOf("MM","Myanmar")           // Service not available
+    val NETHERLANDS = arrayListOf("NL","Netherlands")
+    val NEPAL = arrayListOf("NP","Nepal")
+    val NEW_ZEALAND = arrayListOf("NZ","New Zealand")
+    val NIGERIA = arrayListOf("NG","Nigeria")
+    val NORWAY = arrayListOf("NO","Norway")
+    val PAKISTAN = arrayListOf("PK","Pakistan")
+    val PANAMA = arrayListOf("PA","Panama")
+    val PARAGUAY = arrayListOf("PY","Paraguay")
+    val PERU = arrayListOf("PE","Peru")
+    val PHILIPPINES = arrayListOf("PH","Philippines")
+    val POLAND = arrayListOf("PL","Poland")
+    val PORTUGAL = arrayListOf("PT","Portugal")
+    val RUSSIA = arrayListOf("RU","Russia")
+    val ROMANIA = arrayListOf("RO","Romania")
+    val SAUDI_ARABIA = arrayListOf("SA","Saudi Arabia")
+    val SINGAPORE = arrayListOf("SG","Singapore")
+    val SPAIN = arrayListOf("ES","Spain")
+    val SRI_LANKA = arrayListOf("LK","Sri Lanka")
+    val SWEDEN = arrayListOf("SE","Sweden")
+    val SWITZERLAND = arrayListOf("CH","Switzerland")
+    val TAIWAN = arrayListOf("TW","Taiwan")
+    val UKRAINE = arrayListOf("UA","Ukraine")
+    val UNITED_KINGDOM = arrayListOf("GB","United Kingdom")
+    val UNITED_STATES = arrayListOf("US","United States")
+    val ZIMBABWE = arrayListOf("ZW","Zimbabwe")
+
     val REGIONS = arrayOf(
-        DEFAULT_REGION,
-        USA,
-        AUSTRALIA,
-        CANADA
+        DEFAULT_REGION[1],
+        ARGENTINA[1],
+        AUSTRALIA[1],
+        BANGLADESH[1],
+        BRAZIL[1],
+        BHUTAN[1],
+        CANADA[1],
+        CHINA[1],
+        COLOMBIA[1],
+        DENMARK[1],
+        EGYPT[1],
+        FRANCE[1],
+        GERMANY[1],
+        HONG_KONG[1],
+        ISRAEL[1],
+        ITALY[1],
+        IRAN[1],
+        JAPAN[1],
+        JERSEY[1],
+        KENYA[1],
+        KOREA[1],
+        LEBANON[1],
+        MALAYSIA[1],
+        MALDIVES[1],
+        MEXICO[1],
+        MONGOLIA[1],
+        MYANMAR[1],
+        NETHERLANDS[1],
+        NEPAL[1],
+        NEW_ZEALAND[1],
+        NIGERIA[1],
+        NORWAY[1],
+        PAKISTAN[1],
+        PANAMA[1],
+        PARAGUAY[1],
+        PERU[1],
+        PHILIPPINES[1],
+        POLAND[1],
+        PORTUGAL[1],
+        RUSSIA[1],
+        ROMANIA[1],
+        SAUDI_ARABIA[1],
+        SINGAPORE[1],
+        SPAIN[1],
+        SRI_LANKA[1],
+        SWEDEN[1],
+        SWITZERLAND[1],
+        TAIWAN[1],
+        UKRAINE[1],
+        UNITED_KINGDOM[1],
+        UNITED_STATES[1],
+        ZIMBABWE[1]
     )
 
 
