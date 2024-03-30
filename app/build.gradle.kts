@@ -13,7 +13,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "version dopamine_20242703_02.phone.prerelease.dynamic"
+        versionName = "version dopamine_20243003_01.phone.prerelease.dynamic"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
