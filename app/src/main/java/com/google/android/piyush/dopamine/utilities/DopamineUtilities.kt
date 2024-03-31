@@ -37,7 +37,6 @@ object ToastUtilities {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }
-
 object Utilities {
 const val PERMISSION_REQUEST_CODE = 100
     const val PROCESS_ID = "MyDlProcess"
