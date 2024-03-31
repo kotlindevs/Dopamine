@@ -65,6 +65,11 @@ class DopamineHome : AppCompatActivity() {
             defaultScreen(Home())
         }
 
+        if(intent.getBooleanExtra("fromSettings",false).equals(true)){
+            defaultScreen(User())
+            binding.bottomNavigationView.selectedItemId = R.id.user
+        }
+
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {

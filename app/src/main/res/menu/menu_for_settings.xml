@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="AlwaysShowAction">
+    <item
+        android:id="@+id/screencast"
+        android:title="@string/screen_cast"
+        android:contentDescription="@string/start_screencast"
+        android:icon="@drawable/screen_cast"
+        android:enabled="true"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/notification"
+        android:title="@string/notification"
+        android:contentDescription="@string/open_notification"
+        android:icon="@drawable/ic_notification"
+        android:enabled="true"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/search"
+        android:title="@string/search"
+        android:contentDescription="@string/open_search"
+        android:icon="@drawable/ic_search"
+        android:enabled="true"
+        app:showAsAction="always" />
     <item
         android:id="@+id/setting"
         android:title="@string/setting"
         android:contentDescription="@string/open_settings"
         android:icon="@drawable/settings"
-        app:showAsAction="ifRoom"
-        android:enabled="true"/>
-
+        android:enabled="true"
+        app:showAsAction="always"/>
 </menu>
