@@ -1,11 +1,8 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -14,7 +11,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
@@ -27,13 +23,13 @@ import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.createDefaultNotification
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
+import me.leolin.shortcutbadger.ShortcutBadger
 import kotlin.system.exitProcess
 
 @Suppress("DEPRECATION")
@@ -114,11 +110,24 @@ class DopamineHome : AppCompatActivity() {
                                         oldNotifications.toSet()
                                     )
                                     if(newNotifications.isNotEmpty()) {
-                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home).apply {
-                                            number = newNotifications.size
-                                            isVisible = true
-                                            badgeGravity = BadgeDrawable.TOP_END
-                                        }
+                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home)
+                                            .apply {
+                                                number = newNotifications.size
+                                                isVisible = true
+                                                badgeGravity = BadgeDrawable.TOP_END
+                                            }
+                                        createDefaultNotification(
+                                            applicationContext,
+                                            newNotifications.toTypedArray()[0].title!!,
+                                            newNotifications.toTypedArray()[0].description!!,
+                                        )
+                                        ShortcutBadger.applyCount(
+                                            this,
+                                            newNotifications.size
+                                        )
+                                    }
+                                    if(oldNotifications.containsAll(notifications.data)){
+                                        ShortcutBadger.removeCountOrThrow(applicationContext)
                                     }
                                 }
                             }

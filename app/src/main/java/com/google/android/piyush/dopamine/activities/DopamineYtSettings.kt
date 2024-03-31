@@ -1,12 +1,7 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -14,8 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +25,7 @@ import com.google.android.piyush.dopamine.databinding.ActivityDopamineYtSettings
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.createDefaultNotification
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -122,6 +116,7 @@ class DopamineYtSettings : AppCompatActivity() {
                         if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
                             createDefaultNotification(
                                 this,
+                                "Update available",
                                 it.data.versionName.toString()
                             )
                         }
@@ -141,6 +136,7 @@ class DopamineYtSettings : AppCompatActivity() {
                                 if (update.data.versionName != Utilities.PROJECT_VERSION) {
                                     createDefaultNotification(
                                         this,
+                                        "Update available",
                                         update.data.versionName.toString()
                                     )
                                 }
@@ -523,50 +519,6 @@ class DopamineYtSettings : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .create().show()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun createDefaultNotification(
-        context: Context, content: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "dopamineUpdateChannel",
-                "Update Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val updateApp: PendingIntent =
-            PendingIntent.getActivity(this, 0, Intent(
-                this,
-                DopamineHome::class.java
-            ), PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationBuilder = NotificationCompat.Builder(context, "dopamineUpdateChannel")
-            .setContentTitle("Update Available")
-            .setContentText(content)
-            .setSmallIcon(R.drawable.ic_update)
-            .setAutoCancel(true)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setOnlyAlertOnce(true)
-            .addAction(
-                R.drawable.ic_update,
-                "Update",
-                updateApp
-            )
-
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
-        }else {
-            notificationManager.notify(0, notificationBuilder.build())
         }
     }
 }

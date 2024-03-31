@@ -1,13 +1,21 @@
 package com.google.android.piyush.dopamine.utilities
 
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.os.Build
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -225,4 +233,38 @@ class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
 
 fun dopamineSharedPreferences(context: Context) : SharedPreferences{
     return context.getSharedPreferences("DopamineApp", Context.MODE_PRIVATE)
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun createDefaultNotification(
+    context: Context,title: String , content: String) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(
+            "dopamineUpdateChannel",
+            "Update Channel",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    val notificationBuilder = NotificationCompat.Builder(context, "dopamineUpdateChannel")
+        .setContentTitle(title)
+        .setContentText(content)
+        .setSmallIcon(R.drawable.ic_update)
+        .setAutoCancel(true)
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setOnlyAlertOnce(true)
+        .build()
+
+
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    if(ActivityCompat.checkSelfPermission(context,android.Manifest.permission.POST_NOTIFICATIONS)
+        != PackageManager.PERMISSION_GRANTED
+    ){
+        ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
+    }else {
+        notificationManager.notify(0, notificationBuilder)
+    }
 }

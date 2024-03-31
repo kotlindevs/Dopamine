@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":Database"))
     implementation(libs.androidx.preference)
     implementation(libs.androidappupdatelibrary)
+    implementation (libs.shortcutbadger)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
