@@ -62,50 +62,59 @@ class User : Fragment() {
         userViewModel = ViewModelProvider(this, userViewModelFactory)[UserAuthViewModel::class.java]
         databaseViewModel = DatabaseViewModel(requireContext())
 
-        binding.apply {
-            View.VISIBLE.also {
-                text1.visibility = it
-                text2.visibility = it
-                googleSignIn.visibility = it
-                phoneAuth.visibility = it
+        if(firebaseAuth.currentUser?.uid.isNullOrEmpty()) {
+            Log.d(TAG, "onViewCreated: ${firebaseAuth.currentUser?.uid} : 😉")
+            binding.apply {
+                text1.visibility = View.VISIBLE
+                text2.visibility = View.VISIBLE
+                googleSignIn.visibility = View.VISIBLE
+                phoneAuth.visibility = View.VISIBLE
+                View.GONE.also {
+                    userImage.visibility = it
+                    userName.visibility = it
+                    userEmail.visibility = it
+                }
             }
         }
 
         if(NetworkUtilities.isNetworkAvailable(context = requireContext()).equals(true)) {
-            if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
-                binding.apply {
-                    View.VISIBLE.also {
-                        userImage.visibility = it
-                        userName.visibility = it
-                        userEmail.visibility = it
+            if(!firebaseAuth.currentUser?.uid.isNullOrEmpty()) {
+                if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
+                    binding.apply {
+                        View.VISIBLE.also {
+                            userImage.visibility = it
+                            userName.visibility = it
+                            userEmail.visibility = it
+                        }
+                        View.GONE.also {
+                            text1.visibility = it
+                            text2.visibility = it
+                            googleSignIn.visibility = it
+                            phoneAuth.visibility = it
+                        }
                     }
-                    View.GONE.also {
-                        text1.visibility = it
-                        text2.visibility = it
-                        googleSignIn.visibility = it
-                        phoneAuth.visibility = it
+                    Glide.with(this).load(R.drawable.default_user).into(binding.userImage)
+                    binding.userName.text = getString(R.string.app_name)
+                    binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
+                } else {
+                    binding.apply {
+                        View.VISIBLE.also {
+                            userImage.visibility = it
+                            userName.visibility = it
+                            userEmail.visibility = it
+                        }
+                        View.GONE.also {
+                            text1.visibility = it
+                            text2.visibility = it
+                            googleSignIn.visibility = it
+                            phoneAuth.visibility = it
+                        }
                     }
+                    Glide.with(this).load(firebaseAuth.currentUser?.photoUrl)
+                        .into(binding.userImage)
+                    binding.userName.text = firebaseAuth.currentUser?.displayName
+                    binding.userEmail.text = firebaseAuth.currentUser?.email
                 }
-                Glide.with(this).load(R.drawable.default_user).into(binding.userImage)
-                binding.userName.text = getString(R.string.app_name)
-                binding.userEmail.text = firebaseAuth.currentUser?.phoneNumber
-            } else {
-                binding.apply {
-                    View.VISIBLE.also {
-                        userImage.visibility = it
-                        userName.visibility = it
-                        userEmail.visibility = it
-                    }
-                    View.GONE.also {
-                        text1.visibility = it
-                        text2.visibility = it
-                        googleSignIn.visibility = it
-                        phoneAuth.visibility = it
-                    }
-                }
-                Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(binding.userImage)
-                binding.userName.text = firebaseAuth.currentUser?.displayName
-                binding.userEmail.text = firebaseAuth.currentUser?.email
             }
         }else{
             requireContext().getSharedPreferences("currentUser", AppCompatActivity.MODE_PRIVATE).apply {

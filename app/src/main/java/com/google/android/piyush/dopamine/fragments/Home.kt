@@ -60,7 +60,7 @@ class Home : Fragment() {
         Log.d(TAG, " -> Fragment : Home || Greeting : ${getGreeting()}")
 
         //User details
-        Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
+       /* Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
         Log.d(TAG, "User Email : " +firebaseAuth.currentUser?.email.toString())
         Log.d(TAG, "User Photo : " +firebaseAuth.currentUser?.photoUrl.toString())
         Log.d(TAG, "User Uid   : " +firebaseAuth.currentUser?.uid.toString())
@@ -69,7 +69,7 @@ class Home : Fragment() {
         Log.d(TAG, "IsUserAnonymous : "+firebaseAuth.currentUser?.isAnonymous.toString())
         Log.d(TAG, "IsUserEmailVerified : "+firebaseAuth.currentUser?.isEmailVerified.toString())
         Log.d(TAG, "User ProviderData : "+firebaseAuth.currentUser?.providerData.toString())
-        Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString())
+        Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString()) */
 
         if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
             Glide.with(this).load(R.drawable.default_user).into(fragmentHomeBinding!!.userImage)

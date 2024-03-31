@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -74,48 +75,83 @@ class DopamineYtSettings : AppCompatActivity() {
             )
         }
 
-        val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
-        if (preReleaseUpdates.equals(true)) {
-            dopamineVersionViewModel.preReleaseUpdate()
-            dopamineVersionViewModel.preRelease.observe(this) {
-                if (it is YoutubeResource.Success) {
-                    sharedPreferences.edit().apply {
-                        putString("PreReleaseVersion", it.data.versionName)
-                        putString("PreReleaseUrl", it.data.url)
-                        apply()
-                    }
-                    if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
-                        createDefaultNotification(
-                            this,
-                            it.data.versionName.toString()
-                        )
-                    }
+
+        if(firebaseAuth.currentUser?.uid.isNullOrEmpty()){
+            binding.apply {
+                View.GONE.also{
+                    googleSignOut.visibility = it
+                    googleSignOutText.visibility = it
+                }
+                installPreReleaseUpdate.apply {
+                    isEnabled = false
+                    isChecked = false
+                }
+                val userWantToSignIn = sharedPreferences.getBoolean("userWantToSignIn", true)
+                if(userWantToSignIn.equals(true)) {
+                    MaterialAlertDialogBuilder(this@DopamineYtSettings).apply {
+                        this.setTitle("Information")
+                        this.setMessage("Still you are not logged in with your account and you'll be not fully access features of Dopamine 😉")
+                        this.setIcon(R.drawable.ic_info)
+                        this.setCancelable(true)
+                        this.setPositiveButton("Sign In") { dialog, _ ->
+                            startActivity(
+                                Intent(
+                                    this@DopamineYtSettings, DopamineHome::class.java
+                                ).putExtra("userWantToSignIn", true)
+                            )
+                            dialog.dismiss()
+                        }
+                        this.setNegativeButton("Not Now") { dialog, _ ->
+                            dialog.dismiss()
+                            sharedPreferences.edit().putBoolean("userWantToSignIn", false).apply()
+                        }
+                    }.create().show()
                 }
             }
         }else {
-            if (NetworkUtilities.isNetworkAvailable(this).equals(true)) {
-                dopamineVersionViewModel.update.observe(this) { update ->
-                    when (update) {
-                        is YoutubeResource.Loading -> {}
-                        is YoutubeResource.Success -> {
-                            sharedPreferences.edit().apply {
-                                putString("Version", update.data.versionName)
-                                putString("Url", update.data.url)
-                                apply()
+            val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
+            if (preReleaseUpdates.equals(true)) {
+                dopamineVersionViewModel.preReleaseUpdate()
+                dopamineVersionViewModel.preRelease.observe(this) {
+                    if (it is YoutubeResource.Success) {
+                        sharedPreferences.edit().apply {
+                            putString("PreReleaseVersion", it.data.versionName)
+                            putString("PreReleaseUrl", it.data.url)
+                            apply()
+                        }
+                        if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
+                            createDefaultNotification(
+                                this,
+                                it.data.versionName.toString()
+                            )
+                        }
+                    }
+                }
+            } else {
+                if (NetworkUtilities.isNetworkAvailable(this).equals(true)) {
+                    dopamineVersionViewModel.update.observe(this) { update ->
+                        when (update) {
+                            is YoutubeResource.Loading -> {}
+                            is YoutubeResource.Success -> {
+                                sharedPreferences.edit().apply {
+                                    putString("Version", update.data.versionName)
+                                    putString("Url", update.data.url)
+                                    apply()
+                                }
+                                if (update.data.versionName != Utilities.PROJECT_VERSION) {
+                                    createDefaultNotification(
+                                        this,
+                                        update.data.versionName.toString()
+                                    )
+                                }
                             }
-                            if (update.data.versionName != Utilities.PROJECT_VERSION) {
-                                createDefaultNotification(
+
+                            is YoutubeResource.Error -> {
+                                ToastUtilities.showToast(
                                     this,
-                                    update.data.versionName.toString()
+                                    "Oh no! Something went wrong"
                                 )
                             }
-                        }
-
-                        is YoutubeResource.Error -> {
-                            ToastUtilities.showToast(
-                                this,
-                                "Oh no! Something went wrong"
-                            )
                         }
                     }
                 }
