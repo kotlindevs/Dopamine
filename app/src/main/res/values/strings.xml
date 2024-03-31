@@ -128,4 +128,5 @@
     <string name="start_screencast">Start Screencast</string>
     <string name="currently_you_are_not_logged_in">Currently , You are not logged in !</string>
     <string name="to_get_access_to_save_your_watch_history_playlist_and_more_features_please_sign_in_to_dopamine">To get access to save your watch history, playlist and more features ,please sign in to dopamine ❤️</string>
+    <string name="watch_history">Watch History</string>
 </resources>

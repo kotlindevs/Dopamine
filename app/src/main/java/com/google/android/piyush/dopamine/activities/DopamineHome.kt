@@ -1,5 +1,11 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -23,7 +30,6 @@ import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.dopamine.utilities.createDefaultNotification
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
@@ -116,7 +122,7 @@ class DopamineHome : AppCompatActivity() {
                                                 isVisible = true
                                                 badgeGravity = BadgeDrawable.TOP_END
                                             }
-                                        createDefaultNotification(
+                                        allNotifications(
                                             applicationContext,
                                             newNotifications.toTypedArray()[0].title!!,
                                             newNotifications.toTypedArray()[0].description!!,
@@ -126,8 +132,16 @@ class DopamineHome : AppCompatActivity() {
                                             newNotifications.size
                                         )
                                     }
-                                    if(oldNotifications.containsAll(notifications.data)){
-                                        ShortcutBadger.removeCountOrThrow(applicationContext)
+
+                                    if(newNotifications.isEmpty()){
+                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home)
+                                            .apply {
+                                                number = 0
+                                                isVisible = false
+                                            }
+                                        ShortcutBadger.removeCount(
+                                            this
+                                        )
                                     }
                                 }
                             }
@@ -162,6 +176,52 @@ class DopamineHome : AppCompatActivity() {
 
                 else -> false
             }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun allNotifications(
+        context: Context, title: String, content: String ,channelId : String = "allNotifications") {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "All Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notifyIntent = Intent(this, AppNotificationView::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val notifyPendingIntent = PendingIntent.getActivity(
+            this, 0, notifyIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
+            .setSmallIcon(R.drawable.ic_notification)
+            .setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(false)
+            .addAction(
+                R.drawable.ic_notification,
+                "View All",
+                notifyPendingIntent
+            )
+            .build()
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if(ActivityCompat.checkSelfPermission(context,android.Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
+        }else {
+            notificationManager.notify(0, notificationBuilder)
         }
     }
 

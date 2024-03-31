@@ -1,12 +1,10 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -55,6 +53,7 @@ class AppNotificationView : AppCompatActivity() {
             }
         }
 
+        /*
         onBackPressedDispatcher.addCallback {
             startActivity(
                 Intent(
@@ -62,7 +61,7 @@ class AppNotificationView : AppCompatActivity() {
                     DopamineHome::class.java
                 )
             )
-        }
+        } */
     }
 }
 
