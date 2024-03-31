@@ -7,101 +7,112 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.Home">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="52dp">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/userImage"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="left"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-                android:layout_marginRight="8dp" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/greeting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:fontFamily="@font/circular_spotify"
-                android:text="Good Greetings"
-                android:textSize="22sp" />
-
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialIconButtonFilledTonalStyle"
-                android:id="@+id/Notifications"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                app:icon="@drawable/ic_notification"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-        <ScrollView
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-                <include layout="@layout/shimmer_item_fragment_home"/>
-            </LinearLayout>
-        </ScrollView>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                android:minHeight="?attr/actionBarSize">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="left"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                    android:layout_marginRight="8dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:fontFamily="@font/circular_spotify"
+                    android:text="Good Greetings"
+                    android:textSize="22sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="?attr/materialIconButtonFilledTonalStyle"
+                    android:id="@+id/Notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/ic_notification"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        tools:listitem="@layout/item_fragment_home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/coordinatorLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                    <include layout="@layout/shimmer_item_fragment_home"/>
+                </LinearLayout>
+            </ScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            tools:listitem="@layout/item_fragment_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

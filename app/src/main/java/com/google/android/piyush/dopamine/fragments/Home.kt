@@ -12,9 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AppNotificationView
+import com.google.android.piyush.dopamine.activities.NotificationAdapter
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -22,6 +26,8 @@ import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
+import com.google.android.piyush.youtube.utilities.NotificationViewModel
+import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
@@ -85,6 +91,35 @@ class Home : Fragment() {
                 )
             )
         }
+
+        val notificationViewModel = NotificationViewModel()
+        val databaseViewModel = DatabaseViewModel(requireContext())
+        notificationViewModel.notifications.observe(this){ notifications ->
+            when(notifications){
+                is YoutubeResource.Loading -> {}
+                is YoutubeResource.Success -> {
+                    databaseViewModel.initializeNotifications()
+                    val oldNotifications = databaseViewModel.getListOfNotifications()
+                    if(oldNotifications.isNotEmpty()){
+                        val newNotifications = notifications.data.subtract(
+                            oldNotifications.toSet()
+                        )
+                        if(newNotifications.isNotEmpty()) {
+                            BadgeUtils.attachBadgeDrawable(
+                                BadgeDrawable.create(requireContext()).apply {
+                                    isVisible = true
+                                    badgeGravity = BadgeDrawable.TOP_END
+                                }, binding.Notifications
+                            )
+                        }
+                    }
+                }
+                is YoutubeResource.Error -> {
+                    ToastUtilities.showToast(requireContext(), notifications.exception.message.toString())
+                }
+            }
+        }
+
 
         val regionPref = dopamineSharedPreferences(requireContext())
         if(regionPref.getBoolean("saveRegion", false).equals(true)){

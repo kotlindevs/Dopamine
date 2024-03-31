@@ -14,6 +14,7 @@ import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.database.repository.DopamineDatabaseRepository
+import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -244,6 +245,48 @@ class DatabaseViewModel(
         return false
     }
 
+    fun initializeNotifications(){
+        val writableDatabase = database.writableDatabase
+        val query = "CREATE TABLE IF NOT EXISTS NOTIFICATIONS (ID INTEGER PRIMARY KEY, BUILD TEXT, TITLE TEXT, DESCRIPTION TEXT, TIME TEXT , DATE TEXT)"
+        writableDatabase.execSQL(query)
+    }
+    fun insertNotification(notification: Notifications) {
+        val writableDatabase = database.writableDatabase
+        writableDatabase.execSQL("INSERT INTO NOTIFICATIONS VALUES (\"${notification.id}\",\"${notification.build}\",\"${notification.title}\",\"${notification.description}\",\"${notification.time}\",\"${notification.date}\") ")
+    }
+
+    fun checkIsNotificationExist(notificationId : Int) : Boolean{
+        val writableDatabase = database.writableDatabase
+        val query = "SELECT * FROM NOTIFICATIONS WHERE ID = \"$notificationId\" "
+        val data = writableDatabase.query(query)
+        while (data.moveToNext()){
+            val dbTableNotificationId = data.getString(0)
+            if(dbTableNotificationId == notificationId.toString()){
+               return true
+            }
+        }
+        return false
+    }
+
+    fun getListOfNotifications() : List<Notifications> {
+        val writableDatabase = database.writableDatabase
+        val list = mutableListOf<Notifications>()
+        val query = "SELECT * FROM NOTIFICATIONS"
+        val data = writableDatabase.query(query)
+        while (data.moveToNext()){
+            list.add(
+                Notifications(
+                    data.getInt(0),
+                    data.getString(1),
+                    data.getString(2),
+                    data.getString(3),
+                    data.getString(4),
+                    data.getString(5)
+                )
+            )
+        }
+        return list
+    }
     fun getPlaylistData(playlistName : String) : List<CustomPlaylists> {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistName)

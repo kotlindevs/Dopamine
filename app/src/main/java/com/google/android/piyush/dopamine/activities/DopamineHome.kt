@@ -11,6 +11,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.android.piyush.dopamine.fragments.ExperimentalSearch
@@ -20,9 +23,12 @@ import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
 import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
+import com.google.android.piyush.youtube.utilities.NotificationViewModel
+import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.system.exitProcess
@@ -81,6 +87,34 @@ class DopamineHome : AppCompatActivity() {
         }else if(intent.getBooleanExtra("userWantToSignIn",false).equals(true)){
             defaultScreen(User())
             binding.bottomNavigationView.selectedItemId = R.id.user
+        }
+
+        val notificationViewModel = NotificationViewModel()
+        val databaseViewModel = DatabaseViewModel(this)
+        notificationViewModel.notifications.observe(this){ notifications ->
+            when(notifications){
+                is YoutubeResource.Loading -> {}
+                is YoutubeResource.Success -> {
+                    databaseViewModel.initializeNotifications()
+                    val oldNotifications = databaseViewModel.getListOfNotifications()
+                    if(oldNotifications.isNotEmpty()){
+                        val newNotifications = notifications.data.subtract(
+                            oldNotifications.toSet()
+                        )
+                        if(newNotifications.isNotEmpty()) {
+                            binding.bottomNavigationView.getOrCreateBadge(R.id.home).apply {
+                                number = newNotifications.size
+                                isVisible = true
+                                badgeGravity = BadgeDrawable.TOP_END
+                            }
+                        }
+                    }
+                }
+                is YoutubeResource.Error -> {
+                    ToastUtilities.showToast(this, notifications.exception.message.toString())
+                }
+
+            }
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener {

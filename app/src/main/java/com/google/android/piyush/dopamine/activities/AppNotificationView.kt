@@ -1,9 +1,12 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAppNotificationViewBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -41,7 +45,7 @@ class AppNotificationView : AppCompatActivity() {
                     is YoutubeResource.Success -> {
                         binding.recyclerView.apply {
                             layoutManager = LinearLayoutManager(this@AppNotificationView)
-                            adapter = NotificationAdapter(notifications.data)
+                            adapter = NotificationAdapter(context,notifications.data)
                         }
                     }
                     is YoutubeResource.Error -> {
@@ -50,11 +54,20 @@ class AppNotificationView : AppCompatActivity() {
                 }
             }
         }
+
+        onBackPressedDispatcher.addCallback {
+            startActivity(
+                Intent(
+                    this@AppNotificationView,
+                    DopamineHome::class.java
+                )
+            )
+        }
     }
 }
 
 
-class NotificationAdapter(private val notifications : List<Notifications>?) :
+class NotificationAdapter(private val context : Context, private val notifications : List<Notifications>?) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
     class NotificationViewHolder(notificationView : View) : RecyclerView.ViewHolder(notificationView) {
         val title: MaterialTextView = notificationView.findViewById<MaterialTextView>(R.id.title)
@@ -75,5 +88,11 @@ class NotificationAdapter(private val notifications : List<Notifications>?) :
         holder.description.text = notification?.description
         holder.date.text = notification?.date
         holder.time.text = notification?.time
+        val databaseViewModel = DatabaseViewModel(context = context )
+        databaseViewModel.initializeNotifications()
+        val isNotification =  databaseViewModel.checkIsNotificationExist(notificationId = notification?.id!!)
+        if(isNotification.equals(false)) {
+            databaseViewModel.insertNotification(notification)
+        }
     }
 }
