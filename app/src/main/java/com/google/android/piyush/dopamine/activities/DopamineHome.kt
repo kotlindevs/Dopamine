@@ -1,6 +1,7 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.badge.BadgeDrawable
@@ -25,6 +27,7 @@ import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
@@ -66,6 +69,11 @@ class DopamineHome : AppCompatActivity() {
             )
         }
 
+        val theme = dopamineSharedPreferences(applicationContext).getString("Theme", "")
+        if(theme.isNullOrEmpty()){
+            dopamineSharedPreferences(context = applicationContext).edit().putString("Theme", Utilities.SYSTEM_MODE).apply()
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
 
         if(!NetworkUtilities.isNetworkAvailable(this)){
             Utilities.turnOnNetworkDialog(this,"No Internet Connection")
@@ -89,38 +97,37 @@ class DopamineHome : AppCompatActivity() {
             binding.bottomNavigationView.selectedItemId = R.id.user
         }
 
-        val notificationViewModel = NotificationViewModel()
-        val databaseViewModel = DatabaseViewModel(this)
-        notificationViewModel.notifications.observe(this){ notifications ->
-            when(notifications){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
-                    databaseViewModel.initializeNotifications()
-                    val oldNotifications = databaseViewModel.getListOfNotifications()
-                    if(oldNotifications.isNotEmpty()){
-                        val newNotifications = notifications.data.subtract(
-                            oldNotifications.toSet()
-                        )
-                        if(newNotifications.isNotEmpty()) {
-                            binding.bottomNavigationView.getOrCreateBadge(R.id.home).apply {
-                                number = newNotifications.size
-                                isVisible = true
-                                badgeGravity = BadgeDrawable.TOP_END
-                            }
-                        }
-                    }
-                }
-                is YoutubeResource.Error -> {
-                    ToastUtilities.showToast(this, notifications.exception.message.toString())
-                }
-
-            }
-        }
-
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     defaultScreen(Home())
+                    val notificationViewModel = NotificationViewModel()
+                    val databaseViewModel = DatabaseViewModel(this)
+                    notificationViewModel.notifications.observe(this){ notifications ->
+                        when(notifications){
+                            is YoutubeResource.Loading -> {}
+                            is YoutubeResource.Success -> {
+                                databaseViewModel.initializeNotifications()
+                                val oldNotifications = databaseViewModel.getListOfNotifications()
+                                if(oldNotifications.isNotEmpty()){
+                                    val newNotifications = notifications.data.subtract(
+                                        oldNotifications.toSet()
+                                    )
+                                    if(newNotifications.isNotEmpty()) {
+                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home).apply {
+                                            number = newNotifications.size
+                                            isVisible = true
+                                            badgeGravity = BadgeDrawable.TOP_END
+                                        }
+                                    }
+                                }
+                            }
+                            is YoutubeResource.Error -> {
+                                ToastUtilities.showToast(this, notifications.exception.message.toString())
+                            }
+
+                        }
+                    }
                     true
                 }
                 R.id.search -> {
