@@ -50,7 +50,7 @@
             android:id="@+id/phoneNumberLogin"
             app:icon="@drawable/ic_android"
             android:fontFamily="@font/gotham"
-            android:text="@string/continue_with_phone_number"
+            android:text="@string/continue_with_phone"
             android:layout_marginStart="34dp"
             android:layout_marginEnd="34dp"
             android:layout_marginBottom="8dp"

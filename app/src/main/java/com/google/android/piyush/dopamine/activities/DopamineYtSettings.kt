@@ -17,11 +17,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
+import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
+import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
 import com.google.android.piyush.dopamine.beta.youtubedl.DownloadVideo
 import com.google.android.piyush.dopamine.beta.youtubedl.StreamVideo
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineYtSettingsBinding
@@ -455,16 +458,24 @@ class DopamineYtSettings : AppCompatActivity() {
                         dialog, _ ->
                     if(NetworkUtilities.isNetworkAvailable(context = this)) {
                         firebaseAuth.signOut()
+                        val userAuthRepositoryImpl = UserAuthRepositoryImpl(this)
+                        val userAuthViewModelFactory =  UserAuthViewModelFactory(userAuthRepositoryImpl)
+                        val userAuthViewModel = ViewModelProvider(
+                            this, userAuthViewModelFactory
+                        )[ UserAuthViewModel::class.java ]
                         lifecycleScope.launch {
-                            UserAuthRepositoryImpl(
-                                applicationContext
-                            ).signOut()
+                            userAuthRepositoryImpl.signOut()
+                            userAuthViewModel.resetSignInState()
                         }
                         ToastUtilities.showToast(
                             this,"You have successfully signed out from your account"
                         )
                         startActivity(
-                            Intent(this, MainActivity::class.java)
+                            Intent(
+                                this, DopamineHome::class.java
+                            ).putExtra(
+                                "userSignedOut", true
+                            )
                         )
                         dialog.dismiss()
                     }else{

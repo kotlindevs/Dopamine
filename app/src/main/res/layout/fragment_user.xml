@@ -23,53 +23,123 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/userImage"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_margin="12dp"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
+                app:layout_constraintBottom_toTopOf="@id/recentWatchHistory">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/userName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:hint="@string/user_name"
-                android:maxLines="2"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                app:layout_constraintStart_toEndOf="@id/userImage"
-                app:layout_constraintTop_toTopOf="@id/userImage"
-                app:layout_constraintBottom_toTopOf="@id/userEmail"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currently_you_are_not_logged_in"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_margin="4dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text2"/>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/userEmail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:hint="@string/user_email"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                app:layout_constraintStart_toEndOf="@id/userImage"
-                app:layout_constraintTop_toBottomOf="@id/userName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/userImage"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text2"
+                    android:layout_width="312dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:visibility="gone"
+                    android:text="@string/to_get_access_to_save_your_watch_history_playlist_and_more_features_please_sign_in_to_dopamine"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    app:layout_constraintTop_toBottomOf="@id/text1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/googleSignIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/continue_with_google"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                    style="@style/Widget.Material3.Button.TonalButton.Icon"
+                    app:icon="@drawable/ic_google"
+                    app:layout_constraintTop_toBottomOf="@id/text2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/phoneAuth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/continue_with_phone"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                    style="@style/Widget.Material3.Button.Icon"
+                    app:icon="@drawable/ic_phone_auth"
+                    app:layout_constraintTop_toBottomOf="@id/googleSignIn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_margin="12dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/userName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:hint="@string/user_name"
+                    android:maxLines="2"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    app:layout_constraintStart_toEndOf="@id/userImage"
+                    app:layout_constraintTop_toTopOf="@id/userImage"
+                    app:layout_constraintBottom_toTopOf="@id/userEmail"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/userEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:hint="@string/user_email"
+                    android:maxLines="2"
+                    android:visibility="gone"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    app:layout_constraintStart_toEndOf="@id/userImage"
+                    app:layout_constraintTop_toBottomOf="@id/userName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/userImage"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recentWatchHistory"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userImage" />
+                app:layout_constraintTop_toBottomOf="@+id/user" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

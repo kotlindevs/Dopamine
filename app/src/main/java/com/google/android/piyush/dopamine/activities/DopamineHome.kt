@@ -1,8 +1,10 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -21,6 +23,8 @@ import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
 import com.google.android.piyush.dopamine.viewModels.SharedViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.system.exitProcess
 
 @Suppress("DEPRECATION")
@@ -66,6 +70,12 @@ class DopamineHome : AppCompatActivity() {
         }
 
         if(intent.getBooleanExtra("fromSettings",false).equals(true)){
+            defaultScreen(User())
+            binding.bottomNavigationView.selectedItemId = R.id.user
+        }else if(intent.getBooleanExtra("userSignedIn",false).equals(true)){
+            defaultScreen(User())
+            binding.bottomNavigationView.selectedItemId = R.id.user
+        }else if(intent.getBooleanExtra("userSignedOut",false).equals(true)){
             defaultScreen(User())
             binding.bottomNavigationView.selectedItemId = R.id.user
         }

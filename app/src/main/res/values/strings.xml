@@ -63,7 +63,7 @@
     <string name="channel_description">Channel Description</string>
     <string name="subscribers">Subscribers</string>
     <string name="stream_any_video_n_ad_free_on_dopamine">Stream Any Video \n Ad-Free on Dopamine</string>
-    <string name="continue_with_phone_number">Continue with phone number</string>
+    <string name="continue_with_phone">Continue with phone</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
     <string name="system_theme_color">Use system theme color</string>
@@ -126,4 +126,6 @@
     <string name="open_notification">Open Notification</string>
     <string name="screen_cast">Screen Cast</string>
     <string name="start_screencast">Start Screencast</string>
+    <string name="currently_you_are_not_logged_in">Currently , You are not logged in !</string>
+    <string name="to_get_access_to_save_your_watch_history_playlist_and_more_features_please_sign_in_to_dopamine">To get access to save your watch history, playlist and more features ,please sign in to dopamine ❤️</string>
 </resources>
