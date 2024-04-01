@@ -139,4 +139,8 @@
     <string name="favorites_playlist">favorite playlist</string>
     <string name="watch_later_playlist">watch later</string>"
     <string name="admin">admin</string>
+    <string name="welcome_to_dopamine">Welcome to Dopamine</string>
+    <string name="administrator_id">Administrator ID</string>
+    <string name="you_are_accessing_the_administrator_of_the_app_please_continue_with_caution">You are accessing the administrator of the app,\n Please continue with caution !</string>
+    <string name="continue_with_adminId">Continue</string>
 </resources>
