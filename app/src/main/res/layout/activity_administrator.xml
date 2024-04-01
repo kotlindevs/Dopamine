@@ -7,33 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".activities.Administrator">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/appIcon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        app:cardCornerRadius="32dp"
-        style="@style/Widget.Material3.CardView.Filled"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+        android:layout_height="426dp"
+        android:src="@drawable/welcome"
+        android:padding="32dp"
+        android:layout_marginBottom="256dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/titleDescription">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/appIcon"
-            android:layout_width="256dp"
-            android:layout_height="256dp"
-            android:padding="42dp"
-            android:tint="?attr/colorOnPrimaryContainer"
-            android:src="@drawable/ic_dopamine"/>
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
         android:id="@+id/titleDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/card"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/appIcon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/textInputLayout">
@@ -43,6 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/welcome_to_dopamine"
             android:textStyle="bold"
+            android:layout_margin="4dp"
             android:layout_gravity="center"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
             android:textColor="?attr/colorOnPrimaryContainer" />
@@ -52,6 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="4dp"
+
             android:text="@string/you_are_accessing_the_administrator_of_the_app_please_continue_with_caution"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textAlignment="center" />
@@ -63,9 +58,9 @@
         android:layout_width="252dp"
         android:layout_height="wrap_content"
         android:hint="@string/administrator_id"
+        android:layout_margin="12dp"
         app:layout_constraintTop_toBottomOf="@id/titleDescription"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/continueWithAdminId"
         app:layout_constraintEnd_toEndOf="parent">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/adminId"
@@ -79,11 +74,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/continue_with_adminId"
-        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_margin="16dp"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
         app:layout_constraintTop_toBottomOf="@id/textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
