@@ -1,12 +1,15 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -19,18 +22,16 @@ import com.bumptech.glide.Glide
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.FullScreenCarouselStrategy
-import com.google.android.material.carousel.HeroCarouselStrategy
-import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDopamineBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.youtube.utilities.Developer
 import com.google.android.piyush.youtube.utilities.Photos
 import kotlin.random.Random
 
 class AboutDopamine : AppCompatActivity() {
     private lateinit var binding: ActivityAboutDopamineBinding
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -85,6 +86,14 @@ class AboutDopamine : AppCompatActivity() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         }
+
+        val motionEventCounter = MotionEventCounter(this)
+        val gestureDetector = GestureDetector(this, motionEventCounter)
+
+        binding.appVersion.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            true
+        }
     }
 }
 
@@ -126,5 +135,25 @@ class AboutDeveloperRecyclerViewAdapter(val context: Context, private val devIma
 
     override fun onBindViewHolder(holder: DevHolder, position: Int) {
         Glide.with(context).load(devImage[position].photo).into(holder.image)
+    }
+}
+
+class MotionEventCounter( val context: Context) : GestureDetector.SimpleOnGestureListener() {
+
+    private var count = 0
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        count++
+        if (count == 6) {
+            context.startActivity(
+                Intent(
+                    context,Administrator::class.java
+                ).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+            )
+            count = 0
+        }
+        return true
     }
 }

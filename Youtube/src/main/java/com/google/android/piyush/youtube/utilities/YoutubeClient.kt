@@ -68,6 +68,8 @@ object YoutubeClient {
 
     const val EXPERIMENTAL_API = "https://yt.lemnoslife.com/noKey/"
 
+    const val ABOUT_APP = "https://api.npoint.io/255cbfc840e9bf199c9d"
+
     val CODING_VIDEOS = arrayListOf(
         "PLfqMhTWNBTe0PY9xunOzsP5kmYIz2Hu7i","PLfqMhTWNBTe0gqgFk-CUE-ktO5Cek1GdP",
         "PLfqMhTWNBTe0sPLFF91REaJQEteFZtLzA","PLfqMhTWNBTe25HU2y-3Kx6MBsasawd61U",
@@ -183,6 +185,23 @@ data class Photos(
     val photo : String? = null
 )
 
+@Serializable
+data class PreRelease(
+    val applicationId : String? = null,
+    val minSdk : String? = null,
+    val targetSdk : String? = null,
+    val versionCode : String? = null,
+    val appName : String? = null,
+    val versionName : String? = null,
+    val description : String? = null,
+    val releaseDate : String? = null,
+    val releaseTime : String? = null,
+    val changeLog : String? = null,
+    val jvmTarget : String? = null,
+    val url : String? = null,
+    val inherit : Boolean? = false
+)
+
 class DevelopersViewModel : ViewModel() {
 
     private val _devModel : MutableLiveData<YoutubeResource<Developer>> = MutableLiveData()
@@ -213,6 +232,30 @@ data class Notifications(
     val date : String? = null,
 )
 
+/*
+class AboutAppViewModel : ViewModel() {
+
+    private val _aboutUs  : MutableLiveData<YoutubeResource<PreRelease>> = MutableLiveData()
+    val aboutUs : MutableLiveData<YoutubeResource<PreRelease>> = _aboutUs
+
+    init {
+        viewModelScope.launch {
+            try {
+                _aboutUs.postValue(YoutubeResource.Loading)
+                _aboutUs.postValue(
+                    YoutubeResource.Success(
+                        YoutubeClient.CLIENT.get(
+                            YoutubeClient.ABOUT_APP
+                        ).body()
+                    )
+                )
+            }catch (exception : Exception) {
+                _aboutUs.postValue(YoutubeResource.Error(exception))
+            }
+        }
+    }
+}
+*/
 
 class NotificationViewModel() : ViewModel() {
 

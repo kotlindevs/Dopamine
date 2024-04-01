@@ -301,7 +301,11 @@ class DopamineYtSettings : AppCompatActivity() {
         }
 
         binding.viewAboutUs.setOnClickListener{
-            AboutUs(context = this).create().show()
+            startActivity(
+                Intent(
+                    this, AboutDopamine::class.java
+                )
+            )
         }
         val regionPref = dopamineSharedPreferences(this)
         val region = regionPref.getString("region", "").toString()
@@ -478,6 +482,14 @@ class DopamineYtSettings : AppCompatActivity() {
                     dialog.dismiss()
                 }
             }.create().show()
+        }
+
+        binding.viewAboutDeveloper.setOnClickListener {
+            startActivity(
+                Intent(
+                    this , AboutDeveloper::class.java
+                )
+            )
         }
 
         binding.googleSignOut.setOnClickListener {

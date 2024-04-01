@@ -14,6 +14,7 @@ import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDeveloperBinding
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DevelopersViewModel
@@ -33,7 +34,7 @@ class AboutDeveloper : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if(!intent.getStringExtra("userId").isNullOrEmpty()){
+        if(NetworkUtilities.isNetworkAvailable(this)){
             developersViewModel.devModel.observe(this) { developer ->
                 when (developer) {
                     is YoutubeResource.Loading -> {}

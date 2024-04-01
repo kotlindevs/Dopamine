@@ -138,4 +138,5 @@
     <string name="empty_playlist">Empty Playlist</string>
     <string name="favorites_playlist">favorite playlist</string>
     <string name="watch_later_playlist">watch later</string>"
+    <string name="admin">admin</string>
 </resources>

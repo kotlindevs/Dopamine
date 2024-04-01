@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.Administrator"
+            android:exported="false" />
+        <activity
             android:name=".activities.DopamineYtSettings"
             android:exported="false" />
         <activity
@@ -34,9 +37,6 @@
             android:exported="true" />
         <activity
             android:name=".activities.AboutDeveloper"
-            android:exported="true" />
-        <activity
-            android:name=".activities.AboutUs"
             android:exported="true" />
         <activity
             android:name=".beta.youtubedl.DownloadVideo"
