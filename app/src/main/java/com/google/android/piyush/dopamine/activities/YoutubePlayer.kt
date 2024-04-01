@@ -200,6 +200,7 @@ class YoutubePlayer : AppCompatActivity() {
                                         channelTitle = channelTitle
                                     )
                                 )
+                                databaseViewModel.addFavorites()
                             } else {
                                 databaseViewModel.deleteFavouriteVideo(
                                     videoId = videoId

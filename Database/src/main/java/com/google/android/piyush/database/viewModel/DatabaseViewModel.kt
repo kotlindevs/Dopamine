@@ -1,6 +1,6 @@
 package com.google.android.piyush.database.viewModel
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -136,6 +136,12 @@ class DatabaseViewModel(
         writableDatabase.execSQL(query)
     }
 
+    fun addFavorites() {
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify("favorite playlist")
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"Your Favorite Videos List\")")
+    }
+
 
     fun getPlaylist() : List<CustomPlaylistView>{
         val writableDatabase = database.writableDatabase
@@ -151,7 +157,7 @@ class DatabaseViewModel(
                 )
             )
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || GetPlaylist : $list")
+        Log.d(TAG, " -> viewModel : Database || GetPlaylist : $list")
         return list
     }
 
@@ -160,15 +166,15 @@ class DatabaseViewModel(
         val list = mutableListOf<String>()
         val query = "SELECT name FROM sqlite_master Where type=\"table\" except \n" +
                 "select name from sqlite_master where name=\"android_metadata\" Except  select name from sqlite_master where name= \"recent_videos\" except  select name from sqlite_master where name= \"room_master_table\" except  \n" +
-                " select name from sqlite_master where name= \"sqlite_sequence\" except select name from sqlite_master where name= \"NOTIFICATIONS\" except  select name from sqlite_master where name= \"search_table\" except  select name from sqlite_master where name= \"favorite_playlist\" except  select name from sqlite_master where name= \"DopamineMastersDev\" "
+                " select name from sqlite_master where name= \"sqlite_sequence\" except select name from sqlite_master where name= \"NOTIFICATIONS\" except  select name from sqlite_master where name= \"search_table\" except  select name from sqlite_master where name= \"DopamineMastersDev\" "
         val data  = writableDatabase.query(query)
         while(data.moveToNext()){
             list.add(
                 stringify(data.getString(0))
             )
-            Log.d("list",list.toString())
+            Log.d(TAG,list.toString())
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || GetAllPlaylist : $list")
+        Log.d(TAG, " -> viewModel : Database || GetAllPlaylist : $list")
         return list
     }
 
@@ -180,11 +186,11 @@ class DatabaseViewModel(
         while (data.moveToNext()) {
             val dbTableVideoId= data.getString(0)
             if(dbTableVideoId == videoId){
-                Log.d(ContentValues.TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || True")
+                Log.d(TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || True")
                 return true
             }
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || False")
+        Log.d(TAG, " -> viewModel : Database || isExistsDataInPlaylist : $newPlaylistName || False")
         return false
     }
 
@@ -199,7 +205,7 @@ class DatabaseViewModel(
         while (data.moveToNext()){
             count = data.getInt(0)
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || countTheNumberOfCustomPlaylist : $count")
+        Log.d(TAG, " -> viewModel : Database || countTheNumberOfCustomPlaylist : $count")
         return count
     }
 
@@ -217,12 +223,12 @@ class DatabaseViewModel(
             val dbTableName = query.getString(0)
             if(query.getString(0).isNotEmpty()){
                 if(dbTableName == playlistName){
-                    Log.d(ContentValues.TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || True")
+                    Log.d(TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || True")
                     return true
                 }
             }
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || False")
+        Log.d(TAG, " -> viewModel : Database || isPlaylistExist : $playlistName || False")
         return false
     }
 
@@ -287,7 +293,7 @@ class DatabaseViewModel(
                 )
             )
         }
-        Log.d(ContentValues.TAG, " -> viewModel : Database || getPlaylistData : $list")
+        Log.d(TAG, " -> viewModel : Database || getPlaylistData : $list")
         return list
     }
 
