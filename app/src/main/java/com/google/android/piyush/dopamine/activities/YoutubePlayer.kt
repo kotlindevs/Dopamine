@@ -1,7 +1,5 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ContentValues.TAG
@@ -17,8 +15,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -41,12 +37,10 @@ import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
-import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
-import io.reactivex.disposables.CompositeDisposable
 import java.text.DecimalFormat
 import java.time.Duration
 import java.time.LocalTime
@@ -366,20 +360,6 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
         createNewPlaylist.setOnClickListener {
             val customDialog = CustomDialog(requireContext())
             customDialog.show()
-        }
-
-        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
-            if(databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth).equals(false)){
-                databaseViewModel.userFromPhoneAuth()
-            }else{
-                Log.d(TAG, "${databaseViewModel.isUserFromPhoneAuth} : Exists")
-            }
-        }else {
-            if (databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)) {
-                databaseViewModel.defaultUserPlaylist()
-            } else {
-                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
-            }
         }
 
         customPlaylists.apply {

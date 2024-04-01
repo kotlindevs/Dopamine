@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -16,13 +15,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.activities.DopamineYtSettings
 import com.google.android.piyush.dopamine.activities.PhoneNumberAuthentication
+import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
@@ -126,6 +126,28 @@ class User : Fragment() {
             }
         }
 
+        databaseViewModel.getFavouritePlayList()
+        databaseViewModel.favouritePlayList.observe(viewLifecycleOwner){
+            if(it.isNullOrEmpty()){
+                binding.likeVideosTxt.text = "0"
+            }else{
+                binding.likeVideosTxt.text = it.size.toString()
+            }
+        }
+
+        Log.d(TAG, "onViewCreated: ${databaseViewModel.countTheNumberOfCustomPlaylist()}")
+
+        if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
+            userFragment!!.yourPlaylists.visibility = View.GONE
+        }else{
+            userFragment!!.yourPlaylists.visibility = View.VISIBLE
+            userFragment!!.yourPlaylists.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
+                adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
+            }
+        }
+
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.setting -> {
@@ -155,7 +177,7 @@ class User : Fragment() {
             databaseViewModel.recentVideos.observe(viewLifecycleOwner) { recentVideos ->
                 binding.recentWatchHistory.apply {
                     setHasFixedSize(true)
-                    layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, binding.recentWatchHistory.horizontalFadingEdgeLength, false)
+                    layoutManager = LinearLayoutManager(context, binding.recentWatchHistory.horizontalFadingEdgeLength, false)
                     adapter = RecentVideosAdapter(context, recentVideos)
                 }
                 if (recentVideos.isNullOrEmpty()) {

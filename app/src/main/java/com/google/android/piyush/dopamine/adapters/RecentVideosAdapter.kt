@@ -41,6 +41,9 @@ class RecentVideosAdapter(
                     .putExtra("channelId",videos?.channelId)
             )
         }
+        if(holder.title.text.length < 20){
+            holder.title.text = holder.title.text.toString().padEnd(20 ,'\n')
+        }
         holder.videoLength.text = videos?.length
     }
 }

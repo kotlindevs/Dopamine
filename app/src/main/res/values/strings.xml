@@ -41,7 +41,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="your_custom_playlists">Your Custom Playlists</string>
+    <string name="your_playlists">Playlists</string>
     <string name="play_any_video_here">Play any video here</string>
     <string name="play_video">Play Video</string>
     <string name="video_link">Video Link</string>
@@ -128,5 +128,12 @@
     <string name="start_screencast">Start Screencast</string>
     <string name="currently_you_are_not_logged_in">Currently , You are not logged in !</string>
     <string name="to_get_access_to_save_your_watch_history_playlist_and_more_features_please_sign_in_to_dopamine">To get access to save your watch history, playlist and more features ,please sign in to dopamine ❤️</string>
-    <string name="watch_history">Watch History</string>
+    <string name="watch_history">History</string>
+    <string name="like_videos">Like Videos</string>
+    <string name="like_videos_to_get_more_recommendations">Like videos to get more recommendations</string>
+    <string name="_0">0</string>
+    <string name="watch_later">Watch Later</string>
+    <string name="watch_later_after_you_finish_watching_videos">Watch later after you finish watching videos</string>
+    <string name="add_playlist">Add Playlist</string>
+    <string name="empty_playlist">Empty Playlist</string>
 </resources>

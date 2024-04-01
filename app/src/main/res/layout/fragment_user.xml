@@ -140,7 +140,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="12dp"
                 android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user"
                 app:layout_constraintBottom_toTopOf="@id/recentWatchHistory"/>
@@ -156,6 +156,208 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/watchHistory" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/your_custom_playlists_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_playlists"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="12dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recentWatchHistory"
+                app:layout_constraintBottom_toTopOf="@id/playlistsContainer" />
+
+            <LinearLayout
+                android:id="@+id/playlistsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintTop_toBottomOf="@id/your_custom_playlists_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/likeVideos"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="6dp"
+                        style="@style/Widget.Material3.CardView.Filled">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="8dp">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/likeVideosImage"
+                                android:layout_width="128dp"
+                                android:layout_height="72dp"
+                                android:scaleType="centerCrop"
+                                android:background="?attr/colorTertiaryContainer"
+                                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/likeVideosIc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_like_video"
+                                android:layout_marginEnd="12dp"
+                                android:tint="?attr/colorOnTertiaryContainer"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/likeVideosImage"
+                                app:layout_constraintStart_toStartOf="@id/likeVideosImage"
+                                app:layout_constraintBottom_toBottomOf="@id/likeVideosImage"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/likeVideosTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/_0"
+                                android:textColor="?attr/colorOnTertiaryContainer"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                app:layout_constraintTop_toTopOf="@id/likeVideosIc"
+                                app:layout_constraintStart_toEndOf="@id/likeVideosIc"
+                                app:layout_constraintBottom_toBottomOf="@id/likeVideosIc"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/likeVideosText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:maxLines="2"
+                                android:text="@string/like_videos"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/likeVideosImage" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/likeVideosDescription"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                                android:textStyle="normal"
+                                android:maxLines="2"
+                                android:text="@string/like_videos_to_get_more_recommendations"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/likeVideosText" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/watchLater"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        style="@style/Widget.Material3.CardView.Filled">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="8dp">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/watchLaterImage"
+                                android:layout_width="128dp"
+                                android:layout_height="72dp"
+                                android:scaleType="centerCrop"
+                                android:background="?attr/colorPrimaryContainer"
+                                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/watchLaterIc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_watch_later"
+                                android:layout_marginEnd="12dp"
+                                android:tint="?attr/colorOnPrimaryContainer"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/watchLaterImage"
+                                app:layout_constraintStart_toStartOf="@id/watchLaterImage"
+                                app:layout_constraintBottom_toBottomOf="@id/watchLaterImage"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/watchLaterTxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/_0"
+                                android:textColor="?attr/colorOnPrimaryContainer"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                app:layout_constraintTop_toTopOf="@id/watchLaterIc"
+                                app:layout_constraintStart_toEndOf="@id/watchLaterIc"
+                                app:layout_constraintBottom_toBottomOf="@id/watchLaterIc"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/watchLaterText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:maxLines="2"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                                android:textStyle="bold"
+                                android:text="@string/watch_later"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/watchLaterImage" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/watchLaterDescription"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                                android:textStyle="normal"
+                                android:text="@string/watch_later_after_you_finish_watching_videos"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/watchLaterText" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/yourPlaylists"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/item_fragment_user"
+                    tools:itemCount="1"/>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addPlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_playlist"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                app:icon="@drawable/create"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recentWatchHistory"
+                app:layout_constraintBottom_toTopOf="@id/playlistsContainer" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
@@ -257,16 +256,6 @@ class Library : Fragment() {
                 true,
                 iFramePlayerOptions
             )
-        }
-
-        if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
-            fragmentLibraryBinding!!.customPlaylistsList.visibility = View.GONE
-        }else{
-            fragmentLibraryBinding!!.customPlaylistsList.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(context)
-                adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
-            }
         }
     }
 
