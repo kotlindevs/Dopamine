@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "recent_videos")
 data class EntityRecentVideos(
     @PrimaryKey val id : Int,
-    val videoId: String?,
-    val title: String?,
-    val thumbnail: String?,
-    val timing : String?,
+    val videoId: String? = null,
+    val title: String? = null,
+    val thumbnail: String? = null,
+    val timing : String? = null,
     val channelId : String? = null,
     val length : String? = null
 )
