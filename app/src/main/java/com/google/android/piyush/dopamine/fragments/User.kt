@@ -126,15 +126,6 @@ class User : Fragment() {
             }
         }
 
-        databaseViewModel.getFavouritePlayList()
-        databaseViewModel.favouritePlayList.observe(viewLifecycleOwner){
-            if(it.isNullOrEmpty()){
-                binding.likeVideosTxt.text = "0"
-            }else{
-                binding.likeVideosTxt.text = it.size.toString()
-            }
-        }
-
         Log.d(TAG, "onViewCreated: ${databaseViewModel.countTheNumberOfCustomPlaylist()}")
 
         if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){

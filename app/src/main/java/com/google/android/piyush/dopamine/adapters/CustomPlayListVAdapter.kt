@@ -67,6 +67,15 @@ class CustomPlayListVAdapter(
                 playlistIc.setImageResource(R.drawable.ic_like_video)
                 playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
             }
+        }else if(playlistName ==context.getString(R.string.watch_later_playlist)){
+            holder.apply {
+                playlistEmptyIc.visibility = View.GONE
+                playlistEmptyTxt.visibility = View.GONE
+                playlistIc.visibility = View.VISIBLE
+                playlistTxt.visibility = View.VISIBLE
+                playlistIc.setImageResource(R.drawable.ic_watch_later)
+                playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+            }
         }else{
             holder.apply {
                 playlistEmptyIc.visibility = View.GONE

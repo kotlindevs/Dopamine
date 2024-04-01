@@ -201,7 +201,10 @@ class YoutubePlayer : AppCompatActivity() {
                                         thumbnail = videoThumbnail,
                                         title = videoTitle,
                                         channelId = channelId,
-                                        channelTitle = channelTitle
+                                        channelTitle = channelTitle,
+                                        viewCount = videoViews,
+                                        publishedAt = videoPublishedAt,
+                                        duration = videoDuration
                                     )
                                 )
 
