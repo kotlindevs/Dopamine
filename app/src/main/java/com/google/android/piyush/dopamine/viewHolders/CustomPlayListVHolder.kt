@@ -14,7 +14,8 @@ class CustomPlayListVHolder (
     val title: MaterialTextView = itemView.findViewById(R.id.playlistText)
     val description: MaterialTextView = itemView.findViewById(R.id.playlistDescription)
     val playlist: MaterialCardView = itemView.findViewById(R.id.playlist)
-    val playlistIc : ShapeableImageView = itemView.findViewById(R.id.playlistIc)
-    val playlistTxt : MaterialTextView = itemView.findViewById(R.id.playlistTxt)
-
+    val playlistEmptyIc : ShapeableImageView = itemView.findViewById(R.id.playlistEmptyIc)
+    val playlistEmptyTxt : MaterialTextView = itemView.findViewById(R.id.playlistEmptyTxt)
+    val playlistIc : ShapeableImageView = itemView.findViewById(R.id.playlistsIc)
+    val playlistTxt : MaterialTextView = itemView.findViewById(R.id.playlistsTxt)
 }

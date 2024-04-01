@@ -55,11 +55,22 @@ class CustomPlayListVAdapter(
         val database = DatabaseViewModel(context)
         if(database.getPlaylistData(playlistName).isEmpty()){
             holder.apply {
+                playlistEmptyIc.visibility = View.VISIBLE
+                playlistEmptyTxt.visibility = View.VISIBLE
+            }
+        }else if(playlistName == context.getString(R.string.favorites_playlist)){
+            holder.apply {
+                playlistEmptyIc.visibility = View.GONE
+                playlistEmptyTxt.visibility = View.GONE
                 playlistIc.visibility = View.VISIBLE
                 playlistTxt.visibility = View.VISIBLE
+                playlistIc.setImageResource(R.drawable.ic_like_video)
+                playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
             }
         }else{
             holder.apply {
+                playlistEmptyIc.visibility = View.GONE
+                playlistEmptyTxt.visibility = View.GONE
                 playlistIc.visibility = View.GONE
                 playlistTxt.visibility = View.GONE
                 Glide.with(context).load(database.getPlaylistData(playlistName)[0].thumbnail).into(image)

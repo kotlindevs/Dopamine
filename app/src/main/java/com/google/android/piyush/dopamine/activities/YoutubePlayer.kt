@@ -153,8 +153,12 @@ class YoutubePlayer : AppCompatActivity() {
         val videoId = intent?.getStringExtra("videoId").toString()
         val channelId = intent?.getStringExtra("channelId").toString()
 
-        youtubePlayerViewModel.getVideoDetails(videoId)
+        databaseViewModel.initializeWatchLater()
+        if(databaseViewModel.isPlaylistExist("watch_later").equals(false)){
+            databaseViewModel.addWatchLater()
+        }
 
+        youtubePlayerViewModel.getVideoDetails(videoId)
         youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
             when (videoDetails) {
                 is YoutubeResource.Loading -> {}
@@ -200,7 +204,10 @@ class YoutubePlayer : AppCompatActivity() {
                                         channelTitle = channelTitle
                                     )
                                 )
-                                databaseViewModel.addFavorites()
+
+                                if(databaseViewModel.isPlaylistExist("favorite_playlist").equals(false)){
+                                    databaseViewModel.addFavorites()
+                                }
                             } else {
                                 databaseViewModel.deleteFavouriteVideo(
                                     videoId = videoId

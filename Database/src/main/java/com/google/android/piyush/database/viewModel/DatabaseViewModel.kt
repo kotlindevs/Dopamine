@@ -142,7 +142,6 @@ class DatabaseViewModel(
         writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$newPlaylistName\",\"Your Favorite Videos List\")")
     }
 
-
     fun getPlaylist() : List<CustomPlaylistView>{
         val writableDatabase = database.writableDatabase
         val list = mutableListOf<CustomPlaylistView>()
@@ -297,6 +296,57 @@ class DatabaseViewModel(
         return list
     }
 
+    fun initializeWatchLater(){
+        val writableDatabase = database.writableDatabase
+        val query = "CREATE TABLE IF NOT EXISTS watch_later (videoId TEXT PRIMARY KEY, title TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)"
+        writableDatabase.execSQL(query)
+    }
+
+    /*
+    fun insertWatchLater(playlistsData: CustomPlaylists) {
+        val writableDatabase = database.writableDatabase
+        val query = "INSERT INTO watch_later VALUES (\"${playlistsData.videoId}\",\"${playlistsData.title}\",\"${playlistsData.thumbnail}\",\"${playlistsData.channelId}\",\"${playlistsData.publishedAt}\",\"${playlistsData.viewCount}\",\"${playlistsData.channelTitle}\",\"${playlistsData.duration}\")"
+        writableDatabase.execSQL(query)
+    }
+
+    fun isWatchLaterExist (videoId: String) : Boolean {
+        val writableDatabase = database.writableDatabase
+        val query = "SELECT videoId FROM watch_later WHERE videoId = \"$videoId\" "
+        val data = writableDatabase.query(query)
+        while (data.moveToNext()) {
+            val dbTableVideoId = data.getString(0)
+            if (dbTableVideoId == videoId) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun getWatchLater() : List<CustomPlaylists> {
+        val writableDatabase = database.writableDatabase
+        val list = mutableListOf<CustomPlaylists>()
+        val query = writableDatabase.query("SELECT * FROM watch_later")
+        while (query.moveToNext()){
+            list.add(
+                CustomPlaylists(
+                    query.getString(0),
+                    query.getString(1),
+                    query.getString(2),
+                    query.getString(3),
+                    query.getString(4),
+                    query.getString(5),
+                    query.getString(6),
+                    query.getString(7)
+                )
+            )
+        }
+        return list
+    } */
+
+    fun addWatchLater() {
+        val writableDatabase = database.writableDatabase
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"watch_later\",\"Watch your videos later\")")
+    }
 
     private fun stringify(playlistName: String): String {
         val name = if(playlistName.isNotEmpty()){

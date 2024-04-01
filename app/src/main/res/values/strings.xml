@@ -136,4 +136,5 @@
     <string name="watch_later_after_you_finish_watching_videos">Watch later after you finish watching videos</string>
     <string name="add_playlist">Add Playlist</string>
     <string name="empty_playlist">Empty Playlist</string>
+    <string name="favorites_playlist">favorite playlist</string>
 </resources>
