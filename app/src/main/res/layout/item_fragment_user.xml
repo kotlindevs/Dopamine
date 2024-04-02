@@ -5,8 +5,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/playlist"
-    android:layout_marginEnd="8dp"
+    android:layout_marginEnd="12dp"
     android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     style="@style/Widget.Material3.CardView.Filled">
 
     <androidx.constraintlayout.widget.ConstraintLayout

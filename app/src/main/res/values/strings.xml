@@ -22,7 +22,7 @@
     <string name="copy">Copy</string>
     <string name="your_favourites">Your Liked Videos</string>
     <string name="create_new_playlist">Create new playlist !</string>
-    <string name="playlist_name">Playlist name</string>
+    <string name="playlist_name">Playlist Name</string>
     <string name="playlist_description">Playlist Description</string>
     <string name="create">Create Playlist</string>
     <string name="title_activity_settings">SettingsActivity</string>
@@ -134,7 +134,7 @@
     <string name="_0">0</string>
     <string name="watch_later">Watch Later</string>
     <string name="watch_later_after_you_finish_watching_videos">Watch later after you finish watching videos</string>
-    <string name="add_playlist">Add Playlist</string>
+    <string name="add_new_playlist">Add New Playlist</string>
     <string name="empty_playlist">Empty Playlist</string>
     <string name="favorites_playlist">favorite playlist</string>
     <string name="watch_later_playlist">watch later</string>"
@@ -143,4 +143,6 @@
     <string name="administrator_id">Administrator ID</string>
     <string name="you_are_accessing_the_administrator_of_the_app_please_continue_with_caution">You are accessing the administrator of the app,\n Please continue with caution !</string>
     <string name="continue_with_adminId">Continue</string>
+    <string name="create_a_new_playlist">Create a new playlist</string>
+    <string name="create_playlist">Create Playlist</string>
 </resources>

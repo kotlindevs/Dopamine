@@ -7,18 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.badge.ExperimentalBadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AppNotificationView
-import com.google.android.piyush.dopamine.activities.NotificationAdapter
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -27,11 +27,9 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
-import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
-import com.google.android.piyush.youtube.viewModels.MoreViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 import kotlin.system.exitProcess
@@ -52,6 +50,7 @@ class Home : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @OptIn(ExperimentalBadgeUtils::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -94,7 +93,7 @@ class Home : Fragment() {
 
         val notificationViewModel = NotificationViewModel()
         val databaseViewModel = DatabaseViewModel(requireContext())
-        notificationViewModel.notifications.observe(this){ notifications ->
+        notificationViewModel.notifications.observe(viewLifecycleOwner){ notifications ->
             when(notifications){
                 is YoutubeResource.Loading -> {}
                 is YoutubeResource.Success -> {
@@ -287,6 +286,14 @@ class Home : Fragment() {
                 this.setCancelable(true)
                 this.setPositiveButton("Save") { dialog, _ ->
                     regionPref.edit().putBoolean("saveRegion", true).apply()
+                    val regionCode = regionPref.getString("region", "").toString()
+                    if(regionCode.isEmpty()){
+                        ToastUtilities.showToast(
+                            requireContext(),
+                            "You have not selected a region yet"
+                        )
+                        regionPref.edit().putString("region", Utilities.DEFAULT_REGION[0]).apply()
+                    }
                     val code = regionPref.getString("region", "").toString()
                     homeViewModel.getHomeVideos(
                         regionCode = code

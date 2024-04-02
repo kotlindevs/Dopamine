@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineHome
@@ -27,6 +29,7 @@ import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
+import com.google.android.piyush.dopamine.databinding.BottomSheetPlaylistBinding
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
@@ -69,10 +72,12 @@ class User : Fragment() {
                 text2.visibility = View.VISIBLE
                 googleSignIn.visibility = View.VISIBLE
                 phoneAuth.visibility = View.VISIBLE
+                emptyPlaylist.visibility = View.VISIBLE
                 View.GONE.also {
                     userImage.visibility = it
                     userName.visibility = it
                     userEmail.visibility = it
+                    watchHistory.visibility = it
                 }
             }
         }
@@ -130,7 +135,9 @@ class User : Fragment() {
 
         if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
             userFragment!!.yourPlaylists.visibility = View.GONE
+            userFragment!!.emptyPlaylist.visibility = View.VISIBLE
         }else{
+            userFragment!!.emptyPlaylist.visibility = View.GONE
             userFragment!!.yourPlaylists.visibility = View.VISIBLE
             userFragment!!.yourPlaylists.apply {
                 setHasFixedSize(true)
@@ -173,6 +180,10 @@ class User : Fragment() {
                 }
                 if (recentVideos.isNullOrEmpty()) {
                     binding.recentWatchHistory.visibility = View.GONE
+                    binding.watchHistory.visibility = View.GONE
+                }else{
+                    binding.recentWatchHistory.visibility = View.VISIBLE
+                    binding.watchHistory.visibility = View.VISIBLE
                 }
             }
         }
@@ -233,11 +244,67 @@ class User : Fragment() {
         binding.phoneAuth.setOnClickListener{
             startActivity(Intent(requireContext(), PhoneNumberAuthentication::class.java))
         }
+
+        binding.addPlaylist.setOnClickListener {
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(parentFragmentManager, modalBottomSheet.tag)
+        }
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         userFragment = null
+    }
+}
+
+
+class ModalBottomSheet : BottomSheetDialogFragment() {
+
+    private var modalBottomSheet: BottomSheetPlaylistBinding? = null
+    private lateinit var databaseViewModel: DatabaseViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.bottom_sheet_playlist, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val binding = BottomSheetPlaylistBinding.bind(view)
+        modalBottomSheet = binding
+        databaseViewModel = DatabaseViewModel(requireContext())
+
+        val playlistName = binding.playlistName.text
+        val playlistDescription = binding.playlistDescription.text
+
+        binding.addPlaylist.setOnClickListener {
+            if(databaseViewModel.isPlaylistExist(playlistName.toString())){
+                binding.playlistNameInputLayout.isErrorEnabled = true
+                binding.playlistNameInputLayout.error = "Playlist Already Exists"
+            }else{
+                if(playlistName?.isEmpty()!!.equals(true)){
+                    ToastUtilities.showToast(context, "Please Fill All Fields")
+                }else {
+                    databaseViewModel.createCustomPlaylist(
+                        CustomPlaylistView(
+                            playlistName.toString(),
+                            playlistDescription.toString().ifEmpty { "Empty Description" },
+                        )
+                    )
+                    playlistName.clear()
+                    playlistDescription?.clear()
+                    ToastUtilities.showToast(context, "$playlistName Created ✅")
+                    this.dismiss()
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        modalBottomSheet = null
     }
 }
