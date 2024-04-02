@@ -296,6 +296,27 @@ class DatabaseViewModel(
         return list
     }
 
+    fun deletePlaylist(playlistName: String) {
+        val writableDatabase = database.writableDatabase
+        val newPlaylistName = stringify(playlistName)
+        val query = "DROP TABLE $newPlaylistName"
+        writableDatabase.execSQL("DELETE FROM DopamineMastersDev WHERE playlistName = \"$playlistName\" ")
+        writableDatabase.execSQL(query)
+    }
+
+    fun updatePlaylistName(
+        playlistName: String,
+        newPlaylistName: String,
+        newPlaylistDescription: String? = null
+    ) {
+        val writableDatabase = database.writableDatabase
+        val oldPlaylistName = stringify(playlistName)
+        val newUpdatedPlaylistName = stringify(newPlaylistName)
+        val query = "UPDATE DopamineMastersDev SET playlistName = \"$newUpdatedPlaylistName\" , playlistDescription = \"$newPlaylistDescription\"  WHERE playlistName = \"$oldPlaylistName\" "
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS \"$newUpdatedPlaylistName\" AS SELECT * FROM \"$oldPlaylistName\" ")
+        writableDatabase.execSQL(query)
+    }
+
     fun initializeWatchLater(){
         val writableDatabase = database.writableDatabase
         val query = "CREATE TABLE IF NOT EXISTS watch_later (videoId TEXT PRIMARY KEY, title TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)"

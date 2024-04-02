@@ -145,4 +145,10 @@
     <string name="continue_with_adminId">Continue</string>
     <string name="create_a_new_playlist">Create a new playlist</string>
     <string name="create_playlist">Create Playlist</string>
+    <string name="manage_playlists">Manage Playlists</string>
+    <string name="you_can_customize_your_playlists_here">You can customize your playlists here</string>
+    <string name="edit_playlist">Edit Playlist</string>
+    <string name="delete_playlist">Delete Playlist</string>
+    <string name="playlists_name">Playlists Name</string>
+    <string name="playlists_description">Playlists Description</string>
 </resources>

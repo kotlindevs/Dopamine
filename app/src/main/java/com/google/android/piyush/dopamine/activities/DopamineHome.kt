@@ -97,6 +97,9 @@ class DopamineHome : AppCompatActivity() {
         }else if(intent.getBooleanExtra("userWantToSignIn",false).equals(true)){
             defaultScreen(User())
             binding.bottomNavigationView.selectedItemId = R.id.user
+        }else if(intent.getBooleanExtra("fromPlaylistManager",false).equals(true)){
+            defaultScreen(User())
+            binding.bottomNavigationView.selectedItemId = R.id.user
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener {

@@ -315,6 +315,14 @@ class DopamineYtSettings : AppCompatActivity() {
             binding.currentRegionText.text = getString(R.string.no_region)
         }
 
+        binding.managePlaylists.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,PlaylistsManager::class.java
+                )
+            )
+        }
+
         binding.currentRegion.setOnClickListener {
             MaterialAlertDialogBuilder(this).apply {
                 this.setTitle("Select your home region")
