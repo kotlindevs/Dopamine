@@ -1,8 +1,6 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -27,19 +25,39 @@ class CVPlaylist : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val playlist = intent.getStringExtra("playlistName")
-        if(playlist != null) {
+        val playlistName = intent.getStringExtra("playlistName")
+        if(!playlistName.isNullOrEmpty()) {
             binding.customPlayListVideos.apply {
                 setHasFixedSize(false)
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-                adapter = CustomPlaylistsVDataAdapter(databaseViewModel.getPlaylistData(playlist),context)
+                adapter = CustomPlaylistsVDataAdapter(databaseViewModel.getPlaylistData(playlistName),context)
             }
-            binding.playlistName.text = playlist
+            binding.playlistName.text = playlistName
             binding.playlistDescription.text = intent.getStringExtra("playlistDescription")
-            Glide.with(applicationContext).load(databaseViewModel.getPlaylistData(playlist)[0].thumbnail).into(binding.playlistImage)
-
-            Log.d(TAG, " -> Activity : CVPlaylist || PlaylistData : $playlist")
+            if(databaseViewModel.getPlaylistData(playlistName).isNotEmpty()) {
+                binding.apply {
+                    binding.playlistDetails.visibility = android.view.View.VISIBLE
+                    binding.playlistImage.visibility = android.view.View.VISIBLE
+                    binding.playlistName.visibility = android.view.View.VISIBLE
+                    binding.playlistDescription.visibility = android.view.View.VISIBLE
+                    binding.customPlayListVideos.visibility = android.view.View.VISIBLE
+                }
+                Glide.with(applicationContext)
+                    .load(databaseViewModel.getPlaylistData(playlistName)[0].thumbnail)
+                    .into(binding.playlistImage)
+                binding.apply {
+                    textNoPlaylist1.visibility = android.view.View.GONE
+                    textNoPlaylist2.visibility = android.view.View.GONE
+                    noPlaylistImage.visibility = android.view.View.GONE
+                }
+            }else{
+                binding.apply {
+                    binding.playlistImage.visibility = android.view.View.GONE
+                    binding.playlistName.visibility = android.view.View.GONE
+                    binding.playlistDescription.visibility = android.view.View.GONE
+                    binding.customPlayListVideos.visibility = android.view.View.GONE
+                }
+            }
         }
     }
 }

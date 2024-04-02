@@ -7,14 +7,49 @@
     android:layout_height="match_parent"
     tools:context=".activities.CVPlaylist">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/noPlaylistImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/no_photo"
+        android:layout_margin="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textNoPlaylist1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_have_no_playlists_yet"
+        android:layout_marginBottom="6dp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textNoPlaylist2"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textNoPlaylist2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/please_create_one_and_add_videos_to_it"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/noPlaylistImage" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/playlistDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimaryContainer"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-        style="@style/Widget.Material3.CardView.Elevated"
+        android:visibility="gone"
+        style="@style/Widget.Material3.CardView.Filled"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,7 +77,6 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="6dp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorOnPrimaryContainer"
                 app:layout_constraintEnd_toStartOf="@id/sharePlaylist"
                 app:layout_constraintTop_toBottomOf="@id/playlistImage"
                 app:layout_constraintStart_toStartOf="@id/playlistImage" />
@@ -55,7 +89,6 @@
                 android:layout_marginBottom="12dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:layout_marginEnd="6dp"
-                android:textColor="?attr/colorOnPrimaryContainer"
                 app:layout_constraintEnd_toStartOf="@id/sharePlaylist"
                 app:layout_constraintTop_toBottomOf="@id/playlistName"
                 app:layout_constraintStart_toStartOf="@id/playlistName"
@@ -65,8 +98,9 @@
                 android:id="@+id/sharePlaylist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorTertiaryContainer"
                 android:layout_margin="12dp"
+                android:backgroundTint="?attr/colorSurfaceContainer"
+                style="@style/Widget.Material3.CardView.Filled"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -74,7 +108,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/share"
-                    android:tint="?attr/colorOnTertiaryContainer"
                     android:layout_margin="12dp"/>
             </com.google.android.material.card.MaterialCardView>
 
@@ -87,6 +120,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/playlistDetails"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

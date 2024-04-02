@@ -20,7 +20,7 @@
             android:layout_width="128dp"
             android:layout_height="72dp"
             android:scaleType="centerCrop"
-            android:background="?attr/colorTertiaryContainer"
+            android:background="?attr/colorSurfaceContainer"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

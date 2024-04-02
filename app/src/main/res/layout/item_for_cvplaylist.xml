@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     style="@style/Widget.Material3.CardView.Filled"
@@ -13,8 +14,7 @@
         android:id="@+id/video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:backgroundTint="?attr/colorPrimaryContainer">
+        style="@style/Widget.Material3.CardView.Filled">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,7 +39,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="?attr/colorOnTertiaryContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/videoImage"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                android:textColor="?attr/colorOnTertiaryContainer"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +63,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 app:cardCornerRadius="8dp"
-                android:backgroundTint="?attr/colorPrimaryContainer"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/videoImage"
                 app:layout_constraintEnd_toEndOf="@id/videoImage">
 
@@ -78,8 +76,7 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:textColor="?attr/colorOnPrimaryContainer"/>
+                    android:paddingBottom="6dp" />
 
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
