@@ -8,10 +8,9 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.dopamine.R
 
 class CustomPlaylistsVDataHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val youTubePlayerView : ShapeableImageView = itemView.findViewById(R.id.youtube_player_view)
-    val imageView : ShapeableImageView = itemView.findViewById(R.id.channel_image)
-    val videoTitle : MaterialTextView = itemView.findViewById(R.id.video_title)
-    val channelTitle : MaterialTextView = itemView.findViewById(R.id.channel_title)
-    val videoDuration : MaterialTextView = itemView.findViewById(R.id.video_duration)
-    val youTubePlayer : MaterialCardView = itemView.findViewById(R.id.video_card)
+    val youTubePlayerView : ShapeableImageView = itemView.findViewById(R.id.videoImage)
+    val videoTitle : MaterialTextView = itemView.findViewById(R.id.videoTitle)
+    val channelTitle : MaterialTextView = itemView.findViewById(R.id.channelTitle)
+    val videoDuration : MaterialTextView = itemView.findViewById(R.id.videoDuration)
+    val youTubePlayer : MaterialCardView = itemView.findViewById(R.id.video)
 }

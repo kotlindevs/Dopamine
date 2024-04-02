@@ -24,7 +24,7 @@ class CustomPlaylistsVDataAdapter(
 ) : RecyclerView.Adapter<CustomPlaylistsVDataHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomPlaylistsVDataHolder {
         return CustomPlaylistsVDataHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_fragment_home, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.item_for_cvplaylist, parent, false)
         )
     }
 
@@ -56,10 +56,6 @@ class CustomPlaylistsVDataAdapter(
                 playlists[position].duration
             )
         )
-
-        Glide.with(context)
-            .load(playlists[position].thumbnail)
-            .into(holder.imageView)
 
         Glide.with(context)
             .load(playlists[position].thumbnail)

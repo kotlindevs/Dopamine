@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.CustomPlaylistsVDataAdapter
@@ -29,12 +30,15 @@ class CVPlaylist : AppCompatActivity() {
 
         val playlist = intent.getStringExtra("playlistName")
         if(playlist != null) {
-            binding.materialTextView.text = playlist
             binding.customPlayListVideos.apply {
                 setHasFixedSize(false)
                 layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
                 adapter = CustomPlaylistsVDataAdapter(databaseViewModel.getPlaylistData(playlist),context)
             }
+            binding.playlistName.text = playlist
+            binding.playlistDescription.text = intent.getStringExtra("playlistDescription")
+            Glide.with(applicationContext).load(databaseViewModel.getPlaylistData(playlist)[0].thumbnail).into(binding.playlistImage)
+
             Log.d(TAG, " -> Activity : CVPlaylist || PlaylistData : $playlist")
         }
     }

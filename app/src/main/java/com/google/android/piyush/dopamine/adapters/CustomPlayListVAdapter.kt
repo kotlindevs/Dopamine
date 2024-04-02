@@ -44,6 +44,7 @@ class CustomPlayListVAdapter(
         holder.playlist.setOnClickListener {
             val intent = Intent(context, CVPlaylist::class.java)
             intent.putExtra("playlistName", playlistName)
+            intent.putExtra("playlistDescription", playlistDescription)
             context.startActivity(intent)
         }
         if(holder.title.text.length > 20){
