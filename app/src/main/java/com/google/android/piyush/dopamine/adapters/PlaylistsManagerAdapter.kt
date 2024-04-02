@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -35,7 +34,6 @@ class PlaylistsManagerAdapter(
     override fun getItemCount(): Int = playlistList?.size!!
 
     override fun onBindViewHolder(holder: PlaylistsManagerViewHolder, position: Int) {
-        val databaseViewModel = DatabaseViewModel(context)
         holder.playlistName.text = playlistList?.get(position)?.playListName
         holder.playlistDescription.text = playlistList?.get(position)?.playListDescription
         holder.editPlaylist.setOnClickListener {
@@ -47,6 +45,7 @@ class PlaylistsManagerAdapter(
             }
         }
         holder.deletePlaylist.setOnClickListener {
+            val databaseViewModel = DatabaseViewModel(context)
             MaterialAlertDialogBuilder(context).apply {
                 setTitle("Delete Playlist")
                 setIcon(R.drawable.delete)
@@ -56,15 +55,20 @@ class PlaylistsManagerAdapter(
                     databaseViewModel.deletePlaylist(playlistList?.get(position)?.playListName!!)
                     dialog.dismiss()
                     context.startActivity(
-                        Intent(
-                            context,
-                            DopamineHome::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("fromPlaylistManager", true)
-                    )
+                            Intent(
+                                context,
+                                DopamineHome::class.java
+                            ).putExtra(
+                                "fromPlaylistManager",true
+                            ).addFlags(
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            ).setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK
+                            )
+                        )
                 }
                 setNegativeButton("No") {
-                    dialog, _ ->
+                        dialog, _ ->
                     dialog.dismiss()
                 }
                 setCancelable(true)
@@ -115,11 +119,7 @@ class ManagerPlaylistsBottomSheet : BottomSheetDialogFragment() {
                     ToastUtilities.showToast(context, "Please Fill All Fields")
                 }else {
                     if(oldPlaylistName.toString() == binding.playlistName.text.toString()){
-                        Snackbar.make(
-                            requireView(),
-                            "Playlist Name Not Changed",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        ToastUtilities.showToast(context, "Playlist Name Not Changed ❌")
                     }else {
                         databaseViewModel.updatePlaylistName(
                             oldPlaylistName.toString(),
@@ -132,9 +132,12 @@ class ManagerPlaylistsBottomSheet : BottomSheetDialogFragment() {
                             Intent(
                                 requireContext(),
                                 DopamineHome::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(
-                                "fromPlaylistManager",
-                                true
+                            ).putExtra(
+                                "fromPlaylistManager",true
+                            ).addFlags(
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            ).setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK
                             )
                         )
                     }

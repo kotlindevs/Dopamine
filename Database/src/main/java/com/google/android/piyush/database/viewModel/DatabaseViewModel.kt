@@ -299,9 +299,8 @@ class DatabaseViewModel(
     fun deletePlaylist(playlistName: String) {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistName)
-        val query = "DROP TABLE $newPlaylistName"
         writableDatabase.execSQL("DELETE FROM DopamineMastersDev WHERE playlistName = \"$playlistName\" ")
-        writableDatabase.execSQL(query)
+        writableDatabase.execSQL("DROP TABLE \"$newPlaylistName\" ")
     }
 
     fun updatePlaylistName(
@@ -314,6 +313,7 @@ class DatabaseViewModel(
         val newUpdatedPlaylistName = stringify(newPlaylistName)
         val query = "UPDATE DopamineMastersDev SET playlistName = \"$newUpdatedPlaylistName\" , playlistDescription = \"$newPlaylistDescription\"  WHERE playlistName = \"$oldPlaylistName\" "
         writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS \"$newUpdatedPlaylistName\" AS SELECT * FROM \"$oldPlaylistName\" ")
+        writableDatabase.execSQL("DROP TABLE \"$oldPlaylistName\" ")
         writableDatabase.execSQL(query)
     }
 
