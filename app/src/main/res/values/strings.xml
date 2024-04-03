@@ -151,6 +151,7 @@
     <string name="delete_playlist">Delete Playlist</string>
     <string name="playlists_name">Playlists Name</string>
     <string name="playlists_description">Playlists Description</string>
-    <string name="you_have_no_playlists_yet">You have no playlists yet</string>
-    <string name="please_create_one_and_add_videos_to_it">please create one and add videos to it !</string>
+    <string name="you_have_no_playlists_yet">You have no videos yet</string>
+    <string name="please_create_one_and_add_videos_to_it">please add videos to your playlist !</string>
+    <string name="empty_data_in_playlist">0</string>
 </resources>

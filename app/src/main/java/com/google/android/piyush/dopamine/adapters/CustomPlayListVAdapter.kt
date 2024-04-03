@@ -37,6 +37,7 @@ class CustomPlayListVAdapter(
     override fun onBindViewHolder(holder: CustomPlayListVHolder, position: Int) {
         val playlistName = playlists?.get(position)?.playListName.toString()
         val playlistDescription = playlists?.get(position)?.playListDescription
+        val database = DatabaseViewModel(context)
 
         Log.d("playlistName", playlistName)
         holder.title.text = playlistName
@@ -53,29 +54,47 @@ class CustomPlayListVAdapter(
         if(holder.description.text.length > 20){
             holder.description.text =  holder.description.text.toString().substring(0,20)
         }
-        val database = DatabaseViewModel(context)
-        if(database.getPlaylistData(playlistName).isEmpty()){
+
+        if(playlistName == context.getString(R.string.favorites_playlist)) {
+            holder.apply {
+                if(database.getPlaylistData(playlistName).isEmpty()){
+                    playlistEmptyIc.visibility = View.GONE
+                    playlistEmptyTxt.visibility = View.GONE
+                    playlistIc.visibility = View.VISIBLE
+                    playlistTxt.visibility = View.VISIBLE
+                    playlistIc.setImageResource(R.drawable.ic_like_video)
+                    playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                }else {
+                    playlistEmptyIc.visibility = View.GONE
+                    playlistEmptyTxt.visibility = View.GONE
+                    playlistIc.visibility = View.VISIBLE
+                    playlistTxt.visibility = View.VISIBLE
+                    playlistIc.setImageResource(R.drawable.ic_like_video)
+                    playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+                }
+            }
+        } else if(playlistName ==context.getString(R.string.watch_later_playlist)) {
+            holder.apply {
+                if (database.getPlaylistData(playlistName).isEmpty()) {
+                    playlistEmptyIc.visibility = View.GONE
+                    playlistEmptyTxt.visibility = View.GONE
+                    playlistIc.visibility = View.VISIBLE
+                    playlistTxt.visibility = View.VISIBLE
+                    playlistIc.setImageResource(R.drawable.ic_watch_later)
+                    playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                } else {
+                    playlistEmptyIc.visibility = View.GONE
+                    playlistEmptyTxt.visibility = View.GONE
+                    playlistIc.visibility = View.VISIBLE
+                    playlistTxt.visibility = View.VISIBLE
+                    playlistIc.setImageResource(R.drawable.ic_watch_later)
+                    playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+                }
+            }
+        }else if(database.getPlaylistData(playlistName).isEmpty()){
             holder.apply {
                 playlistEmptyIc.visibility = View.VISIBLE
                 playlistEmptyTxt.visibility = View.VISIBLE
-            }
-        }else if(playlistName == context.getString(R.string.favorites_playlist)){
-            holder.apply {
-                playlistEmptyIc.visibility = View.GONE
-                playlistEmptyTxt.visibility = View.GONE
-                playlistIc.visibility = View.VISIBLE
-                playlistTxt.visibility = View.VISIBLE
-                playlistIc.setImageResource(R.drawable.ic_like_video)
-                playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
-            }
-        }else if(playlistName ==context.getString(R.string.watch_later_playlist)){
-            holder.apply {
-                playlistEmptyIc.visibility = View.GONE
-                playlistEmptyTxt.visibility = View.GONE
-                playlistIc.visibility = View.VISIBLE
-                playlistTxt.visibility = View.VISIBLE
-                playlistIc.setImageResource(R.drawable.ic_watch_later)
-                playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
             }
         }else{
             holder.apply {

@@ -10,48 +10,55 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/noPlaylistImage"
         android:layout_width="320dp"
-        android:layout_height="512dp"
+        android:layout_height="match_parent"
         android:src="@drawable/no_photo"
         android:scaleType="fitCenter"
-        android:layout_marginBottom="92dp"
+        android:layout_margin="32dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/noPlaylistText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textNoPlaylist1"
+    <LinearLayout
+        android:id="@+id/noPlaylistText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/you_have_no_playlists_yet"
-        android:layout_marginBottom="6dp"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/noPlaylistImage"
-        app:layout_constraintEnd_toEndOf="@id/noPlaylistImage"
-        app:layout_constraintBottom_toBottomOf="@id/noPlaylistImage"/>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textNoPlaylist2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/please_create_one_and_add_videos_to_it"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textNoPlaylist1" />
+        app:layout_constraintTop_toTopOf="@id/noPlaylistImage"
+        app:layout_constraintBottom_toBottomOf="@id/noPlaylistImage"
+        app:layout_constraintStart_toEndOf="@id/noPlaylistImage">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textNoPlaylist1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/you_have_no_playlists_yet"
+            android:layout_marginBottom="6dp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textNoPlaylist2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_create_one_and_add_videos_to_it"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+
+    </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/playlistDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="352dp"
+        android:layout_height="match_parent"
         android:layout_margin="16dp"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
         android:visibility="gone"
         style="@style/Widget.Material3.CardView.Filled"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -118,13 +125,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/customPlayListVideos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/playlistDetails"
-        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/playlistDetails"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
