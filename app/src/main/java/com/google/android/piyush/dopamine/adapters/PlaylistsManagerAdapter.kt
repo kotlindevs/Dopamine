@@ -36,6 +36,10 @@ class PlaylistsManagerAdapter(
     override fun onBindViewHolder(holder: PlaylistsManagerViewHolder, position: Int) {
         holder.playlistName.text = playlistList?.get(position)?.playListName
         holder.playlistDescription.text = playlistList?.get(position)?.playListDescription
+        if(playlistList?.get(position)?.playListName.equals("favorite playlist") || playlistList?.get(position)?.playListName.equals("watch later")){
+            holder.editPlaylist.visibility = View.GONE
+            holder.deletePlaylist.visibility = View.GONE
+        }
         holder.editPlaylist.setOnClickListener {
             val managerPlaylistsBottomSheet = ManagerPlaylistsBottomSheet()
             managerPlaylistsBottomSheet.show(fragment, managerPlaylistsBottomSheet.tag)

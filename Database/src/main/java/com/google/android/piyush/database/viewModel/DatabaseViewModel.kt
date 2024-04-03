@@ -299,7 +299,7 @@ class DatabaseViewModel(
     fun deletePlaylist(playlistName: String) {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistName)
-        writableDatabase.execSQL("DELETE FROM DopamineMastersDev WHERE playlistName = \"$playlistName\" ")
+        writableDatabase.execSQL("DELETE FROM DopamineMastersDev WHERE playlistName = \"$newPlaylistName\" ")
         writableDatabase.execSQL("DROP TABLE \"$newPlaylistName\" ")
     }
 

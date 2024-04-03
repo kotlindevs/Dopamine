@@ -1,7 +1,6 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,29 +32,7 @@ class PlaylistsManager : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(applicationContext)
             playlistsManager = PlaylistsManagerAdapter(context, playlists, fragment = supportFragmentManager)
-            playlistsManager.notifyDataSetChanged()
             adapter = playlistsManager
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("PlaylistsManager", "onStart: ")
-    }
-    override fun onResume() {
-        super.onResume()
-        Log.d("PlaylistsManager", "onResume: ")
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.d("PlaylistsManager", "onPause: ")
-    }
-    override fun onStop() {
-        super.onStop()
-        Log.d("PlaylistsManager", "onStop: ")
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("PlaylistsManager", "onDestroy: ")
     }
 }
