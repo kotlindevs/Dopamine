@@ -24,7 +24,6 @@ class DatabaseViewModel(
 
     private val dopamineDatabaseRepository : DopamineDatabaseRepository
     private val database = DopamineDatabase.getDatabase(context).openHelper
-    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     private val _searchVideoHistory = MutableLiveData<List<EntityVideoSearch>>()
     val searchVideoHistory : LiveData<List<EntityVideoSearch>> = _searchVideoHistory
@@ -204,7 +203,6 @@ class DatabaseViewModel(
         while (data.moveToNext()){
             count = data.getInt(0)
         }
-        Log.d(TAG, " -> viewModel : Database || countTheNumberOfCustomPlaylist : $count")
         return count
     }
 

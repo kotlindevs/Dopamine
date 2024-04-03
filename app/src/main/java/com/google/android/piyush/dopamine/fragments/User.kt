@@ -26,6 +26,7 @@ import com.google.android.piyush.dopamine.activities.DopamineYtSettings
 import com.google.android.piyush.dopamine.activities.PhoneNumberAuthentication
 import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.RecentVideosAdapter
+import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
@@ -33,6 +34,8 @@ import com.google.android.piyush.dopamine.databinding.BottomSheetPlaylistBinding
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -66,7 +69,6 @@ class User : Fragment() {
         databaseViewModel = DatabaseViewModel(requireContext())
 
         if(firebaseAuth.currentUser?.uid.isNullOrEmpty()) {
-            Log.d(TAG, "onViewCreated: ${firebaseAuth.currentUser?.uid} : 😉")
             binding.apply {
                 text1.visibility = View.VISIBLE
                 text2.visibility = View.VISIBLE
@@ -130,8 +132,6 @@ class User : Fragment() {
                 }
             }
         }
-
-        Log.d(TAG, "onViewCreated: ${databaseViewModel.countTheNumberOfCustomPlaylist()}")
 
         if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
             userFragment!!.yourPlaylists.visibility = View.GONE
@@ -208,14 +208,40 @@ class User : Fragment() {
         lifecycleScope.launch {
             userViewModel.state.collect { state ->
                 if(state.isSignInSuccessful){
-                    requireContext().getSharedPreferences("currentUser",
-                        AppCompatActivity.MODE_PRIVATE
-                    ).edit()
-                        .putString("uid", Firebase.auth.currentUser?.uid)
-                        .putString("name", Firebase.auth.currentUser?.displayName)
-                        .putString("email", Firebase.auth.currentUser?.email)
-                        .putString("photoUrl", Firebase.auth.currentUser?.photoUrl.toString())
-                        .apply()
+
+                    val userId = Firebase.auth.currentUser?.uid.toString()
+                    val userName = Firebase.auth.currentUser?.displayName.toString()
+                    val userEmail = Firebase.auth.currentUser?.email.toString()
+                    val userPhotoUrl = Firebase.auth.currentUser?.photoUrl.toString()
+
+                    val database = RealtimeViewModel()
+
+                    database.isUserExists(
+                        User(
+                            userId,
+                            userName,
+                            userEmail,
+                            userPhotoUrl
+                        )
+                    )
+                    database.dopamineUser.observe(viewLifecycleOwner) {
+                        if(it is RealtimeResource.Success){
+                            val user = it.data
+                            requireContext().getSharedPreferences("currentUser",
+                                AppCompatActivity.MODE_PRIVATE
+                            ).edit()
+                                .putString("uid", user?.userId)
+                                .putString("name", user?.userName)
+                                .putString("email", user?.userEmail)
+                                .putString("photoUrl", user?.userImage)
+                                .apply()
+                        }
+
+                        if(it is RealtimeResource.Error){
+                            Log.d(TAG, "Error: ${it.message}")
+                        }
+                    }
+
                     startActivity(
                         Intent(requireContext(), DopamineHome::class.java).putExtra("userSignedIn", true)
                     )

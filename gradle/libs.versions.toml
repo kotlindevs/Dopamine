@@ -9,6 +9,7 @@ library = "23b26d55f8"
 preference = "1.2.1"
 rxandroid = "2.1.1"
 shortcutbadger = "1.1.22"
+firebaseDatabase = "20.3.1"
 
 [libraries]
 androidappupdatelibrary = { module = "com.github.Piashsarker:AndroidAppUpdateLibrary", version.ref = "androidappupdatelibrary" }
@@ -44,6 +45,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.6
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 shortcutbadger = { module = "me.leolin:ShortcutBadger", version.ref = "shortcutbadger" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
