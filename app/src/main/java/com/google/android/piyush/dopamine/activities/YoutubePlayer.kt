@@ -33,6 +33,8 @@ import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapte
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -240,6 +242,28 @@ class YoutubePlayer : AppCompatActivity() {
                                     length = videoLength
                                 )
                             )
+                            val realtimeViewModel = RealtimeViewModel()
+                            realtimeViewModel.isRecentVideos(
+                                EntityRecentVideos(
+                                    id = Random.nextInt(1, 100000),
+                                    videoId = videoId,
+                                    thumbnail = videoThumbnail,
+                                    title = videoTitle,
+                                    timing = LocalTime.now()
+                                        .format(DateTimeFormatter.ofPattern("hh:mm a"))
+                                        .toString(),
+                                    channelId = channelId,
+                                    length = videoLength
+                                )
+                            )
+
+                            realtimeViewModel.recentVideos.observe(this) { recentVideos ->
+                                if(recentVideos is RealtimeResource.Success){
+                                    Log.d(TAG, "YoutubePlayer: ${recentVideos.data.toString()}")
+                                }else{
+                                    Log.d(TAG, "YoutubePlayer: ${recentVideos.message.toString()}")
+                                }
+                            }
                         }
                     }
 

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "recent_videos")
 data class EntityRecentVideos(
-    @PrimaryKey val id : Int,
+    @PrimaryKey val id : Int? = null,
     val videoId: String? = null,
     val title: String? = null,
     val thumbnail: String? = null,

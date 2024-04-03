@@ -170,20 +170,31 @@ class User : Fragment() {
         }
 
         if(NetworkUtilities.isNetworkAvailable(requireContext()).equals(true)) {
-            databaseViewModel.getRecentVideos()
-
-            databaseViewModel.recentVideos.observe(viewLifecycleOwner) { recentVideos ->
-                binding.recentWatchHistory.apply {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(context, binding.recentWatchHistory.horizontalFadingEdgeLength, false)
-                    adapter = RecentVideosAdapter(context, recentVideos)
-                }
-                if (recentVideos.isNullOrEmpty()) {
-                    binding.recentWatchHistory.visibility = View.GONE
-                    binding.watchHistory.visibility = View.GONE
-                }else{
-                    binding.recentWatchHistory.visibility = View.VISIBLE
-                    binding.watchHistory.visibility = View.VISIBLE
+            val realtimeViewModel = RealtimeViewModel()
+            realtimeViewModel.getRecentVideos()
+            realtimeViewModel.listOfRecentVideos.observe(viewLifecycleOwner) { recentVideos ->
+                when(recentVideos){
+                    is RealtimeResource.Loading -> {}
+                    is RealtimeResource.Success -> {
+                        binding.recentWatchHistory.apply {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(
+                                context,
+                                binding.recentWatchHistory.horizontalFadingEdgeLength,
+                                false
+                            )
+                            adapter = RecentVideosAdapter(context, recentVideos.data)
+                        }
+                    }
+                    is RealtimeResource.Error -> {
+                        if (recentVideos.data.isNullOrEmpty()) {
+                            binding.recentWatchHistory.visibility = View.GONE
+                            binding.watchHistory.visibility = View.GONE
+                        }else{
+                            binding.recentWatchHistory.visibility = View.VISIBLE
+                            binding.watchHistory.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
         }
