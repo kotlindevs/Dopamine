@@ -3,6 +3,7 @@ package com.google.android.piyush.dopamine.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -73,7 +74,13 @@ class AdminProfiler : AppCompatActivity() {
                                         }else{
                                             binding.textInputLayoutPasswd.isErrorEnabled = false
                                             if(adminData.adminPasswd == password){
-                                                Snackbar.make(binding.root, "Login Successful", Snackbar.LENGTH_SHORT).show()
+                                                Toast.makeText(this@AdminProfiler, "Login Successful", Toast.LENGTH_SHORT).show()
+                                                startActivity(
+                                                    Intent(
+                                                        this@AdminProfiler, AdminHome::class.java
+                                                    ).putExtra("adminId", adminId).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                )
+                                                binding.adminPasswd.text?.clear()
                                             }else{
                                                 Snackbar.make(binding.root, "Password is incorrect", Snackbar.LENGTH_SHORT).show()
                                             }
