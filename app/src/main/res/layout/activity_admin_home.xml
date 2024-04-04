@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:openDrawer="start"
     tools:context=".activities.AdminHome">
 
@@ -40,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/admin_navigation_header"/>
+        app:headerLayout="@layout/admin_navigation_header"
+        app:menu="@menu/admin_menu_item"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
