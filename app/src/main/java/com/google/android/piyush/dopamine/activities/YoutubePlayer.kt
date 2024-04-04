@@ -221,13 +221,18 @@ class YoutubePlayer : AppCompatActivity() {
                         }
                     }
                     databaseViewModel.isRecentVideo(videoId = videoId)
-
+                    val realtimeViewModel = RealtimeViewModel()
                     databaseViewModel.isRecent.observe(this) {
                         if (it == videoId) {
                             databaseViewModel.updateRecentVideo(
                                 videoId = videoId,
                                 time = LocalTime.now()
                                     .format(DateTimeFormatter.ofPattern("hh:mm a")).toString())
+                            realtimeViewModel.updateRecentVideos(
+                                videoId = videoId,
+                                timing = LocalTime.now()
+                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString()
+                            )
                         } else {
                             databaseViewModel.insertRecentVideos(
                                 EntityRecentVideos(
@@ -242,7 +247,6 @@ class YoutubePlayer : AppCompatActivity() {
                                     length = videoLength
                                 )
                             )
-                            val realtimeViewModel = RealtimeViewModel()
                             realtimeViewModel.isRecentVideos(
                                 EntityRecentVideos(
                                     id = Random.nextInt(1, 100000),

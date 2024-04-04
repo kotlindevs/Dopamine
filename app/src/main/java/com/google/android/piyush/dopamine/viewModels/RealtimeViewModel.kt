@@ -118,4 +118,28 @@ class RealtimeViewModel : ViewModel() {
                 })
         }
     }
+
+    fun updateRecentVideos(videoId : String, timing : String){
+        reference.child(currentUser?.uid!!).child("recentVideos").addValueEventListener(
+            object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if(it.key == videoId){
+                            val update = mapOf(
+                                "timing" to timing
+                            )
+                            it.ref.updateChildren(update)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+        )
+    }
 }

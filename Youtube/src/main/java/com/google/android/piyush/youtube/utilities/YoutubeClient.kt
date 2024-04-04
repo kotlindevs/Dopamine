@@ -87,6 +87,8 @@ object YoutubeClient {
         "PLQHHr8gPOsH48qDASzYskAYiWHgKhPl26","PLHKIZtgW3Stx7FBBV1fU5EziT_2HCGciV",
     ).random()
 
+    const val ADMIN = "https://api.npoint.io/972a4ffd7d2eb2285ec2"
+
     val TECH_VIDEOS =  arrayListOf(
         "PLflqtq8EOGAJJDNAct-tz9X8C6-MSljjB","PLBsP89CPrMeOYPjeabTfPW8UDC-WRn2Gi",
         "PLG2K6CpAgCSqTTu87JRtBXnxgbXU_BqVy","PLWMr6-kiy-EymYr84AW65YK5HQqa3c3pM",
@@ -223,6 +225,22 @@ class DevelopersViewModel : ViewModel() {
 }
 
 @Serializable
+data class AdministratorOfDopamine(
+    val adminId : String? = null,
+    val adminPasswd : String? = null,
+    val adminImage : String? = null,
+    val adminName : String? = null,
+    val adminEmail : String? = null,
+    val adminMobile : String? = null,
+    val adminDescription : List<Bio>? = null
+)
+
+@Serializable
+data class Bio(
+    val bio : String? = null
+)
+
+@Serializable
 data class Notifications(
      val id : Int = 0,
      val build : String? = null,
@@ -231,6 +249,28 @@ data class Notifications(
     val time : String? = null,
     val date : String? = null,
 )
+
+class AdminViewModel : ViewModel() {
+    private val _admin : MutableLiveData<YoutubeResource<AdministratorOfDopamine>> = MutableLiveData()
+    val admin : MutableLiveData<YoutubeResource<AdministratorOfDopamine>> = _admin
+
+    init {
+        viewModelScope.launch {
+            try {
+                _admin.postValue(YoutubeResource.Loading)
+                _admin.postValue(
+                    YoutubeResource.Success(
+                        YoutubeClient.CLIENT.get(
+                            YoutubeClient.ADMIN
+                        ).body()
+                    )
+                )
+            }catch (exception : Exception) {
+                _admin.postValue(YoutubeResource.Error(exception))
+            }
+        }
+    }
+}
 
 /*
 class AboutAppViewModel : ViewModel() {
