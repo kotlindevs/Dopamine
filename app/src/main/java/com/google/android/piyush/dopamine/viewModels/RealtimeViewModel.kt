@@ -10,6 +10,8 @@ import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.authentication.User
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
+import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,6 +36,9 @@ class RealtimeViewModel : ViewModel() {
 
     private val _listOfRecentVideos : MutableLiveData<RealtimeResource<List<EntityRecentVideos>>> = MutableLiveData()
     val listOfRecentVideos : LiveData<RealtimeResource<List<EntityRecentVideos>>> = _listOfRecentVideos
+
+    private val _notifications : MutableLiveData<RealtimeResource<Notifications>> = MutableLiveData()
+    val notifications : LiveData<RealtimeResource<Notifications>> = _notifications
 
     fun isUserExists(dopamineUser : User) {
         reference.child(dopamineUser.userId!!).child("userDetails").addValueEventListener(
@@ -141,5 +146,37 @@ class RealtimeViewModel : ViewModel() {
                 }
             }
         )
+    }
+
+    fun sendNotification(notifications: Notifications,context: android.content.Context) {
+        val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
+        val notificationId = notifications.id.toString()
+        adminId?.let{
+            reference.child(adminId).child("notifications").addValueEventListener(
+                object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach {
+                            if(it.key == notifications.id.toString()){
+                                _notifications.value = RealtimeResource.Success(it.getValue(Notifications::class.java)!!)
+                            }else{
+                                reference.child(adminId).child("notifications").child(notificationId).setValue(notifications)
+                            }
+                            val totalNotifications = snapshot.childrenCount
+                            Log.d(TAG, "totalNotifications: $totalNotifications")
+                        }
+                        if(snapshot.childrenCount.toInt() == 0){
+                            reference.child(adminId).child("notifications").child(notificationId).setValue(notifications)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        RealtimeResource.Error(
+                            data = null,
+                            message = error.message
+                        )
+                    }
+                }
+            )
+        }
     }
 }

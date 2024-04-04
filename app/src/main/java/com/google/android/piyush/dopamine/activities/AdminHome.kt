@@ -41,6 +41,23 @@ class AdminHome : AppCompatActivity() {
             binding.drawerLayout.open()
         }
 
+        binding.navigationView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.notification -> {
+                    it.isChecked = true
+                    binding.drawerLayout.close()
+                    startActivity(
+                        Intent(
+                            this,
+                            SendNotifications::class.java
+                        )
+                    )
+                    true
+                }
+                else -> false
+            }
+        }
+
         if(!adminId.isNullOrEmpty()){
             viewModel.admin.observe(this) { admin ->
                 when (admin) {

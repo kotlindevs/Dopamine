@@ -24,6 +24,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.SendNotifications"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminHome"
             android:exported="false" />
         <activity
