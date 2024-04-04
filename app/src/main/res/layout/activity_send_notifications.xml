@@ -19,7 +19,8 @@
             android:minHeight="?attr/actionBarSize"
             app:title="@string/notification"
             app:menu="@menu/menu_for_notifications"
-            app:navigationIcon="@drawable/back_press" />
+            app:navigationIcon="@drawable/close"
+            android:visibility="gone"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

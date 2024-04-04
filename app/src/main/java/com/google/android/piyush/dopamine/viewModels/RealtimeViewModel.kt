@@ -1,14 +1,12 @@
 package com.google.android.piyush.dopamine.viewModels
 
 import android.content.ContentValues.TAG
-import android.provider.ContactsContract.RawContacts.Entity
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.piyush.database.entities.EntityRecentVideos
-import com.google.android.piyush.database.model.CustomPlaylistView
-import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.Notifications
@@ -16,7 +14,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.Context
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -39,6 +36,9 @@ class RealtimeViewModel : ViewModel() {
 
     private val _notifications : MutableLiveData<RealtimeResource<Notifications>> = MutableLiveData()
     val notifications : LiveData<RealtimeResource<Notifications>> = _notifications
+
+    private val _listOfNotifications : MutableLiveData<RealtimeResource<List<Notifications>>> = MutableLiveData()
+    val listOfNotifications : LiveData<RealtimeResource<List<Notifications>>> = _listOfNotifications
 
     fun isUserExists(dopamineUser : User) {
         reference.child(dopamineUser.userId!!).child("userDetails").addValueEventListener(
@@ -148,7 +148,7 @@ class RealtimeViewModel : ViewModel() {
         )
     }
 
-    fun sendNotification(notifications: Notifications,context: android.content.Context) {
+    fun sendNotification(notifications: Notifications,context: Context) {
         val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
         val notificationId = notifications.id.toString()
         adminId?.let{
@@ -177,6 +177,41 @@ class RealtimeViewModel : ViewModel() {
                     }
                 }
             )
+        }
+    }
+
+    fun getNotifications(context: Context) {
+        val notifications =  mutableListOf<Notifications>()
+        val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
+        adminId?.let {
+            reference.child(adminId).child("notifications").addValueEventListener(
+                object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach { notification ->
+                            notifications.add(
+                                notification.getValue(
+                                    Notifications::class.java
+                                )!!
+                            )
+                        }
+                        _listOfNotifications.value = RealtimeResource.Success(notifications)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        RealtimeResource.Error(
+                            data = null,
+                            message = error.message
+                        )
+                    }
+                })
+        }
+    }
+
+    fun deleteNotification(notificationId: String, context: Context){
+        val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
+
+        adminId?.let {
+            reference.child(adminId).child("notifications").child(notificationId).removeValue()
         }
     }
 }

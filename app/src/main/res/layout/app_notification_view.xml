@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
+    android:id="@+id/notification"
     style="@style/Widget.Material3.CardView.Filled">
 
     <androidx.constraintlayout.widget.ConstraintLayout

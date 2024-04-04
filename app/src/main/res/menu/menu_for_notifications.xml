@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/addNotification"
-        android:title="@string/add_notification"
-        android:icon="@drawable/add_notification"
-        app:showAsAction="always" />
+        android:id="@+id/deleteNotification"
+        android:title="@string/delete_notification"
+        android:icon="@drawable/delete"
+        app:showAsAction="ifRoom" />
 </menu>

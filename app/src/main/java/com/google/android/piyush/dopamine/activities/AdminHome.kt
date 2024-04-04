@@ -1,7 +1,9 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -9,12 +11,17 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAdminHomeBinding
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.AdminViewModel
+import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
 class AdminHome : AppCompatActivity() {
@@ -35,7 +42,7 @@ class AdminHome : AppCompatActivity() {
             insets
         }
 
-        val adminId= intent.getStringExtra("adminId")
+        val adminId= dopamineSharedPreferences(applicationContext).getString("adminId", null)
 
         binding.topAppBar.setNavigationOnClickListener {
             binding.drawerLayout.open()
@@ -43,20 +50,25 @@ class AdminHome : AppCompatActivity() {
 
         binding.navigationView.setNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.notification -> {
+                R.id.addNotification -> {
+                    it.isChecked = true
+                    binding.drawerLayout.close()
+                    val notifications = NotificationBottomSheet()
+                    notifications.show(supportFragmentManager, notifications.tag)
+                    true
+                }
+                R.id.getNotification -> {
                     it.isChecked = true
                     binding.drawerLayout.close()
                     startActivity(
-                        Intent(
-                            this,
-                            SendNotifications::class.java
-                        )
+                        Intent(this, SendNotifications::class.java)
                     )
                     true
                 }
                 else -> false
             }
         }
+
 
         if(!adminId.isNullOrEmpty()){
             viewModel.admin.observe(this) { admin ->

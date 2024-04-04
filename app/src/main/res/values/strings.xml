@@ -169,4 +169,7 @@
     <string name="notification_publish_time">Notification Publish Time</string>
     <string name="notification_publish_date">Notification Publish Date</string>
     <string name="publish_notification">Publish Notification</string>
+    <string name="published_notification">Published Notification</string>
+    <string name="preview_notification">Preview Notification</string>
+    <string name="delete_notification">Delete Notification</string>
 </resources>

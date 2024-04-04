@@ -3,12 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/options"
-        android:title="@string/options">
+        android:title="@string/notification">
         <menu>
             <item
-                android:id="@+id/notification"
+                android:id="@+id/addNotification"
+                android:icon="@drawable/add_notification"
+                android:title="@string/published_notification"
+                android:checkable="true"
+                app:showAsAction="ifRoom"/>
+            <item
+                android:id="@+id/getNotification"
                 android:icon="@drawable/ic_notification"
-                android:title="@string/notification"
+                android:title="@string/preview_notification"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
         </menu>
