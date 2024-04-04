@@ -160,4 +160,5 @@
     <string name="sign_in">Sign In</string>
     <string name="we_are_getting_the_data_from_the_server">We are getting the data from the server !</string>
     <string name="wait_a_moment">Wait a moment...</string>
+    <string name="save_this_device">Save the current login device</string>
 </resources>

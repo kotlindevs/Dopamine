@@ -2,17 +2,20 @@ package com.google.android.piyush.dopamine.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAdminProfilerBinding
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.AdminViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
@@ -64,6 +67,22 @@ class AdminProfiler : AppCompatActivity() {
                                     Glide.with(applicationContext).load(adminData.adminImage).into(this.adminImage)
                                     this.adminDescription.text = adminData.adminDescription?.random()?.bio
                                 }
+                                binding.rememberAdmin.apply {
+                                    visibility = View.VISIBLE
+                                    setOnCheckedChangeListener { _, isChecked ->
+                                        if(isChecked){
+                                            dopamineSharedPreferences(applicationContext).edit {
+                                                putBoolean("rememberAdmin", true)
+                                                putString("adminId", adminId)
+                                            }
+                                        }else{
+                                            dopamineSharedPreferences(applicationContext).edit {
+                                                putBoolean("rememberAdmin", false)
+                                            }
+                                        }
+                                    }
+                                }
+
                                 binding.adminLogin.apply {
                                     visibility = View.VISIBLE
                                     setOnClickListener {

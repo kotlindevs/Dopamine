@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAdministratorBinding
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.AdminViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
@@ -27,6 +29,20 @@ class Administrator : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val admin = dopamineSharedPreferences(applicationContext)
+        val prefAdminId : String = admin.getString("adminId", "").toString()
+        val rememberAdmin : Boolean = admin.getBoolean("rememberAdmin", false)
+        if(!rememberAdmin.equals(null)) {
+            if (rememberAdmin.equals(true)) {
+                startActivity(
+                    Intent(
+                        this, AdminHome::class.java
+                    ).putExtra("adminId", prefAdminId).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            }
         }
 
         binding.continueWithAdminId.setOnClickListener {
