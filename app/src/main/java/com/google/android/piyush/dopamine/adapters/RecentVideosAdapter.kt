@@ -13,8 +13,14 @@ import com.google.android.piyush.dopamine.viewHolders.RecentVideosViewHolder
 
 class RecentVideosAdapter(
     private val context: Context,
-    private val videos: List<EntityRecentVideos>?
+    private var videos: List<EntityRecentVideos>?
 ) : RecyclerView.Adapter<RecentVideosViewHolder>() {
+
+    fun setVideos(newVideos: List<EntityRecentVideos>?) {
+        videos = newVideos
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentVideosViewHolder {
         return RecentVideosViewHolder(
             LayoutInflater.from(parent.context)
@@ -22,9 +28,7 @@ class RecentVideosAdapter(
         )
     }
 
-    override fun getItemCount(): Int {
-        return videos?.size!!
-    }
+    override fun getItemCount() = videos?.size ?: 0
 
     override fun onBindViewHolder(holder: RecentVideosViewHolder, position: Int) {
         val videos = videos?.get(position)

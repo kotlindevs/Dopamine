@@ -49,6 +49,7 @@ class User : Fragment() {
     private lateinit var userRepository : UserAuthRepositoryImpl
     private lateinit var userViewModelFactory: UserAuthViewModelFactory
     private lateinit var userViewModel: UserAuthViewModel
+    private lateinit var recentVideosAdapter: RecentVideosAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -183,7 +184,12 @@ class User : Fragment() {
                                 binding.recentWatchHistory.horizontalFadingEdgeLength,
                                 false
                             )
-                            adapter = RecentVideosAdapter(context, recentVideos.data)
+                            recentVideosAdapter = RecentVideosAdapter(context, recentVideos.data)
+                            adapter = recentVideosAdapter.apply {
+                                setVideos(
+                                    recentVideos.data
+                                )
+                            }
                         }
                     }
                     is RealtimeResource.Error -> {
