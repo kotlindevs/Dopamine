@@ -41,20 +41,22 @@ class RealtimeViewModel : ViewModel() {
     val listOfNotifications : LiveData<RealtimeResource<List<Notifications>>> = _listOfNotifications
 
     fun isUserExists(dopamineUser : User) {
-        reference.child(dopamineUser.userId!!).child("userDetails").addValueEventListener(
-            object : ValueEventListener{
+
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
-                        if(it.key == dopamineUser.userId){
-                            _dopamineUser.value = RealtimeResource.Success(it.getValue(User::class.java)!!)
-                        }else{
-                            reference.child(dopamineUser.userId).child("userDetails").setValue(dopamineUser)
+                        if (it.key == dopamineUser.userId) {
+                            _dopamineUser.value =
+                                RealtimeResource.Success(it.getValue(User::class.java)!!)
+                        } else {
+                            reference.child(user.uid).child("userDetails")
+                                .setValue(dopamineUser)
                         }
-                        val totalUsers = snapshot.childrenCount
-                        Log.d(TAG, "totalUsers: $totalUsers")
                     }
-                    if(snapshot.childrenCount.toInt() == 0){
-                        reference.child(dopamineUser.userId).child("userDetails").setValue(dopamineUser)
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        reference.child(user.uid).child("userDetails")
+                            .setValue(dopamineUser)
                     }
                 }
 
@@ -65,14 +67,18 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-        )
+            reference.child(dopamineUser.userId!!).child("userDetails")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
     }
 
 
     fun isRecentVideos(recentVideos : EntityRecentVideos){
-        //try recent_videos instead of recentVideos
-        reference.child(currentUser?.uid!!).child("recentVideos").addValueEventListener(
-            object : ValueEventListener{
+
+        currentUser?.let {
+            val valueEventListener = object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
                         if(it.key == recentVideos.videoId){
@@ -80,8 +86,6 @@ class RealtimeViewModel : ViewModel() {
                         }else{
                             reference.child(currentUser.uid).child("recentVideos").child(recentVideos.videoId!!).setValue(recentVideos)
                         }
-                        val totalVideos = snapshot.childrenCount
-                        Log.d(TAG, "recentVideos: $totalVideos")
                     }
                     if(snapshot.childrenCount.toInt() == 0){
                         reference.child(currentUser.uid).child("recentVideos").child(recentVideos.videoId!!).setValue(recentVideos)
@@ -95,38 +99,46 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-        )
+
+            reference.child(currentUser.uid).child("recentVideos").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
     }
 
     fun getRecentVideos() {
         val recentVideos =  mutableListOf<EntityRecentVideos>()
         currentUser?.let { user ->
-            reference.child(user.uid).child("recentVideos").addValueEventListener(
-                object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        snapshot.children.forEach { videos ->
-                            recentVideos.add(
-                                videos.getValue(
-                                    EntityRecentVideos::class.java
-                                )!!
-                            )
-                        }
-                        _listOfRecentVideos.value = RealtimeResource.Success(recentVideos)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        RealtimeResource.Error(
-                            data = null,
-                            message = error.message
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { videos ->
+                        recentVideos.add(
+                            videos.getValue(
+                                EntityRecentVideos::class.java
+                            )!!
                         )
                     }
-                })
+                    _listOfRecentVideos.value = RealtimeResource.Success(recentVideos)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).child("recentVideos").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
         }
     }
 
     fun updateRecentVideos(videoId : String, timing : String){
-        reference.child(currentUser?.uid!!).child("recentVideos").addValueEventListener(
-            object : ValueEventListener{
+
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
                         if(it.key == videoId){
@@ -145,38 +157,43 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-        )
+            reference.child(user.uid).child("recentVideos").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
     }
 
     fun sendNotification(notifications: Notifications,context: Context) {
         val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
         val notificationId = notifications.id.toString()
         adminId?.let{
-            reference.child(adminId).child("notifications").addValueEventListener(
-                object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        snapshot.children.forEach {
-                            if(it.key == notifications.id.toString()){
-                                _notifications.value = RealtimeResource.Success(it.getValue(Notifications::class.java)!!)
-                            }else{
-                                reference.child(adminId).child("notifications").child(notificationId).setValue(notifications)
-                            }
-                            val totalNotifications = snapshot.childrenCount
-                            Log.d(TAG, "totalNotifications: $totalNotifications")
-                        }
-                        if(snapshot.childrenCount.toInt() == 0){
+            val valueEventListener = object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if(it.key == notifications.id.toString()){
+                            _notifications.value = RealtimeResource.Success(it.getValue(Notifications::class.java)!!)
+                        }else{
                             reference.child(adminId).child("notifications").child(notificationId).setValue(notifications)
                         }
+                        val totalNotifications = snapshot.childrenCount
+                        Log.d(TAG, "totalNotifications: $totalNotifications")
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        RealtimeResource.Error(
-                            data = null,
-                            message = error.message
-                        )
+                    if(snapshot.childrenCount.toInt() == 0){
+                        reference.child(adminId).child("notifications").child(notificationId).setValue(notifications)
                     }
                 }
-            )
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(adminId).child("notifications").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
         }
     }
 
@@ -184,26 +201,30 @@ class RealtimeViewModel : ViewModel() {
         val notifications =  mutableListOf<Notifications>()
         val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
         adminId?.let {
-            reference.child(adminId).child("notifications").addValueEventListener(
-                object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        snapshot.children.forEach { notification ->
-                            notifications.add(
-                                notification.getValue(
-                                    Notifications::class.java
-                                )!!
-                            )
-                        }
-                        _listOfNotifications.value = RealtimeResource.Success(notifications)
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        RealtimeResource.Error(
-                            data = null,
-                            message = error.message
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { notification ->
+                        notifications.add(
+                            notification.getValue(
+                                Notifications::class.java
+                            )!!
                         )
                     }
-                })
+                    _listOfNotifications.value = RealtimeResource.Success(notifications)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(adminId).child("notifications").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
         }
     }
 
@@ -212,6 +233,24 @@ class RealtimeViewModel : ViewModel() {
 
         adminId?.let {
             reference.child(adminId).child("notifications").child(notificationId.toString()).removeValue()
+        }
+    }
+
+    fun clearAllWatchHistory() {
+        currentUser?.let { user ->
+            reference.child(user.uid).child("recentVideos").removeValue()
+        }
+    }
+
+    fun deleteUserDetails() {
+        currentUser?.let { user ->
+            reference.child(user.uid).child("userDetails").removeValue()
+        }
+    }
+
+    fun deleteYourAccount() {
+        currentUser?.let { user ->
+            reference.child(user.uid).removeValue()
         }
     }
 }

@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
@@ -27,6 +29,7 @@ import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.createDefaultNotification
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +41,8 @@ class DopamineYtSettings : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
     private lateinit var firebaseAuth: FirebaseAuth
+    private val realtimeViewModel by viewModels<RealtimeViewModel>()
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +80,10 @@ class DopamineYtSettings : AppCompatActivity() {
                 View.GONE.also{
                     googleSignOut.visibility = it
                     googleSignOutText.visibility = it
+                    accountDeletion.visibility = it
+                    accountDeletionText.visibility = it
+                    clearAllWatchHistory.visibility = it
+                    clearAllWatchHistoryText.visibility = it
                 }
                 installPreReleaseUpdate.apply {
                     isEnabled = false
@@ -500,6 +509,68 @@ class DopamineYtSettings : AppCompatActivity() {
             )
         }
 
+        binding.clearAllWatchHistory.setOnClickListener {
+            MaterialAlertDialogBuilder(this).apply {
+                setTitle("Clear all watch history ?")
+                setIcon(R.drawable.clock)
+                setMessage("This will clear all the watch history from the app, and this action cannot be undone.")
+                setCancelable(true)
+                setPositiveButton("Yes") { dialog, _ ->
+                    realtimeViewModel.clearAllWatchHistory()
+                    Snackbar.make(
+                        binding.root,
+                        "Watch history cleared successfully !",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    dialog.dismiss()
+                }
+                setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.create().show()
+        }
+
+        binding.accountDeletion.setOnClickListener {
+            MaterialAlertDialogBuilder(this).apply {
+                setTitle("Caution ! ")
+                setIcon(R.drawable.dangerous)
+                setMessage("This will delete your account from the server and you will not be able to access your data from the app. To access it, please sign in again 😊")
+                setCancelable(true)
+                setPositiveButton("Delete it !") { dialog, _ ->
+                    if(NetworkUtilities.isNetworkAvailable(context = this@DopamineYtSettings)) {
+                        realtimeViewModel.deleteYourAccount()
+                        firebaseAuth.signOut()
+                        firebaseAuth.currentUser?.delete()
+                        val userAuthRepositoryImpl = UserAuthRepositoryImpl(this@DopamineYtSettings)
+                        val userAuthViewModelFactory =  UserAuthViewModelFactory(userAuthRepositoryImpl)
+                        val userAuthViewModel by viewModels<UserAuthViewModel> { userAuthViewModelFactory }
+                        lifecycleScope.launch {
+                            userAuthRepositoryImpl.signOut()
+                            userAuthViewModel.resetSignInState()
+                        }
+                        Snackbar.make(
+                            binding.root,
+                            "Account deleted successfully !",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                        startActivity(
+                            Intent(
+                                this@DopamineYtSettings, DopamineHome::class.java
+                            ).putExtra(
+                                "userDeleteAccount", true
+                            )
+                        )
+                    }else{
+                        ToastUtilities.showToast(this@DopamineYtSettings,"Please check your internet connection")
+                    }
+                }
+                setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.create().show()
+        }
+
         binding.googleSignOut.setOnClickListener {
             MaterialAlertDialogBuilder(this)
                 .setTitle("Sign out from your account ?")
@@ -522,6 +593,7 @@ class DopamineYtSettings : AppCompatActivity() {
                         ToastUtilities.showToast(
                             this,"You have successfully signed out from your account"
                         )
+                        dialog.dismiss()
                         startActivity(
                             Intent(
                                 this, DopamineHome::class.java
@@ -529,7 +601,6 @@ class DopamineYtSettings : AppCompatActivity() {
                                 "userSignedOut", true
                             )
                         )
-                        dialog.dismiss()
                     }else{
                         ToastUtilities.showToast(this,"Please check your internet connection")
                     }

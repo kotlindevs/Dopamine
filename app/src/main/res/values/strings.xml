@@ -172,4 +172,10 @@
     <string name="published_notification">Published Notification</string>
     <string name="preview_notification">Preview Notification</string>
     <string name="delete_notification">Delete Notification</string>
+    <string name="account">Account</string>
+    <string name="clear_all_watch_history">Clear all watch history</string>
+    <string name="watched_videos_will_be_deleted_from_your_watch_history">Watched videos will be deleted from your watch history</string>
+    <string name="delete_account">Delete your account</string>
+    <string name="this_action_cannot_be_undone">This action cannot be undone</string>
+    <string name="coming_soon">Coming soon...</string>
 </resources>
