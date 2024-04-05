@@ -19,6 +19,12 @@ class CustomPlayListVAdapter(
     private val context: Context,
     private var playlists: List<CustomPlaylistView>?,
 ) : RecyclerView.Adapter<CustomPlayListVHolder>() {
+
+    fun setDataList(newPlaylists: List<CustomPlaylistView>?) {
+        playlists = newPlaylists
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomPlayListVHolder {
         return CustomPlayListVHolder(
             LayoutInflater.from(

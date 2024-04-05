@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.piyush.database.entities.EntityRecentVideos
+import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.Notifications
@@ -39,6 +40,12 @@ class RealtimeViewModel : ViewModel() {
 
     private val _listOfNotifications : MutableLiveData<RealtimeResource<List<Notifications>>> = MutableLiveData()
     val listOfNotifications : LiveData<RealtimeResource<List<Notifications>>> = _listOfNotifications
+
+    private val _customPlaylistView : MutableLiveData<RealtimeResource<CustomPlaylistView>> = MutableLiveData()
+    val customPlaylistView : LiveData<RealtimeResource<CustomPlaylistView>> = _customPlaylistView
+
+    private val _listOfCustomPlaylistView : MutableLiveData<RealtimeResource<List<CustomPlaylistView>>> = MutableLiveData()
+    val listOfCustomPlaylistView : LiveData<RealtimeResource<List<CustomPlaylistView>>> = _listOfCustomPlaylistView
 
     fun isUserExists(dopamineUser : User) {
 
@@ -251,6 +258,74 @@ class RealtimeViewModel : ViewModel() {
     fun deleteYourAccount() {
         currentUser?.let { user ->
             reference.child(user.uid).removeValue()
+        }
+    }
+
+    fun addInMasterRecords (customPlaylistView: List<CustomPlaylistView>) {
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    customPlaylistView.forEach { playlist ->
+                        snapshot.children.forEach { snap ->
+                            if (snap.key == playlist.playListName) {
+                                _customPlaylistView.value =
+                                    RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
+                            } else {
+                                reference.child(user.uid).child("masterRecords").child(playlist.playListName!!)
+                                    .setValue(playlist)
+                            }
+                        }
+                    }
+
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        customPlaylistView.forEach { playlist ->
+                            reference.child(user.uid).child("masterRecords").child(playlist.playListName!!)
+                                .setValue(playlist)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("masterRecords")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun getMasterRecords() {
+        val customPlaylists =  mutableListOf<CustomPlaylistView>()
+        currentUser?.let { user ->
+
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { playlist ->
+                        customPlaylists.add(
+                            playlist.getValue(
+                                CustomPlaylistView::class.java
+                            )!!
+                        )
+                    }
+                    _listOfCustomPlaylistView.value = RealtimeResource.Success(customPlaylists)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).child("masterRecords").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
         }
     }
 }

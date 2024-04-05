@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +51,8 @@ class User : Fragment() {
     private lateinit var userViewModelFactory: UserAuthViewModelFactory
     private lateinit var userViewModel: UserAuthViewModel
     private lateinit var recentVideosAdapter: RecentVideosAdapter
+    private val realtimeViewModel by viewModels<RealtimeViewModel>()
+    private lateinit var customPlayListVAdapter: CustomPlayListVAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -140,10 +143,41 @@ class User : Fragment() {
         }else{
             userFragment!!.emptyPlaylist.visibility = View.GONE
             userFragment!!.yourPlaylists.visibility = View.VISIBLE
-            userFragment!!.yourPlaylists.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
-                adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
+            if(firebaseAuth.currentUser?.uid.isNullOrEmpty()){
+                userFragment!!.yourPlaylists.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
+                    adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
+                }
+            }else{
+                val dopamineMasterDev = databaseViewModel.getPlaylist()
+                realtimeViewModel.addInMasterRecords(dopamineMasterDev)
+                realtimeViewModel.customPlaylistView.observe(viewLifecycleOwner) {
+                    when(it){
+                        is RealtimeResource.Loading -> {}
+                        is RealtimeResource.Success -> {}
+                        is RealtimeResource.Error -> {}
+                    }
+                }
+                realtimeViewModel.getMasterRecords()
+                realtimeViewModel.listOfCustomPlaylistView.observe(viewLifecycleOwner) {
+                    when(it) {
+                        is RealtimeResource.Loading -> {}
+                        is RealtimeResource.Success -> {
+                            userFragment!!.yourPlaylists.apply {
+                                setHasFixedSize(true)
+                                layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
+                                customPlayListVAdapter = CustomPlayListVAdapter(context, it.data)
+                                adapter = customPlayListVAdapter.apply {
+                                    setDataList(
+                                        it.data
+                                    )
+                                }
+                            }
+                        }
+                        is RealtimeResource.Error -> {}
+                    }
+                }
             }
         }
 
