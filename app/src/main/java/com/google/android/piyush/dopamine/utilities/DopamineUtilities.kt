@@ -50,6 +50,7 @@ const val PERMISSION_REQUEST_CODE = 100
     const val PROCESS_ID = "MyDlProcess"
     const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val RELEASE_DATE = "05/04/2024"
+    const val PROJECT_TIMELINE = "© 2024 Dopamine Team "
     const val PROJECT_VERSION = "dopamine_20242703_03.phone.stable.dynamic"
     const val PRE_RELEASE_VERSION = "dopamine_20240405_01.phone.prerelease.dynamic"
     const val STABLE = "stable"

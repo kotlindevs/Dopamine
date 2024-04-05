@@ -201,6 +201,7 @@ data class PreRelease(
     val changeLog : String? = null,
     val jvmTarget : String? = null,
     val url : String? = null,
+    val releaseType : String? = null,
     val inherit : Boolean? = false
 )
 
@@ -272,7 +273,7 @@ class AdminViewModel : ViewModel() {
     }
 }
 
-/*
+
 class AboutAppViewModel : ViewModel() {
 
     private val _aboutUs  : MutableLiveData<YoutubeResource<PreRelease>> = MutableLiveData()
@@ -295,7 +296,7 @@ class AboutAppViewModel : ViewModel() {
         }
     }
 }
-*/
+
 
 class NotificationViewModel() : ViewModel() {
 
