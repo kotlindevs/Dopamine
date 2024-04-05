@@ -51,7 +51,6 @@ class DopamineYtSettings : AppCompatActivity() {
         binding = ActivityDopamineYtSettingsBinding.inflate(layoutInflater)
         sharedPreferences = getSharedPreferences("DopamineApp", MODE_PRIVATE)
         firebaseAuth = FirebaseAuth.getInstance()
-        dopamineVersionViewModel = DopamineVersionViewModel()
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -75,64 +74,66 @@ class DopamineYtSettings : AppCompatActivity() {
         }
 
 
-        if(firebaseAuth.currentUser?.uid.isNullOrEmpty()){
-            binding.apply {
-                View.GONE.also{
-                    googleSignOut.visibility = it
-                    googleSignOutText.visibility = it
-                    accountDeletion.visibility = it
-                    accountDeletionText.visibility = it
-                    clearAllWatchHistory.visibility = it
-                    clearAllWatchHistoryText.visibility = it
-                }
-                installPreReleaseUpdate.apply {
-                    isEnabled = false
-                    isChecked = false
-                }
-                val userWantToSignIn = sharedPreferences.getBoolean("userWantToSignIn", true)
-                if(userWantToSignIn.equals(true)) {
-                    MaterialAlertDialogBuilder(this@DopamineYtSettings).apply {
-                        this.setTitle("Information")
-                        this.setMessage("Still you are not logged in with your account and you'll be not fully access features of Dopamine 😉")
-                        this.setIcon(R.drawable.ic_info)
-                        this.setCancelable(true)
-                        this.setPositiveButton("Sign In") { dialog, _ ->
-                            startActivity(
-                                Intent(
-                                    this@DopamineYtSettings, DopamineHome::class.java
-                                ).putExtra("userWantToSignIn", true)
-                            )
-                            dialog.dismiss()
-                        }
-                        this.setNegativeButton("Not Now") { dialog, _ ->
-                            dialog.dismiss()
-                            sharedPreferences.edit().putBoolean("userWantToSignIn", false).apply()
-                        }
-                    }.create().show()
-                }
-            }
-        }else {
-            val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
-            if (preReleaseUpdates.equals(true)) {
-                dopamineVersionViewModel.preReleaseUpdate()
-                dopamineVersionViewModel.preRelease.observe(this) {
-                    if (it is YoutubeResource.Success) {
-                        sharedPreferences.edit().apply {
-                            putString("PreReleaseVersion", it.data.versionName)
-                            putString("PreReleaseUrl", it.data.url)
-                            apply()
-                        }
-                        if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
-                            createDefaultNotification(
-                                this,
-                                "Update available",
-                                it.data.versionName.toString()
-                            )
-                        }
+        if(NetworkUtilities.isNetworkAvailable(this).equals(true)) {
+            dopamineVersionViewModel = DopamineVersionViewModel()
+            if (firebaseAuth.currentUser?.uid.isNullOrEmpty()) {
+                binding.apply {
+                    View.GONE.also {
+                        googleSignOut.visibility = it
+                        googleSignOutText.visibility = it
+                        accountDeletion.visibility = it
+                        accountDeletionText.visibility = it
+                        clearAllWatchHistory.visibility = it
+                        clearAllWatchHistoryText.visibility = it
+                    }
+                    installPreReleaseUpdate.apply {
+                        isEnabled = false
+                        isChecked = false
+                    }
+                    val userWantToSignIn = sharedPreferences.getBoolean("userWantToSignIn", true)
+                    if (userWantToSignIn.equals(true)) {
+                        MaterialAlertDialogBuilder(this@DopamineYtSettings).apply {
+                            this.setTitle("Information")
+                            this.setMessage("Still you are not logged in with your account and you'll be not fully access features of Dopamine 😉")
+                            this.setIcon(R.drawable.ic_info)
+                            this.setCancelable(true)
+                            this.setPositiveButton("Sign In") { dialog, _ ->
+                                startActivity(
+                                    Intent(
+                                        this@DopamineYtSettings, DopamineHome::class.java
+                                    ).putExtra("userWantToSignIn", true)
+                                )
+                                dialog.dismiss()
+                            }
+                            this.setNegativeButton("Not Now") { dialog, _ ->
+                                dialog.dismiss()
+                                sharedPreferences.edit().putBoolean("userWantToSignIn", false)
+                                    .apply()
+                            }
+                        }.create().show()
                     }
                 }
             } else {
-                if (NetworkUtilities.isNetworkAvailable(this).equals(true)) {
+                val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
+                if (preReleaseUpdates.equals(true)) {
+                    dopamineVersionViewModel.preReleaseUpdate()
+                    dopamineVersionViewModel.preRelease.observe(this) {
+                        if (it is YoutubeResource.Success) {
+                            sharedPreferences.edit().apply {
+                                putString("PreReleaseVersion", it.data.versionName)
+                                putString("PreReleaseUrl", it.data.url)
+                                apply()
+                            }
+                            if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
+                                createDefaultNotification(
+                                    this,
+                                    "Update available",
+                                    it.data.versionName.toString()
+                                )
+                            }
+                        }
+                    }
+                } else {
                     dopamineVersionViewModel.update.observe(this) { update ->
                         when (update) {
                             is YoutubeResource.Loading -> {}
@@ -269,9 +270,11 @@ class DopamineYtSettings : AppCompatActivity() {
                     }
                 }
             }else{
-                ToastUtilities.showToast(
-                    this,"Please check your internet connection"
-                )
+                Snackbar.make(
+                    binding.root,
+                    "Please check your internet connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -516,12 +519,20 @@ class DopamineYtSettings : AppCompatActivity() {
                 setMessage("This will clear all the watch history from the app, and this action cannot be undone.")
                 setCancelable(true)
                 setPositiveButton("Yes") { dialog, _ ->
-                    realtimeViewModel.clearAllWatchHistory()
-                    Snackbar.make(
-                        binding.root,
-                        "Watch history cleared successfully !",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    if(NetworkUtilities.isNetworkAvailable(context = this@DopamineYtSettings) ){
+                        realtimeViewModel.clearAllWatchHistory()
+                        Snackbar.make(
+                            binding.root,
+                            "Watch history cleared successfully !",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }else{
+                        Snackbar.make(
+                            binding.root,
+                            "Please check your internet connection",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
                     dialog.dismiss()
                 }
                 setNegativeButton("No") { dialog, _ ->
@@ -553,7 +564,6 @@ class DopamineYtSettings : AppCompatActivity() {
                             "Account deleted successfully !",
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        dialog.dismiss()
                         startActivity(
                             Intent(
                                 this@DopamineYtSettings, DopamineHome::class.java
@@ -562,8 +572,13 @@ class DopamineYtSettings : AppCompatActivity() {
                             )
                         )
                     }else{
-                        ToastUtilities.showToast(this@DopamineYtSettings,"Please check your internet connection")
+                        Snackbar.make(
+                            binding.root,
+                            "Please check your internet connection",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
+                    dialog.dismiss()
                 }
                 setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
@@ -590,10 +605,11 @@ class DopamineYtSettings : AppCompatActivity() {
                             userAuthRepositoryImpl.signOut()
                             userAuthViewModel.resetSignInState()
                         }
-                        ToastUtilities.showToast(
-                            this,"You have successfully signed out from your account"
-                        )
-                        dialog.dismiss()
+                        Snackbar.make(
+                            binding.root,
+                            "Logged out successfully !",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                         startActivity(
                             Intent(
                                 this, DopamineHome::class.java
@@ -602,9 +618,13 @@ class DopamineYtSettings : AppCompatActivity() {
                             )
                         )
                     }else{
-                        ToastUtilities.showToast(this,"Please check your internet connection")
+                        Snackbar.make(
+                            binding.root,
+                            "Please check your internet connection",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
-                }
+                    dialog.dismiss()                }
                 .setNegativeButton("No"){
                         dialog, _ ->
                     dialog.dismiss()

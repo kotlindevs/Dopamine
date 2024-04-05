@@ -62,7 +62,6 @@ class Home : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         fragmentHomeBinding!!.greeting.text = getGreeting()
-        Log.d(TAG, " -> Fragment : Home || Greeting : ${getGreeting()}")
 
         //User details
        /* Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
@@ -91,30 +90,31 @@ class Home : Fragment() {
             )
         }
 
-        val notificationViewModel = NotificationViewModel()
-        val databaseViewModel = DatabaseViewModel(requireContext())
-        notificationViewModel.notifications.observe(viewLifecycleOwner){ notifications ->
-            when(notifications){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
-                    databaseViewModel.initializeNotifications()
-                    val oldNotifications = databaseViewModel.getListOfNotifications()
-                    if(oldNotifications.isNotEmpty()){
-                        val newNotifications = notifications.data.subtract(
-                            oldNotifications.toSet()
-                        )
-                        if(newNotifications.isNotEmpty()) {
-                            BadgeUtils.attachBadgeDrawable(
-                                BadgeDrawable.create(requireContext()).apply {
-                                    isVisible = true
-                                    badgeGravity = BadgeDrawable.TOP_END
-                                }, binding.Notifications
+        if(NetworkUtilities.isNetworkAvailable(context = requireContext())) {
+            val notificationViewModel = NotificationViewModel()
+            val databaseViewModel = DatabaseViewModel(requireContext())
+            notificationViewModel.notifications.observe(viewLifecycleOwner) { notifications ->
+                when (notifications) {
+                    is YoutubeResource.Loading -> {}
+                    is YoutubeResource.Success -> {
+                        databaseViewModel.initializeNotifications()
+                        val oldNotifications = databaseViewModel.getListOfNotifications()
+                        if (oldNotifications.isNotEmpty()) {
+                            val newNotifications = notifications.data.subtract(
+                                oldNotifications.toSet()
                             )
+                            if (newNotifications.isNotEmpty()) {
+                                BadgeUtils.attachBadgeDrawable(
+                                    BadgeDrawable.create(requireContext()).apply {
+                                        isVisible = true
+                                        badgeGravity = BadgeDrawable.TOP_END
+                                    }, binding.Notifications
+                                )
+                            }
                         }
                     }
-                }
-                is YoutubeResource.Error -> {
-                    ToastUtilities.showToast(requireContext(), notifications.exception.message.toString())
+
+                    is YoutubeResource.Error -> {}
                 }
             }
         }

@@ -274,13 +274,18 @@ class User : Fragment() {
         }
 
         binding.googleSignIn.setOnClickListener{
-            lifecycleScope.launch {
-                val signInIntentSender = userRepository.googleSignIn()
-                launcher.launch(
-                    IntentSenderRequest.Builder(
-                        signInIntentSender ?: return@launch
-                    ).build()
-                )
+            if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+                lifecycleScope.launch {
+                    val signInIntentSender = userRepository.googleSignIn()
+                    launcher.launch(
+                        IntentSenderRequest.Builder(
+                            signInIntentSender ?: return@launch
+                        ).build()
+                    )
+                }
+            }else{
+                val googleAuthNoNetwork = GoogleAuthNoNetwork()
+                googleAuthNoNetwork.show(parentFragmentManager, googleAuthNoNetwork.tag)
             }
         }
 
@@ -350,4 +355,13 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
         super.onDestroyView()
         modalBottomSheet = null
     }
+}
+
+class GoogleAuthNoNetwork : BottomSheetDialogFragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.google_auth_no_network, container, false)
 }

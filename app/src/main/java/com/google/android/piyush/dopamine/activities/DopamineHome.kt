@@ -151,9 +151,7 @@ class DopamineHome : AppCompatActivity() {
                                     }
                                 }
                             }
-                            is YoutubeResource.Error -> {
-                                ToastUtilities.showToast(this, notifications.exception.message.toString())
-                            }
+                            is YoutubeResource.Error -> {}
 
                         }
                     }
