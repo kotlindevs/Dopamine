@@ -58,7 +58,7 @@ class SendNotifications : AppCompatActivity() {
                 visibility = View.VISIBLE
             }
         }
-        val notificationId = dopamineSharedPreferences(applicationContext).getInt("notificationId", 0).toString()
+        val notificationId = dopamineSharedPreferences(applicationContext).getInt("notificationId", 0).toString().toInt()
 
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId){

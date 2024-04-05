@@ -207,11 +207,11 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun deleteNotification(notificationId: String, context: Context){
+    fun deleteNotification(notificationId: Int, context: Context){
         val adminId = dopamineSharedPreferences(context = context).getString("adminId", "")
 
         adminId?.let {
-            reference.child(adminId).child("notifications").child(notificationId).removeValue()
+            reference.child(adminId).child("notifications").child(notificationId.toString()).removeValue()
         }
     }
 }
