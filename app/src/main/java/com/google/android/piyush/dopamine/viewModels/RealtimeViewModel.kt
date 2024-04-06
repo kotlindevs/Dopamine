@@ -473,34 +473,34 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun getPlaylistVideos(playListName : String) {
-        val customPlaylists =  mutableListOf<CustomPlaylists>()
-        currentUser?.let { user ->
-            val valueEventListener =  object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { videos ->
-                        customPlaylists.add(
-                            videos.getValue(
-                                CustomPlaylists::class.java
-                            )!!
-                        )
-                    }
-                    _getPlaylistData.value = RealtimeResource.Success(customPlaylists)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    RealtimeResource.Error(
-                        data = null,
-                        message = error.message
-                    )
-                }
-            }
-
-            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
-
-            reference.removeEventListener(valueEventListener)
-        }
-    }
+//    fun getPlaylistVideos(playListName : String) {
+//        val customPlaylists =  mutableListOf<CustomPlaylists>()
+//        currentUser?.let { user ->
+//            val valueEventListener =  object : ValueEventListener{
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    snapshot.children.forEach { videos ->
+//                        customPlaylists.add(
+//                            videos.getValue(
+//                                CustomPlaylists::class.java
+//                            )!!
+//                        )
+//                    }
+//                    _getPlaylistData.value = RealtimeResource.Success(customPlaylists)
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    RealtimeResource.Error(
+//                        data = null,
+//                        message = error.message
+//                    )
+//                }
+//            }
+//
+//            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
+//
+//            reference.removeEventListener(valueEventListener)
+//        }
+//    }
 
     fun initializeFavorites(playlist: CustomPlaylistView) {
         currentUser?.let { user ->

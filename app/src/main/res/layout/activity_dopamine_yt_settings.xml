@@ -175,7 +175,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/installPreReleaseUpdateText"
-                app:layout_constraintTop_toBottomOf="@id/useLiveSearch"/>
+                app:layout_constraintTop_toBottomOf="@id/tryVideoStreamingText"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tryVideoStreaming"
@@ -186,7 +186,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
+                app:layout_constraintTop_toBottomOf="@id/useLiveSearch"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -207,7 +207,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tryVideoStreamingText"
+                app:layout_constraintTop_toBottomOf="@id/installPreReleaseUpdate"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -220,6 +220,38 @@
                 app:layout_constraintStart_toStartOf="@id/tryVideoDownloading"/>
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/managePlaylistExpText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/manage_your_playlists"
+                android:layout_marginStart="12dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/managePlaylistExp"
+                app:layout_constraintEnd_toStartOf="@id/managePlaylistExp"
+                app:layout_constraintBottom_toTopOf="@id/managePlaylistExpDesc"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/managePlaylistExpDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/just_enable_this_feature_to_manage_your_playlists"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                app:layout_constraintTop_toBottomOf="@id/managePlaylistExpText"
+                app:layout_constraintStart_toStartOf="@id/managePlaylistExpText"
+                app:layout_constraintBottom_toBottomOf="@id/managePlaylistExp"
+                app:layout_constraintEnd_toStartOf="@id/managePlaylistExp" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/managePlaylistExp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/managePlaylistExpText"
+                app:layout_constraintTop_toBottomOf="@id/tryVideoDownloadingText"/>
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/options"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -229,7 +261,7 @@
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorPrimary"
                 android:text="@string/options"
-                app:layout_constraintTop_toBottomOf="@id/tryVideoDownloadingText"
+                app:layout_constraintTop_toBottomOf="@id/managePlaylistExpDesc"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -241,6 +273,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="16dp"
+                android:enabled="false"
                 app:layout_constraintTop_toBottomOf="@id/account"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -249,6 +282,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/you_can_customize_your_playlists_here"
+                android:enabled="false"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 app:layout_constraintTop_toBottomOf="@id/managePlaylists"
                 app:layout_constraintStart_toStartOf="@id/managePlaylists"/>

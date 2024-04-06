@@ -44,7 +44,7 @@ class CVPlaylist : AppCompatActivity() {
                     )
                 }
             }else{
-                viewModel.getPlaylistVideos(playlistName)
+//                viewModel.getPlaylistVideos(playlistName)
                 viewModel.getPlaylistData.observe(this) {
                     if(it is RealtimeResource.Success) {
                         it.data?.let { videos ->
@@ -85,7 +85,7 @@ class CVPlaylist : AppCompatActivity() {
                     }
                 }
             }else{
-                viewModel.getPlaylistVideos(playlistName)
+               // viewModel.getPlaylistVideos(playlistName)
                 viewModel.getPlaylistData.observe(this) {
                     if(it is RealtimeResource.Success) {
                         it.data?.let { videos ->

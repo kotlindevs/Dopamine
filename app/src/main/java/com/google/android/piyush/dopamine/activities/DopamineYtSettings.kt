@@ -62,6 +62,7 @@ class DopamineYtSettings : AppCompatActivity() {
         binding.useLiveSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
         binding.useSystemColor.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
         binding.installPreReleaseUpdate.isChecked = sharedPreferences.getBoolean("PreReleaseUpdate", false)
+        binding.managePlaylistExp.isChecked = sharedPreferences.getBoolean("managePlaylist", false)
 
         binding.topAppBar.setNavigationOnClickListener {
             startActivity(
@@ -205,6 +206,26 @@ class DopamineYtSettings : AppCompatActivity() {
                 ToastUtilities.showToast(
                     this,"Application rollback feature is currently unavailable"
                 )
+            }
+        }
+
+        if(sharedPreferences.getBoolean("managePlaylist", false).equals(true)){
+            binding.managePlaylists.isEnabled = true
+            binding.managePlaylistsText.isEnabled = true
+        }else{
+            binding.managePlaylists.isEnabled = false
+            binding.managePlaylistsText.isEnabled = false
+        }
+
+        binding.managePlaylistExp.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked.equals(true)){
+                sharedPreferences.edit().putBoolean("managePlaylist", true).apply()
+                binding.managePlaylists.isEnabled = true
+                binding.managePlaylistsText.isEnabled = true
+            }else{
+                sharedPreferences.edit().putBoolean("managePlaylist", false).apply()
+                binding.managePlaylists.isEnabled = false
+                binding.managePlaylistsText.isEnabled = false
             }
         }
 

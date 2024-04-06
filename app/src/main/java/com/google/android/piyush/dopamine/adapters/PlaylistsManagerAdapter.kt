@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -45,17 +47,8 @@ class PlaylistsManagerAdapter(
             holder.deletePlaylist.visibility = View.GONE
         }
 
-        if(!Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
-            holder.editPlaylist.visibility = View.GONE
-            holder.deletePlaylist.visibility = View.GONE
-        }
         holder.editPlaylist.setOnClickListener {
-            val managerPlaylistsBottomSheet = ManagerPlaylistsBottomSheet()
-            managerPlaylistsBottomSheet.show(fragment, managerPlaylistsBottomSheet.tag)
-            dopamineSharedPreferences(context).edit {
-                putString("playlistName", playlistList?.get(position)?.playListName)
-                putString("playlistDescription", playlistList?.get(position)?.playListDescription)
-            }
+            Snackbar.make(it, "This feature is coming soon", Snackbar.LENGTH_SHORT).show()
         }
 
         holder.deletePlaylist.setOnClickListener {

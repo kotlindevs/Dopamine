@@ -122,7 +122,7 @@ class CustomPlayListVAdapter(
         }else{
             if (playlistName == "favoritePlaylist") {
                 holder.apply {
-                    viewModel.getPlaylistVideos(playlistName)
+                  //  viewModel.getPlaylistVideos(playlistName)
                     viewModel.getPlaylistData.observeForever {
                         if(it is RealtimeResource.Success){
                             val favoriteVideos = it.data
@@ -146,7 +146,7 @@ class CustomPlayListVAdapter(
                 }
             } else if (playlistName == "watchLater") {
                 holder.apply {
-                    viewModel.getPlaylistVideos(playlistName)
+                  //  viewModel.getPlaylistVideos(playlistName)
                     viewModel.getPlaylistData.observeForever {
                         if(it is RealtimeResource.Success){
                             val watchLaterVideos = it.data
