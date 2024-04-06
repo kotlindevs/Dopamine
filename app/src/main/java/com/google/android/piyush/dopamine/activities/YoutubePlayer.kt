@@ -184,12 +184,12 @@ class YoutubePlayer : AppCompatActivity() {
                 databaseViewModel.addWatchLater()
             }
         }else{
-            realtimeViewModel.initializeWatchLater(
-                CustomPlaylistView(
-                    playListName = "watchLater",
-                    playListDescription = "Watch your videos later 😊"
-                )
-            )
+//            realtimeViewModel.initializeWatchLater(
+//                CustomPlaylistView(
+//                    playListName = "watchLater",
+//                    playListDescription = "Watch your videos later 😊"
+//                )
+//            )
         }
 
         youtubePlayerViewModel.getVideoDetails(videoId)

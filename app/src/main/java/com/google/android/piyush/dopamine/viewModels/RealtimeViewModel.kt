@@ -574,43 +574,43 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun initializeWatchLater(playlist: CustomPlaylistView) {
-        currentUser?.let { user ->
-            val valueEventListener = object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { snap ->
-                        if (snap.key == playlist.playListName) {
-                            _customPlaylistView.value =
-                                RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
-                        } else {
-                            playlist.playListName?.let {
-                                reference.child(user.uid).child("masterRecords").child(it)
-                                    .setValue(playlist)
-                            }
-                        }
-                    }
-
-                    if (snapshot.childrenCount.toInt() == 0) {
-                        playlist.playListName?.let {
-                            reference.child(user.uid).child("masterRecords").child(it)
-                                .setValue(playlist)
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    RealtimeResource.Error(
-                        data = null,
-                        message = error.message
-                    )
-                }
-            }
-            reference.child(user.uid).child("masterRecords")
-                .addValueEventListener(valueEventListener)
-
-            reference.removeEventListener(valueEventListener)
-        }
-    }
+//    fun initializeWatchLater(playlist: CustomPlaylistView) {
+//        currentUser?.let { user ->
+//            val valueEventListener = object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    snapshot.children.forEach { snap ->
+//                        if (snap.key == playlist.playListName) {
+//                            _customPlaylistView.value =
+//                                RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
+//                        } else {
+//                            playlist.playListName?.let {
+//                                reference.child(user.uid).child("masterRecords").child(it)
+//                                    .setValue(playlist)
+//                            }
+//                        }
+//                    }
+//
+//                    if (snapshot.childrenCount.toInt() == 0) {
+//                        playlist.playListName?.let {
+//                            reference.child(user.uid).child("masterRecords").child(it)
+//                                .setValue(playlist)
+//                        }
+//                    }
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    RealtimeResource.Error(
+//                        data = null,
+//                        message = error.message
+//                    )
+//                }
+//            }
+//            reference.child(user.uid).child("masterRecords")
+//                .addValueEventListener(valueEventListener)
+//
+//            reference.removeEventListener(valueEventListener)
+//        }
+//    }
 
     fun getAllPlaylists() {
         val customPlaylists =  mutableListOf<String>()
@@ -619,7 +619,11 @@ class RealtimeViewModel : ViewModel() {
             val valueEventListener =  object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach { playlists ->
-                        if(playlists.key != "userDetails" && playlists.key != "masterRecords" && playlists.key != "favoritePlaylist" && playlists.key != "recentVideos" && playlists.key != "notifications"){
+                        if(playlists.key != "userDetails"
+                            && playlists.key != "masterRecords"
+                            && playlists.key != "favoritePlaylist"
+                            && playlists.key != "recentVideos"
+                            && playlists.key != "notifications"){
                             customPlaylists.add(playlists.key!!)
                         }
                     }
@@ -714,14 +718,20 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun isPlaylistExists(playlistName: String){
+    fun updatePlaylist(playlistName: String,playlist: CustomPlaylists) {
         currentUser?.let { user ->
-            val valueEventListener =  object : ValueEventListener{
+            val valueEventListener = object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { playlists ->
-                        if(playlists.key != "userDetails" && playlists.key != "masterRecords" && playlists.key != "favoritePlaylist" && playlists.key != "recentVideos" && playlists.key != "notifications"){
-                            _isPlaylistExists.value = RealtimeResource.Success(true)
+                    snapshot.children.forEach { chill ->
+                        if(chill.key == "playListName"){
+                            chill.ref.removeValue()
+                        }else if(chill.key == "playListDescription"){
+                            chill.ref.removeValue()
                         }
+                        rebuildPlaylist(
+                            playlist = playlist,
+                            playlistName = playlistName
+                        )
                     }
                 }
 
@@ -732,24 +742,31 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-
-            reference.child(user.uid).addValueEventListener(valueEventListener)
-
+            reference.child(user.uid).child(playlistName).addValueEventListener(valueEventListener)
             reference.removeEventListener(valueEventListener)
         }
     }
 
-    fun updatePlaylist(playlists: CustomPlaylists, playListName: String) {
+    private fun rebuildPlaylist(playlist : CustomPlaylists, playlistName: String) {
         currentUser?.let { user ->
-            val valueEventListener =  object : ValueEventListener{
+            val valueEventListener =  object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
-                        if(it.key == playListName){
-                            it.ref.removeValue()
-                            it.ref.setValue(playlists)
+                        if (it.key == playlist.videoId) {
+                            // Log.d(TAG, "onDataChange: ${it.key}")
+                        } else {
+                            reference.child(user.uid).child(playlistName).child(
+                                playlist.videoId!!
+                            ).setValue(playlist)
                         }
                     }
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        reference.child(user.uid).child(playlistName).child(
+                            playlist.videoId!!
+                        ).setValue(playlist)
+                    }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     RealtimeResource.Error(
                         data = null,
@@ -757,7 +774,9 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
+            reference.child(user.uid).child(playlistName)
+                .addValueEventListener(valueEventListener)
+
             reference.removeEventListener(valueEventListener)
         }
     }

@@ -5,14 +5,12 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
-import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewHolders.CustomPlaylistsViewHolder
 import com.google.android.piyush.dopamine.viewModels.RealtimeResource
 import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
@@ -94,83 +92,36 @@ class CustomPlaylistsAdapter(
                     }
                 }
             }
-        }else{
+        }else {
             viewModel.getAllPlaylists()
             viewModel.getAllPlaylists.observeForever {
-                if(it is RealtimeResource.Success) {
-                    it.data?.let { playlist ->
-                        val playlistName = playlist[0]
-                        dopamineSharedPreferences(context).edit {
-                            putString("finalPlaylistName", playlistName)
-                        }
-                        Log.d(TAG, "playlistName : ${playlist[position]}")
-                    }
-                }
-            }
-            val playlistName = dopamineSharedPreferences(context).getString("finalPlaylistName", "")
-            viewModel.isVideoExists(
-                playlistName = playlistName!!,
-                videoId = videoId
-            )
-            viewModel.isVideoExists.observeForever {
-                if(it is RealtimeResource.Success) {
-                    it.data?.let { isVideoAlreadyAdded ->
-                        if (isVideoAlreadyAdded.equals(true)) {
-                            holder.selectedPlaylistItem.isChecked = true
-                            val isVideoExists = true
-                            dopamineSharedPreferences(context).edit {
-                                putBoolean("finalIsVideoExists", isVideoExists)
-                            }
+                if (it is RealtimeResource.Success) {
+                    it.data?.get(position)?.let { playlists ->
+                        val playlistName = playlists
+                        if(playlistName.isEmpty()) {
+                            Log.w(TAG, "playlistName : $playlistName")
                         }else{
-                            holder.selectedPlaylistItem.isChecked = false
-                            val isVideoExists = false
-                            dopamineSharedPreferences(context).edit {
-                                putBoolean("finalIsVideoExists", isVideoExists)
+                            holder.selectedPlaylistItem.addOnCheckedStateChangedListener { _, isChecked ->
+                                if(isChecked == 1){
+                                    viewModel.updatePlaylist(
+                                        playlist = CustomPlaylists(
+                                            videoId = videoId,
+                                            title = title,
+                                            thumbnail = thumbnail,
+                                            channelId = channelId,
+                                            viewCount = viewCount,
+                                            channelTitle = channelTitle ,
+                                            publishedAt = publishedAt,
+                                            duration = duration
+                                        ),
+                                        playlistName = playlistName
+                                    )
+                                    ToastUtilities.showToast(context, "Successfully added to playlist :)")
+                                }else{
+                                   //try to remove from playlist
+                                }
                             }
                         }
-                    }
-                }
-            }
-
-            val isVideoExists = dopamineSharedPreferences(context).getBoolean("finalIsVideoExists", false)
-            holder.selectedPlaylistItem.addOnCheckedStateChangedListener { _, isChecked ->
-                if(isChecked == 1){
-                    if(isVideoExists.equals(false)){
-                        viewModel.addInYourPlaylist(
-                            playlists = CustomPlaylists(
-                                videoId = videoId,
-                                title = title,
-                                thumbnail = thumbnail,
-                                channelId = channelId,
-                                viewCount = viewCount,
-                                channelTitle = channelTitle ,
-                                publishedAt = publishedAt,
-                                duration = duration
-                            ),
-                            playlistName
-                        )
-
-                        viewModel.updatePlaylist(
-                            playListName = playlistName,
-                            playlists = CustomPlaylists(
-                                videoId = videoId,
-                                title = title,
-                                thumbnail = thumbnail,
-                                channelId = channelId,
-                                viewCount = viewCount,
-                                channelTitle = channelTitle ,
-                                publishedAt = publishedAt,
-                                duration = duration
-                            )
-                        )
-                    }
-                    ToastUtilities.showToast(context, "Successfully added to playlist :)")
-                }else{
-                    if(isVideoExists.equals(true)){
-                        viewModel.deleteFromPlaylist(
-                            playlistName,
-                            videoId
-                        )
                     }
                 }
             }

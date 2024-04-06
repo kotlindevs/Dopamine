@@ -11,8 +11,8 @@ class CustomPlaylistsViewHolder(
     itemView : View
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val title: MaterialTextView = itemView.findViewById<MaterialTextView>(R.id.title)
-    val description: MaterialTextView = itemView.findViewById<MaterialTextView>(R.id.description)
-    val selectedPlaylist : MaterialCardView = itemView.findViewById<MaterialCardView>(R.id.selectedPlaylist)
-    val selectedPlaylistItem : MaterialCheckBox = itemView.findViewById<MaterialCheckBox>(R.id.selectedPlaylistItem)
+    val title: MaterialTextView = itemView.findViewById(R.id.title)
+    val description: MaterialTextView = itemView.findViewById(R.id.description)
+    val selectedPlaylist : MaterialCardView = itemView.findViewById(R.id.selectedPlaylist)
+    val selectedPlaylistItem : MaterialCheckBox = itemView.findViewById(R.id.selectedPlaylistItem)
 }
