@@ -199,7 +199,6 @@ class DatabaseViewModel(
             )
             Log.d(TAG,list.toString())
         }
-        Log.d(TAG, " -> viewModel : Database || GetAllPlaylist : $list")
         return list
     }
 

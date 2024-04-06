@@ -178,9 +178,18 @@ class YoutubePlayer : AppCompatActivity() {
         val videoId = intent?.getStringExtra("videoId").toString()
         val channelId = intent?.getStringExtra("channelId").toString()
 
-        databaseViewModel.initializeWatchLater()
-        if(databaseViewModel.isPlaylistExist("watch_later").equals(false)){
-            databaseViewModel.addWatchLater()
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+            databaseViewModel.initializeWatchLater()
+            if (databaseViewModel.isPlaylistExist("watch_later").equals(false)) {
+                databaseViewModel.addWatchLater()
+            }
+        }else{
+            realtimeViewModel.initializeWatchLater(
+                CustomPlaylistView(
+                    playListName = "watchLater",
+                    playListDescription = "Watch your videos later 😊"
+                )
+            )
         }
 
         youtubePlayerViewModel.getVideoDetails(videoId)
@@ -250,6 +259,13 @@ class YoutubePlayer : AppCompatActivity() {
                                             viewCount = videoViews,
                                             publishedAt = videoPublishedAt,
                                             duration = videoDuration
+                                        )
+                                    )
+
+                                    realtimeViewModel.initializeFavorites(
+                                        CustomPlaylistView(
+                                            playListName = "favoritePlaylist",
+                                            playListDescription = "Your Favorite Videos List"
                                         )
                                     )
                                 }

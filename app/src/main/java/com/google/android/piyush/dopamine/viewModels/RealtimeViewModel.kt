@@ -61,6 +61,15 @@ class RealtimeViewModel : ViewModel() {
     private val _getPlaylistData : MutableLiveData<RealtimeResource<List<CustomPlaylists>>> = MutableLiveData()
     val getPlaylistData : LiveData<RealtimeResource<List<CustomPlaylists>>> = _getPlaylistData
 
+    private val _getALlPlaylists : MutableLiveData<RealtimeResource<List<String>>> = MutableLiveData()
+    val getAllPlaylists : LiveData<RealtimeResource<List<String>>> = _getALlPlaylists
+
+    private val _isVideoExists : MutableLiveData<RealtimeResource<Boolean>> = MutableLiveData()
+    val isVideoExists : LiveData<RealtimeResource<Boolean>> = _isVideoExists
+
+    private val _isPlaylistExists : MutableLiveData<RealtimeResource<Boolean>> = MutableLiveData()
+    val isPlaylistExists : LiveData<RealtimeResource<Boolean>> = _isPlaylistExists
+
     fun isUserExists(dopamineUser : User) {
 
         currentUser?.let { user ->
@@ -523,6 +532,232 @@ class RealtimeViewModel : ViewModel() {
 
             reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
 
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun initializeFavorites(playlist: CustomPlaylistView) {
+        currentUser?.let { user ->
+            val valueEventListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { snap ->
+                        if (snap.key == playlist.playListName) {
+                            _customPlaylistView.value =
+                                RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
+                        } else {
+                            playlist.playListName?.let {
+                                reference.child(user.uid).child("masterRecords").child(it)
+                                    .setValue(playlist)
+                            }
+                        }
+                    }
+
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        playlist.playListName?.let {
+                            reference.child(user.uid).child("masterRecords").child(it)
+                                .setValue(playlist)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("masterRecords")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun initializeWatchLater(playlist: CustomPlaylistView) {
+        currentUser?.let { user ->
+            val valueEventListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { snap ->
+                        if (snap.key == playlist.playListName) {
+                            _customPlaylistView.value =
+                                RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
+                        } else {
+                            playlist.playListName?.let {
+                                reference.child(user.uid).child("masterRecords").child(it)
+                                    .setValue(playlist)
+                            }
+                        }
+                    }
+
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        playlist.playListName?.let {
+                            reference.child(user.uid).child("masterRecords").child(it)
+                                .setValue(playlist)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("masterRecords")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun getAllPlaylists() {
+        val customPlaylists =  mutableListOf<String>()
+
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { playlists ->
+                        if(playlists.key != "userDetails" && playlists.key != "masterRecords" && playlists.key != "favoritePlaylist" && playlists.key != "recentVideos" && playlists.key != "notifications"){
+                            customPlaylists.add(playlists.key!!)
+                        }
+                    }
+                    _getALlPlaylists.value = RealtimeResource.Success(customPlaylists)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun isVideoExists(playlistName: String,videoId: String) {
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { playlists ->
+                        if(playlists.key == playlistName){
+                            playlists.children.forEach {
+                                if (it.key == videoId) {
+                                    _isVideoExists.value = RealtimeResource.Success(true)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun addInYourPlaylist(playlists: CustomPlaylists,playlistName: String){
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if (it.key == playlists.videoId) {
+                            // Log.d(TAG, "onDataChange: ${it.key}")
+                        } else {
+                            playlists.videoId?.let { videoId ->
+                                reference.child(user.uid).child(playlistName).child(
+                                    videoId
+                                ).setValue(playlists)
+                            }
+                        }
+
+                    }
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        playlists.videoId?.let { videoId ->
+                            reference.child(user.uid).child(playlistName).child(
+                                videoId
+                            ).setValue(playlists)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child(playlistName)
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun deleteFromPlaylist(playlistName: String,videoId: String){
+        currentUser?.let { user ->
+            reference.child(user.uid).child(playlistName).child(videoId).removeValue()
+        }
+    }
+
+    fun isPlaylistExists(playlistName: String){
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { playlists ->
+                        if(playlists.key != "userDetails" && playlists.key != "masterRecords" && playlists.key != "favoritePlaylist" && playlists.key != "recentVideos" && playlists.key != "notifications"){
+                            _isPlaylistExists.value = RealtimeResource.Success(true)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun updatePlaylist(playlists: CustomPlaylists, playListName: String) {
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if(it.key == playListName){
+                            it.ref.removeValue()
+                            it.ref.setValue(playlists)
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
             reference.removeEventListener(valueEventListener)
         }
     }

@@ -144,7 +144,7 @@ class CustomPlayListVAdapter(
                         }
                     }
                 }
-            } else if (playlistName == context.getString(R.string.watch_later_playlist)) {
+            } else if (playlistName == "watchLater") {
                 holder.apply {
                     viewModel.getPlaylistVideos(playlistName)
                     viewModel.getPlaylistData.observeForever {
