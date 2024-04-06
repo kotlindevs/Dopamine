@@ -61,29 +61,56 @@ class DatabaseViewModel(
         }
     }
 
-    fun insertFavouriteVideos(favouritePlaylist: EntityFavouritePlaylist) {
-        viewModelScope.launch {
-            dopamineDatabaseRepository.insertFavouriteVideos(favouritePlaylist)
-        }
+    fun initializeFavouritePlaylist() {
+        val writableDatabase = database.writableDatabase
+        val query = "CREATE TABLE IF NOT EXISTS favorite_playlist (videoId TEXT PRIMARY KEY, title TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)"
+        writableDatabase.execSQL(query)
     }
 
-    fun isFavouriteVideo(videoId: String) : String {
-        viewModelScope.launch {
-          _isFavourite.value =  dopamineDatabaseRepository.isFavouriteVideo(videoId)
+    fun insertFavouriteVideos(favouritePlaylist: EntityFavouritePlaylist) {
+        val writableDatabase = database.writableDatabase
+        val query = "INSERT INTO favorite_playlist VALUES (\"${favouritePlaylist.videoId}\",\"${favouritePlaylist.title}\",\"${favouritePlaylist.thumbnail}\",\"${favouritePlaylist.channelId}\",\"${favouritePlaylist.publishedAt}\",\"${favouritePlaylist.viewCount}\",\"${favouritePlaylist.channelTitle}\",\"${favouritePlaylist.duration}\" )"
+        writableDatabase.execSQL(query)
+    }
+
+    fun isFavouriteVideo(videoId: String) : Boolean {
+        val writableDatabase = database.writableDatabase
+        val query = "SELECT videoId FROM favorite_playlist WHERE videoId = \"$videoId\" "
+        val data = writableDatabase.query(query)
+        while (data.moveToNext()) {
+            val dbTableVideoId = data.getString(0)
+            if (dbTableVideoId == videoId) {
+                return true
+            }
         }
-        return _isFavourite.value.toString()
+        return false
     }
 
     fun deleteFavouriteVideo(videoId: String) {
-        viewModelScope.launch {
-            dopamineDatabaseRepository.deleteFavouriteVideo(videoId)
-        }
+        val writableDatabase = database.writableDatabase
+        val query = "DELETE FROM favorite_playlist WHERE videoId = \"$videoId\" "
+        writableDatabase.execSQL(query)
     }
 
-    fun getFavouritePlayList() {
-        viewModelScope.launch {
-           _favouritePlayList.value = dopamineDatabaseRepository.getFavouritePlayList()
+    fun getFavouritePlayList()  : List<EntityFavouritePlaylist> {
+        val writableDatabase = database.writableDatabase
+        val list = mutableListOf<EntityFavouritePlaylist>()
+        val query = writableDatabase.query("SELECT * FROM favorite_playlist")
+        while (query.moveToNext()){
+            list.add(
+                EntityFavouritePlaylist(
+                    query.getString(0),
+                    query.getString(1),
+                    query.getString(2),
+                    query.getString(3),
+                    query.getString(4),
+                    query.getString(5),
+                    query.getString(6),
+                    query.getString(7)
+                )
+            )
         }
+        return list
     }
 
     fun insertRecentVideos(recentVideos: EntityRecentVideos) {

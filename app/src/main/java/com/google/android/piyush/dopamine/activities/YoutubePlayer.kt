@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -64,6 +65,7 @@ class YoutubePlayer : AppCompatActivity() {
     private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
     private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
+    private val realtimeViewModel by viewModels<RealtimeViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,12 +88,26 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
+        databaseViewModel.initializeFavouritePlaylist()
 
         databaseViewModel.isFavouriteVideo(
             intent?.getStringExtra("videoId").toString()
         )
-        databaseViewModel.isFavourite.observe(this) {
-            binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
+
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+            databaseViewModel.isFavourite.observe(this) {
+                binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
+            }
+        }else{
+            realtimeViewModel.isFavorite(
+                videoId = intent.getStringExtra("videoId").toString()
+            )
+            realtimeViewModel.favorites.observe(this) {
+                if(it is RealtimeResource.Success){
+                    binding.addToPlayList.isChecked =
+                        it.data?.contains(intent.getStringExtra("videoId").toString()) == true
+                }
+            }
         }
 
         binding.YtPlayer.enableBackgroundPlayback(true)
@@ -204,31 +220,53 @@ class YoutubePlayer : AppCompatActivity() {
                         }
                         addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
                             if (isFavourite == 1) {
-                                databaseViewModel.insertFavouriteVideos(
-                                    EntityFavouritePlaylist(
-                                        videoId = videoId,
-                                        thumbnail = videoThumbnail,
-                                        title = videoTitle,
-                                        channelId = channelId,
-                                        channelTitle = channelTitle,
-                                        viewCount = videoViews,
-                                        publishedAt = videoPublishedAt,
-                                        duration = videoDuration
+                                if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+                                    databaseViewModel.insertFavouriteVideos(
+                                        EntityFavouritePlaylist(
+                                            videoId = videoId,
+                                            thumbnail = videoThumbnail,
+                                            title = videoTitle,
+                                            channelId = channelId,
+                                            channelTitle = channelTitle,
+                                            viewCount = videoViews,
+                                            publishedAt = videoPublishedAt,
+                                            duration = videoDuration
+                                        )
                                     )
-                                )
 
-                                if(databaseViewModel.isPlaylistExist("favorite_playlist").equals(false)){
-                                    databaseViewModel.addFavorites()
+                                    if (databaseViewModel.isPlaylistExist("favorite_playlist")
+                                            .equals(false)
+                                    ) {
+                                        databaseViewModel.addFavorites()
+                                    }
+                                }else{
+                                    realtimeViewModel.addYourFavorites(
+                                        EntityFavouritePlaylist(
+                                            videoId = videoId,
+                                            thumbnail = videoThumbnail,
+                                            title = videoTitle,
+                                            channelId = channelId,
+                                            channelTitle = channelTitle,
+                                            viewCount = videoViews,
+                                            publishedAt = videoPublishedAt,
+                                            duration = videoDuration
+                                        )
+                                    )
                                 }
                             } else {
-                                databaseViewModel.deleteFavouriteVideo(
-                                    videoId = videoId
-                                )
+                                if(Firebase.auth.currentUser?.uid.isNullOrEmpty()){
+                                    databaseViewModel.deleteFavouriteVideo(
+                                        videoId = videoId
+                                    )
+                                }else{
+                                    realtimeViewModel.deleteYourFavorites(
+                                        video = videoId
+                                    )
+                                }
                             }
                         }
                     }
                     databaseViewModel.isRecentVideo(videoId = videoId)
-                    val realtimeViewModel = RealtimeViewModel()
                     databaseViewModel.isRecent.observe(this) {
                         if (it == videoId) {
                             databaseViewModel.updateRecentVideo(

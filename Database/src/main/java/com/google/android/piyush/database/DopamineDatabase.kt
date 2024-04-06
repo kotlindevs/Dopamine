@@ -9,7 +9,7 @@ import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.entities.EntityVideoSearch
 
-@Database(entities = [EntityVideoSearch::class, EntityRecentVideos::class,EntityFavouritePlaylist::class], version = 1, exportSchema = false)
+@Database(entities = [EntityVideoSearch::class, EntityRecentVideos::class], version = 1, exportSchema = false)
 abstract class DopamineDatabase : RoomDatabase() {
     abstract fun dopamineDao(): DopamineDao
     companion object {

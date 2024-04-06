@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.model.CustomPlaylists
@@ -50,6 +51,9 @@ class RealtimeViewModel : ViewModel() {
 
     private val _customPlaylist : MutableLiveData<RealtimeResource<CustomPlaylists>> = MutableLiveData()
     val customPlaylist : LiveData<RealtimeResource<CustomPlaylists>> = _customPlaylist
+
+    private val _favorites : MutableLiveData<RealtimeResource<String>> = MutableLiveData()
+    val favorites : LiveData<RealtimeResource<String>> = _favorites
 
     fun isUserExists(dopamineUser : User) {
 
@@ -369,20 +373,23 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun addInCustomPlaylists(playlist : CustomPlaylists){
+    fun addYourFavorites(favoritesVideos : EntityFavouritePlaylist){
         currentUser?.let { user ->
             val valueEventListener =  object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    snapshot.children.forEach { snap ->
-                        if (snap.key == playlist.videoId) {
-                            _customPlaylist.value =
-                                RealtimeResource.Success(snap.getValue(CustomPlaylists::class.java)!!)
+                    snapshot.children.forEach {
+                        if (it.key == favoritesVideos.videoId) {
+                           // Log.d(TAG, "onDataChange: ${it.key}")
+                        } else {
+                            reference.child(user.uid).child("favoritePlaylist").child(
+                                favoritesVideos.videoId!!
+                            ).setValue(favoritesVideos)
                         }
                     }
-
                     if (snapshot.childrenCount.toInt() == 0) {
-                        reference.child(user.uid).child("masterRecords").child(playlist.videoId!!)
-                            .setValue(playlist)
+                        reference.child(user.uid).child("favoritePlaylist").child(
+                            favoritesVideos.videoId!!
+                        ).setValue(favoritesVideos)
                     }
                 }
 
@@ -393,7 +400,38 @@ class RealtimeViewModel : ViewModel() {
                     )
                 }
             }
-            reference.child(user.uid).child("masterRecords")
+            reference.child(user.uid).child("favoritePlaylist")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun deleteYourFavorites(video : String) {
+        currentUser?.let { user ->
+            reference.child(user.uid).child("favoritePlaylist").child(video).removeValue()
+        }
+    }
+
+    fun isFavorite(videoId : String){
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if (it.key == videoId) {
+                            _favorites.value = RealtimeResource.Success(it.key!!)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("favoritePlaylist")
                 .addValueEventListener(valueEventListener)
 
             reference.removeEventListener(valueEventListener)

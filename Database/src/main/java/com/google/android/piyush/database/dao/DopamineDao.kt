@@ -16,15 +16,6 @@ interface DopamineDao {
     @Query("DELETE FROM search_table")
     suspend fun deleteSearchVideoList()
     @Insert
-    suspend fun insertFavouriteVideos(vararg favouriteVideo : EntityFavouritePlaylist)
-    @Query("SELECT videoId FROM favorite_playlist WHERE videoId = :videoId")
-    suspend fun isFavouriteVideo (videoId : String) : String
-
-    @Query("DELETE FROM favorite_playlist WHERE videoId = :videoId")
-    suspend fun deleteFavouriteVideo(videoId : String)
-    @Query("Select * FROM favorite_playlist")
-    suspend fun getFavouritePlayList(): List<EntityFavouritePlaylist>
-    @Insert
     suspend fun insertRecentVideos(vararg fav: EntityRecentVideos)
     @Query("Select * FROM recent_videos")
     suspend fun getRecentVideos(): List<EntityRecentVideos>
@@ -34,5 +25,4 @@ interface DopamineDao {
     suspend fun updateRecentVideo(videoId: String, time: String)
     @Query("DELETE FROM recent_videos")
     suspend fun deleteRecentVideo()
-
 }
