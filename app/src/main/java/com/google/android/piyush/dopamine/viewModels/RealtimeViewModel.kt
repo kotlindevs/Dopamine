@@ -58,6 +58,9 @@ class RealtimeViewModel : ViewModel() {
     private val _countTheMasterRecords : MutableLiveData<RealtimeResource<Int>> = MutableLiveData()
     val countTheMasterRecords : LiveData<RealtimeResource<Int>> = _countTheMasterRecords
 
+    private val _getPlaylistData : MutableLiveData<RealtimeResource<List<CustomPlaylists>>> = MutableLiveData()
+    val getPlaylistData : LiveData<RealtimeResource<List<CustomPlaylists>>> = _getPlaylistData
+
     fun isUserExists(dopamineUser : User) {
 
         currentUser?.let { user ->
@@ -349,8 +352,8 @@ class RealtimeViewModel : ViewModel() {
                     snapshot.children.forEach {
                         if(it.key == oldPlayListName){
                             val update = mapOf(
-                                "playListName" to newPlayListName
-                                ,"playListDescription" to playListDescription
+                                "playListName" to newPlayListName,
+                                "playListDescription" to playListDescription
                             )
                             it.ref.updateChildren(update)
                         }
@@ -416,6 +419,12 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
+    fun deletePlaylist(playlist : String) {
+        currentUser?.let { user ->
+            reference.child(user.uid).child(playlist).removeValue()
+        }
+    }
+
     fun isFavorite(videoId : String){
         currentUser?.let { user ->
             val valueEventListener =  object : ValueEventListener {
@@ -457,6 +466,62 @@ class RealtimeViewModel : ViewModel() {
             }
             reference.child(it.uid).child("masterRecords")
                 .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun updateYourPlaylist(oldPlayListName : String, newPlayListName: String) {
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if(it.key == oldPlayListName){
+                            val update = mapOf(
+                                it.key to newPlayListName
+                            )
+                            it.ref.updateChildren(update)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child(oldPlayListName).addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun getPlaylistVideos(playListName : String) {
+        val customPlaylists =  mutableListOf<CustomPlaylists>()
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { videos ->
+                        customPlaylists.add(
+                            videos.getValue(
+                                CustomPlaylists::class.java
+                            )!!
+                        )
+                    }
+                    _getPlaylistData.value = RealtimeResource.Success(customPlaylists)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
 
             reference.removeEventListener(valueEventListener)
         }

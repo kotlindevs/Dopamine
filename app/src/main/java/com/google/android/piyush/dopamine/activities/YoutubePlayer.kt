@@ -430,7 +430,7 @@ class YoutubePlayer : AppCompatActivity() {
 class MyBottomSheetFragment : BottomSheetDialogFragment() {
     private var bottomSheetBinding: BottomSheetAddToAPlaylistBinding? = null
     private lateinit var databaseViewModel: DatabaseViewModel
-    val realtimeViewModel by viewModels<RealtimeViewModel>()
+    private val realtimeViewModel by viewModels<RealtimeViewModel>()
 
 
     override fun onCreateView(

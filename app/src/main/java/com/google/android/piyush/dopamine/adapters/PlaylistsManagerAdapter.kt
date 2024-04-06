@@ -44,6 +44,10 @@ class PlaylistsManagerAdapter(
             holder.editPlaylist.visibility = View.GONE
             holder.deletePlaylist.visibility = View.GONE
         }
+
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+            holder.editPlaylist.visibility = View.GONE
+        }
         holder.editPlaylist.setOnClickListener {
             val managerPlaylistsBottomSheet = ManagerPlaylistsBottomSheet()
             managerPlaylistsBottomSheet.show(fragment, managerPlaylistsBottomSheet.tag)
@@ -67,6 +71,7 @@ class PlaylistsManagerAdapter(
                         }else{
                             val viewModel = RealtimeViewModel()
                             viewModel.deleteMasterRecords(playListName = it)
+                            viewModel.deletePlaylist(it)
                         }
                     }
                     dialog.dismiss()

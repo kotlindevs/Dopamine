@@ -14,6 +14,8 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.CVPlaylist
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.viewHolders.CustomPlayListVHolder
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -47,6 +49,7 @@ class CustomPlayListVAdapter(
         val playlistName = playlists?.get(position)?.playListName.toString()
         val playlistDescription = playlists?.get(position)?.playListDescription
         val database = DatabaseViewModel(context)
+        val viewModel = RealtimeViewModel()
 
         Log.d("playlistName", playlistName)
         holder.title.text = playlistName
@@ -117,7 +120,55 @@ class CustomPlayListVAdapter(
                 }
             }
         }else{
-            ToastUtilities.showToast(context,"Setup It !☠️")
+            if (playlistName == "favoritePlaylist") {
+                holder.apply {
+                    viewModel.getPlaylistVideos(playlistName)
+                    viewModel.getPlaylistData.observeForever {
+                        if(it is RealtimeResource.Success){
+                            val favoriteVideos = it.data
+                            if (favoriteVideos.isNullOrEmpty()) {
+                                playlistEmptyIc.visibility = View.GONE
+                                playlistEmptyTxt.visibility = View.GONE
+                                playlistIc.visibility = View.VISIBLE
+                                playlistTxt.visibility = View.VISIBLE
+                                playlistIc.setImageResource(R.drawable.ic_like_video)
+                                playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                            } else {
+                                playlistEmptyIc.visibility = View.GONE
+                                playlistEmptyTxt.visibility = View.GONE
+                                playlistIc.visibility = View.VISIBLE
+                                playlistTxt.visibility = View.VISIBLE
+                                playlistIc.setImageResource(R.drawable.ic_like_video)
+                                playlistTxt.text = favoriteVideos.size.toString()
+                            }
+                        }
+                    }
+                }
+            } else if (playlistName == context.getString(R.string.watch_later_playlist)) {
+                holder.apply {
+                    viewModel.getPlaylistVideos(playlistName)
+                    viewModel.getPlaylistData.observeForever {
+                        if(it is RealtimeResource.Success){
+                            val watchLaterVideos = it.data
+                            if (watchLaterVideos.isNullOrEmpty()) {
+                                playlistEmptyIc.visibility = View.GONE
+                                playlistEmptyTxt.visibility = View.GONE
+                                playlistIc.visibility = View.VISIBLE
+                                playlistTxt.visibility = View.VISIBLE
+                                playlistIc.setImageResource(R.drawable.ic_watch_later)
+                                playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                            } else {
+                                playlistEmptyIc.visibility = View.GONE
+                                playlistEmptyTxt.visibility = View.GONE
+                                playlistIc.visibility = View.VISIBLE
+                                playlistTxt.visibility = View.VISIBLE
+                                playlistIc.setImageResource(R.drawable.ic_watch_later)
+                                playlistTxt.text = watchLaterVideos.size.toString()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
