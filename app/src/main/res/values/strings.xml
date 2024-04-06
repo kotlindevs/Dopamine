@@ -192,4 +192,6 @@
     <string name="update_status">Update status</string>
     <string name="company">© 2024 Dopamine Team</string>
     <string name="you_are_not_connected_to_the_internet_please_check_your_connection_and_try_again">You are not connected to the internet, \nplease check your connection and try again 😊</string>
+    <string name="create_your_playlist">Create your playlist</string>
+    <string name="view_all_playlists">View all playlists</string>
 </resources>

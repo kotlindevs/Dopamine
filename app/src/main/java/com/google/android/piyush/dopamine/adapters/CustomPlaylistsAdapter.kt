@@ -12,6 +12,8 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.viewHolders.CustomPlaylistsViewHolder
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class CustomPlaylistsAdapter(
     private val context: Context,
@@ -35,7 +37,7 @@ class CustomPlaylistsAdapter(
     override fun onBindViewHolder(holder: CustomPlaylistsViewHolder, position: Int) {
         val databaseViewModel = DatabaseViewModel(context = context)
         val pref = context.getSharedPreferences("customPlaylist", Context.MODE_PRIVATE)
-        val playlistName = databaseViewModel.getPlaylistsFromDatabase()[position]
+        val playlistName = if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {databaseViewModel.getPlaylistsFromDatabase()[position]} else {"heavy"}
         val videoId = pref.getString("videoId", "")!!
         val title = pref.getString("title", "")!!
         val thumbnail = pref.getString("thumbnail", "")!!
@@ -45,11 +47,9 @@ class CustomPlaylistsAdapter(
         val publishedAt = pref.getString("publishedAt", "")!!
         val duration = pref.getString("duration", "")!!
 
-        val isVideoAlreadyAdded = databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)
-        Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
-        Log.d(TAG, "currentPlaylists : ${databaseViewModel.getPlaylistsFromDatabase()}")
+        val isVideoAlreadyAdded = if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {databaseViewModel.isExistsDataInPlaylist(playlistName,videoId)} else {}
 
-        if(playlistName.isNullOrEmpty()) {
+        if(playlistName.isEmpty()) {
             Log.d(TAG, "playlistName : $playlistName")
         }else{
             if (isVideoAlreadyAdded.equals(true)) {

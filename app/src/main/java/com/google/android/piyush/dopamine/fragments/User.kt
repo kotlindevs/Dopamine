@@ -150,8 +150,8 @@ class User : Fragment() {
                     adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
                 }
             }else{
-                val dopamineMasterDev = databaseViewModel.getPlaylist()
-                realtimeViewModel.addInMasterRecords(dopamineMasterDev)
+//                val dopamineMasterDev = databaseViewModel.getPlaylist()
+//                realtimeViewModel.addInMasterRecords(dopamineMasterDev)
                 realtimeViewModel.customPlaylistView.observe(viewLifecycleOwner) {
                     when(it){
                         is RealtimeResource.Loading -> {}

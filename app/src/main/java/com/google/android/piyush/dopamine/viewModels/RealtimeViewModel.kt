@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.model.CustomPlaylistView
+import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.Notifications
@@ -46,6 +47,9 @@ class RealtimeViewModel : ViewModel() {
 
     private val _listOfCustomPlaylistView : MutableLiveData<RealtimeResource<List<CustomPlaylistView>>> = MutableLiveData()
     val listOfCustomPlaylistView : LiveData<RealtimeResource<List<CustomPlaylistView>>> = _listOfCustomPlaylistView
+
+    private val _customPlaylist : MutableLiveData<RealtimeResource<CustomPlaylists>> = MutableLiveData()
+    val customPlaylist : LiveData<RealtimeResource<CustomPlaylists>> = _customPlaylist
 
     fun isUserExists(dopamineUser : User) {
 
@@ -261,26 +265,28 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-    fun addInMasterRecords (customPlaylistView: List<CustomPlaylistView>) {
+    fun addInMasterRecords (playlist: CustomPlaylistView) {
         currentUser?.let { user ->
             val valueEventListener =  object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    customPlaylistView.forEach { playlist ->
-                        snapshot.children.forEach { snap ->
-                            if (snap.key == playlist.playListName) {
-                                _customPlaylistView.value =
-                                    RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
-                            } else {
-                                reference.child(user.uid).child("masterRecords").child(playlist.playListName!!)
+                    snapshot.children.forEach { snap ->
+                        if (snap.key == playlist.playListName) {
+                            _customPlaylistView.value =
+                                RealtimeResource.Success(snap.getValue(CustomPlaylistView::class.java)!!)
+                        } else {
+                            playlist.playListName?.let {
+                                reference.child(user.uid).child("masterRecords").child(it)
                                     .setValue(playlist)
+                                reference.child(user.uid).child(it).setValue(playlist)
                             }
                         }
                     }
 
                     if (snapshot.childrenCount.toInt() == 0) {
-                        customPlaylistView.forEach { playlist ->
-                            reference.child(user.uid).child("masterRecords").child(playlist.playListName!!)
+                        playlist.playListName?.let {
+                            reference.child(user.uid).child("masterRecords").child(it)
                                 .setValue(playlist)
+                            reference.child(user.uid).child(it).setValue(playlist)
                         }
                     }
                 }
@@ -324,6 +330,71 @@ class RealtimeViewModel : ViewModel() {
             }
 
             reference.child(user.uid).child("masterRecords").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun updateMasterRecords(oldPlayListName : String, newPlayListName : String ,playListDescription : String) {
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        if(it.key == oldPlayListName){
+                            val update = mapOf(
+                                "playListName" to newPlayListName
+                                ,"playListDescription" to playListDescription
+                            )
+                            it.ref.updateChildren(update)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("masterRecords").addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun deleteMasterRecords(playListName: String) {
+        currentUser?.let { user ->
+            reference.child(user.uid).child("masterRecords").child(playListName).removeValue()
+        }
+    }
+
+    fun addInCustomPlaylists(playlist : CustomPlaylists){
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { snap ->
+                        if (snap.key == playlist.videoId) {
+                            _customPlaylist.value =
+                                RealtimeResource.Success(snap.getValue(CustomPlaylists::class.java)!!)
+                        }
+                    }
+
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        reference.child(user.uid).child("masterRecords").child(playlist.videoId!!)
+                            .setValue(playlist)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+            reference.child(user.uid).child("masterRecords")
+                .addValueEventListener(valueEventListener)
 
             reference.removeEventListener(valueEventListener)
         }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -20,6 +21,9 @@ import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.databinding.BottomSheetPlaylistBinding
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class PlaylistsManagerAdapter(
     val context : Context,
@@ -48,6 +52,7 @@ class PlaylistsManagerAdapter(
                 putString("playlistDescription", playlistList?.get(position)?.playListDescription)
             }
         }
+
         holder.deletePlaylist.setOnClickListener {
             val databaseViewModel = DatabaseViewModel(context)
             MaterialAlertDialogBuilder(context).apply {
@@ -56,7 +61,14 @@ class PlaylistsManagerAdapter(
                 setMessage("Are you sure you want to delete this playlist? This action cannot be undone.")
                 setPositiveButton("Yes") { dialog, _ ->
                     ToastUtilities.showToast(context, "Playlist Deleted")
-                    databaseViewModel.deletePlaylist(playlistList?.get(position)?.playListName!!)
+                    playlistList?.get(position)?.playListName?.let {
+                        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+                            databaseViewModel.deletePlaylist(it)
+                        }else{
+                            val viewModel = RealtimeViewModel()
+                            viewModel.deleteMasterRecords(playListName = it)
+                        }
+                    }
                     dialog.dismiss()
                     context.startActivity(
                             Intent(
@@ -115,17 +127,48 @@ class ManagerPlaylistsBottomSheet : BottomSheetDialogFragment() {
         binding.playlistDescription.setText(playlistDescription)
 
         binding.addPlaylist.setOnClickListener {
-            if(databaseViewModel.isPlaylistExist(binding.playlistName.text.toString())){
-                binding.playlistNameInputLayout.isErrorEnabled = true
-                binding.playlistNameInputLayout.error = "Playlist Already Exists"
+            if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+                if (databaseViewModel.isPlaylistExist(binding.playlistName.text.toString())) {
+                    binding.playlistNameInputLayout.isErrorEnabled = true
+                    binding.playlistNameInputLayout.error = "Playlist Already Exists"
+                } else {
+                    if (oldPlaylistName?.isEmpty()!!.equals(true)) {
+                        ToastUtilities.showToast(context, "Please Fill All Fields")
+                    } else {
+                        if (oldPlaylistName.toString() == binding.playlistName.text.toString()) {
+                            ToastUtilities.showToast(context, "Playlist Name Not Changed ❌")
+                        } else {
+                            databaseViewModel.updatePlaylistName(
+                                oldPlaylistName.toString(),
+                                binding.playlistName.text.toString(),
+                                binding.playlistDescription.text.toString()
+                            )
+                            ToastUtilities.showToast(context, "$oldPlaylistName Updated ✅")
+                            this.dismiss()
+                            startActivity(
+                                Intent(
+                                    requireContext(),
+                                    DopamineHome::class.java
+                                ).putExtra(
+                                    "fromPlaylistManager", true
+                                ).addFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                ).setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK
+                                )
+                            )
+                        }
+                    }
+                }
             }else{
-                if(oldPlaylistName?.isEmpty()!!.equals(true)){
+                val viewModel = RealtimeViewModel()
+                if (oldPlaylistName?.isEmpty()!!.equals(true)) {
                     ToastUtilities.showToast(context, "Please Fill All Fields")
-                }else {
-                    if(oldPlaylistName.toString() == binding.playlistName.text.toString()){
+                } else {
+                    if (oldPlaylistName.toString() == binding.playlistName.text.toString()) {
                         ToastUtilities.showToast(context, "Playlist Name Not Changed ❌")
-                    }else {
-                        databaseViewModel.updatePlaylistName(
+                    } else {
+                        viewModel.updateMasterRecords(
                             oldPlaylistName.toString(),
                             binding.playlistName.text.toString(),
                             binding.playlistDescription.text.toString()
@@ -137,7 +180,7 @@ class ManagerPlaylistsBottomSheet : BottomSheetDialogFragment() {
                                 requireContext(),
                                 DopamineHome::class.java
                             ).putExtra(
-                                "fromPlaylistManager",true
+                                "fromPlaylistManager", true
                             ).addFlags(
                                 Intent.FLAG_ACTIVITY_CLEAR_TOP
                             ).setFlags(

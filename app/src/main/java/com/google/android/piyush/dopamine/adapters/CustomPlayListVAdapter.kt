@@ -12,7 +12,10 @@ import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.CVPlaylist
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.viewHolders.CustomPlayListVHolder
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class CustomPlayListVAdapter(
@@ -61,55 +64,60 @@ class CustomPlayListVAdapter(
             holder.description.text =  holder.description.text.toString().substring(0,20)
         }
 
-        if(playlistName == context.getString(R.string.favorites_playlist)) {
-            holder.apply {
-                if(database.getPlaylistData(playlistName).isEmpty()){
-                    playlistEmptyIc.visibility = View.GONE
-                    playlistEmptyTxt.visibility = View.GONE
-                    playlistIc.visibility = View.VISIBLE
-                    playlistTxt.visibility = View.VISIBLE
-                    playlistIc.setImageResource(R.drawable.ic_like_video)
-                    playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
-                }else {
-                    playlistEmptyIc.visibility = View.GONE
-                    playlistEmptyTxt.visibility = View.GONE
-                    playlistIc.visibility = View.VISIBLE
-                    playlistTxt.visibility = View.VISIBLE
-                    playlistIc.setImageResource(R.drawable.ic_like_video)
-                    playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+            if (playlistName == context.getString(R.string.favorites_playlist)) {
+                holder.apply {
+                    if (database.getPlaylistData(playlistName).isEmpty()) {
+                        playlistEmptyIc.visibility = View.GONE
+                        playlistEmptyTxt.visibility = View.GONE
+                        playlistIc.visibility = View.VISIBLE
+                        playlistTxt.visibility = View.VISIBLE
+                        playlistIc.setImageResource(R.drawable.ic_like_video)
+                        playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                    } else {
+                        playlistEmptyIc.visibility = View.GONE
+                        playlistEmptyTxt.visibility = View.GONE
+                        playlistIc.visibility = View.VISIBLE
+                        playlistTxt.visibility = View.VISIBLE
+                        playlistIc.setImageResource(R.drawable.ic_like_video)
+                        playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+                    }
                 }
-            }
-        } else if(playlistName ==context.getString(R.string.watch_later_playlist)) {
-            holder.apply {
-                if (database.getPlaylistData(playlistName).isEmpty()) {
-                    playlistEmptyIc.visibility = View.GONE
-                    playlistEmptyTxt.visibility = View.GONE
-                    playlistIc.visibility = View.VISIBLE
-                    playlistTxt.visibility = View.VISIBLE
-                    playlistIc.setImageResource(R.drawable.ic_watch_later)
-                    playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
-                } else {
-                    playlistEmptyIc.visibility = View.GONE
-                    playlistEmptyTxt.visibility = View.GONE
-                    playlistIc.visibility = View.VISIBLE
-                    playlistTxt.visibility = View.VISIBLE
-                    playlistIc.setImageResource(R.drawable.ic_watch_later)
-                    playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+            } else if (playlistName == context.getString(R.string.watch_later_playlist)) {
+                holder.apply {
+                    if (database.getPlaylistData(playlistName).isEmpty()) {
+                        playlistEmptyIc.visibility = View.GONE
+                        playlistEmptyTxt.visibility = View.GONE
+                        playlistIc.visibility = View.VISIBLE
+                        playlistTxt.visibility = View.VISIBLE
+                        playlistIc.setImageResource(R.drawable.ic_watch_later)
+                        playlistTxt.text = context.getString(R.string.empty_data_in_playlist)
+                    } else {
+                        playlistEmptyIc.visibility = View.GONE
+                        playlistEmptyTxt.visibility = View.GONE
+                        playlistIc.visibility = View.VISIBLE
+                        playlistTxt.visibility = View.VISIBLE
+                        playlistIc.setImageResource(R.drawable.ic_watch_later)
+                        playlistTxt.text = database.getPlaylistData(playlistName).size.toString()
+                    }
                 }
-            }
-        }else if(database.getPlaylistData(playlistName).isEmpty()){
-            holder.apply {
-                playlistEmptyIc.visibility = View.VISIBLE
-                playlistEmptyTxt.visibility = View.VISIBLE
+            } else if (database.getPlaylistData(playlistName).isEmpty()) {
+                holder.apply {
+                    playlistEmptyIc.visibility = View.VISIBLE
+                    playlistEmptyTxt.visibility = View.VISIBLE
+                }
+            } else {
+                holder.apply {
+                    playlistEmptyIc.visibility = View.GONE
+                    playlistEmptyTxt.visibility = View.GONE
+                    playlistIc.visibility = View.GONE
+                    playlistTxt.visibility = View.GONE
+                    Glide.with(context).load(database.getPlaylistData(playlistName)[0].thumbnail)
+                        .into(image)
+                }
             }
         }else{
-            holder.apply {
-                playlistEmptyIc.visibility = View.GONE
-                playlistEmptyTxt.visibility = View.GONE
-                playlistIc.visibility = View.GONE
-                playlistTxt.visibility = View.GONE
-                Glide.with(context).load(database.getPlaylistData(playlistName)[0].thumbnail).into(image)
-            }
+            ToastUtilities.showToast(context,"Setup It !☠️")
         }
     }
 }

@@ -1,12 +1,12 @@
 package com.google.android.piyush.database.model
 
 data class CustomPlaylists (
-    val videoId: String,
-    val title: String?,
-    val thumbnail: String?,
-    val channelId : String?,
-    val publishedAt : String?,
-    val viewCount : String?,
-    val channelTitle : String?,
-    val duration : String?
+    val videoId: String? = null,
+    val title: String? = null,
+    val thumbnail: String? = null,
+    val channelId : String? = null,
+    val publishedAt : String? = null,
+    val viewCount : String? = null,
+    val channelTitle : String? = null,
+    val duration : String? = null
 )

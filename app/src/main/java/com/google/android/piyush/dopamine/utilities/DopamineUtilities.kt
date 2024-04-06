@@ -21,6 +21,10 @@ import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ItemCustomDialogBinding
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @Suppress("DEPRECATION")
 object NetworkUtilities {
@@ -210,15 +214,32 @@ class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
         val playlistDescription = binding.text2.text
 
         binding.button.setOnClickListener {
-            if(databaseViewModel.isPlaylistExist(playlistName.toString())){
-                binding.textInputLayout1.isErrorEnabled = true
-                binding.textInputLayout1.error = "Playlist Already Exists"
+            if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+                if (databaseViewModel.isPlaylistExist(playlistName.toString())) {
+                    binding.textInputLayout1.isErrorEnabled = true
+                    binding.textInputLayout1.error = "Playlist Already Exists"
+                } else {
+                    if (playlistName.toString().isEmpty()) {
+                        ToastUtilities.showToast(context, "Please Fill All Fields")
+                    } else {
+                        databaseViewModel.createCustomPlaylist(
+                            CustomPlaylistView(
+                                playlistName.toString(),
+                                playlistDescription.toString().ifEmpty { "Empty Description" },
+                            )
+                        )
+                        playlistName?.clear()
+                        playlistDescription?.clear()
+                        ToastUtilities.showToast(context, "$playlistName Created ✅")
+                    }
+                }
             }else{
-                if(playlistName.toString().isEmpty()){
+                if (playlistName.toString().isEmpty()) {
                     ToastUtilities.showToast(context, "Please Fill All Fields")
-                }else {
-                    databaseViewModel.createCustomPlaylist(
-                        CustomPlaylistView(
+                } else {
+                    val realtimeViewModel = RealtimeViewModel()
+                    realtimeViewModel.addInMasterRecords(
+                        playlist = CustomPlaylistView(
                             playlistName.toString(),
                             playlistDescription.toString().ifEmpty { "Empty Description" },
                         )
