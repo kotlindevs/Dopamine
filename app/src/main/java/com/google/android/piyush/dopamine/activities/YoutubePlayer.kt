@@ -392,6 +392,8 @@ class YoutubePlayer : AppCompatActivity() {
 class MyBottomSheetFragment : BottomSheetDialogFragment() {
     private var bottomSheetBinding: BottomSheetAddToAPlaylistBinding? = null
     private lateinit var databaseViewModel: DatabaseViewModel
+    val realtimeViewModel by viewModels<RealtimeViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -412,6 +414,7 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
             bottomSheetBinding = binding
 
             bottomSheetBinding?.apply {
+                playlistsView.visibility = View.GONE
                 playlistText.visibility = View.VISIBLE
                 playlistText.text = context?.getString(R.string.create_playlist)
                 playlistNameInput.visibility = View.VISIBLE
@@ -466,46 +469,54 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
                             binding.playlistName.text?.clear()
                             binding.playlistDescription.text?.clear()
                             ToastUtilities.showToast(context, "$playlistName Created ✅")
+                            this.dismiss()
                         }
                     }
                 }
             }
 
+            binding.showPlaylist.setOnClickListener {
+                bottomSheetBinding?.apply {
+                    space.visibility = View.VISIBLE
+                    playlistsView.visibility = View.VISIBLE
+                    playlistText.visibility = View.VISIBLE
+                    playlistText.text = context?.getString(R.string.view_all_playlists)
+                    playlistNameInput.visibility = View.GONE
+                    playlistDescriptionInput.visibility = View.GONE
+                    addPlaylist.visibility = View.GONE
+                    showPlaylist.visibility = View.GONE
+                }
 
-
-//            if(Firebase.auth.currentUser?.uid.isNullOrEmpty()){
-//                customPlaylists.apply {
-//                    layoutManager = LinearLayoutManager(context)
-//                    adapter = CustomPlaylistsAdapter(
-//                        requireContext(),
-//                        databaseViewModel.getPlaylist(),
-//                    )
-//                }
-//            }else{
-//                val realtimeViewModel by viewModels<RealtimeViewModel>()
-//                realtimeViewModel.getMasterRecords()
-//                realtimeViewModel.listOfCustomPlaylistView.observe(viewLifecycleOwner) {
-//                    when(it){
-//                        is RealtimeResource.Loading -> {}
-//                        is RealtimeResource.Success -> {
-//                            val playlistData = it.data
-//                            customPlaylists.apply {
-//                                layoutManager = LinearLayoutManager(context)
-//                                adapter = CustomPlaylistsAdapter(
-//                                    requireContext(),
-//                                    playlistData,
-//                                )
-//                            }
-//                        }
-//                        is RealtimeResource.Error -> {
-//                            Log.d(TAG, "YoutubePlayer: ${it.message.toString()}")
-//                        }
-//                    }
-//                }
-//            }
-
-
-
+                if(Firebase.auth.currentUser?.uid.isNullOrEmpty()){
+                    binding.playlistsView.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = CustomPlaylistsAdapter(
+                            requireContext(),
+                            databaseViewModel.getPlaylist(),
+                        )
+                    }
+                }else{
+                    realtimeViewModel.getMasterRecords()
+                    realtimeViewModel.listOfCustomPlaylistView.observe(viewLifecycleOwner) {
+                        when(it){
+                            is RealtimeResource.Loading -> {}
+                            is RealtimeResource.Success -> {
+                                val playlistData = it.data
+                                binding.playlistsView.apply {
+                                    layoutManager = LinearLayoutManager(context)
+                                    adapter = CustomPlaylistsAdapter(
+                                        requireContext(),
+                                        playlistData,
+                                    )
+                                }
+                            }
+                            is RealtimeResource.Error -> {
+                                Log.d(TAG, "YoutubePlayer: ${it.message.toString()}")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

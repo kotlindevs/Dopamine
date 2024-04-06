@@ -94,6 +94,13 @@ class AboutDopamine : AppCompatActivity() {
             binding.dopamineTeamText1.visibility = View.VISIBLE
             binding.dopamineTeamText2.visibility = View.VISIBLE
         }
+
+        binding.topAppBar.setNavigationOnClickListener {
+            finishActivity(0)
+            startActivity(
+                Intent(this, DopamineYtSettings::class.java)
+            )
+        }
     }
 }
 
