@@ -189,7 +189,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/emptyPlaylist"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="212dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/no_photo"
                 android:visibility="visible"

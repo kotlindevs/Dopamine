@@ -137,50 +137,62 @@ class User : Fragment() {
             }
         }
 
-        if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1){
-            userFragment!!.yourPlaylists.visibility = View.GONE
-            userFragment!!.emptyPlaylist.visibility = View.VISIBLE
-        }else{
-            userFragment!!.emptyPlaylist.visibility = View.GONE
-            userFragment!!.yourPlaylists.visibility = View.VISIBLE
-            if(firebaseAuth.currentUser?.uid.isNullOrEmpty()){
-                userFragment!!.yourPlaylists.apply {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
-                    adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()){
+            if(databaseViewModel.countTheNumberOfCustomPlaylist() < 1) {
+                userFragment?.let {
+                    it.yourPlaylists.visibility = View.GONE
+                    it.emptyPlaylist.visibility = View.VISIBLE
                 }
-            }else{
-//                val dopamineMasterDev = databaseViewModel.getPlaylist()
-//                realtimeViewModel.addInMasterRecords(dopamineMasterDev)
-                realtimeViewModel.customPlaylistView.observe(viewLifecycleOwner) {
-                    when(it){
-                        is RealtimeResource.Loading -> {}
-                        is RealtimeResource.Success -> {}
-                        is RealtimeResource.Error -> {}
+            }else {
+                userFragment?.let {
+                    it.yourPlaylists.visibility = View.VISIBLE
+                    it.emptyPlaylist.visibility = View.GONE
+                    it.yourPlaylists.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
+                        adapter = CustomPlayListVAdapter(requireContext(),databaseViewModel.getPlaylist())
                     }
                 }
-                realtimeViewModel.getMasterRecords()
-                realtimeViewModel.listOfCustomPlaylistView.observe(viewLifecycleOwner) {
-                    when(it) {
-                        is RealtimeResource.Loading -> {}
-                        is RealtimeResource.Success -> {
-                            userFragment!!.yourPlaylists.apply {
-                                setHasFixedSize(true)
-                                layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
-                                customPlayListVAdapter = CustomPlayListVAdapter(context, it.data)
-                                adapter = customPlayListVAdapter.apply {
-                                    setDataList(
-                                        it.data
-                                    )
+            }
+        }else{
+            realtimeViewModel.countingMasterRecords()
+            realtimeViewModel.countTheMasterRecords.observe(viewLifecycleOwner) {
+                if(it is RealtimeResource.Success){
+                    it.data?.let { videos ->
+                        if(videos < 1) {
+                            userFragment?.let { frag ->
+                                frag.yourPlaylists.visibility = View.GONE
+                                frag.emptyPlaylist.visibility = View.VISIBLE
+                            }
+                        }else{
+                            userFragment?.let { frag ->
+                                frag.yourPlaylists.visibility = View.VISIBLE
+                                frag.emptyPlaylist.visibility = View.GONE
+                                realtimeViewModel.getMasterRecords()
+                                realtimeViewModel.listOfCustomPlaylistView.observe(viewLifecycleOwner) { list ->
+                                    when(list) {
+                                        is RealtimeResource.Loading -> {}
+                                        is RealtimeResource.Success -> {
+                                            userFragment!!.yourPlaylists.apply {
+                                                setHasFixedSize(true)
+                                                layoutManager = LinearLayoutManager(context, binding.yourPlaylists.horizontalFadingEdgeLength, false)
+                                                customPlayListVAdapter = CustomPlayListVAdapter(context, list.data)
+                                                adapter = customPlayListVAdapter.apply {
+                                                    setDataList(
+                                                        list.data
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        is RealtimeResource.Error -> {}
+                                    }
                                 }
                             }
                         }
-                        is RealtimeResource.Error -> {}
                     }
                 }
             }
         }
-
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.setting -> {

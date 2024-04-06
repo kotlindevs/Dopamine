@@ -55,6 +55,9 @@ class RealtimeViewModel : ViewModel() {
     private val _favorites : MutableLiveData<RealtimeResource<String>> = MutableLiveData()
     val favorites : LiveData<RealtimeResource<String>> = _favorites
 
+    private val _countTheMasterRecords : MutableLiveData<RealtimeResource<Int>> = MutableLiveData()
+    val countTheMasterRecords : LiveData<RealtimeResource<Int>> = _countTheMasterRecords
+
     fun isUserExists(dopamineUser : User) {
 
         currentUser?.let { user ->
@@ -432,6 +435,27 @@ class RealtimeViewModel : ViewModel() {
                 }
             }
             reference.child(user.uid).child("favoritePlaylist")
+                .addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
+
+    fun countingMasterRecords () {
+        currentUser?.let {
+            val valueEventListener =  object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    _countTheMasterRecords.value = RealtimeResource.Success(snapshot.childrenCount.toInt())
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                    Log.d(TAG, "onCancelled: ${error.message}")
+                }
+            }
+            reference.child(it.uid).child("masterRecords")
                 .addValueEventListener(valueEventListener)
 
             reference.removeEventListener(valueEventListener)
