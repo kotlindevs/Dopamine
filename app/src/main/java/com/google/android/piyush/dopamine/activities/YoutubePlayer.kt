@@ -29,6 +29,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.piyush.database.entities.EntityFavouritePlaylist
 import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.model.CustomPlaylistView
+import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
@@ -86,6 +87,26 @@ class YoutubePlayer : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
+            databaseViewModel.initializeWatchLater()
+            if (databaseViewModel.isPlaylistExist("watch_later").equals(false)) {
+                databaseViewModel.addWatchLater()
+            }
+        }else{
+            realtimeViewModel.initializeWatchLater(
+                CustomPlaylistView(
+                    playListName = "watchLater",
+                    playListDescription = "Watch your videos later 😊"
+                )
+            )
+            realtimeViewModel.initializeFavorites(
+                CustomPlaylistView(
+                    playListName = "favoritePlaylist",
+                    playListDescription = "Your Favorite Videos ❤️"
+                )
+            )
         }
 
         databaseViewModel.initializeFavouritePlaylist()
@@ -178,20 +199,6 @@ class YoutubePlayer : AppCompatActivity() {
         val videoId = intent?.getStringExtra("videoId").toString()
         val channelId = intent?.getStringExtra("channelId").toString()
 
-        if(Firebase.auth.currentUser?.uid.isNullOrEmpty()) {
-            databaseViewModel.initializeWatchLater()
-            if (databaseViewModel.isPlaylistExist("watch_later").equals(false)) {
-                databaseViewModel.addWatchLater()
-            }
-        }else{
-//            realtimeViewModel.initializeWatchLater(
-//                CustomPlaylistView(
-//                    playListName = "watchLater",
-//                    playListDescription = "Watch your videos later 😊"
-//                )
-//            )
-        }
-
         youtubePlayerViewModel.getVideoDetails(videoId)
         youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
             when (videoDetails) {
@@ -249,8 +256,8 @@ class YoutubePlayer : AppCompatActivity() {
                                         databaseViewModel.addFavorites()
                                     }
                                 }else{
-                                    realtimeViewModel.addYourFavorites(
-                                        EntityFavouritePlaylist(
+                                    realtimeViewModel.updatePlaylist(
+                                        playlist = CustomPlaylists(
                                             videoId = videoId,
                                             thumbnail = videoThumbnail,
                                             title = videoTitle,
@@ -259,14 +266,8 @@ class YoutubePlayer : AppCompatActivity() {
                                             viewCount = videoViews,
                                             publishedAt = videoPublishedAt,
                                             duration = videoDuration
-                                        )
-                                    )
-
-                                    realtimeViewModel.initializeFavorites(
-                                        CustomPlaylistView(
-                                            playListName = "favoritePlaylist",
-                                            playListDescription = "Your Favorite Videos List"
-                                        )
+                                        ),
+                                        playlistName = "favoritePlaylist"
                                     )
                                 }
                             } else {
