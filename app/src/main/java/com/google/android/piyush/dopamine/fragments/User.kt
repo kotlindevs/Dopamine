@@ -208,6 +208,9 @@ class User : Fragment() {
                     true
                 }
                 R.id.screencast -> {
+                    ToastUtilities.showToast(
+                        context, "Coming Soon"
+                    )
                     true
                 }
                 else -> {

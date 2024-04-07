@@ -17,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -473,34 +474,34 @@ class RealtimeViewModel : ViewModel() {
         }
     }
 
-//    fun getPlaylistVideos(playListName : String) {
-//        val customPlaylists =  mutableListOf<CustomPlaylists>()
-//        currentUser?.let { user ->
-//            val valueEventListener =  object : ValueEventListener{
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    snapshot.children.forEach { videos ->
-//                        customPlaylists.add(
-//                            videos.getValue(
-//                                CustomPlaylists::class.java
-//                            )!!
-//                        )
-//                    }
-//                    _getPlaylistData.value = RealtimeResource.Success(customPlaylists)
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                    RealtimeResource.Error(
-//                        data = null,
-//                        message = error.message
-//                    )
-//                }
-//            }
-//
-//            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
-//
-//            reference.removeEventListener(valueEventListener)
-//        }
-//    }
+    fun getPlaylistVideos(playListName : String) {
+        val customPlaylists =  mutableListOf<CustomPlaylists>()
+        currentUser?.let { user ->
+            val valueEventListener =  object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { videos ->
+                        if(videos.key != "playListName" && videos.key != "playListDescription"){
+                            videos.getValue<CustomPlaylists>()?.let {
+                                customPlaylists.add(it)
+                            }
+                        }
+                    }
+                    _getPlaylistData.value = RealtimeResource.Success(customPlaylists)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    RealtimeResource.Error(
+                        data = null,
+                        message = error.message
+                    )
+                }
+            }
+
+            reference.child(user.uid).child(playListName).addValueEventListener(valueEventListener)
+
+            reference.removeEventListener(valueEventListener)
+        }
+    }
 
     fun initializeFavorites(playlist: CustomPlaylistView) {
         currentUser?.let { user ->

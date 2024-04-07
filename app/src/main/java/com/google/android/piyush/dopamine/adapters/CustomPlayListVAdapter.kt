@@ -122,7 +122,7 @@ class CustomPlayListVAdapter(
         }else{
             if (playlistName == "favoritePlaylist") {
                 holder.apply {
-                  //  viewModel.getPlaylistVideos(playlistName)
+                    viewModel.getPlaylistVideos(playlistName)
                     viewModel.getPlaylistData.observeForever {
                         if(it is RealtimeResource.Success){
                             val favoriteVideos = it.data
@@ -146,7 +146,7 @@ class CustomPlayListVAdapter(
                 }
             } else if (playlistName == "watchLater") {
                 holder.apply {
-                  //  viewModel.getPlaylistVideos(playlistName)
+                    viewModel.getPlaylistVideos(playlistName)
                     viewModel.getPlaylistData.observeForever {
                         if(it is RealtimeResource.Success){
                             val watchLaterVideos = it.data
@@ -164,6 +164,27 @@ class CustomPlayListVAdapter(
                                 playlistTxt.visibility = View.VISIBLE
                                 playlistIc.setImageResource(R.drawable.ic_watch_later)
                                 playlistTxt.text = watchLaterVideos.size.toString()
+                            }
+                        }
+                    }
+                }
+            }else {
+                viewModel.getPlaylistVideos(playlistName)
+                viewModel.getPlaylistData.observeForever {
+                    if (it is RealtimeResource.Success) {
+                        val playlistVideos = it.data
+                        if (playlistVideos.isNullOrEmpty()) {
+                            holder.apply {
+                                playlistEmptyIc.visibility = View.VISIBLE
+                                playlistEmptyTxt.visibility = View.VISIBLE
+                            }
+                        } else {
+                            holder.apply {
+                                playlistEmptyIc.visibility = View.GONE
+                                playlistEmptyTxt.visibility = View.GONE
+                                playlistIc.visibility = View.GONE
+                                playlistTxt.visibility = View.GONE
+                                Glide.with(context).load(playlistVideos[0].thumbnail).into(image)
                             }
                         }
                     }
