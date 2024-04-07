@@ -30,6 +30,8 @@ import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.Utilities.getGreeting
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -109,72 +111,75 @@ class Home : Fragment() {
         }
 
         if(NetworkUtilities.isNetworkAvailable(context = requireContext())) {
-            val notificationViewModel = NotificationViewModel()
+            val notificationViewModel = RealtimeViewModel()
             val databaseViewModel = DatabaseViewModel(requireContext())
-            notificationViewModel.notifications.observe(viewLifecycleOwner) { notifications ->
+            notificationViewModel.getNotifications(requireContext())
+            notificationViewModel.listOfNotifications.observe(viewLifecycleOwner) { notifications ->
                 when (notifications) {
-                    is YoutubeResource.Loading -> {}
-                    is YoutubeResource.Success -> {
+                    is RealtimeResource.Loading -> {}
+                    is RealtimeResource.Success -> {
                         databaseViewModel.initializeNotifications()
                         val oldNotifications = databaseViewModel.getListOfNotifications()
                         if (oldNotifications.isNotEmpty()) {
-                            val newNotifications = notifications.data.subtract(
+                            val newNotifications = notifications.data?.subtract(
                                 oldNotifications.toSet()
                             )
-                            if (newNotifications.isNotEmpty()) {
-                                binding.topAppBar.menu.findItem(R.id.notification).apply {
-                                    isVisible = true
-                                    setIcon(
-                                        R.drawable.unread_notification
-                                    )
-                                }
-                                val defaultTap = dopamineSharedPreferences(requireContext()).getBoolean("ExperimentalUserColor",true)
-                                if(!defaultTap) {
-                                    TapTargetView.showFor(
-                                        requireActivity(),
-                                        TapTarget.forView(
-                                            binding.topAppBar.findViewById(R.id.notification)!!,
-                                            "Dopamine Notifications",
-                                            "Notifications are available please tap to see them 😀"
+                            if (newNotifications != null) {
+                                if (newNotifications.isNotEmpty()) {
+                                    binding.topAppBar.menu.findItem(R.id.notification).apply {
+                                        isVisible = true
+                                        setIcon(
+                                            R.drawable.unread_notification
                                         )
-                                            .outerCircleColor(R.color.md_theme_light_primaryContainer)
-                                            .outerCircleAlpha(0.96f)
-                                            .targetCircleColor(R.color.md_theme_light_primary)
-                                            .titleTextSize(20)
-                                            .titleTextColor(R.color.md_theme_light_onPrimaryContainer)
-                                            .descriptionTextSize(10)
-                                            .descriptionTextColor(R.color.md_theme_light_onPrimaryContainer)
-                                            .textColor(R.color.md_theme_light_onPrimaryContainer)
-                                            .textTypeface(Typeface.SANS_SERIF)
-                                            .dimColor(R.color.md_theme_light_surface)
-                                            .drawShadow(true)
-                                            .cancelable(false)
-                                            .tintTarget(true)
-                                            .transparentTarget(false)
-                                            .icon(
-                                                resources.getDrawable(
-                                                    R.drawable.unread_notification,
-                                                    null
-                                                )
+                                    }
+                                    val defaultTap = dopamineSharedPreferences(requireContext()).getBoolean("ExperimentalUserColor",false)
+                                    if(!defaultTap) {
+                                        TapTargetView.showFor(
+                                            requireActivity(),
+                                            TapTarget.forView(
+                                                binding.topAppBar.findViewById(R.id.notification)!!,
+                                                "Dopamine Notifications",
+                                                "Notifications are available please tap to see them 😀"
                                             )
-                                            .targetRadius(60),
-                                        object : TapTargetView.Listener() {
-                                            override fun onTargetClick(view: TapTargetView) {
-                                                super.onTargetClick(view)
-                                                startActivity(
-                                                    Intent(
-                                                        context,
-                                                        AppNotificationView::class.java
+                                                .outerCircleColor(R.color.md_theme_light_primaryContainer)
+                                                .outerCircleAlpha(0.96f)
+                                                .targetCircleColor(R.color.md_theme_light_primary)
+                                                .titleTextSize(20)
+                                                .titleTextColor(R.color.md_theme_light_onPrimaryContainer)
+                                                .descriptionTextSize(10)
+                                                .descriptionTextColor(R.color.md_theme_light_onPrimaryContainer)
+                                                .textColor(R.color.md_theme_light_onPrimaryContainer)
+                                                .textTypeface(Typeface.SANS_SERIF)
+                                                .dimColor(R.color.md_theme_light_surface)
+                                                .drawShadow(true)
+                                                .cancelable(false)
+                                                .tintTarget(true)
+                                                .transparentTarget(false)
+                                                .icon(
+                                                    resources.getDrawable(
+                                                        R.drawable.unread_notification,
+                                                        null
                                                     )
                                                 )
-                                            }
-                                        })
+                                                .targetRadius(60),
+                                            object : TapTargetView.Listener() {
+                                                override fun onTargetClick(view: TapTargetView) {
+                                                    super.onTargetClick(view)
+                                                    startActivity(
+                                                        Intent(
+                                                            context,
+                                                            AppNotificationView::class.java
+                                                        )
+                                                    )
+                                                }
+                                            })
+                                    }
                                 }
                             }
                         }
                     }
 
-                    is YoutubeResource.Error -> {}
+                    is RealtimeResource.Error -> {}
                 }
             }
         }

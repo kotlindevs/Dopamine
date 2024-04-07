@@ -65,12 +65,6 @@ class RealtimeViewModel : ViewModel() {
     private val _getALlPlaylists : MutableLiveData<RealtimeResource<List<String>>> = MutableLiveData()
     val getAllPlaylists : LiveData<RealtimeResource<List<String>>> = _getALlPlaylists
 
-    private val _isVideoExists : MutableLiveData<RealtimeResource<Boolean>> = MutableLiveData()
-    val isVideoExists : LiveData<RealtimeResource<Boolean>> = _isVideoExists
-
-    private val _isPlaylistExists : MutableLiveData<RealtimeResource<Boolean>> = MutableLiveData()
-    val isPlaylistExists : LiveData<RealtimeResource<Boolean>> = _isPlaylistExists
-
     fun isUserExists(dopamineUser : User) {
 
         currentUser?.let { user ->

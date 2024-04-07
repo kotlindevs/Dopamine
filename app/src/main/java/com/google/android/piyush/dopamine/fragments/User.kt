@@ -35,6 +35,7 @@ import com.google.android.piyush.dopamine.databinding.BottomSheetPlaylistBinding
 import com.google.android.piyush.dopamine.databinding.FragmentUserBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewModels.RealtimeResource
 import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
@@ -238,10 +239,8 @@ class User : Fragment() {
                     true
                 }
                 R.id.search -> {
-                    startActivity(
-                        Intent(
-                            requireContext(),ExperimentalSearch::class.java
-                        )
+                    ToastUtilities.showToast(
+                        context, "Coming Soon"
                     )
                     true
                 }

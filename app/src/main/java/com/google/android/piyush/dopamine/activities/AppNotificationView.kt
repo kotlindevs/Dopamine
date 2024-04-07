@@ -1,10 +1,12 @@
 package com.google.android.piyush.dopamine.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,18 +19,20 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAppNotificationViewBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
 import com.google.android.piyush.youtube.utilities.Notifications
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 
 class AppNotificationView : AppCompatActivity() {
     private lateinit var binding: ActivityAppNotificationViewBinding
-    private lateinit var notificationViewModel: NotificationViewModel
+    private lateinit var notificationViewModel: RealtimeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityAppNotificationViewBinding.inflate(layoutInflater)
-        notificationViewModel = NotificationViewModel()
+        notificationViewModel = RealtimeViewModel()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,23 +41,24 @@ class AppNotificationView : AppCompatActivity() {
         }
 
         if(NetworkUtilities.isNetworkAvailable(this).equals(true)){
-            notificationViewModel.notifications.observe(this){ notifications ->
+            notificationViewModel.getNotifications(this)
+            notificationViewModel.listOfNotifications.observe(this){ notifications ->
                 when(notifications){
-                    is YoutubeResource.Loading -> {}
-                    is YoutubeResource.Success -> {
+                    is RealtimeResource.Loading -> {}
+                    is RealtimeResource.Success -> {
                         binding.recyclerView.apply {
                             layoutManager = LinearLayoutManager(this@AppNotificationView)
                             adapter = NotificationAdapter(context,notifications.data)
                         }
                     }
-                    is YoutubeResource.Error -> {
-                        ToastUtilities.showToast(this, notifications.exception.message.toString())
+                    is RealtimeResource.Error -> {
+                        ToastUtilities.showToast(this, notifications.message.toString())
                     }
                 }
             }
         }
 
-        /*
+
         onBackPressedDispatcher.addCallback {
             startActivity(
                 Intent(
@@ -61,7 +66,7 @@ class AppNotificationView : AppCompatActivity() {
                     DopamineHome::class.java
                 )
             )
-        } */
+        }
     }
 }
 

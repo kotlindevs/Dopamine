@@ -82,16 +82,26 @@ class Search : Fragment() {
         fragmentSearchBinding?.topAppBar?.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.searchVideos -> {
-                    val searchSheet = SearchSheet()
-                    searchSheet.show(childFragmentManager, searchSheet.tag)
-                    val permissionGranted = dopamineSharedPreferences(requireContext()).getBoolean("permissionGranted", false)
-                    if(permissionGranted){
+                    if(ActivityCompat.checkSelfPermission(
+                            requireContext(),
+                            Manifest.permission.RECORD_AUDIO
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ){
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            arrayOf(Manifest.permission.RECORD_AUDIO),
+                            Utilities.PERMISSION_REQUEST_CODE
+                        )
+                    }else{
                         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Something 😊")
                         startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
+                        dopamineSharedPreferences(requireContext()).edit().putBoolean("permissionGranted", true).apply()
                     }
+                    //val searchSheet = SearchSheet()
+                    //searchSheet.show(childFragmentManager, searchSheet.tag)
                     true
                 }
                 else -> false

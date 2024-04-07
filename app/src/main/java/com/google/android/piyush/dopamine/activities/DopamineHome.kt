@@ -30,6 +30,8 @@ import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
+import com.google.android.piyush.dopamine.viewModels.RealtimeResource
+import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -137,19 +139,20 @@ class DopamineHome : AppCompatActivity() {
                 R.id.home -> {
                     defaultScreen(Home())
                     dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.HOME).apply()
-                    val notificationViewModel = NotificationViewModel()
+                    val notificationViewModel = RealtimeViewModel()
                     val databaseViewModel = DatabaseViewModel(this)
-                    notificationViewModel.notifications.observe(this){ notifications ->
+                    notificationViewModel.getNotifications(this)
+                    notificationViewModel.listOfNotifications.observe(this){ notifications ->
                         when(notifications){
-                            is YoutubeResource.Loading -> {}
-                            is YoutubeResource.Success -> {
+                            is RealtimeResource.Loading -> {}
+                            is RealtimeResource.Success -> {
                                 databaseViewModel.initializeNotifications()
                                 val oldNotifications = databaseViewModel.getListOfNotifications()
                                 if(oldNotifications.isNotEmpty()){
-                                    val newNotifications = notifications.data.subtract(
+                                    val newNotifications = notifications.data?.subtract(
                                         oldNotifications.toSet()
                                     )
-                                    if(newNotifications.isNotEmpty()) {
+                                    if(newNotifications?.isNotEmpty() == true) {
                                         binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
                                             ?.apply {
                                                 number = newNotifications.size
@@ -167,19 +170,21 @@ class DopamineHome : AppCompatActivity() {
                                         )
                                     }
 
-                                    if(newNotifications.isEmpty()){
-                                        binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
-                                            ?.apply {
-                                                number = 0
-                                                isVisible = false
-                                            }
-                                        ShortcutBadger.removeCount(
-                                            this
-                                        )
+                                    if (newNotifications != null) {
+                                        if(newNotifications.isEmpty()){
+                                            binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
+                                                ?.apply {
+                                                    number = 0
+                                                    isVisible = false
+                                                }
+                                            ShortcutBadger.removeCount(
+                                                this
+                                            )
+                                        }
                                     }
                                 }
                             }
-                            is YoutubeResource.Error -> {}
+                            is RealtimeResource.Error -> {}
 
                         }
                     }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,14 @@ class AdminHome : AppCompatActivity() {
             insets
         }
 
+        onBackPressedDispatcher.addCallback {
+            startActivity(
+                Intent(
+                    this@AdminHome,
+                    AboutDopamine::class.java
+                )
+            )
+        }
         val adminId= dopamineSharedPreferences(applicationContext).getString("adminId", null)
 
         binding.topAppBar.setNavigationOnClickListener {
