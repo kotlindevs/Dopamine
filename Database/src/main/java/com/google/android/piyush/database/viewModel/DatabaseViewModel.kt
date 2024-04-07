@@ -131,6 +131,10 @@ class DatabaseViewModel(
     fun addItemsInCustomPlaylist(playlistName: String,playlistsData: CustomPlaylists) {
         val writableDatabase = database.writableDatabase
         val newPlaylistName = stringify(playlistName)
+        val title = playlistsData.title
+        if(!title.isNullOrEmpty()){
+           title.replace('"', ' ')
+        }
         val query = "INSERT INTO $newPlaylistName VALUES (\"${playlistsData.videoId}\",\"${playlistsData.title}\",\"${playlistsData.thumbnail}\",\"${playlistsData.channelId}\",\"${playlistsData.publishedAt}\",\"${playlistsData.viewCount}\",\"${playlistsData.channelTitle}\",\"${playlistsData.duration}\")"
         writableDatabase.execSQL(query)
     }
@@ -147,13 +151,11 @@ class DatabaseViewModel(
     }
 
     fun userFromPhoneAuth() {
-        val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"
+        val usersFavoritePlayListDescription =  "You can store your favorite videos here"
         val writableDatabase = database.writableDatabase
-        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS $isUserFromPhoneAuth (videoId TEXT PRIMARY KEY, title TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)")
-        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"$isUserFromPhoneAuth\",\"$usersFavoritePlayListDescription\")")
+        writableDatabase.execSQL("CREATE TABLE IF NOT EXISTS dopaminePlaylist (videoId TEXT PRIMARY KEY, title TEXT, thumbnail TEXT, channelId TEXT, publishedAt TEXT , viewCount TEXT, channelTitle TEXT , duration TEXT)")
+        writableDatabase.execSQL("INSERT INTO DopamineMastersDev VALUES (\"dopaminePlaylist\",\"$usersFavoritePlayListDescription\")")
     }
-
-
 
     fun getPlaylist() : List<CustomPlaylistView>{
         val writableDatabase = database.writableDatabase
