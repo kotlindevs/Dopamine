@@ -3,9 +3,7 @@ package com.google.android.piyush.dopamine.fragments
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -108,7 +106,6 @@ class Home : Fragment() {
             }
         }
 
-
         if(NetworkUtilities.isNetworkAvailable(context = requireContext())) {
             val notificationViewModel = NotificationViewModel()
             val databaseViewModel = DatabaseViewModel(requireContext())
@@ -129,39 +126,48 @@ class Home : Fragment() {
                                         R.drawable.unread_notification
                                     )
                                 }
-                                TapTargetView.showFor(
-                                    requireActivity(),  // `this` is an Activity
-                                    TapTarget.forView(
-                                        binding.topAppBar.findViewById(R.id.notification)!!,
-                                        "This is a target",
-                                        "We have the best targets, believe me"
-                                    ) // All options below are optional
-                                        .outerCircleColor(R.color.md_theme_light_primaryContainer) // Specify a color for the outer circle
-                                        .outerCircleAlpha(0.96f) // Specify the alpha amount for the outer circle
-                                        .targetCircleColor(R.color.md_theme_light_primary) // Specify a color for the target circle
-                                        .titleTextSize(20) // Specify the size (in sp) of the title text
-                                        .titleTextColor(R.color.white) // Specify the color of the title text
-                                        .descriptionTextSize(10) // Specify the size (in sp) of the description text
-                                        .descriptionTextColor(androidx.appcompat.R.color.primary_material_light) // Specify the color of the description text
-                                        .textColor(com.dcastalia.localappupdate.R.color.primary_material_light) // Specify a color for both the title and description text
-                                        .textTypeface(Typeface.SANS_SERIF) // Specify a typeface for the text
-                                        .dimColor(R.color.black) // If set, will dim behind the view with 30% opacity of the given color
-                                        .drawShadow(true) // Whether to draw a drop shadow or not
-                                        .cancelable(false) // Whether tapping outside the outer circle dismisses the view
-                                        .tintTarget(true) // Whether to tint the target view's color
-                                        .transparentTarget(false) // Specify whether the target is transparent (displays the content underneath)
-                                        .icon(
-                                            resources.getDrawable(
-                                                R.drawable.unread_notification,
-                                                null
-                                            )
+                                val defaultTap = dopamineSharedPreferences(requireContext()).getBoolean("ExperimentalUserColor",true)
+                                if(defaultTap.equals(false)) {
+                                    TapTargetView.showFor(
+                                        requireActivity(),
+                                        TapTarget.forView(
+                                            binding.topAppBar.findViewById(R.id.notification)!!,
+                                            "Dopamine Notifications",
+                                            "Notifications are available please tap to see them 😀"
                                         )
-                                        .targetRadius(60),
-                                    object : TapTargetView.Listener() {
-                                        override fun onTargetClick(view: TapTargetView) {
-                                            super.onTargetClick(view) // This call is optional
-                                        }
-                                    })
+                                            .outerCircleColor(R.color.md_theme_light_primaryContainer)
+                                            .outerCircleAlpha(0.96f)
+                                            .targetCircleColor(R.color.md_theme_light_primary)
+                                            .titleTextSize(20)
+                                            .titleTextColor(R.color.md_theme_light_onPrimaryContainer)
+                                            .descriptionTextSize(10)
+                                            .descriptionTextColor(R.color.md_theme_light_onPrimaryContainer)
+                                            .textColor(R.color.md_theme_light_onPrimaryContainer)
+                                            .textTypeface(Typeface.SANS_SERIF)
+                                            .dimColor(R.color.md_theme_light_surface)
+                                            .drawShadow(true)
+                                            .cancelable(false)
+                                            .tintTarget(true)
+                                            .transparentTarget(false)
+                                            .icon(
+                                                resources.getDrawable(
+                                                    R.drawable.unread_notification,
+                                                    null
+                                                )
+                                            )
+                                            .targetRadius(60),
+                                        object : TapTargetView.Listener() {
+                                            override fun onTargetClick(view: TapTargetView) {
+                                                super.onTargetClick(view)
+                                                startActivity(
+                                                    Intent(
+                                                        context,
+                                                        AppNotificationView::class.java
+                                                    )
+                                                )
+                                            }
+                                        })
+                                }
                             }
                         }
                     }
