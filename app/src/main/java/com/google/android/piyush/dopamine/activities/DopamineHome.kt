@@ -11,7 +11,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -29,11 +28,8 @@ import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Shorts
 import com.google.android.piyush.dopamine.fragments.User
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
-import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
-import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -42,15 +38,15 @@ import kotlin.system.exitProcess
 @Suppress("DEPRECATION")
 class DopamineHome : AppCompatActivity() {
 
-    private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: ActivityDopamineHomeBinding
+    private lateinit var screen : String
+
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
-        sharedViewModel = SharedViewModel()
+        screen = dopamineSharedPreferences(applicationContext).getString(Utilities.CURRENT_SCREEN, "")!!
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback {
@@ -60,6 +56,40 @@ class DopamineHome : AppCompatActivity() {
             finishAffinity()
             finish()
             exitProcess(0)
+        }
+
+        if(screen.isNotEmpty()){
+            when(screen){
+                Utilities.HOME -> {
+                    binding.bottomNavigationView?.selectedItemId = R.id.home
+                    binding.navigationRail?.selectedItemId = R.id.home
+                    defaultScreen(Home())
+                }
+                Utilities.SEARCH -> {
+                    binding.bottomNavigationView?.selectedItemId = R.id.search
+                    binding.navigationRail?.selectedItemId = R.id.search
+                    defaultScreen(Search())
+                }
+                Utilities.LIBRARY -> {
+                    binding.bottomNavigationView?.selectedItemId = R.id.library
+                    binding.navigationRail?.selectedItemId = R.id.library
+                    defaultScreen(Library())
+                }
+                Utilities.SHORTS -> {
+                    binding.bottomNavigationView?.selectedItemId = R.id.shorts
+                    binding.navigationRail?.selectedItemId = R.id.shorts
+                    defaultScreen(Shorts())
+                }
+                Utilities.USER -> {
+                    binding.bottomNavigationView?.selectedItemId = R.id.user
+                    binding.navigationRail?.selectedItemId = R.id.user
+                    defaultScreen(User())
+                }
+            }
+        }else{
+            binding.bottomNavigationView?.selectedItemId = R.id.home
+            binding.navigationRail?.selectedItemId = R.id.home
+            defaultScreen(Home())
         }
 
         if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
@@ -80,10 +110,6 @@ class DopamineHome : AppCompatActivity() {
 
         if(!NetworkUtilities.isNetworkAvailable(this)){
             Utilities.turnOnNetworkDialog(this,"No Internet Connection")
-        }
-
-        if (savedInstanceState == null) {
-            defaultScreen(Home())
         }
 
         if(intent.getBooleanExtra("fromSettings",false).equals(true)){
@@ -109,6 +135,89 @@ class DopamineHome : AppCompatActivity() {
         binding.bottomNavigationView?.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
+                    defaultScreen(Home())
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.HOME).apply()
+                    val notificationViewModel = NotificationViewModel()
+                    val databaseViewModel = DatabaseViewModel(this)
+                    notificationViewModel.notifications.observe(this){ notifications ->
+                        when(notifications){
+                            is YoutubeResource.Loading -> {}
+                            is YoutubeResource.Success -> {
+                                databaseViewModel.initializeNotifications()
+                                val oldNotifications = databaseViewModel.getListOfNotifications()
+                                if(oldNotifications.isNotEmpty()){
+                                    val newNotifications = notifications.data.subtract(
+                                        oldNotifications.toSet()
+                                    )
+                                    if(newNotifications.isNotEmpty()) {
+                                        binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
+                                            ?.apply {
+                                                number = newNotifications.size
+                                                isVisible = true
+                                                badgeGravity = BadgeDrawable.TOP_END
+                                            }
+                                        allNotifications(
+                                            applicationContext,
+                                            newNotifications.toTypedArray()[0].title!!,
+                                            newNotifications.toTypedArray()[0].description!!,
+                                        )
+                                        ShortcutBadger.applyCount(
+                                            this,
+                                            newNotifications.size
+                                        )
+                                    }
+
+                                    if(newNotifications.isEmpty()){
+                                        binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
+                                            ?.apply {
+                                                number = 0
+                                                isVisible = false
+                                            }
+                                        ShortcutBadger.removeCount(
+                                            this
+                                        )
+                                    }
+                                }
+                            }
+                            is YoutubeResource.Error -> {}
+
+                        }
+                    }
+                    true
+                }
+                R.id.search -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.SEARCH).apply()
+                    if(getSharedPreferences("DopamineApp", MODE_PRIVATE).getBoolean("ExperimentalSearch", false)){
+                        defaultScreen(ExperimentalSearch())
+                    }else{
+                        defaultScreen(Search())
+                    }
+                    true
+                }
+                R.id.library -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.LIBRARY).apply()
+                    defaultScreen(Library())
+                    true
+                }
+                R.id.shorts -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.SHORTS).apply()
+                    defaultScreen(Shorts())
+                    true
+                }
+                R.id.user -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.USER).apply()
+                    defaultScreen(User())
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        binding.navigationRail?.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.HOME).apply()
                     defaultScreen(Home())
                     val notificationViewModel = NotificationViewModel()
                     val databaseViewModel = DatabaseViewModel(this)
@@ -159,6 +268,7 @@ class DopamineHome : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.SEARCH).apply()
                     if(getSharedPreferences("DopamineApp", MODE_PRIVATE).getBoolean("ExperimentalSearch", false)){
                         defaultScreen(ExperimentalSearch())
                     }else{
@@ -167,14 +277,17 @@ class DopamineHome : AppCompatActivity() {
                     true
                 }
                 R.id.library -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.LIBRARY).apply()
                     defaultScreen(Library())
                     true
                 }
                 R.id.shorts -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.SHORTS).apply()
                     defaultScreen(Shorts())
                     true
                 }
                 R.id.user -> {
+                    dopamineSharedPreferences(applicationContext).edit().putString(Utilities.CURRENT_SCREEN, Utilities.USER).apply()
                     defaultScreen(User())
                     true
                 }
@@ -247,19 +360,5 @@ class DopamineHome : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout,fragment)
         fragmentTransaction.commit()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        viewModel.selectedFragment.value?.let {
-            outState.putInt("selectedFragment", it)
-        }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        viewModel.setSelectedFragment(
-            savedInstanceState.getInt("selectedFragment")
-        )
     }
 }

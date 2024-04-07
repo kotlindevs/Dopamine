@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -37,10 +38,13 @@ import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.viewModels.RealtimeResource
 import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
+import com.google.android.piyush.youtube.utilities.NotificationViewModel
+import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
+import me.leolin.shortcutbadger.ShortcutBadger
 
 class User : Fragment() {
 
@@ -202,9 +206,45 @@ class User : Fragment() {
                     true
                 }
                 R.id.notification -> {
+                    val notificationViewModel = NotificationViewModel()
+                    val databaseViewModel = DatabaseViewModel(requireContext())
+                    notificationViewModel.notifications.observe(viewLifecycleOwner){ notifications ->
+                        when(notifications){
+                            is YoutubeResource.Loading -> {}
+                            is YoutubeResource.Success -> {
+                                databaseViewModel.initializeNotifications()
+                                val oldNotifications = databaseViewModel.getListOfNotifications()
+                                if(oldNotifications.isNotEmpty()){
+                                    val newNotifications = notifications.data.subtract(
+                                        oldNotifications.toSet()
+                                    )
+                                    if(newNotifications.isNotEmpty()) {
+                                        binding.topAppBar.menu.findItem(R.id.notification).apply {
+                                            setIcon(
+                                                R.drawable.unread_notification
+                                            )
+                                        }
+                                    }else{
+                                        binding.topAppBar.menu.findItem(R.id.notification).apply {
+                                            setIcon(
+                                                R.drawable.ic_notification
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            is YoutubeResource.Error -> {}
+
+                        }
+                    }
                     true
                 }
                 R.id.search -> {
+                    startActivity(
+                        Intent(
+                            requireContext(),ExperimentalSearch::class.java
+                        )
+                    )
                     true
                 }
                 R.id.screencast -> {

@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home"
         android:title="@string/home"
-        android:icon="@drawable/ic_home" />
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/shorts"
         android:title="@string/shorts"
-        android:icon="@drawable/ic_shorts" />
+        android:icon="@drawable/ic_shorts"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/search"
         android:title="@string/search"
-        android:icon="@drawable/ic_search" />
+        android:icon="@drawable/ic_search"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/library"
         android:title="@string/library"
-        android:icon="@drawable/ic_library"/>
+        android:icon="@drawable/ic_library"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/user"
         android:title="@string/user"
-        android:icon="@drawable/default_user"/>
+        android:icon="@drawable/new_default_user"
+        android:enabled="true"
+        app:showAsAction="always"/>
 </menu>

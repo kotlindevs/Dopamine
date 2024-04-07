@@ -3,6 +3,7 @@ package com.google.android.piyush.dopamine.fragments
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.AppNotificationView
+import com.google.android.piyush.dopamine.adapters.CustomGridAdapter
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
@@ -368,30 +370,49 @@ class Home : Fragment() {
             homeViewModel.videos.observe(viewLifecycleOwner) { videos ->
                 when (videos) {
                     is YoutubeResource.Loading -> {
-                        binding.shimmerRecyclerView.visibility = View.VISIBLE
-                        binding.shimmerRecyclerView.startShimmer()
+                        binding.shimmerRecyclerView?.visibility = View.VISIBLE
+                        binding.shimmerRecyclerView?.startShimmer()
                     }
 
                     is YoutubeResource.Success -> {
-                        binding.shimmerRecyclerView.visibility = View.INVISIBLE
-                        binding.shimmerRecyclerView.stopShimmer()
-                        binding.recyclerView.apply {
-                            setHasFixedSize(true)
-                            layoutManager = LinearLayoutManager(context)
-                            homeAdapter = HomeAdapter(requireContext(), videos.data.items)
-                            homeAdapter.notifyDataSetChanged()
-                            adapter = homeAdapter
+                        binding.shimmerRecyclerView?.visibility = View.INVISIBLE
+                        binding.shimmerRecyclerView?.stopShimmer()
+                        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            binding.recyclerView?.apply {
+                                setHasFixedSize(true)
+                                layoutManager = LinearLayoutManager(context)
+                                homeAdapter = HomeAdapter(requireContext(), videos.data.items)
+                                homeAdapter.notifyDataSetChanged()
+                                adapter = homeAdapter
 
-                            val totalResults = videos.data.pageInfo?.totalResults!!
-                            val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
-                            val totalPages = totalResults.div(resultsPerPage).toInt()
+                                val totalResults = videos.data.pageInfo?.totalResults!!
+                                val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
+                                val totalPages = totalResults.div(resultsPerPage).toInt()
 
-                            dopamineSharedPreferences(
-                                requireContext()
-                            ).edit()
-                                .putString("pageToken", videos.data.nextPageToken)
-                                .putInt("totalPages", totalPages)
-                                .apply()
+                                dopamineSharedPreferences(
+                                    requireContext()
+                                ).edit()
+                                    .putString("pageToken", videos.data.nextPageToken)
+                                    .putInt("totalPages", totalPages)
+                                    .apply()
+                            }
+                        }else{
+                            binding.gridView?.apply {
+
+                                adapter = CustomGridAdapter(requireContext(), videos.data.items?.toMutableList())
+
+
+                                val totalResults = videos.data.pageInfo?.totalResults!!
+                                val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
+                                val totalPages = totalResults.div(resultsPerPage).toInt()
+
+                                dopamineSharedPreferences(
+                                    requireContext()
+                                ).edit()
+                                    .putString("pageToken", videos.data.nextPageToken)
+                                    .putInt("totalPages", totalPages)
+                                    .apply()
+                            }
                         }
                     }
 
@@ -413,17 +434,17 @@ class Home : Fragment() {
                                     homeViewModel.reGetVideos.observe(viewLifecycleOwner) { videos ->
                                         when (videos) {
                                             is YoutubeResource.Loading -> {
-                                                binding.shimmerRecyclerView.visibility =
+                                                binding.shimmerRecyclerView?.visibility =
                                                     View.VISIBLE
-                                                binding.shimmerRecyclerView.startShimmer()
+                                                binding.shimmerRecyclerView?.startShimmer()
                                                 Log.d(TAG, "Loading: True")
                                             }
 
                                             is YoutubeResource.Success -> {
-                                                binding.shimmerRecyclerView.visibility =
+                                                binding.shimmerRecyclerView?.visibility =
                                                     View.INVISIBLE
-                                                binding.shimmerRecyclerView.stopShimmer()
-                                                binding.recyclerView.apply {
+                                                binding.shimmerRecyclerView?.stopShimmer()
+                                                binding.recyclerView?.apply {
                                                     setHasFixedSize(true)
                                                     layoutManager = LinearLayoutManager(context)
                                                     homeAdapter =

@@ -64,6 +64,12 @@ const val PERMISSION_REQUEST_CODE = 100
     const val LIGHT_MODE = "light"
     const val DARK_MODE = "dark"
     const val SYSTEM_MODE = "system"
+    const val HOME = "home"
+    const val SEARCH = "search"
+    const val LIBRARY = "library"
+    const val USER = "user"
+    const val SHORTS = "shorts"
+    const val CURRENT_SCREEN = "currentScreen"
     val THEME = arrayOf(
         LIGHT_MODE,
         DARK_MODE,
