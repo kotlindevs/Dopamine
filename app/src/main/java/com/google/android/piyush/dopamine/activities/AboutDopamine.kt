@@ -28,6 +28,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDopamineBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.utilities.AboutAppViewModel
 import com.google.android.piyush.youtube.utilities.Photos
 import com.google.android.piyush.youtube.utilities.YoutubeResource
@@ -100,6 +101,27 @@ class AboutDopamine : AppCompatActivity() {
             startActivity(
                 Intent(this, DopamineYtSettings::class.java)
             )
+        }
+
+        val isLogin = dopamineSharedPreferences(applicationContext).getBoolean("rememberAdmin",false)
+        if(isLogin.equals(true)){
+            binding.topAppBar.menu.findItem(R.id.adminLogin).apply {
+                setIcon(
+                    R.drawable.admin_login
+                )
+            }
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.adminLogin -> {
+                    startActivity(
+                        Intent(this, Administrator::class.java)
+                    )
+                    true
+                }
+                else -> false
+            }
         }
     }
 }

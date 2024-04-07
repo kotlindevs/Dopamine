@@ -196,4 +196,5 @@
     <string name="view_all_playlists">View all playlists</string>
     <string name="manage_your_playlists">Manage your playlists</string>
     <string name="just_enable_this_feature_to_manage_your_playlists">Just enable this feature to manage your playlists</string>
+    <string name="admin_login">Admin Login</string>
 </resources>
