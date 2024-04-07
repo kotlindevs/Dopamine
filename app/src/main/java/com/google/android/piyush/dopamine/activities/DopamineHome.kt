@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
@@ -87,25 +88,25 @@ class DopamineHome : AppCompatActivity() {
 
         if(intent.getBooleanExtra("fromSettings",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }else if(intent.getBooleanExtra("userSignedIn",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }else if(intent.getBooleanExtra("userSignedOut",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }else if(intent.getBooleanExtra("userWantToSignIn",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }else if(intent.getBooleanExtra("fromPlaylistManager",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }else if(intent.getBooleanExtra("userDeleteAccount",false).equals(true)){
             defaultScreen(User())
-            binding.bottomNavigationView.selectedItemId = R.id.user
+            binding.bottomNavigationView?.selectedItemId = R.id.user
         }
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
+        binding.bottomNavigationView?.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     defaultScreen(Home())
@@ -122,8 +123,8 @@ class DopamineHome : AppCompatActivity() {
                                         oldNotifications.toSet()
                                     )
                                     if(newNotifications.isNotEmpty()) {
-                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home)
-                                            .apply {
+                                        binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
+                                            ?.apply {
                                                 number = newNotifications.size
                                                 isVisible = true
                                                 badgeGravity = BadgeDrawable.TOP_END
@@ -140,8 +141,8 @@ class DopamineHome : AppCompatActivity() {
                                     }
 
                                     if(newNotifications.isEmpty()){
-                                        binding.bottomNavigationView.getOrCreateBadge(R.id.home)
-                                            .apply {
+                                        binding.bottomNavigationView?.getOrCreateBadge(R.id.home)
+                                            ?.apply {
                                                 number = 0
                                                 isVisible = false
                                             }
@@ -226,6 +227,18 @@ class DopamineHome : AppCompatActivity() {
             ActivityCompat.requestPermissions(context as Activity, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
         }else {
             notificationManager.notify(0, notificationBuilder)
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            binding.bottomNavigationView?.visibility = android.view.View.GONE
+            binding.navigationRail?.visibility = android.view.View.VISIBLE
+        }else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            binding.bottomNavigationView?.visibility = android.view.View.VISIBLE
+            binding.navigationRail?.visibility = android.view.View.GONE
         }
     }
 

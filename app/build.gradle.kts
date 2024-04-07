@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.androidappupdatelibrary)
     implementation (libs.shortcutbadger)
     implementation(libs.firebase.database)
+    implementation("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

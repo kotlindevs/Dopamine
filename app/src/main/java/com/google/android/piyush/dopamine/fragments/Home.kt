@@ -1,7 +1,11 @@
 package com.google.android.piyush.dopamine.fragments
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.badge.ExperimentalBadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -34,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 import kotlin.system.exitProcess
 
+
 class Home : Fragment() {
 
     private var fragmentHomeBinding : FragmentHomeBinding? = null
@@ -50,6 +55,7 @@ class Home : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @OptIn(ExperimentalBadgeUtils::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,8 +66,6 @@ class Home : Fragment() {
         homeViewModelFactory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
         firebaseAuth = FirebaseAuth.getInstance()
-
-        fragmentHomeBinding!!.greeting.text = getGreeting()
 
         //User details
        /* Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
@@ -76,19 +80,34 @@ class Home : Fragment() {
         Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString()) */
 
         if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentHomeBinding!!.userImage)
+            Glide.with(requireContext())
+                .load(R.drawable.default_user)
+                .into(binding.imageView)
+            binding.topAppBar.subtitle = firebaseAuth.currentUser?.phoneNumber
         }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
+            Glide.with(requireContext())
+                .load(firebaseAuth.currentUser?.photoUrl)
+                .into(binding.imageView)
+            binding.topAppBar.subtitle = firebaseAuth.currentUser?.displayName
         }
 
-        fragmentHomeBinding!!.Notifications.setOnClickListener{
-            startActivity(
-                Intent(
-                    context,
-                    AppNotificationView::class.java
-                )
-            )
+        binding.topAppBar.title = getGreeting()
+        binding.topAppBar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.notification -> {
+                    startActivity(
+                        Intent(
+                            context,
+                            AppNotificationView::class.java
+                        )
+                    )
+                    true
+                }
+
+                else -> false
+            }
         }
+
 
         if(NetworkUtilities.isNetworkAvailable(context = requireContext())) {
             val notificationViewModel = NotificationViewModel()
@@ -104,12 +123,45 @@ class Home : Fragment() {
                                 oldNotifications.toSet()
                             )
                             if (newNotifications.isNotEmpty()) {
-                                BadgeUtils.attachBadgeDrawable(
-                                    BadgeDrawable.create(requireContext()).apply {
-                                        isVisible = true
-                                        badgeGravity = BadgeDrawable.TOP_END
-                                    }, binding.Notifications
-                                )
+                                binding.topAppBar.menu.findItem(R.id.notification).apply {
+                                    isVisible = true
+                                    setIcon(
+                                        R.drawable.unread_notification
+                                    )
+                                }
+                                TapTargetView.showFor(
+                                    requireActivity(),  // `this` is an Activity
+                                    TapTarget.forView(
+                                        binding.topAppBar.findViewById(R.id.notification)!!,
+                                        "This is a target",
+                                        "We have the best targets, believe me"
+                                    ) // All options below are optional
+                                        .outerCircleColor(R.color.md_theme_light_primaryContainer) // Specify a color for the outer circle
+                                        .outerCircleAlpha(0.96f) // Specify the alpha amount for the outer circle
+                                        .targetCircleColor(R.color.md_theme_light_primary) // Specify a color for the target circle
+                                        .titleTextSize(20) // Specify the size (in sp) of the title text
+                                        .titleTextColor(R.color.white) // Specify the color of the title text
+                                        .descriptionTextSize(10) // Specify the size (in sp) of the description text
+                                        .descriptionTextColor(androidx.appcompat.R.color.primary_material_light) // Specify the color of the description text
+                                        .textColor(com.dcastalia.localappupdate.R.color.primary_material_light) // Specify a color for both the title and description text
+                                        .textTypeface(Typeface.SANS_SERIF) // Specify a typeface for the text
+                                        .dimColor(R.color.black) // If set, will dim behind the view with 30% opacity of the given color
+                                        .drawShadow(true) // Whether to draw a drop shadow or not
+                                        .cancelable(false) // Whether tapping outside the outer circle dismisses the view
+                                        .tintTarget(true) // Whether to tint the target view's color
+                                        .transparentTarget(false) // Specify whether the target is transparent (displays the content underneath)
+                                        .icon(
+                                            resources.getDrawable(
+                                                R.drawable.unread_notification,
+                                                null
+                                            )
+                                        )
+                                        .targetRadius(60),
+                                    object : TapTargetView.Listener() {
+                                        override fun onTargetClick(view: TapTargetView) {
+                                            super.onTargetClick(view) // This call is optional
+                                        }
+                                    })
                             }
                         }
                     }
