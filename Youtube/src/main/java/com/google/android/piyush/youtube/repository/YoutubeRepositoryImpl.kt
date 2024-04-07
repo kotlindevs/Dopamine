@@ -13,14 +13,13 @@ import io.ktor.client.request.get
 class YoutubeRepositoryImpl : YoutubeRepository {
     override suspend fun getHomeVideos(): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("chart", YoutubeClient.CHART)
                 parameters.append("regionCode", YoutubeClient.REGION_CODE)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -28,13 +27,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getLibraryVideos(playListId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLIST
         ){
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -42,13 +40,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getSearchVideos(query: String): SearchTube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.SEARCH
         ){
             url {
                 parameters.append("part", YoutubeClient.SEARCH_PART)
                 parameters.append("q", query)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -63,12 +60,11 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getChannelDetails(channelId: String): YoutubeChannel {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.CHANNEL
         ){
             url {
                 parameters.append("part", YoutubeClient.CHANNEL_PART)
                 parameters.append("id", channelId)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -76,13 +72,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getChannelsPlaylists(channelId: String): ChannelPlaylists {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLISTS
         ) {
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("channelId", channelId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -90,13 +85,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getPlaylistVideos(playListId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLIST
             ){
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -104,12 +98,11 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     override suspend fun getVideoDetails(videoId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", videoId)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()
@@ -132,14 +125,13 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetHomeVideos() : Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("chart", YoutubeClient.CHART)
                 parameters.append("regionCode", YoutubeClient.REGION_CODE)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -147,13 +139,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetLibraryVideos(playListId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLIST
         ){
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key",YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -161,13 +152,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetSearchVideos(query: String): SearchTube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.SEARCH
         ){
             url {
                 parameters.append("part", YoutubeClient.SEARCH_PART)
                 parameters.append("q", query)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key",YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -175,12 +165,11 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetChannelDetails(channelId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.CHANNEL
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", channelId)
-                parameters.append("key", YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -188,13 +177,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetChannelsPlaylists(channelId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLISTS
         ) {
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("channelId", channelId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -202,13 +190,12 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetPlaylistVideos(playListId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.PLAYLIST
         ){
             url {
                 parameters.append("part", YoutubeClient.PLAYLIST_PART)
                 parameters.append("playlistId", playListId)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -216,12 +203,11 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun reGetVideoDetails(videoId: String): Youtube {
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("id", videoId)
-                parameters.append("key", YoutubeClient.EXTRA_KEYS)
             }
         }
         return response.body()
@@ -258,14 +244,13 @@ class YoutubeRepositoryImpl : YoutubeRepository {
 
     suspend fun experimentalRegionWiseVideos(regionCode: String): Youtube{
         val response = YoutubeClient.CLIENT.get(
-            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
         ){
             url {
                 parameters.append("part", YoutubeClient.PART)
                 parameters.append("chart", YoutubeClient.CHART)
                 parameters.append("regionCode", regionCode)
                 parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
-                parameters.append("key", YoutubeClient.API_KEY)
             }
         }
         return response.body()

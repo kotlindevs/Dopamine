@@ -25,6 +25,7 @@ import com.google.android.piyush.dopamine.viewModels.RealtimeResource
 import com.google.android.piyush.dopamine.viewModels.RealtimeViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.util.Calendar
 
 @Suppress("DEPRECATION")
 object NetworkUtilities {
@@ -187,7 +188,17 @@ const val PERMISSION_REQUEST_CODE = 100
         ZIMBABWE[1]
     )
 
+    fun getGreeting(): String {
+        val calendar = Calendar.getInstance()
+        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
 
+        return when (hourOfDay) {
+            in 6..11 -> "Good Morning"
+            in 12..17 -> "Good Afternoon"
+            in 18..23 -> "Good Evening"
+            else -> "Good Night"
+        }
+    }
 
     fun turnOnNetworkDialog(context: Context, message: String) = MaterialAlertDialogBuilder(context).also {
         it.setTitle("Network not detected")

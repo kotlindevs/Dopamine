@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -44,7 +43,6 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
-import me.leolin.shortcutbadger.ShortcutBadger
 
 class User : Fragment() {
 

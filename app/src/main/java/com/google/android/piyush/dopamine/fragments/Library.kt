@@ -14,9 +14,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
-import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentLibraryBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities.getGreeting
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.LibraryViewModel
@@ -57,11 +57,19 @@ class Library : Fragment() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentLibraryBinding!!.userImage)
+        if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
+            Glide.with(requireContext())
+                .load(R.drawable.default_user)
+                .into(binding.imageView)
+            binding.topAppBar.subtitle = firebaseAuth.currentUser?.phoneNumber
         }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentLibraryBinding!!.userImage)
+            Glide.with(requireContext())
+                .load(firebaseAuth.currentUser?.photoUrl)
+                .into(binding.imageView)
+            binding.topAppBar.subtitle = firebaseAuth.currentUser?.displayName
         }
+
+        binding.topAppBar.title = getGreeting()
 
         if(NetworkUtilities.isNetworkAvailable(requireContext())) {
             viewModel.codingVideos.observe(viewLifecycleOwner) { playListVideos ->
@@ -213,25 +221,6 @@ class Library : Fragment() {
                         binding.techVideosEffect.startShimmer()
                         binding.techVideosEffect.visibility = View.VISIBLE
                     }
-                }
-            }
-        }
-
-        databaseViewModel.getFavouritePlayList()
-
-        databaseViewModel.favouritePlayList.observe(viewLifecycleOwner){ yourFavouriteList ->
-            if(yourFavouriteList.isEmpty()){
-                fragmentLibraryBinding!!.yourFavouriteList.visibility = View.GONE
-                fragmentLibraryBinding!!.yourFavouriteEffect.visibility = View.VISIBLE
-                fragmentLibraryBinding!!.yourFavouriteEffect.startShimmer()
-            }else{
-                fragmentLibraryBinding!!.yourFavouriteList.visibility = View.VISIBLE
-                fragmentLibraryBinding!!.yourFavouriteEffect.stopShimmer()
-                fragmentLibraryBinding!!.yourFavouriteEffect.visibility = View.INVISIBLE
-                fragmentLibraryBinding!!.yourFavouriteList.apply {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    adapter = YourFavouriteVideosAdapter(requireContext(), yourFavouriteList)
                 }
             }
         }

@@ -44,14 +44,6 @@ object YoutubeClient {
 
     const val PRE_RELEASE = "https://api.npoint.io/255cbfc840e9bf199c9d"
 
-    val API_KEY = arrayListOf(
-        "AIzaSyDetnr3eHcdt6oqv_poZkrHB_T63cMRMsc","AIzaSyAx7uFZfxSppUJmY4ifXYirVEPB9pdUw2c","AIzaSyDaHGB5Z5nq29U46YGINN4Xjku3f-U8AIs"
-    ).random()
-
-    val EXTRA_KEYS = arrayListOf(
-        "AIzaSyDMQuMItUqW2QrSQUtLtCpKmdCfniKD1zE","AIzaSyCgLZsNdWFWuJb4GQvfS_HJvc5n7cV6Pyk","AIzaSyDthuStFPH6bdtsDBFHVm30wjprKKOd5b8"
-    ).random()
-
     val HIDDEN_CLIENT = "https://api.npoint.io/$SHORTS/"
 
     const val DEVELOPER = "https://api.npoint.io/a46779f358ad86851acb"

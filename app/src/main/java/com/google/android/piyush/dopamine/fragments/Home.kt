@@ -28,6 +28,7 @@ import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.Utilities.getGreeting
 import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.NotificationViewModel
@@ -35,7 +36,6 @@ import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
-import java.util.Calendar
 import kotlin.system.exitProcess
 
 
@@ -55,7 +55,7 @@ class Home : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint("UseCompatLoadingForDrawables", "NotifyDataSetChanged")
     @OptIn(ExperimentalBadgeUtils::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -129,7 +129,7 @@ class Home : Fragment() {
                                     )
                                 }
                                 val defaultTap = dopamineSharedPreferences(requireContext()).getBoolean("ExperimentalUserColor",true)
-                                if(defaultTap.equals(false)) {
+                                if(!defaultTap) {
                                     TapTargetView.showFor(
                                         requireActivity(),
                                         TapTarget.forView(
@@ -181,7 +181,7 @@ class Home : Fragment() {
 
 
         val regionPref = dopamineSharedPreferences(requireContext())
-        if(regionPref.getBoolean("saveRegion", false).equals(true)){
+        if(regionPref.getBoolean("saveRegion", false)){
             val code = regionPref.getString("region", "").toString()
             homeViewModel.getHomeVideos(
                 regionCode = code
@@ -387,7 +387,7 @@ class Home : Fragment() {
 
                                 val totalResults = videos.data.pageInfo?.totalResults!!
                                 val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
-                                val totalPages = totalResults.div(resultsPerPage).toInt()
+                                val totalPages = totalResults.div(resultsPerPage)
 
                                 dopamineSharedPreferences(
                                     requireContext()
@@ -404,7 +404,7 @@ class Home : Fragment() {
 
                                 val totalResults = videos.data.pageInfo?.totalResults!!
                                 val resultsPerPage = videos.data.pageInfo?.resultsPerPage!!
-                                val totalPages = totalResults.div(resultsPerPage).toInt()
+                                val totalPages = totalResults.div(resultsPerPage)
 
                                 dopamineSharedPreferences(
                                     requireContext()
@@ -485,17 +485,5 @@ class Home : Fragment() {
         super.onDestroyView()
         fragmentHomeBinding = null
         homeViewModel.videos.removeObservers(viewLifecycleOwner)
-    }
-
-    private fun getGreeting(): String {
-        val calendar = Calendar.getInstance()
-        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-
-        return when (hourOfDay) {
-            in 6..11 -> "Good Morning"
-            in 12..17 -> "Good Afternoon"
-            in 18..23 -> "Good Evening"
-            else -> "Good Night"
-        }
     }
 }

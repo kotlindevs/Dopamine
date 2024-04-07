@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_voice_search"
-        android:title="@string/voice_search"
+        android:id="@+id/searchVideos"
+        android:title="@string/search_videos"
+        android:icon="@drawable/new_mic_out"
         app:showAsAction="always"/>
 </menu>

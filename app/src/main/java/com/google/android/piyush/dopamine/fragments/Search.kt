@@ -11,12 +11,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -24,9 +24,12 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.SearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
+import com.google.android.piyush.dopamine.databinding.SearchWithVoiceBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.utilities.Utilities.getGreeting
+import com.google.android.piyush.dopamine.utilities.dopamineSharedPreferences
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
 import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -62,11 +65,40 @@ class Search : Fragment() {
         searchViewModel = ViewModelProvider(this, searchViewModelFactory)[SearchViewModel::class.java]
         databaseViewModel = DatabaseViewModel(context?.applicationContext!!)
 
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentSearchBinding!!.userImage)
-        }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentSearchBinding!!.userImage)
+        fragmentSearchBinding?.imageView?.let {
+            if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
+                Glide.with(requireContext())
+                    .load(R.drawable.default_user)
+                    .into(it)
+                binding.topAppBar.subtitle = firebaseAuth.currentUser?.phoneNumber
+            }else{
+                Glide.with(requireContext())
+                    .load(firebaseAuth.currentUser?.photoUrl)
+                    .into(it)
+                binding.topAppBar.subtitle = firebaseAuth.currentUser?.displayName
+            }
         }
+
+        fragmentSearchBinding?.topAppBar?.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.searchVideos -> {
+                    val searchSheet = SearchSheet()
+                    searchSheet.show(childFragmentManager, searchSheet.tag)
+                    val permissionGranted = dopamineSharedPreferences(requireContext()).getBoolean("permissionGranted", false)
+                    if(permissionGranted){
+                        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Something 😊")
+                        startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.topAppBar.title = getGreeting()
 
         binding.clearAll.setOnClickListener {
             binding.utilList.visibility = View.GONE
@@ -99,106 +131,78 @@ class Search : Fragment() {
             Log.d(TAG, " -> Fragment : Search || Search History : $it")
         }
 
-        binding.searchVideo.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    binding.utilList.visibility = View.VISIBLE
-                    binding.searchEffect.visibility = View.INVISIBLE
-                    databaseViewModel.insertSearchVideos(
-                        EntityVideoSearch(
-                            Random.nextInt(1, 100000),
-                            query
-                        )
-                    )
+        val search = binding.searchVideo.text.toString()
 
-                    if(NetworkUtilities.isNetworkAvailable(requireContext())) {
-                        searchViewModel.searchVideos(query!!)
+        binding.searchLayout.setEndIconOnClickListener {
+            binding.utilList.visibility = View.VISIBLE
+            binding.searchEffect.visibility = View.INVISIBLE
+            databaseViewModel.insertSearchVideos(
+                EntityVideoSearch(
+                    Random.nextInt(1, 100000),
+                    search
+                )
+            )
 
-                        searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
-                            when (searchVideos) {
-                                is YoutubeResource.Loading -> {
-                                    binding.utilList.visibility = View.GONE
-                                }
+            if(NetworkUtilities.isNetworkAvailable(requireContext())) {
+                searchViewModel.searchVideos(search)
 
-                                is YoutubeResource.Success -> {
-                                    binding.utilList.apply {
-                                        layoutManager = LinearLayoutManager(context)
-                                        visibility = View.VISIBLE
-                                        adapter = SearchAdapter(context!!, searchVideos.data)
-                                    }
-                                }
+                searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
+                    when (searchVideos) {
+                        is YoutubeResource.Loading -> {
+                            binding.utilList.visibility = View.GONE
+                        }
 
-                                is YoutubeResource.Error -> {
-                                    //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
-                                    MaterialAlertDialogBuilder(context!!)
-                                        .apply {
-                                            this.setTitle("Oops!")
-                                            this.setMessage("Oh no! Something went wrong. Please try again.")
-                                            this.setIcon(R.drawable.ic_dialog_error)
-                                            this.setCancelable(false)
-                                            this.setNegativeButton("Cancel") { dialog, _ ->
-                                                dialog?.dismiss()
-                                            }
-                                            this.setPositiveButton("Retry") { _, _ ->
-                                                searchViewModel.reSearchVideos(query)
-                                                searchViewModel.reGetSearchVideos.observe(
-                                                    viewLifecycleOwner
-                                                ) { searchVideos ->
-                                                    when (searchVideos) {
-                                                        is YoutubeResource.Loading -> {}
-                                                        is YoutubeResource.Success -> {
-                                                            binding.utilList.apply {
-                                                                layoutManager =
-                                                                    LinearLayoutManager(context)
-                                                                visibility = View.VISIBLE
-                                                                adapter = SearchAdapter(
-                                                                    context!!,
-                                                                    searchVideos.data
-                                                                )
-                                                            }
-                                                        }
-                                                        is YoutubeResource.Error -> {}
-                                                    }
-                                                }
-                                            }.create().show()
-                                        }
-
-                                }
+                        is YoutubeResource.Success -> {
+                            binding.utilList.apply {
+                                layoutManager = LinearLayoutManager(context)
+                                visibility = View.VISIBLE
+                                adapter = SearchAdapter(requireContext(), searchVideos.data)
                             }
                         }
-                    }else{
-                        Utilities.turnOnNetworkDialog(
-                            requireContext(),
-                            "search videos in your application"
-                        )
+
+                        is YoutubeResource.Error -> {
+                            //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
+                            MaterialAlertDialogBuilder(requireContext())
+                                .apply {
+                                    this.setTitle("Oops!")
+                                    this.setMessage("Oh no! Something went wrong. Please try again.")
+                                    this.setIcon(R.drawable.ic_dialog_error)
+                                    this.setCancelable(false)
+                                    this.setNegativeButton("Cancel") { dialog, _ ->
+                                        dialog?.dismiss()
+                                    }
+                                    this.setPositiveButton("Retry") { _, _ ->
+                                        searchViewModel.reSearchVideos(search)
+                                        searchViewModel.reGetSearchVideos.observe(
+                                            viewLifecycleOwner
+                                        ) { searchVideos ->
+                                            when (searchVideos) {
+                                                is YoutubeResource.Loading -> {}
+                                                is YoutubeResource.Success -> {
+                                                    binding.utilList.apply {
+                                                        layoutManager =
+                                                            LinearLayoutManager(context)
+                                                        visibility = View.VISIBLE
+                                                        adapter = SearchAdapter(
+                                                            requireContext(),
+                                                            searchVideos.data
+                                                        )
+                                                    }
+                                                }
+                                                is YoutubeResource.Error -> {}
+                                            }
+                                        }
+                                    }.create().show()
+                                }
+
+                        }
                     }
-                    return true
                 }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            }
-        )
-
-        binding.voiceSearch.setOnClickListener {
-            if(
-                ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_GRANTED
-            ){
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.RECORD_AUDIO),
-                    Utilities.PERMISSION_REQUEST_CODE
-                )
             }else{
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
-                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
+                Utilities.turnOnNetworkDialog(
+                    requireContext(),
+                    "search videos in your application"
+                )
             }
         }
     }
@@ -233,8 +237,7 @@ class Search : Fragment() {
 
         if(requestCode == Utilities.PERMISSION_REQUEST_CODE && resultCode == RESULT_OK){
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            fragmentSearchBinding!!.searchVideo.setQuery(result?.get(0), true)
-            Log.d(TAG, " -> Fragment : Search || User Voice Search : ${result?.get(0)}")
+            fragmentSearchBinding?.searchVideo?.setText(result?.get(0))
         }
     }
 
@@ -242,5 +245,90 @@ class Search : Fragment() {
         super.onDestroyView()
         fragmentSearchBinding = null
         searchViewModel.searchVideos.removeObservers(viewLifecycleOwner)
+    }
+}
+
+class SearchSheet : BottomSheetDialogFragment() {
+
+    private var searchSheetBinding : SearchWithVoiceBinding? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.search_with_voice, container, false)
+
+    @Suppress("DEPRECATION")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val binding = SearchWithVoiceBinding.bind(view)
+        searchSheetBinding = binding
+
+        binding.continueToSearch.setOnClickListener {
+            if(
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.RECORD_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    Utilities.PERMISSION_REQUEST_CODE
+                )
+            }else{
+                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Something 😊")
+                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
+                dopamineSharedPreferences(requireContext()).edit().putBoolean("permissionGranted", true).apply()
+            }
+        }
+
+        binding.notNow.setOnClickListener {
+            this.dismiss()
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
+                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "super.onActivityResult(requestCode, resultCode, data)",
+        "androidx.fragment.app.Fragment")
+    )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == Utilities.PERMISSION_REQUEST_CODE && resultCode == RESULT_OK){
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            dopamineSharedPreferences(requireContext()).edit().putString("searchData", result?.get(0)).apply()
+            this.dismiss()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchSheetBinding = null
     }
 }

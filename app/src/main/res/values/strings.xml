@@ -197,4 +197,10 @@
     <string name="manage_your_playlists">Manage your playlists</string>
     <string name="just_enable_this_feature_to_manage_your_playlists">Just enable this feature to manage your playlists</string>
     <string name="admin_login">Admin Login</string>
+    <string name="search_videos">Search Videos</string>
+    <string name="search_something">Search something...</string>
+    <string name="continue_to_search">Continue to search</string>
+    <string name="not_now">Not now</string>
+    <string name="new_faster_ways_to_search_on_dopamine">New! Ways to search on dopamine</string>
+    <string name="to_get_search_videos_channel_and_many_more_using_your_vice_allow_dopamine_to_record_audio">To get search videos, channel and many more data using your voice, please allow dopamine to record audio</string>
 </resources>
