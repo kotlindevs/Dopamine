@@ -13,7 +13,6 @@ Dopamine is an unofficial YouTube clone that aims to replicate the functionality
 
 <table>
   <tr>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/1.jpg?raw=true" alt="project-screenshot" width="180" height="300"></td>
     <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/2.jpg?raw=true" alt="project-screenshot" width="180" height="300"></td>
     <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/3.jpg?raw=true" alt="project-screenshot" width="180" height="300"></td>
     <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/4.jpg?raw=true" alt="project-screenshot" width="180" height="300"></td>
