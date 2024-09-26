@@ -11,25 +11,40 @@ Dopamine is an unofficial YouTube clone that aims to replicate the functionality
 
 ## Screenshots
 
+<style>
+  table {
+    width: 100%;
+    table-layout: fixed;
+  }
+  td {
+    width: 12.5%; /* 100% divided by 8 columns */
+  }
+  img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+  }
+</style>
+
 <table>
   <tr>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/2.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/3.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/4.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/5.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/6.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/7.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/8.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/1.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/2.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/3.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/4.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/5.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/6.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/7.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/8.jpg?raw=true" alt="project-screenshot"></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/9.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/10.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/11.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/12.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/13.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/14.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/15.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
-    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/16.jpg?raw=true" alt="project-screenshot" width="200" height="300"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/9.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/10.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/11.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/12.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/13.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/14.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/15.jpg?raw=true" alt="project-screenshot"></td>
+    <td><img src="https://github.com/kotlindevs/Dopamine/blob/Stable/app/16.jpg?raw=true" alt="project-screenshot"></td>
   </tr>
 </table>
 
