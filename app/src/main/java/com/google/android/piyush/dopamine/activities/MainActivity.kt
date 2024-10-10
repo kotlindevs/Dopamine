@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback {
             if(!backPressed){
-                showToast(context = applicationContext,"Press Back Again To Exit")
+                showToast(context = applicationContext,"Press Again To Exit")
                 backPressed = true
             }else{
                 @Suppress("DEPRECATION")
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }else{
                 Snackbar.make(
-                    binding.main, "Something went wrong", Snackbar.LENGTH_SHORT
+                    binding.main, "Something Went Wrong", Snackbar.LENGTH_SHORT
                 ).show()
             }
         }
