@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.0"
+agp = "8.7.2"
 androidappupdatelibrary = "1.0.4"
 exomedia = "5.1.0"
 kotlin = "1.9.23"
