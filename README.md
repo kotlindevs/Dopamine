@@ -1,6 +1,6 @@
 # Dopamine (Unofficial YouTube Clone)
 
-Dopamine is an unofficial YouTube clone that aims to replicate the functionality and features of the popular video-sharing platform. Users can upload, view, like, and comment on videos, as well as subscribe to channels and create playlists.
+Dopamine is an unofficial YouTube clone that aims to replicate the functionality and features of the popular video-sharing platform.
 
 ## Authors
 🌊 [Rajat_Kevat](https://kotlindevs.github.io)
