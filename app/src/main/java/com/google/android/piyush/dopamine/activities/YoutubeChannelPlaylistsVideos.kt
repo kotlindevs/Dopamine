@@ -13,12 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.YoutubePlaylistsVideosAdapter
-import com.google.android.piyush.dopamine.databinding.ActivityYoutubeChannelBinding
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubeChannelPlaylistsVideosBinding
 import com.google.android.piyush.dopamine.viewModels.YoutubeChannelPlaylistsVideosViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubeChannelPlaylistsViewModelFactory
-import com.google.android.piyush.dopamine.viewModels.YoutubeChannelViewModel
-import com.google.android.piyush.dopamine.viewModels.YoutubeChannelViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer

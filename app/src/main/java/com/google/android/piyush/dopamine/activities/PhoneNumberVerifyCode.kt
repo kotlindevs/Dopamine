@@ -12,7 +12,6 @@ import com.google.android.piyush.dopamine.authentication.Status
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModel
 import com.google.android.piyush.dopamine.authentication.viewModel.UserAuthViewModelFactory
-import com.google.android.piyush.dopamine.databinding.ActivityPhoneNumberAuthenticationBinding
 import com.google.android.piyush.dopamine.databinding.ActivityPhoneNumberVerifyCodeBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 

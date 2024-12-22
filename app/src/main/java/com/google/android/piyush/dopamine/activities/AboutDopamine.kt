@@ -19,12 +19,9 @@ import com.bumptech.glide.Glide
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.FullScreenCarouselStrategy
-import com.google.android.material.carousel.HeroCarouselStrategy
-import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDopamineBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.youtube.utilities.Developer
 import com.google.android.piyush.youtube.utilities.Photos
 import kotlin.random.Random
 
