@@ -164,18 +164,18 @@ class YoutubePlayer : AppCompatActivity() {
                     val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
                     val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
                     val videoDuration = videoDetails.data.items?.get(0)?.contentDetails?.duration
-                    val videoKind = videoDetails.data.items?.get(0)?.kind
+                    //val videoKind = videoDetails.data.items?.get(0)?.kind
                     val videoPublishedAt = videoDetails.data.items?.get(0)?.snippet?.publishedAt
                     val channelTitle = videoDetails.data.items?.get(0)?.snippet?.channelTitle
                     val videoUrl = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
                     val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
                     val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
-                    val videoTags = videoDetails.data.items?.get(0)?.snippet?.tags.toString()
+                    //val videoTags = videoDetails.data.items?.get(0)?.snippet?.tags.toString()
 
                     binding.apply {
                         textTitle.text  = videoTitle
-                        textKind.text   = videoKind
-                        textTags.text   = videoTags
+                        //textKind.text   = videoKind
+                        //textTags.text   = videoTags
                         videoLink.text  = videoUrl
                         textLiked.text  = videoLikes
                         textView.text   = videoViews
@@ -349,13 +349,13 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
         }
 
         if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
-            if(databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth).equals(false)){
+            if(!databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth)){
                 databaseViewModel.userFromPhoneAuth()
             }else{
                 Log.d(TAG, "${databaseViewModel.isUserFromPhoneAuth} : Exists")
             }
         }else {
-            if (databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName).equals(false)) {
+            if (!databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName)) {
                 databaseViewModel.defaultUserPlaylist()
             } else {
                 Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
@@ -370,5 +370,6 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
             )
         }
         return view
+
     }
 }

@@ -64,16 +64,18 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:scrollbars="none"
-        android:overScrollMode="ifContentScrolls"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/YtPlayerLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/yt_des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/secondContainer"
                 style="@style/Widget.Material3.CardView.Filled"
@@ -88,7 +90,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraint"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textTitle"
@@ -99,56 +101,43 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="4dp"
                         android:fontFamily="@font/circular_spotify"
-                        android:text="Video Title"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toTopOf="@id/textKind"
+                        android:text="@string/video_title"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/textKind"
+                        android:id="@+id/textDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="4dp"
-                        android:fontFamily="@font/proxima_nova"
-                        android:text="Video Kind"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toTopOf="@id/textTags"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textTitle" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/textTags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/proxima_nova"
-                        android:text="Video Tags"
-                        android:textSize="14sp"
+                        android:maxLines="5"
+                        android:text="@string/video_title"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textKind" />
+                        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-                android:gravity="center"
-                android:orientation="horizontal"
                 android:id="@+id/fourthContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/secondContainer">
+                app:layout_constraintTop_toBottomOf="@+id/secondContainer"
+                tools:ignore="RtlHardcoded">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/materialCardView3"
@@ -177,12 +166,15 @@
                             android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="12dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/circular_spotify"
                             android:maxLines="2"
                             android:text="@string/video_view"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/view_video_eye"
@@ -221,12 +213,15 @@
                             android:id="@+id/textLiked"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="12dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/circular_spotify"
                             android:maxLines="2"
                             android:text="@string/like"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
@@ -243,8 +238,8 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/materialCardView3"
                     app:layout_constraintStart_toEndOf="@+id/materialCardView2"
@@ -267,10 +262,13 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="12dp"
                             android:fontFamily="@font/circular_spotify"
                             android:text="@string/pip"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/pip_img"
@@ -283,10 +281,12 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/video_link_button"
                 style="@style/Widget.Material3.CardView.Filled"
-                android:backgroundTint="?attr/colorSecondaryContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="?attr/colorSecondaryContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fourthContainer">
@@ -306,9 +306,9 @@
                         android:fontFamily="@font/circular_spotify"
                         android:gravity="center"
                         android:maxLines="2"
-                        android:text="Video Link"
+                        android:text="@string/video_link"
                         android:textColor="?attr/colorControlActivated"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/copy_video_link"
                         app:layout_constraintStart_toStartOf="parent"
@@ -324,43 +324,22 @@
                         android:text="@string/copy"
                         app:icon="@drawable/ic_copy_text"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        tools:ignore="PrivateResource" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/thirdContainer"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:backgroundTint="?attr/colorTertiaryContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/video_link_button">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:fontFamily="@font/proxima_nova"
-                    android:maxLines="10"
-                    android:text="Video Description"
-                    android:textSize="14sp" />
-            </com.google.android.material.card.MaterialCardView>
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView"
-                android:layout_width="92dp"
-                android:layout_height="92dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/thirdContainer"
+                app:layout_constraintTop_toBottomOf="@id/video_link_button"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -368,9 +347,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="0dp"
                 android:fontFamily="@font/circular_spotify"
-                android:text="Channel Name"
+                android:text="@string/channel_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/imageView"
@@ -383,7 +362,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/proxima_nova"
-                android:text="Custom Url"
+                android:text="@string/custom_url"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@id/imageView"
                 app:layout_constraintTop_toBottomOf="@id/text1" />
@@ -395,7 +374,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/proxima_nova"
-                android:text="Channel Subscribers"
+                android:text="@string/channel_description"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@id/imageView"
                 app:layout_constraintTop_toBottomOf="@id/text2" />
@@ -407,8 +386,8 @@
                 android:layout_margin="12dp"
                 android:fontFamily="@font/proxima_nova"
                 android:maxLines="3"
-                android:text="Channel Description"
-                android:textSize="14sp"
+                android:text="@string/channel_description"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageView" />
@@ -420,13 +399,10 @@
                 android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text4"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@id/text4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
