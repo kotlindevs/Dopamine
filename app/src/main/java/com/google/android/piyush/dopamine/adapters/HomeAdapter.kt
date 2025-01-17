@@ -1,6 +1,5 @@
 package com.google.android.piyush.dopamine.adapters
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Build

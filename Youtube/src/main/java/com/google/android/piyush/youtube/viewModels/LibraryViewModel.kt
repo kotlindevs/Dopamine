@@ -170,6 +170,7 @@ class LibraryViewModel(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class LibraryViewModelFactory(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory{

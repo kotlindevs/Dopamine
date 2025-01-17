@@ -59,7 +59,7 @@ class CustomPlayListVAdapter(
     }
 
     private fun getString(name: String): String {
-        if(name.isNullOrEmpty()){
+        if(name.isEmpty()){
             return "🧿"
         }else{
             var initials = ""

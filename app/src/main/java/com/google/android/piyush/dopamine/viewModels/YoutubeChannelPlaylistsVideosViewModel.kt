@@ -43,6 +43,7 @@ class YoutubeChannelPlaylistsVideosViewModel(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class YoutubeChannelPlaylistsViewModelFactory(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory {

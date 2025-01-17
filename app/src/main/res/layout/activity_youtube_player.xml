@@ -278,59 +278,7 @@
 
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/video_link_button"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="?attr/colorSecondaryContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fourthContainer">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/video_link"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_margin="8dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="4dp"
-                        android:fontFamily="@font/circular_spotify"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:text="@string/video_link"
-                        android:textColor="?attr/colorControlActivated"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/copy_video_link"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/copy_video_link"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="8dp"
-                        android:fontFamily="@font/circular_spotify"
-                        android:text="@string/copy"
-                        app:icon="@drawable/ic_copy_text"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="PrivateResource" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView"
@@ -339,7 +287,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/video_link_button"
+                app:layout_constraintTop_toBottomOf="@id/fourthContainer"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium" />
 
             <com.google.android.material.textview.MaterialTextView

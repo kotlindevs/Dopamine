@@ -88,6 +88,7 @@ class HomeViewModel(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class HomeViewModelFactory(
     private val repository: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory {

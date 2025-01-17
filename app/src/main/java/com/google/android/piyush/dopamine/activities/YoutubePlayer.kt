@@ -1,7 +1,5 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.ContentValues.TAG
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -11,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -164,30 +161,17 @@ class YoutubePlayer : AppCompatActivity() {
                     val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
                     val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
                     val videoDuration = videoDetails.data.items?.get(0)?.contentDetails?.duration
-                    //val videoKind = videoDetails.data.items?.get(0)?.kind
                     val videoPublishedAt = videoDetails.data.items?.get(0)?.snippet?.publishedAt
                     val channelTitle = videoDetails.data.items?.get(0)?.snippet?.channelTitle
-                    val videoUrl = "https://YouTube.com/watch?v=${intent.getStringExtra("videoId")}"
                     val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
                     val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
-                    //val videoTags = videoDetails.data.items?.get(0)?.snippet?.tags.toString()
 
                     binding.apply {
                         textTitle.text  = videoTitle
-                        //textKind.text   = videoKind
-                        //textTags.text   = videoTags
-                        videoLink.text  = videoUrl
                         textLiked.text  = videoLikes
                         textView.text   = videoViews
                         textDescription.text = videoDescription
 
-                        copyVideoLink.setOnClickListener {
-                            val clipboardManager =
-                                getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                            val clipData = ClipData.newPlainText("Text Copied", videoLink.text)
-                            clipboardManager.setPrimaryClip(clipData)
-                            Toast.makeText(applicationContext, "Copied", Toast.LENGTH_SHORT).show()
-                        }
                         addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
                             if (isFavourite == 1) {
                                 databaseViewModel.insertFavouriteVideos(

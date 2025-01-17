@@ -3,8 +3,6 @@ package com.google.android.piyush.dopamine.activities
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -56,7 +56,7 @@ class AboutDopamine : AppCompatActivity() {
                 Intent(
                     Intent.ACTION_VIEW,
                 ).apply {
-                    data = Uri.parse(Utilities.GITHUB)
+                    data = Utilities.GITHUB.toUri()
                 }
             )
         }
@@ -66,7 +66,7 @@ class AboutDopamine : AppCompatActivity() {
                 Intent(
                     Intent.ACTION_SENDTO,
                 ).apply {
-                    data = Uri.parse("mailto:")
+                    data = "mailto:".toUri()
                     putExtra(Intent.EXTRA_EMAIL, arrayOf(Utilities.EMAIL, Utilities.EMAIL1))
                     putExtra(Intent.EXTRA_SUBJECT, Utilities.PROJECT_VERSION)
                 }
@@ -102,7 +102,8 @@ class AboutDopamineRecyclerViewAdapter(val context: Context, private val imageLi
 
     override fun onBindViewHolder(holder: RCHolder, position: Int) {
         Glide.with(context).load(imageList[position]).into(holder.image)
-        holder.image.background = ColorDrawable(Color.rgb(Random.nextInt(256),Random.nextInt(256),Random.nextInt(256)))
+        holder.image.background =
+            Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256)).toDrawable()
     }
 }
 

@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -15,7 +12,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.authentication.SignInResult
 import com.google.android.piyush.dopamine.authentication.User
-import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
 import com.google.android.piyush.dopamine.authentication.utilities.PhoneNumberAuth
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
+import androidx.core.content.edit
 
 class UserAuthRepositoryImpl(
     private val context: Context
@@ -94,16 +91,6 @@ class UserAuthRepositoryImpl(
         }
     }
 
-    suspend fun signOut() {
-        try {
-            oneTapClient.signOut().await()
-            auth.signOut()
-        } catch(e: Exception) {
-            e.printStackTrace()
-            if(e is CancellationException) throw e
-        }
-    }
-
     override suspend fun sendVerificationCode(phoneNumber: String): PhoneNumberAuth<Unit> {
         return try {
             val options = PhoneAuthOptions.newBuilder(firebaseAuth)
@@ -126,7 +113,12 @@ class UserAuthRepositoryImpl(
                         ) {
                             super.onCodeSent(p0, p1)
                             verificationId = p0
-                            sharedPreferences.edit().putString("storedVerificationId", verificationId).apply()
+                            sharedPreferences.edit {
+                                putString(
+                                    "storedVerificationId",
+                                    verificationId
+                                )
+                            }
                             Toast.makeText(context, "Code Sent", Toast.LENGTH_SHORT).show()
                         }
                     }

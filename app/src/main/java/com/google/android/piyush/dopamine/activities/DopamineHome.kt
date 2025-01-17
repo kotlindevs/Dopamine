@@ -11,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
-import com.google.android.piyush.dopamine.fragments.ExperimentalSearch
 import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.fragments.Library
 import com.google.android.piyush.dopamine.fragments.Search
@@ -71,11 +70,7 @@ class DopamineHome : AppCompatActivity() {
                     true
                 }
                 R.id.search -> {
-                    if(getSharedPreferences("DopamineApp", MODE_PRIVATE).getBoolean("ExperimentalSearch", false)){
-                        defaultScreen(ExperimentalSearch())
-                    }else{
-                        defaultScreen(Search())
-                    }
+                    defaultScreen(Search())
                     true
                 }
                 R.id.library -> {

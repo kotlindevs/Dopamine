@@ -1,12 +1,7 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,12 +13,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.dcastalia.localappupdate.DownloadApk
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,7 +29,6 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.firebase.auth.FirebaseAuth
-import kotlin.system.exitProcess
 
 class DopamineUserProfile : AppCompatActivity() {
 
@@ -60,15 +52,13 @@ class DopamineUserProfile : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.useExpSearch.isChecked = sharedPreferences.getBoolean("ExperimentalSearch", false)
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
-        binding.applyForPreReleaseUpdate.isChecked = sharedPreferences.getBoolean("PreReleaseUpdate", false)
 
         onBackPressedDispatcher.addCallback {
             startActivity(Intent(this@DopamineUserProfile, DopamineHome::class.java))
         }
 
-        if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
+        if(NetworkUtilities.isNetworkAvailable(context = this)) {
             dopamineVersionViewModel = DopamineVersionViewModel()
             if (firebaseAuth.currentUser?.email.isNullOrEmpty()) {
                 Glide.with(this).load(R.drawable.default_user).into(binding.userImage)
@@ -93,7 +83,7 @@ class DopamineUserProfile : AppCompatActivity() {
         }
 
         val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
-        if (preReleaseUpdates.equals(true)) {
+        if (preReleaseUpdates) {
             dopamineVersionViewModel.preReleaseUpdate()
             dopamineVersionViewModel.preRelease.observe(this@DopamineUserProfile) {
                 if (it is YoutubeResource.Success) {
@@ -103,15 +93,13 @@ class DopamineUserProfile : AppCompatActivity() {
                         apply()
                     }
                     if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
-                        createDefaultNotification(
-                            applicationContext,
-                            it.data.versionName.toString()
-                        )
+                        Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }else {
-            if (NetworkUtilities.isNetworkAvailable(applicationContext).equals(true)) {
+            if (
+                NetworkUtilities.isNetworkAvailable(applicationContext)) {
                 dopamineVersionViewModel.update.observe(this) { update ->
                     when (update) {
                         is YoutubeResource.Loading -> {}
@@ -122,10 +110,7 @@ class DopamineUserProfile : AppCompatActivity() {
                                 apply()
                             }
                             if (update.data.versionName != Utilities.PROJECT_VERSION) {
-                                createDefaultNotification(
-                                    applicationContext,
-                                    update.data.versionName.toString()
-                                )
+                                Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
                             }
                         }
 
@@ -186,37 +171,9 @@ class DopamineUserProfile : AppCompatActivity() {
             }
         }
 
-        binding.useExpSearch.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked.equals(true)){
-                sharedPreferences.edit().putBoolean("ExperimentalSearch", true).apply()
-            }else{
-                sharedPreferences.edit().putBoolean("ExperimentalSearch", false).apply()
-            }
-        }
-
-        binding.applyForPreReleaseUpdate.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
-                MaterialAlertDialogBuilder(this).apply {
-                    this.setTitle("Thanks for your interest !")
-                    this.setMessage("You are now successfully registered for pre-release update. once you upgrade the app, you will be able to use pre-release feature but you wants to restart the app after you can upgrade it !")
-                    this.setIcon(R.drawable.ic_info)
-                    this.setCancelable(true)
-                    this.setPositiveButton("Restart 🐬") { _, _ ->
-                        exitProcess(0)
-                    }
-                }.create().show()
-                sharedPreferences.edit().putBoolean("PreReleaseUpdate", true).apply()
-            }else{
-                sharedPreferences.edit().putBoolean("PreReleaseUpdate", false).apply()
-                Snackbar.make(
-                    binding.main,"Application rollback feature is currently unavailable",Snackbar.LENGTH_LONG
-                ).show()
-            }
-        }
-
         binding.useExpDynamicUser.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked.equals(true)){
-                sharedPreferences.edit().putBoolean("ExperimentalUserColor", true).apply()
+            if(isChecked){
+                sharedPreferences.edit { putBoolean("ExperimentalUserColor", true) }
                 MaterialAlertDialogBuilder(this).apply {
                     this.setTitle("NOTICE")
                     this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
@@ -227,7 +184,7 @@ class DopamineUserProfile : AppCompatActivity() {
                     }
                 }.create().show()
             }else{
-                sharedPreferences.edit().putBoolean("ExperimentalUserColor", false).apply()
+                sharedPreferences.edit { putBoolean("ExperimentalUserColor", false) }
                 MaterialAlertDialogBuilder(this).apply {
                     this.setTitle("NOTICE")
                     this.setMessage("This feature is currently available in android 12 or above users but you need to restart the app to apply this feature ")
@@ -237,48 +194,6 @@ class DopamineUserProfile : AppCompatActivity() {
                         dialog?.dismiss()
                     }
                 }.create().show()
-            }
-        }
-
-        binding.checkForUpdate.setOnClickListener {
-            if(NetworkUtilities.isNetworkAvailable(context = this).equals(true)) {
-                if(sharedPreferences.getBoolean("PreReleaseUpdate", false).equals(true)) {
-                    if (sharedPreferences.getString("PreReleaseVersion" , "") == Utilities.PRE_RELEASE_VERSION) {
-                        MaterialAlertDialogBuilder(this).apply {
-                            this.setTitle("Congratulations !")
-                            this.setMessage("You are already using the latest pre-release version of Dopamine. Thank you for your interest❤️")
-                            this.setIcon(R.drawable.ic_alert)
-                            this.setCancelable(true)
-                            this.setPositiveButton("Got it !") { dialog, _ ->
-                                dialog?.dismiss()
-                            }
-                        }.create().show()
-                    } else {
-                       DownloadApk(this@DopamineUserProfile).apply {
-                            startDownloadingApk(sharedPreferences.getString("PreReleaseUrl", "")!!)
-                       }
-                    }
-                }else{
-                    if (sharedPreferences.getString("Version", "") == Utilities.PROJECT_VERSION) {
-                        MaterialAlertDialogBuilder(this).apply {
-                            this.setTitle("Wow ! 🫡")
-                            this.setMessage("You are already using the latest version of Dopamine . Happy Coding :) ")
-                            this.setIcon(R.drawable.ic_alert)
-                            this.setCancelable(true)
-                            this.setPositiveButton("Okay") { dialog, _ ->
-                                dialog?.dismiss()
-                            }
-                        }.create().show()
-                    } else {
-                        DownloadApk(this@DopamineUserProfile).apply {
-                            startDownloadingApk(sharedPreferences.getString("Url", "")!!)
-                        }
-                    }
-                }
-            }else{
-                Snackbar.make(
-                    binding.main,"Please check your internet connection",Snackbar.LENGTH_LONG
-                ).show()
             }
         }
 
@@ -295,17 +210,17 @@ class DopamineUserProfile : AppCompatActivity() {
                 ) { dialog, which ->
                     when(which){
                         0 -> {
-                            sharedPreferences.edit().putString("Theme", Utilities.LIGHT_MODE).apply()
+                            sharedPreferences.edit { putString("Theme", Utilities.LIGHT_MODE) }
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                             dialog.dismiss()
                         }
                         1 -> {
-                            sharedPreferences.edit().putString("Theme", Utilities.DARK_MODE).apply()
+                            sharedPreferences.edit { putString("Theme", Utilities.DARK_MODE) }
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                             dialog.dismiss()
                         }
                         2 -> {
-                            sharedPreferences.edit().putString("Theme", Utilities.SYSTEM_MODE).apply()
+                            sharedPreferences.edit { putString("Theme", Utilities.SYSTEM_MODE) }
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                             dialog.dismiss()
                         }
@@ -317,50 +232,6 @@ class DopamineUserProfile : AppCompatActivity() {
 
         binding.cardView4.setOnClickListener{
             AboutUs(context = this).create().show()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun createDefaultNotification(
-        context: Context, content: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "dopamineUpdateChannel",
-                "Update Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val updateApp: PendingIntent =
-            PendingIntent.getActivity(this, 0, Intent(
-                this,
-                DopamineUserProfile::class.java
-            ), PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationBuilder = NotificationCompat.Builder(context, "dopamineUpdateChannel")
-            .setContentTitle(title)
-            .setContentText(content)
-            .setSmallIcon(R.drawable.ic_update)
-            .setAutoCancel(true)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setOnlyAlertOnce(true)
-            .addAction(
-                R.drawable.ic_update,
-                "Update",
-                updateApp
-            )
-
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-            ){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),0)
-        }else {
-            notificationManager.notify(0, notificationBuilder.build())
         }
     }
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.piyush.dopamine.activities.YoutubeChannel
 import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl

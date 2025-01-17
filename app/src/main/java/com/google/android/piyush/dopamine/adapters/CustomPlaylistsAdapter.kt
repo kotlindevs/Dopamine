@@ -49,21 +49,17 @@ class CustomPlaylistsAdapter(
         Log.d(TAG, "videoId : $isVideoAlreadyAdded || playlistName : $playlistName")
         Log.d(TAG, "currentPlaylists : ${databaseViewModel.getPlaylistsFromDatabase()}")
 
-        if(playlistName.isNullOrEmpty()) {
+        if(playlistName.isEmpty()) {
             Log.d(TAG, "playlistName : $playlistName")
         }else{
-            if (isVideoAlreadyAdded.equals(true)) {
-                holder.selectedPlaylistItem.isChecked = true
-            }else{
-                holder.selectedPlaylistItem.isChecked = false
-            }
+            holder.selectedPlaylistItem.isChecked = isVideoAlreadyAdded == true
         }
 
         holder.title.text = playlists?.get(position)?.playListName
         holder.description.text = playlists?.get(position)?.playListDescription
         holder.selectedPlaylistItem.addOnCheckedStateChangedListener { _, isChecked ->
             if(isChecked == 1){
-                if(isVideoAlreadyAdded.equals(false)){
+                if(!isVideoAlreadyAdded){
                     databaseViewModel.addItemsInCustomPlaylist(
                         playlistName,
                         playlistsData = CustomPlaylists(
@@ -81,7 +77,7 @@ class CustomPlaylistsAdapter(
                 }
                 ToastUtilities.showToast(context, "Successfully added to playlist :)")
             }else{
-                if(isVideoAlreadyAdded.equals(true)){
+                if(isVideoAlreadyAdded){
                     Log.d(TAG, "videoId : $videoId || playlistName : $playlistName")
                     databaseViewModel.deleteVideoFromPlaylist(
                         playlistName,

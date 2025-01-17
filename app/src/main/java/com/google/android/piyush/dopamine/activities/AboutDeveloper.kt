@@ -1,11 +1,12 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ import com.google.android.piyush.youtube.utilities.YoutubeResource
 class AboutDeveloper : AppCompatActivity() {
     private lateinit var binding: ActivityAboutDeveloperBinding
     private lateinit var developersViewModel: DevelopersViewModel
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -105,7 +107,7 @@ class AboutDeveloper : AppCompatActivity() {
                                                     Intent(
                                                         Intent.ACTION_SENDTO,
                                                     ).apply {
-                                                        data = Uri.parse("mailto:")
+                                                        data = "mailto:".toUri()
                                                         putExtra(Intent.EXTRA_EMAIL, arrayOf(dev.userEmail))
                                                         putExtra(Intent.EXTRA_SUBJECT, Utilities.PROJECT_VERSION)
                                                     }

@@ -39,8 +39,6 @@ object ToastUtilities {
 
 object Utilities {
 const val PERMISSION_REQUEST_CODE = 100
-    const val PROCESS_ID = "MyDlProcess"
-    const val PROJECT_ID = "com.google.android.piyush.dopamine"
     const val RELEASE_DATE = "07/04/2024"
     const val PROJECT_VERSION = "dopamine_20240704_01.phone.stable.dynamic"
     const val PRE_RELEASE_VERSION = "dopamine_20242003_01.phone.prerelease.dynamic"

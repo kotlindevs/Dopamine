@@ -4,9 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.youtube.model.SearchTube
-import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import kotlinx.coroutines.launch
@@ -67,6 +65,7 @@ class SearchViewModel(
 }
 
 
+@Suppress("UNCHECKED_CAST")
 class SearchViewModelFactory(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory {

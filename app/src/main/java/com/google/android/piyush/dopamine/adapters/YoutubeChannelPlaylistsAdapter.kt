@@ -9,8 +9,6 @@ import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubeChannelPlaylistsVideos
 import com.google.android.piyush.dopamine.viewHolders.YoutubeChannelPlaylistsViewHolder
-import com.google.android.piyush.youtube.model.SearchTube
-import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 
 class YoutubeChannelPlaylistsAdapter(

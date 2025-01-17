@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.dopamine.authentication.SignInResult
 import com.google.android.piyush.dopamine.authentication.SignInState
-import com.google.android.piyush.dopamine.authentication.utilities.GoogleAuth
-import com.google.android.piyush.dopamine.authentication.utilities.PhoneNumberAuth
-import com.google.android.piyush.dopamine.authentication.User
 import com.google.android.piyush.dopamine.authentication.repository.UserAuthRepositoryImpl
+import com.google.android.piyush.dopamine.authentication.utilities.PhoneNumberAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

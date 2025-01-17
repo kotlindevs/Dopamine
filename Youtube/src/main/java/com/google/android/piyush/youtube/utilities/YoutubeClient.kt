@@ -119,7 +119,7 @@ data class DopamineVersion(
     val changelog : String? = null
 )
 
-class DopamineVersionViewModel() : ViewModel() {
+class DopamineVersionViewModel : ViewModel() {
     private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
     val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
 

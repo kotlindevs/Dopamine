@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.piyush.youtube.model.Youtube
 import com.google.android.piyush.youtube.model.channelDetails.YoutubeChannel
 import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -87,6 +86,7 @@ class YoutubeChannelViewModel(
 }
 
 
+@Suppress("UNCHECKED_CAST")
 class YoutubeChannelViewModelFactory(
     private val youtubeRepositoryImpl: YoutubeRepositoryImpl
 ) : ViewModelProvider.Factory{

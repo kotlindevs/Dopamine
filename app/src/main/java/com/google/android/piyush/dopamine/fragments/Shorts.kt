@@ -36,9 +36,9 @@ class Shorts : Fragment() {
         shortsFragmentBinding = binding
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         shortsViewModelFactory = ShortsViewModelFactory(youtubeRepositoryImpl)
-        shortsViewModel = ViewModelProvider(this, shortsViewModelFactory).get(ShortsViewModel::class.java)
+        shortsViewModel = ViewModelProvider(this, shortsViewModelFactory)[ShortsViewModel::class.java]
 
-        if(NetworkUtilities.isNetworkAvailable(requireContext()).equals(true)){
+        if(NetworkUtilities.isNetworkAvailable(requireContext())){
             shortsViewModel.shorts.observe(viewLifecycleOwner){ shorts ->
                 when(shorts){
                     is YoutubeResource.Loading -> {}
