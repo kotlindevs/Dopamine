@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         userViewModelFactory = UserAuthViewModelFactory(userRepository)
         userViewModel = ViewModelProvider(this, userViewModelFactory)[UserAuthViewModel::class.java]
         setContentView(binding.root)
+        
+
 
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -45,6 +48,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.phoneSignIn!!.setOnClickListener{
+            Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
+        }
+
+
 
         onBackPressedDispatcher.addCallback {
             if(!backPressed){

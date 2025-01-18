@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -20,35 +20,65 @@
         app:layout_constraintVertical_bias="0.5">
 
         <com.airbnb.lottie.LottieAnimationView
-            app:lottie_rawRes="@raw/auth"
-            app:lottie_loop="true"
-            app:lottie_autoPlay="true"
+            android:id="@+id/lottieAnimationView2"
             android:layout_width="256dp"
             android:layout_height="256dp"
-            android:layout_marginBottom="16dp"/>
+            app:layout_constraintBottom_toTopOf="@+id/materialTextView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/auth" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:gravity="center"
-            android:fontFamily="@font/circular_spotify"
-            android:textSize="32sp"
-            android:text="Stream Any Video \n Ad-Free on Dopamine"
+            android:id="@+id/materialTextView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="48dp"/>
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="64dp"
+            android:fontFamily="@font/circular_spotify"
+            android:gravity="center"
+            android:text="Stream All Premium Features Of YouTube :)"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toTopOf="@+id/phoneSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/phoneSignIn"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:drawableLeft="@drawable/phone"
+            android:fontFamily="@font/gotham"
+            android:paddingLeft="12dp"
+            android:text="Login with Mobile"
+            app:layout_constraintBottom_toTopOf="@+id/googleSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/googleSignIn"
-            android:drawableLeft="@drawable/ic_google"
-            android:paddingLeft="12dp"
-            android:fontFamily="@font/gotham"
-            android:text="Continue with Google"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_marginStart="34dp"
-            android:layout_marginEnd="34dp"
-            android:layout_marginBottom="6dp"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:drawableLeft="@drawable/ic_google"
+            android:fontFamily="@font/gotham"
+            android:paddingLeft="12dp"
+            android:text="Continue with Google"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

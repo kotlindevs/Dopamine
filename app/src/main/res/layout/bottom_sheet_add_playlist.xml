@@ -26,7 +26,7 @@
             android:layout_margin="8dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/playlist"
+            app:lottie_rawRes="@raw/auth"
             android:layout_width="256dp"
             android:layout_height="256dp"/>
 

@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:name=".beta.DopamineApp"
+        android:name=".DopamineApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -50,12 +50,6 @@
             android:exported="true" />
         <activity
             android:name=".activities.DopamineUserProfile"
-            android:exported="true" />
-        <activity
-            android:name=".activities.PhoneNumberVerifyCode"
-            android:exported="true" />
-        <activity
-            android:name=".activities.PhoneNumberAuthentication"
             android:exported="true" />
         <activity
             android:name=".activities.DopamineHome"

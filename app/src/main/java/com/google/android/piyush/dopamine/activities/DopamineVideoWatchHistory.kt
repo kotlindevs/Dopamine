@@ -45,8 +45,7 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
                 binding.clearWatchHistory.visibility = android.view.View.GONE
                 binding.lottieAnimationView.apply {
                     visibility = android.view.View.VISIBLE
-                    setAnimation(R.raw.no_data)
-                    @Suppress("DEPRECATION")
+                    setAnimation(R.raw.auth)
                     loop(true)
                 }
             }
@@ -64,7 +63,7 @@ class DopamineVideoWatchHistory : AppCompatActivity() {
             binding.clearWatchHistory.visibility = android.view.View.GONE
             binding.lottieAnimationView.apply {
                 visibility = android.view.View.VISIBLE
-                setAnimation(R.raw.no_data)
+                setAnimation(R.raw.auth)
                 @Suppress("DEPRECATION")
                 loop(true)
                 playAnimation()

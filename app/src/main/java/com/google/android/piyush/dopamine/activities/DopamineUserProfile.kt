@@ -1,9 +1,14 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.StatFs
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +58,11 @@ class DopamineUserProfile : AppCompatActivity() {
             insets
         }
         binding.useExpDynamicUser.isChecked = sharedPreferences.getBoolean("ExperimentalUserColor", false)
+        val storageInfo = getStorageInfo()
+        val ramInfo = getRAMInfo()
+        binding.deviceStorageInfoTxt.text = storageInfo
+        binding.deviceRamInfoTxt.text = ramInfo
+
 
         onBackPressedDispatcher.addCallback {
             startActivity(Intent(this@DopamineUserProfile, DopamineHome::class.java))
@@ -232,6 +242,54 @@ class DopamineUserProfile : AppCompatActivity() {
 
         binding.cardView4.setOnClickListener{
             AboutUs(context = this).create().show()
+        }
+    }
+
+    private fun getStorageInfo(): String {
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            val path = Environment.getExternalStorageDirectory().absolutePath
+            val statFs = StatFs(path)
+
+            val blockSize = statFs.blockSizeLong
+            val totalBlocks = statFs.blockCountLong
+            val availableBlocks = statFs.availableBlocksLong
+
+            val totalStorage = formatSize(blockSize * totalBlocks)
+            val availableStorage = formatSize(blockSize * availableBlocks)
+            val usedStorage = formatSize(blockSize * (totalBlocks - availableBlocks))
+
+            return "\n Total Storage: $totalStorage\n\n Used Storage: $usedStorage\n\n Available Storage: $availableStorage \n"
+        } else {
+            return "External storage is not available."
+        }
+
+    }
+
+    private fun getRAMInfo(): String {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memoryInfo)
+
+        val totalMemory = memoryInfo.totalMem
+        val availableMemory = memoryInfo.availMem
+        val usedMemory = totalMemory - availableMemory
+
+        return "\nTotal RAM: ${formatSize(totalMemory)}\n\n" +
+                "Used RAM: ${formatSize(usedMemory)}\n\n" +
+                "Available RAM: ${formatSize(availableMemory)} \n"
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun formatSize(size: Long): String {
+        val kb = 1024L
+        val mb = kb * 1024
+        val gb = mb * 1024
+
+        return when {
+            size >= gb -> String.format("%.2f GB", size.toDouble() / gb)
+            size >= mb -> String.format("%.2f MB", size.toDouble() / mb)
+            size >= kb -> String.format("%.2f KB", size.toDouble() / kb)
+            else -> String.format("%d bytes", size)
         }
     }
 

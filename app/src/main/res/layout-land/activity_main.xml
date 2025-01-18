@@ -36,7 +36,7 @@
             android:gravity="center"
             android:fontFamily="@font/circular_spotify"
             android:textSize="32sp"
-            android:text="@string/stream_any_video_n_ad_free_on_dopamine"
+            android:text="Stream All Premium \n Features Of YouTube :)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -44,11 +44,28 @@
             android:layout_marginEnd="16dp"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/phoneSignIn"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:drawableLeft="@drawable/phone"
+            android:fontFamily="@font/gotham"
+            android:paddingLeft="12dp"
+            android:text="Login with Mobile"
+            app:layout_constraintBottom_toTopOf="@+id/googleSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/googleSignIn"
             app:icon="@drawable/ic_google"
             android:fontFamily="@font/gotham"
             android:text="@string/continue_with_google"
-            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_marginStart="34dp"
             android:layout_marginEnd="34dp"
             android:layout_marginBottom="8dp"

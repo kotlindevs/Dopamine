@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit
 class CustomPlaylistsVDataAdapter(
     private val playlists: List<CustomPlaylists>,
     private val context: Context
-) : RecyclerView.Adapter<CustomPlaylistsVDataHolder>(){
+) : RecyclerView.Adapter<CustomPlaylistsVDataHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomPlaylistsVDataHolder {
         return CustomPlaylistsVDataHolder(
             LayoutInflater.from(context).inflate(R.layout.item_fragment_home, parent, false)
@@ -34,50 +34,52 @@ class CustomPlaylistsVDataAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CustomPlaylistsVDataHolder, position: Int) {
-        val publishedTime = formatDuration(
-            ChronoUnit.SECONDS.between(
-                LocalDateTime.parse(
-                    playlists[position].publishedAt, DateTimeFormatter.ISO_DATE_TIME),
-                LocalDateTime.now()
-            )
-        )
-        val publishedViews = playlists[position].viewCount
+        val playlist = playlists[position]
 
-        val channelTitle = "${
-            playlists[position].channelTitle
-        } • $publishedViews • $publishedTime"
+        // Safely parse the published time, handling potential null or empty strings
+        val publishedTime = parseDate(playlist.publishedAt)?.let {
+            formatDuration(ChronoUnit.SECONDS.between(it, LocalDateTime.now()))
+        } ?: ""
 
-        holder.videoTitle.text = playlists[position].title
+        val publishedViews = playlist.viewCount
 
+        val channelTitle = "${playlist.channelTitle} • $publishedViews • $publishedTime"
+
+        holder.videoTitle.text = playlist.title
         holder.channelTitle.text = channelTitle
 
-        holder.videoDuration.text = formatDuration(
-            Duration.parse(
-                playlists[position].duration
-            )
-        )
+        // Safely parse the duration, handling potential empty strings
+        val videoDuration = try {
+            formatDuration(Duration.parse(playlist.duration))
+        } catch (e: Exception) {
+            ""
+        }
+
+        holder.videoDuration.text = videoDuration
 
         Glide.with(context)
-            .load(playlists[position].thumbnail)
+            .load(playlist.thumbnail)
             .into(holder.imageView)
 
         Glide.with(context)
-            .load(playlists[position].thumbnail)
+            .load(playlist.thumbnail)
             .into(holder.youTubePlayerView)
 
         holder.youTubePlayer.setOnClickListener {
-            if(NetworkUtilities.isNetworkAvailable(context)) {
+            if (NetworkUtilities.isNetworkAvailable(context)) {
                 context.startActivity(
-                    Intent(context, YoutubePlayer::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("videoId", playlists[position].videoId)
-                        .putExtra("channelId", playlists[position].channelId)
+                    Intent(context, YoutubePlayer::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        putExtra("videoId", playlist.videoId)
+                        putExtra("channelId", playlist.channelId)
+                    }
                 )
-            }else{
+            } else {
                 NetworkUtilities.showNetworkError(context)
             }
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun formatDuration(duration: Duration): String {
         val hours = duration.toHours()
@@ -101,6 +103,18 @@ class CustomPlaylistsVDataAdapter(
             hours > 0 -> "$hours hours ago"
             minutes > 0 -> "$minutes minutes ago"
             else -> "$secondsRemaining seconds"
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun parseDate(dateString: String?): LocalDateTime? {
+        if (dateString.isNullOrEmpty()) {
+            return null
+        }
+        return try {
+            LocalDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME)
+        } catch (e: Exception){
+            null
         }
     }
 }

@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/clear_all"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/no_data" />
+        app:lottie_rawRes="@raw/auth" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/utilList"
