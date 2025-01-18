@@ -3,39 +3,27 @@ package com.google.android.piyush.dopamine.authentication.repository
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.authentication.SignInResult
 import com.google.android.piyush.dopamine.authentication.User
-import com.google.android.piyush.dopamine.authentication.utilities.PhoneNumberAuth
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.TimeUnit
-import androidx.core.content.edit
 
 class UserAuthRepositoryImpl(
     private val context: Context
-) : UserAuthRepository {
+) {
 
     private val oneTapClient: SignInClient = Identity.getSignInClient(context)
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val activity: AppCompatActivity = context as AppCompatActivity
-    private var verificationId : String? = null
-    private val sharedPreferences = context.getSharedPreferences("verificationId", Context.MODE_PRIVATE)
     private val auth = Firebase.auth
 
     private fun buildSignInRequest(): BeginSignInRequest {
@@ -88,67 +76,6 @@ class UserAuthRepositoryImpl(
                 userData = null,
                 errorMessage = e.message
             )
-        }
-    }
-
-    override suspend fun sendVerificationCode(phoneNumber: String): PhoneNumberAuth<Unit> {
-        return try {
-            val options = PhoneAuthOptions.newBuilder(firebaseAuth)
-                .setPhoneNumber(phoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(activity)
-                .setCallbacks(
-                    object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
-                        override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-                            Toast.makeText(context, "Verification Completed", Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onVerificationFailed(p0: FirebaseException) {
-                            Toast.makeText(context, p0.message.toString(), Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onCodeSent(
-                            p0: String,
-                            p1: PhoneAuthProvider.ForceResendingToken
-                        ) {
-                            super.onCodeSent(p0, p1)
-                            verificationId = p0
-                            sharedPreferences.edit {
-                                putString(
-                                    "storedVerificationId",
-                                    verificationId
-                                )
-                            }
-                            Toast.makeText(context, "Code Sent", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                ).build()
-            PhoneAuthProvider.verifyPhoneNumber(options)
-            PhoneNumberAuth.success(Unit)
-        }catch (e : Exception){
-            PhoneNumberAuth.error(e.localizedMessage ?: "Unknown Error", null)
-        }
-    }
-
-    override suspend fun verifyCode(code: String): PhoneNumberAuth<Unit> {
-        return try {
-            val storedVerificationId = sharedPreferences.getString("storedVerificationId", null)
-            if(verificationId == null){
-                verificationId = storedVerificationId
-            }
-            val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-            firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener (activity){
-                    if(it.isSuccessful){
-                        context.startActivity(Intent(context, DopamineHome::class.java))
-                    }else{
-                        PhoneNumberAuth.error(it.exception?.message.toString(), null)
-                        Toast.makeText(context, it.exception?.message.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            PhoneNumberAuth.success(Unit)
-        }catch (e : Exception){
-            PhoneNumberAuth.error("Verification ID Null " + e.message.toString(), null)
         }
     }
 

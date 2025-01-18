@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.google.android.piyush.dopamine" />
-                  <option name="mobileSdkAppId" value="1:328744831606:android:6f646b1e0b3bd3a5c76d57" />
-                  <option name="projectId" value="ytdopamine" />
-                  <option name="projectNumber" value="328744831606" />
+                  <option name="mobileSdkAppId" value="1:929480757734:android:09164c78fc362b32388627" />
+                  <option name="projectId" value="kotlinprojects-cr7" />
+                  <option name="projectNumber" value="929480757734" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

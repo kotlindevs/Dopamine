@@ -118,13 +118,5 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-
-        binding.noAuth?.setOnClickListener{
-            startActivity(Intent(this@MainActivity, DopamineHome::class.java))
-        }
-
-        binding.phoneNumberLogin.setOnClickListener{
-            startActivity(Intent(applicationContext, PhoneNumberAuthentication::class.java))
-        }
     }
 }
