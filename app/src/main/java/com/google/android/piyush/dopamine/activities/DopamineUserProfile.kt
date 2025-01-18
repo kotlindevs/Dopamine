@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,19 @@ class DopamineUserProfile : AppCompatActivity() {
         binding.deviceStorageInfoTxt.text = storageInfo
         binding.deviceRamInfoTxt.text = ramInfo
 
+        binding.deviceStorage.setOnClickListener{
+            val intentStorage = Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)
+            startActivity(intentStorage)
+        }
+
+        binding.deviceRam.setOnClickListener{
+            val intentStorage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                Intent(Settings.ACTION_ADVANCED_MEMORY_PROTECTION_SETTINGS)
+            } else {
+                TODO("VERSION.SDK_INT < UPSIDE_DOWN_CAKE")
+            }
+            startActivity(intentStorage)
+        }
 
         onBackPressedDispatcher.addCallback {
             startActivity(Intent(this@DopamineUserProfile, DopamineHome::class.java))
