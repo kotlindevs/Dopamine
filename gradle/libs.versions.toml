@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.3"
+agp = "8.8.0"
 exomedia = "5.1.0"
 kotlin = "1.9.23"
 googleGmsGoogleServices = "4.4.1"
