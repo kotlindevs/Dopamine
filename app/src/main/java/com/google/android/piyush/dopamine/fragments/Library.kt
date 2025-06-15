@@ -1,21 +1,17 @@
 package com.google.android.piyush.dopamine.fragments
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.CustomPlayListVAdapter
 import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.adapters.YourFavouriteVideosAdapter
@@ -25,7 +21,6 @@ import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.LibraryViewModel
 import com.google.android.piyush.youtube.viewModels.LibraryViewModelFactory
-import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -37,7 +32,6 @@ class Library : Fragment() {
     private lateinit var viewModel : LibraryViewModel
     private lateinit var viewModelProviderFactory: LibraryViewModelFactory
     private lateinit var databaseViewModel: DatabaseViewModel
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var libraryAdapter: LibraryAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,22 +52,6 @@ class Library : Fragment() {
             this,
             viewModelProviderFactory
         )[LibraryViewModel::class.java]
-
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentLibraryBinding!!.userImage)
-        }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentLibraryBinding!!.userImage)
-        }
-
-        fragmentLibraryBinding!!.userImage.setOnClickListener {
-            Toast.makeText(context,firebaseAuth.currentUser!!.displayName,
-                Toast.LENGTH_SHORT).show()
-            startActivity(
-                Intent(context, DopamineUserProfile::class.java)
-            )
-        }
 
         if(NetworkUtilities.isNetworkAvailable(requireContext())) {
             viewModel.codingVideos.observe(viewLifecycleOwner) { playListVideos ->

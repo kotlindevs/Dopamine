@@ -32,13 +32,11 @@ import com.google.android.piyush.dopamine.viewModels.SearchViewModel
 import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
-import com.google.firebase.auth.FirebaseAuth
 import java.util.Locale
 import kotlin.random.Random
 
 class Search : Fragment() {
     private var fragmentSearchBinding: FragmentSearchBinding? = null
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var youtubeRepositoryImpl: YoutubeRepositoryImpl
@@ -57,17 +55,10 @@ class Search : Fragment() {
 
         val binding = FragmentSearchBinding.bind(view)
         fragmentSearchBinding = binding
-        firebaseAuth = FirebaseAuth.getInstance()
         youtubeRepositoryImpl = YoutubeRepositoryImpl()
         searchViewModelFactory = SearchViewModelFactory(youtubeRepositoryImpl)
         searchViewModel = ViewModelProvider(this, searchViewModelFactory)[SearchViewModel::class.java]
         databaseViewModel = DatabaseViewModel(context?.applicationContext!!)
-
-        if(firebaseAuth.currentUser?.email.toString().isEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentSearchBinding!!.userImage)
-        }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentSearchBinding!!.userImage)
-        }
 
         fragmentSearchBinding!!.userImage.setOnClickListener {
             startActivity(

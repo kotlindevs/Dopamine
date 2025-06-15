@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.google.android.piyush.youtube"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24

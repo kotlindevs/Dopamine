@@ -14,7 +14,6 @@ import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.model.CustomPlaylistView
 import com.google.android.piyush.database.model.CustomPlaylists
 import com.google.android.piyush.database.repository.DopamineDatabaseRepository
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(
@@ -23,7 +22,6 @@ class DatabaseViewModel(
 
     private val dopamineDatabaseRepository : DopamineDatabaseRepository
     private val database = DopamineDatabase.getDatabase(context).openHelper
-    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     private val _searchVideoHistory = MutableLiveData<List<EntityVideoSearch>>()
     val searchVideoHistory : LiveData<List<EntityVideoSearch>> = _searchVideoHistory
@@ -139,9 +137,9 @@ class DatabaseViewModel(
         writableDatabase.execSQL(query)
     }
 
-    private val usersFavoritePlayListName = currentUser?.displayName+" Favorites"
+    private val usersFavoritePlayListName =  "Favorites"
     val newPlaylistName = stringify(usersFavoritePlayListName)
-    val isUserFromPhoneAuth = currentUser?.uid.toString()
+    val isUserFromPhoneAuth = "Favorites"
 
     fun defaultUserPlaylist() {
         val usersFavoritePlayListDescription =  "Your favorites playlist can be found in library"

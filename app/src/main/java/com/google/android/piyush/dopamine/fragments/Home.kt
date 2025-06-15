@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
@@ -22,7 +21,6 @@ import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
 import com.google.android.piyush.youtube.viewModels.HomeViewModel
 import com.google.android.piyush.youtube.viewModels.HomeViewModelFactory
-import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 import kotlin.system.exitProcess
 
@@ -32,7 +30,6 @@ class Home : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var repository: YoutubeRepositoryImpl
     private lateinit var homeViewModelFactory: HomeViewModelFactory
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var homeAdapter: HomeAdapter
 
     override fun onCreateView(
@@ -50,28 +47,9 @@ class Home : Fragment() {
         repository = YoutubeRepositoryImpl()
         homeViewModelFactory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
-        firebaseAuth = FirebaseAuth.getInstance()
 
         fragmentHomeBinding!!.greeting.text = getGreeting()
         Log.d(TAG, " -> Fragment : Home || Greeting : ${getGreeting()}")
-
-        //User details
-        Log.d(TAG, "User Name  : " +firebaseAuth.currentUser?.displayName.toString())
-        Log.d(TAG, "User Email : " +firebaseAuth.currentUser?.email.toString())
-        Log.d(TAG, "User Photo : " +firebaseAuth.currentUser?.photoUrl.toString())
-        Log.d(TAG, "User Uid   : " +firebaseAuth.currentUser?.uid.toString())
-        Log.d(TAG, "User PhoneNumber : "  +firebaseAuth.currentUser?.phoneNumber.toString())
-        Log.d(TAG, "User ProviderId : "+firebaseAuth.currentUser?.providerId.toString())
-        Log.d(TAG, "IsUserAnonymous : "+firebaseAuth.currentUser?.isAnonymous.toString())
-        Log.d(TAG, "IsUserEmailVerified : "+firebaseAuth.currentUser?.isEmailVerified.toString())
-        Log.d(TAG, "User ProviderData : "+firebaseAuth.currentUser?.providerData.toString())
-        Log.d(TAG, "User Metadata : "+firebaseAuth.currentUser?.metadata.toString())
-
-        if(firebaseAuth.currentUser?.email.isNullOrEmpty()){
-            Glide.with(this).load(R.drawable.default_user).into(fragmentHomeBinding!!.userImage)
-        }else{
-            Glide.with(this).load(firebaseAuth.currentUser?.photoUrl).into(fragmentHomeBinding!!.userImage)
-        }
 
         fragmentHomeBinding!!.watchHistory.setOnClickListener {
             startActivity(

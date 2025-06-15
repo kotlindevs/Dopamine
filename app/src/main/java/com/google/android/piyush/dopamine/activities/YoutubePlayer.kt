@@ -34,7 +34,6 @@ import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResource
-import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -330,20 +329,6 @@ class MyBottomSheetFragment : BottomSheetDialogFragment(){
         createNewPlaylist.setOnClickListener {
             val customDialog = CustomDialog(requireContext())
             customDialog.show()
-        }
-
-        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
-            if(!databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth)){
-                databaseViewModel.userFromPhoneAuth()
-            }else{
-                Log.d(TAG, "${databaseViewModel.isUserFromPhoneAuth} : Exists")
-            }
-        }else {
-            if (!databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName)) {
-                databaseViewModel.defaultUserPlaylist()
-            } else {
-                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
-            }
         }
 
         customPlaylists.apply {
