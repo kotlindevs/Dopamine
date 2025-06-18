@@ -13,12 +13,12 @@ import com.google.android.piyush.dopamine.adapters.LibraryAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
 import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.youtube.viewModels.HomeViewModel
+import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
 
 class Trending : Fragment() {
 
     private var binding : FragmentTrendingBinding? = null
-    private val viewModel : HomeViewModel by activityViewModels<HomeViewModel>()
+    private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
     private val trendingTabs = mutableListOf<String>()
     private lateinit var libraryAdapter: LibraryAdapter
 

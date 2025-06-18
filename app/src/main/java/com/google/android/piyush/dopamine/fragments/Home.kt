@@ -11,12 +11,12 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.youtube.viewModels.HomeViewModel
+import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
 
 class Home : Fragment() {
 
     private var binding : FragmentHomeBinding? = null
-    private val viewModel : HomeViewModel by viewModels<HomeViewModel>()
+    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
     private lateinit var adapter : HomeAdapter
 
     override fun onCreateView(

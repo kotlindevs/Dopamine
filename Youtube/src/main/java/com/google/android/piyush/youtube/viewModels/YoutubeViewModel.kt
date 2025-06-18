@@ -10,7 +10,7 @@ import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import kotlinx.coroutines.launch
 
-class HomeViewModel() : ViewModel() {
+class YoutubeViewModel() : ViewModel() {
 
     private val repository : YoutubeRepositoryImpl = YoutubeRepositoryImpl()
 

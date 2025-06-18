@@ -12,36 +12,25 @@ import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.piyush.database.entities.EntityFavouritePlaylist
-import com.google.android.piyush.database.entities.EntityRecentVideos
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
-import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
-import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
-import java.text.DecimalFormat
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 @Suppress("DEPRECATION")
 class YoutubePlayer : AppCompatActivity() {
@@ -148,167 +137,6 @@ class YoutubePlayer : AppCompatActivity() {
 
         val videoId = intent?.getStringExtra("videoId").toString()
         val channelId = intent?.getStringExtra("channelId").toString()
-
-        youtubePlayerViewModel.getVideoDetails(videoId)
-
-        youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
-            when (videoDetails) {
-                is YoutubeResponse.Loading -> {}
-
-                is YoutubeResponse.Success -> {
-                    val videoTitle = videoDetails.data.items?.get(0)?.snippet?.title
-                    val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
-                    val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
-                    val videoDuration = videoDetails.data.items?.get(0)?.contentDetails?.duration
-                    val videoPublishedAt = videoDetails.data.items?.get(0)?.snippet?.publishedAt
-                    val channelTitle = videoDetails.data.items?.get(0)?.snippet?.channelTitle
-                    val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
-                    val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
-
-                    binding.apply {
-                        textTitle.text  = videoTitle
-                        textLiked.text  = videoLikes
-                        textView.text   = videoViews
-                        textDescription.text = videoDescription
-
-                        addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
-                            if (isFavourite == 1) {
-                                databaseViewModel.insertFavouriteVideos(
-                                    EntityFavouritePlaylist(
-                                        videoId = videoId,
-                                        thumbnail = videoThumbnail,
-                                        title = videoTitle,
-                                        channelId = channelId,
-                                        channelTitle = channelTitle
-                                    )
-                                )
-                            } else {
-                                databaseViewModel.deleteFavouriteVideo(
-                                    videoId = videoId
-                                )
-                            }
-                        }
-                    }
-                    databaseViewModel.isRecentVideo(videoId = videoId)
-
-                    databaseViewModel.isRecent.observe(this) {
-                        if (it == videoId) {
-                            databaseViewModel.updateRecentVideo(
-                                videoId = videoId,
-                                time = LocalTime.now()
-                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString())
-                        } else {
-                            databaseViewModel.insertRecentVideos(
-                                EntityRecentVideos(
-                                    id = Random.nextInt(1, 100000),
-                                    videoId = videoId,
-                                    thumbnail = videoThumbnail,
-                                    title = videoTitle,
-                                    timing = LocalTime.now()
-                                        .format(DateTimeFormatter.ofPattern("hh:mm a"))
-                                        .toString(),
-                                    channelId = channelId
-                                )
-                            )
-                        }
-                    }
-
-                    getSharedPreferences("customPlaylist", MODE_PRIVATE).edit {
-                        putString("videoId", videoId)
-                        putString("thumbnail", videoThumbnail)
-                        putString("title", videoTitle)
-                        putString("channelId", channelId)
-                        putString("channelTitle", channelTitle)
-                        putString("viewCount", videoViews)
-                        putString("publishedAt",  videoPublishedAt)
-                        putString("duration", videoDuration)
-                    }
-                }
-
-                is YoutubeResponse.Error -> {
-                    Log.d("YoutubePlayer", "YoutubePlayer: ${videoDetails.exception.message.toString()}")
-                }
-            }
-        }
-
-        youtubePlayerViewModel.getChannelDetails(channelId)
-
-        youtubePlayerViewModel.channelDetails.observe(this) { channelDetails ->
-            when (channelDetails) {
-                is YoutubeResponse.Loading -> {}
-
-                is YoutubeResponse.Success -> {
-                    val channelLogo = channelDetails.data.items?.get(0)?.snippet?.thumbnails?.default?.url
-                    val channelSubscribers = "${counter(channelDetails.data.items?.get(0)?.statistics?.subscriberCount!!.toInt())} Subscribers"
-                    val channelTitle = channelDetails.data.items?.get(0)?.snippet?.title
-                    val customUrl = channelDetails.data.items?.get(0)?.snippet?.customUrl
-                    val channelDescription = channelDetails.data.items?.get(0)?.snippet?.description
-
-                    if(channelLogo.isNullOrEmpty()){
-                        Glide.with(this).load(Utilities.DEFAULT_LOGO).into(binding.imageView)
-                    }else {
-                        Glide.with(this).load(channelLogo).into(binding.imageView)
-                    }
-                    binding.apply {
-                        this.text1.text = channelTitle
-                        this.text2.text = customUrl
-                        this.text3.text = channelSubscribers
-                        this.text4.text = channelDescription
-                    }
-                }
-
-                is YoutubeResponse.Error -> {
-                    Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
-                }
-            }
-        }
-
-        youtubePlayerViewModel.getChannelsPlaylist(channelId)
-
-        youtubePlayerViewModel.channelsPlaylists.observe(this) { channelsPlaylist ->
-            when (channelsPlaylist) {
-                is YoutubeResponse.Loading -> {}
-
-                is YoutubeResponse.Success -> {
-                    binding.channelsPlaylist.apply {
-                        layoutManager = LinearLayoutManager(this@YoutubePlayer)
-                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
-                    }
-                }
-
-                is YoutubeResponse.Error -> {
-                    Log.d(TAG, "YoutubePlayer: ${channelsPlaylist.exception.message.toString()}")
-                }
-            }
-        }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
-        if (isInPictureInPictureMode) {
-            binding.YtPlayer.wrapContent()
-            binding.addToPlayList.visibility = View.GONE
-            binding.addToCustomPlayList.visibility = View.GONE
-        } else {
-            binding.addToPlayList.visibility = View.VISIBLE
-            binding.addToCustomPlayList.visibility = View.VISIBLE
-        }
-    }
-
-    private fun counter(count : Int) : String{
-        var num : Double = count.toDouble()
-        val data: String
-        if(num > 1000000.00){
-            num /= 1000000.00
-            num = DecimalFormat("#.##").format(num).toDouble()
-            data = "${num}M"
-        }else {
-            num /= 1000
-            num = DecimalFormat("#.##").format(num).toDouble()
-            data = "${num}K"
-        }
-        return data
     }
 }
 
