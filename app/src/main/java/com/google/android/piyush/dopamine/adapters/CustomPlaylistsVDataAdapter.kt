@@ -13,7 +13,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.viewHolders.CustomPlaylistsVDataHolder
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -48,15 +47,6 @@ class CustomPlaylistsVDataAdapter(
         holder.videoTitle.text = playlist.title
         holder.channelTitle.text = channelTitle
 
-        // Safely parse the duration, handling potential empty strings
-        val videoDuration = try {
-            formatDuration(Duration.parse(playlist.duration))
-        } catch (e: Exception) {
-            ""
-        }
-
-        holder.videoDuration.text = videoDuration
-
         Glide.with(context)
             .load(playlist.thumbnail)
             .into(holder.imageView)
@@ -77,18 +67,6 @@ class CustomPlaylistsVDataAdapter(
             } else {
                 NetworkUtilities.showNetworkError(context)
             }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun formatDuration(duration: Duration): String {
-        val hours = duration.toHours()
-        val minutes = duration.toMinutes() % 60
-        val seconds = duration.seconds % 60
-        return if (hours > 0) {
-            "%02d:%02d:%02d".format(hours, minutes, seconds)
-        } else {
-            "%02d:%02d".format(minutes, seconds)
         }
     }
 

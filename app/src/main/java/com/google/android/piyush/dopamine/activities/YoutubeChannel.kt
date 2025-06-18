@@ -18,7 +18,7 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubeChannelViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubeChannelViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 
 class YoutubeChannel : AppCompatActivity() {
 
@@ -54,8 +54,8 @@ class YoutubeChannel : AppCompatActivity() {
 
         youtubeChannelViewModel.channelDetails.observe(this) { channelDetails ->
             when(channelDetails){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
                     val channelTitle = channelDetails.data.items?.get(0)?.snippet?.title
                     val channelCustomUrl = channelDetails.data.items?.get(0)?.snippet?.customUrl
                     val channelSubscribers = " ${counter(channelDetails.data.items?.get(0)?.statistics?.subscriberCount!!.toInt()) } Subscribers"
@@ -82,7 +82,7 @@ class YoutubeChannel : AppCompatActivity() {
                         this.channelDescription.text = channelDescription
                     }
                 }
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     Log.d(TAG, "Error: ${channelDetails.exception.message.toString()}")
                 }
             }
@@ -92,8 +92,8 @@ class YoutubeChannel : AppCompatActivity() {
 
         youtubeChannelViewModel.channelsPlaylists.observe(this) { channelsPlaylists ->
             when(channelsPlaylists){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
                     binding.channelsPlaylist.apply {
                         layoutManager = LinearLayoutManager(this@YoutubeChannel)
                         adapter = YoutubeChannelPlaylistsAdapter(
@@ -102,7 +102,7 @@ class YoutubeChannel : AppCompatActivity() {
                     }
                     Log.d(TAG, "channelsPlaylists: ${channelsPlaylists.data}")
                 }
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     Log.d(TAG, "Error: ${channelsPlaylists.exception.message.toString()}")
                     binding.channelPlaylistLoader.apply {
                         visibility = View.VISIBLE

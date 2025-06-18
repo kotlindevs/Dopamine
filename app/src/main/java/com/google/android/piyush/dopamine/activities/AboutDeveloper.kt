@@ -18,7 +18,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDeveloperBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DevelopersViewModel
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 
 class AboutDeveloper : AppCompatActivity() {
     private lateinit var binding: ActivityAboutDeveloperBinding
@@ -38,8 +38,8 @@ class AboutDeveloper : AppCompatActivity() {
         if(!intent.getStringExtra("userId").isNullOrEmpty()){
             developersViewModel.devModel.observe(this){
                 when(it){
-                    is YoutubeResource.Loading -> {}
-                    is YoutubeResource.Success -> {
+                    is YoutubeResponse.Loading -> {}
+                    is YoutubeResponse.Success -> {
                         if(it.data.isNotEmpty()){
                             for(dev in it.data){
                                 if(dev.userId == intent.getStringExtra("userId")){
@@ -132,7 +132,7 @@ class AboutDeveloper : AppCompatActivity() {
                             }
                         }
                     }
-                    is YoutubeResource.Error -> {
+                    is YoutubeResponse.Error -> {
                         Snackbar.make(binding.root, it.exception.message.toString(), Snackbar.LENGTH_LONG).show()
                     }
                 }

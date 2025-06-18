@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.android.piyush.dopamine.fragments.Home
-import com.google.android.piyush.dopamine.fragments.Library
+import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.Search
-import com.google.android.piyush.dopamine.fragments.Shorts
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
@@ -73,12 +72,8 @@ class DopamineHome : AppCompatActivity() {
                     defaultScreen(Search())
                     true
                 }
-                R.id.library -> {
-                    defaultScreen(Library())
-                    true
-                }
-                R.id.shorts -> {
-                    defaultScreen(Shorts())
+                R.id.trending -> {
+                    defaultScreen(Trending())
                     true
                 }
                 else -> false

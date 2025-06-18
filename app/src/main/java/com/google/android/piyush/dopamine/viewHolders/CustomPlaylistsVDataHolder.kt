@@ -12,6 +12,5 @@ class CustomPlaylistsVDataHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     val imageView : ShapeableImageView = itemView.findViewById(R.id.channel_image)
     val videoTitle : MaterialTextView = itemView.findViewById(R.id.video_title)
     val channelTitle : MaterialTextView = itemView.findViewById(R.id.channel_title)
-    val videoDuration : MaterialTextView = itemView.findViewById(R.id.video_duration)
     val youTubePlayer : MaterialCardView = itemView.findViewById(R.id.video_card)
 }

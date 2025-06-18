@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
@@ -56,6 +55,9 @@ object YoutubeClient {
 
     const val SHORTS_PART = "shorts"
 
+    const val BROWSE = "/youtubei/v1/browse"
+    const val TRENDING = "FEtrending"
+
     const val SEARCH= "search"
 
     const val PLAYLISTS= "playlists"
@@ -94,7 +96,7 @@ object YoutubeClient {
     ).random()
 
     @OptIn(ExperimentalSerializationApi::class)
-    val CLIENT = HttpClient(CIO){
+    val CLIENT = HttpClient(io.ktor.client.engine.okhttp.OkHttp){
         expectSuccess = false
 
         install(ContentNegotiation){
@@ -120,18 +122,18 @@ data class DopamineVersion(
 )
 
 class DopamineVersionViewModel : ViewModel() {
-    private val _update : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
-    val update : MutableLiveData<YoutubeResource<DopamineVersion>> = _update
+    private val _update : MutableLiveData<YoutubeResponse<DopamineVersion>> = MutableLiveData()
+    val update : MutableLiveData<YoutubeResponse<DopamineVersion>> = _update
 
-    private val _preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = MutableLiveData()
-    val preRelease : MutableLiveData<YoutubeResource<DopamineVersion>> = _preRelease
+    private val _preRelease : MutableLiveData<YoutubeResponse<DopamineVersion>> = MutableLiveData()
+    val preRelease : MutableLiveData<YoutubeResponse<DopamineVersion>> = _preRelease
 
     init{
         try {
             viewModelScope.launch {
-                _update.postValue(YoutubeResource.Loading)
+                _update.postValue(YoutubeResponse.Loading)
                 _update.postValue(
-                    YoutubeResource.Success(
+                    YoutubeResponse.Success(
                         YoutubeClient.CLIENT.get(
                             YoutubeClient.DOPAMINE_UPDATE
                         ).body()
@@ -139,7 +141,7 @@ class DopamineVersionViewModel : ViewModel() {
                 )
             }
         }catch (e : Exception){
-            _update.postValue(YoutubeResource.Error(e))
+            _update.postValue(YoutubeResponse.Error(e))
         }
     }
 
@@ -147,9 +149,9 @@ class DopamineVersionViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 viewModelScope.launch {
-                    _preRelease.postValue(YoutubeResource.Loading)
+                    _preRelease.postValue(YoutubeResponse.Loading)
                     _preRelease.postValue(
-                        YoutubeResource.Success(
+                        YoutubeResponse.Success(
                             YoutubeClient.CLIENT.get(
                                 YoutubeClient.PRE_RELEASE
                             ).body()
@@ -157,7 +159,7 @@ class DopamineVersionViewModel : ViewModel() {
                     )
                 }
             }catch (e : Exception){
-                _preRelease.postValue(YoutubeResource.Error(e))
+                _preRelease.postValue(YoutubeResponse.Error(e))
             }
         }
     }
@@ -183,23 +185,23 @@ data class Photos(
 
 class DevelopersViewModel : ViewModel() {
 
-    private val _devModel : MutableLiveData<YoutubeResource<List<Developer>>> = MutableLiveData()
-    val devModel : MutableLiveData<YoutubeResource<List<Developer>>> = _devModel
+    private val _devModel : MutableLiveData<YoutubeResponse<List<Developer>>> = MutableLiveData()
+    val devModel : MutableLiveData<YoutubeResponse<List<Developer>>> = _devModel
 
     init {
         viewModelScope.launch {
             try {
-                _devModel.postValue(YoutubeResource.Loading)
+                _devModel.postValue(YoutubeResponse.Loading)
                 val response = YoutubeClient.CLIENT.get(
                     YoutubeClient.DEVELOPER
                 ).body<List<Developer>>()
                 if(response.isNotEmpty()){
-                    _devModel.postValue(YoutubeResource.Success(response))
+                    _devModel.postValue(YoutubeResponse.Success(response))
                 }else{
-                    _devModel.postValue(YoutubeResource.Error(Exception("Code 521 : Web server is down")))
+                    _devModel.postValue(YoutubeResponse.Error(Exception("Code 521 : Web server is down")))
                 }
             }catch (exception : Exception){
-                _devModel.postValue(YoutubeResource.Error(exception))
+                _devModel.postValue(YoutubeResponse.Error(exception))
             }
         }
     }

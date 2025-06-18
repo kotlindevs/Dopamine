@@ -32,7 +32,7 @@ import com.google.android.piyush.dopamine.utilities.CustomDialog
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 
 class DopamineUserProfile : AppCompatActivity() {
 
@@ -82,7 +82,7 @@ class DopamineUserProfile : AppCompatActivity() {
         if (preReleaseUpdates) {
             dopamineVersionViewModel.preReleaseUpdate()
             dopamineVersionViewModel.preRelease.observe(this@DopamineUserProfile) {
-                if (it is YoutubeResource.Success) {
+                if (it is YoutubeResponse.Success) {
                     sharedPreferences.edit().apply {
                         putString("PreReleaseVersion", it.data.versionName)
                         putString("PreReleaseUrl", it.data.url)
@@ -98,8 +98,8 @@ class DopamineUserProfile : AppCompatActivity() {
                 NetworkUtilities.isNetworkAvailable(applicationContext)) {
                 dopamineVersionViewModel.update.observe(this) { update ->
                     when (update) {
-                        is YoutubeResource.Loading -> {}
-                        is YoutubeResource.Success -> {
+                        is YoutubeResponse.Loading -> {}
+                        is YoutubeResponse.Success -> {
                             sharedPreferences.edit().apply {
                                 putString("Version", update.data.versionName)
                                 putString("Url", update.data.url)
@@ -110,7 +110,7 @@ class DopamineUserProfile : AppCompatActivity() {
                             }
                         }
 
-                        is YoutubeResource.Error -> {
+                        is YoutubeResponse.Error -> {
                             Snackbar.make(
                                 binding.main,
                                 "Oh no! Something went wrong",

@@ -33,7 +33,7 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
 import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -153,9 +153,9 @@ class YoutubePlayer : AppCompatActivity() {
 
         youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
             when (videoDetails) {
-                is YoutubeResource.Loading -> {}
+                is YoutubeResponse.Loading -> {}
 
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Success -> {
                     val videoTitle = videoDetails.data.items?.get(0)?.snippet?.title
                     val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
                     val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
@@ -225,7 +225,7 @@ class YoutubePlayer : AppCompatActivity() {
                     }
                 }
 
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     Log.d("YoutubePlayer", "YoutubePlayer: ${videoDetails.exception.message.toString()}")
                 }
             }
@@ -235,9 +235,9 @@ class YoutubePlayer : AppCompatActivity() {
 
         youtubePlayerViewModel.channelDetails.observe(this) { channelDetails ->
             when (channelDetails) {
-                is YoutubeResource.Loading -> {}
+                is YoutubeResponse.Loading -> {}
 
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Success -> {
                     val channelLogo = channelDetails.data.items?.get(0)?.snippet?.thumbnails?.default?.url
                     val channelSubscribers = "${counter(channelDetails.data.items?.get(0)?.statistics?.subscriberCount!!.toInt())} Subscribers"
                     val channelTitle = channelDetails.data.items?.get(0)?.snippet?.title
@@ -257,7 +257,7 @@ class YoutubePlayer : AppCompatActivity() {
                     }
                 }
 
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
                 }
             }
@@ -267,16 +267,16 @@ class YoutubePlayer : AppCompatActivity() {
 
         youtubePlayerViewModel.channelsPlaylists.observe(this) { channelsPlaylist ->
             when (channelsPlaylist) {
-                is YoutubeResource.Loading -> {}
+                is YoutubeResponse.Loading -> {}
 
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Success -> {
                     binding.channelsPlaylist.apply {
                         layoutManager = LinearLayoutManager(this@YoutubePlayer)
                         adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
                     }
                 }
 
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     Log.d(TAG, "YoutubePlayer: ${channelsPlaylist.exception.message.toString()}")
                 }
             }

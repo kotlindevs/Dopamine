@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.piyush.database.entities.EntityVideoSearch
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -31,7 +30,7 @@ import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.SearchViewModel
 import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import java.util.Locale
 import kotlin.random.Random
 
@@ -117,11 +116,11 @@ class Search : Fragment() {
 
                         searchViewModel.searchVideos.observe(viewLifecycleOwner) { searchVideos ->
                             when (searchVideos) {
-                                is YoutubeResource.Loading -> {
+                                is YoutubeResponse.Loading -> {
                                     binding.utilList.visibility = View.GONE
                                 }
 
-                                is YoutubeResource.Success -> {
+                                is YoutubeResponse.Success -> {
                                     binding.utilList.apply {
                                         layoutManager = LinearLayoutManager(context)
                                         visibility = View.VISIBLE
@@ -129,7 +128,7 @@ class Search : Fragment() {
                                     }
                                 }
 
-                                is YoutubeResource.Error -> {
+                                is YoutubeResponse.Error -> {
                                     //Log.d(TAG, "Error: ${searchVideos.exception.message.toString()}")
                                     MaterialAlertDialogBuilder(context!!)
                                         .apply {
@@ -146,8 +145,8 @@ class Search : Fragment() {
                                                     viewLifecycleOwner
                                                 ) { searchVideos ->
                                                     when (searchVideos) {
-                                                        is YoutubeResource.Loading -> {}
-                                                        is YoutubeResource.Success -> {
+                                                        is YoutubeResponse.Loading -> {}
+                                                        is YoutubeResponse.Success -> {
                                                             binding.utilList.apply {
                                                                 layoutManager =
                                                                     LinearLayoutManager(context)
@@ -158,7 +157,7 @@ class Search : Fragment() {
                                                                 )
                                                             }
                                                         }
-                                                        is YoutubeResource.Error -> {}
+                                                        is YoutubeResponse.Error -> {}
                                                     }
                                                 }
                                             }.create().show()

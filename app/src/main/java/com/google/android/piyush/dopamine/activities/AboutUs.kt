@@ -10,7 +10,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutUsBinding
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.youtube.utilities.DevelopersViewModel
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 
 class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
 
@@ -22,8 +22,8 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
 
         developersViewModel.devModel.observeForever {
             when(it){
-                is YoutubeResource.Loading -> {}
-                is YoutubeResource.Success -> {
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
                     if(NetworkUtilities.isNetworkAvailable(context)){
                         val piyush = it.data[0]
                         binding.devPiyushEffect.apply {
@@ -93,7 +93,7 @@ class AboutUs(context: Context) : MaterialAlertDialogBuilder(context) {
                         }
                     }
                 }
-                is YoutubeResource.Error -> {
+                is YoutubeResponse.Error -> {
                     binding.apply {
                         devPiyushEffect.visibility = View.VISIBLE
                         devPiyushEffect.startShimmer()

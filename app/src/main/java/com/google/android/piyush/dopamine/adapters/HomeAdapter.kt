@@ -61,12 +61,8 @@ class HomeAdapter(
             .into(holder.imageView)
 
         Glide.with(context)
-            .load(youtube!!.items?.get(position)?.snippet!!.thumbnails!!.high!!.url)
+            .load(youtube!!.items?.get(position)?.snippet!!.thumbnails!!.medium!!.url)
             .into(holder.youTubePlayerView)
-
-        holder.videoDuration.text = formatDuration(
-            Duration.parse(youtube!!.items?.get(position)?.contentDetails!!.duration!!)
-        )
 
         holder.youTubePlayer.setOnClickListener {
             if(NetworkUtilities.isNetworkAvailable(context)) {

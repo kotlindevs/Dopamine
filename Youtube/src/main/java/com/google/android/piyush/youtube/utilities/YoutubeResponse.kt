@@ -1,16 +1,16 @@
 package com.google.android.piyush.youtube.utilities
 
-sealed class YoutubeResource<out T> {
+sealed class YoutubeResponse<out T> {
 
     data class Success<out T>(
         val data: T
-    ) : YoutubeResource<T>()
+    ) : YoutubeResponse<T>()
 
     data class Error(
         val exception: Exception
-    ) : YoutubeResource<Nothing>()
+    ) : YoutubeResponse<Nothing>()
 
-    data object Loading : YoutubeResource<Nothing>()
+    data object Loading : YoutubeResponse<Nothing>()
 
     override fun toString(): String {
         return when(this){

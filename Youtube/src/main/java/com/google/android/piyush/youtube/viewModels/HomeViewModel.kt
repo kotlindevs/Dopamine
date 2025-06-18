@@ -3,101 +3,58 @@ package com.google.android.piyush.youtube.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.TRENDING
+import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
-    private val youtubeRepositoryImpl: YoutubeRepositoryImpl
-) : ViewModel() {
+class HomeViewModel() : ViewModel() {
 
-    private val _videos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val videos : LiveData<YoutubeResource<Youtube>> = _videos
+    private val repository : YoutubeRepositoryImpl = YoutubeRepositoryImpl()
 
-    private val _reGetVideos : MutableLiveData<YoutubeResource<Youtube>> = MutableLiveData()
-    val reGetVideos : LiveData<YoutubeResource<Youtube>> = _reGetVideos
+    private val _trendingVideos : MutableLiveData<YoutubeResponse<BrowseResponse>> = MutableLiveData()
+    val trendingVideos : LiveData<YoutubeResponse<BrowseResponse>> = _trendingVideos
+
+    private val _musicVideos : MutableLiveData<YoutubeResponse<BrowseResponse>> = MutableLiveData()
+    val musicVideos : LiveData<YoutubeResponse<BrowseResponse>> = _musicVideos
+
+    private val _gamingVideos : MutableLiveData<YoutubeResponse<BrowseResponse>> = MutableLiveData()
+    val gamingVideos : LiveData<YoutubeResponse<BrowseResponse>> = _gamingVideos
+
+    private val _moviesVideos : MutableLiveData<YoutubeResponse<BrowseResponse>> = MutableLiveData()
+    val moviesVideos : LiveData<YoutubeResponse<BrowseResponse>> = _moviesVideos
+
+    private var alreadyExistsData = false
 
     init {
-        getHomeVideos()
+        getTrendingVideos()
     }
 
-    private fun getHomeVideos() = viewModelScope.launch {
-        try {
-            _videos.postValue(
-                YoutubeResource.Loading
-            )
-            val response = youtubeRepositoryImpl.getHomeVideos()
-            if(response.items.isNullOrEmpty()){
-                _videos.postValue(
-                    YoutubeResource.Error(
-                        Exception(
-                            "The request cannot be completed because you have exceeded your quota."
-                        )
-                    )
-                )
-            }else{
-                _videos.postValue(
-                    YoutubeResource.Success(
-                        response
-                    )
-                )
-            }
-        }catch (exception : Exception){
-            _videos.postValue(
-                YoutubeResource.Error(
-                    exception = exception
-                )
-            )
-            exception.printStackTrace()
-        }
-    }
-
-    fun reGetHomeVideos() {
-        viewModelScope.launch {
-            try {
-                _reGetVideos.postValue(
-                    YoutubeResource.Loading
-                )
-                val response = youtubeRepositoryImpl.reGetHomeVideos()
-                if(response.items.isNullOrEmpty()) {
-                    _reGetVideos.postValue(
-                        YoutubeResource.Error(
-                            Exception(
-                                "The request cannot be completed because you have exceeded your quota."
-                            )
-                        )
-                    )
-                }else{
-                    _reGetVideos.postValue(
-                        YoutubeResource.Success(
-                            response
-                        )
-                    )
-                }
-            }catch (exception : Exception){
-                _reGetVideos.postValue(
-                    YoutubeResource.Error(
-                        exception = exception
-                    )
-                )
-            }
-        }
+    private fun getTrendingVideos() = viewModelScope.launch {
+       if(!alreadyExistsData){
+           _trendingVideos.postValue(YoutubeResponse.Loading)
+           _moviesVideos.postValue(YoutubeResponse.Loading)
+           _gamingVideos.postValue(YoutubeResponse.Loading)
+           _musicVideos.postValue(YoutubeResponse.Loading)
+           try {
+               val now = repository.browseNow(TRENDING)
+               val music = repository.browseMusic(TRENDING)
+               val gaming = repository.browseGaming(TRENDING)
+               val movies = repository.browseMovies(TRENDING)
+               _trendingVideos.postValue(YoutubeResponse.Success(now))
+               _musicVideos.postValue(YoutubeResponse.Success(music))
+               _gamingVideos.postValue(YoutubeResponse.Success(gaming))
+               _moviesVideos.postValue(YoutubeResponse.Success(movies))
+               alreadyExistsData = true
+           } catch (e : Exception) {
+               _trendingVideos.postValue(YoutubeResponse.Error(e))
+               _musicVideos.postValue(YoutubeResponse.Error(e))
+               _gamingVideos.postValue(YoutubeResponse.Error(e))
+               _moviesVideos.postValue(YoutubeResponse.Error(e))
+           }
+       }
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class HomeViewModelFactory(
-    private val repository: YoutubeRepositoryImpl
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(HomeViewModel::class.java)){
-            return HomeViewModel(repository) as T
-        }
-        throw IllegalArgumentException(
-            "Unknown class name"
-        )
-    }
-}
