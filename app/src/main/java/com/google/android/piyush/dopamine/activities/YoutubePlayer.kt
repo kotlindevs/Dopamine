@@ -1,6 +1,5 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.ContentValues.TAG
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -24,9 +22,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
-import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
-import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
-import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -36,23 +31,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
-    private lateinit var youtubeRepositoryImpl: YoutubeRepositoryImpl
-    private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
-    private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
-    private lateinit var databaseViewModel: DatabaseViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityYoutubePlayerBinding.inflate(layoutInflater)
-        youtubeRepositoryImpl = YoutubeRepositoryImpl()
-        youtubePlayerViewModelFactory = YoutubePlayerViewModelFactory(youtubeRepositoryImpl)
-        databaseViewModel = DatabaseViewModel(applicationContext)
-        youtubePlayerViewModel = ViewModelProvider(
-            this, youtubePlayerViewModelFactory
-        )[YoutubePlayerViewModel::class.java]
-
         setContentView(binding.root)
 
         enableEdgeToEdge()
@@ -62,13 +46,13 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
+        val videoId = intent?.getStringExtra("videoId")
+        val channelName = intent.getStringExtra("channelName")
+        val publishedTime = intent.getStringExtra("publishedTime")
+        val viewCount = intent.getStringExtra("viewCount")
+        val channelImage = intent.getStringExtra("channelImage")
 
-        databaseViewModel.isFavouriteVideo(
-            intent?.getStringExtra("videoId").toString()
-        )
-        databaseViewModel.isFavourite.observe(this) {
-            binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
-        }
+        Log.i("FetchData","videoId : $videoId \n channelName : $channelName \n publishedTime : $publishedTime \n channelImage : $channelImage \n viewCount : $viewCount")
 
         binding.YtPlayer.enableBackgroundPlayback(true)
         binding.YtPlayer.enableAutomaticInitialization = false
@@ -86,10 +70,6 @@ class YoutubePlayer : AppCompatActivity() {
                     loadVideo(
                         intent?.getStringExtra("videoId")!!,
                         0F
-                    )
-                    Log.d(
-                        TAG,
-                        " -> Activity : YoutubePlayer || videoId : $intent.getStringExtra(\"videoId\") "
                     )
                 }
             }
@@ -134,9 +114,6 @@ class YoutubePlayer : AppCompatActivity() {
             val bottomSheetFragment = MyBottomSheetFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
-
-        val videoId = intent?.getStringExtra("videoId").toString()
-        val channelId = intent?.getStringExtra("channelId").toString()
     }
 }
 

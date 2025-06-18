@@ -75,7 +75,10 @@ data class BrowseResponse(
                                                             val videoId : String? = null,
                                                             val thumbnail : Thumbnail? = null,
                                                             val title : Title? = null,
-                                                            val longBylineText : LongBylineText? = null
+                                                            val longBylineText : LongBylineText? = null,
+                                                            val publishedTimeText : PublishedTimeText? = null,
+                                                            val shortViewCountText : ShortViewCountText? = null,
+                                                            val avatar : Avatar? = null
                                                         ){
                                                             @Serializable
                                                             data class Thumbnail(
@@ -103,9 +106,17 @@ data class BrowseResponse(
                                                             ){
                                                                 @Serializable
                                                                 data class Runs(
-                                                                    val text : String? = null
+                                                                    val text : String? = null,
                                                                 )
                                                             }
+                                                            @Serializable
+                                                            data class PublishedTimeText(
+                                                                val simpleText : String? = null
+                                                            )
+                                                            @Serializable
+                                                            data class ShortViewCountText(
+                                                                val simpleText : String? = null
+                                                            )
                                                         }
                                                     }
                                                 }

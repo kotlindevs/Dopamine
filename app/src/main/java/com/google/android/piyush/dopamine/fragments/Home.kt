@@ -39,12 +39,9 @@ class Home : Fragment() {
                 is YoutubeResponse.Success -> {
                     Log.i("Home", "Success : ${response.data}")
 
-                    val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs
-                    tabs?.forEach {
-                        val params = it.tabRenderer?.endpoint?.browseEndpoint?.params.toString()
-                        val title = it.tabRenderer?.title.toString()
-                        Log.i("Home", "Params => $title : $params")
-                    }
+                    val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs?.get(0)?.tabRenderer?.content?.sectionListRenderer?.contents?.get(0)?.itemSectionRenderer?.contents?.get(0)?.shelfRenderer?.content?.expandedShelfContentsRenderer?.items
+                    val videos = tabs?.map { it.videoRenderer }
+                    Log.i("Home","Videos : $videos")
                 }
                 is YoutubeResponse.Error -> {
                     Log.e("Home","Error : ${response.exception}")

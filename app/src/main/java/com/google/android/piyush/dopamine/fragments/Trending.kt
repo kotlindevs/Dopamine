@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.adapters.LibraryAdapter
+import com.google.android.piyush.dopamine.adapters.TrendingAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
 import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
@@ -20,7 +20,7 @@ class Trending : Fragment() {
     private var binding : FragmentTrendingBinding? = null
     private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
     private val trendingTabs = mutableListOf<String>()
-    private lateinit var libraryAdapter: LibraryAdapter
+    private lateinit var trendingAdapter: TrendingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +57,10 @@ class Trending : Fragment() {
                                             videoId = data?.videoId,
                                             thumbnail = data?.thumbnail,
                                             title = data?.title,
-                                            longBylineText = data?.longBylineText
+                                            longBylineText = data?.longBylineText,
+                                            shortViewCountText = data?.shortViewCountText,
+                                            publishedTimeText = data?.publishedTimeText,
+                                            avatar = data?.avatar
                                         )
                                     )
                                 }
@@ -71,10 +74,10 @@ class Trending : Fragment() {
                         this?.recyclerView1?.visibility = View.VISIBLE
                         this?.text1?.text = trendingTabs[0]
                     }
-                    libraryAdapter = LibraryAdapter(requireContext(), videos = videos.distinct())
+                    trendingAdapter = TrendingAdapter(requireContext(), videos = videos.distinct())
                     binding?.recyclerView1.apply {
                         this?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                        this?.adapter = libraryAdapter
+                        this?.adapter = trendingAdapter
                     }
                 }
                 is YoutubeResponse.Error -> {
@@ -104,7 +107,10 @@ class Trending : Fragment() {
                                             videoId = data?.videoId,
                                             thumbnail = data?.thumbnail,
                                             title = data?.title,
-                                            longBylineText = data?.longBylineText
+                                            longBylineText = data?.longBylineText,
+                                            shortViewCountText = data?.shortViewCountText,
+                                            publishedTimeText = data?.publishedTimeText,
+                                            avatar = data?.avatar
                                         )
                                     )
                                 }
@@ -119,10 +125,10 @@ class Trending : Fragment() {
                         this?.text2?.text = trendingTabs[1]
                     }
 
-                    libraryAdapter = LibraryAdapter(requireContext(), videos = videos.distinct())
+                    trendingAdapter = TrendingAdapter(requireContext(), videos = videos.distinct())
                     binding?.recyclerView2.apply {
                         this?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                        this?.adapter = libraryAdapter
+                        this?.adapter = trendingAdapter
                     }
                 }
                 is YoutubeResponse.Error -> {
@@ -152,7 +158,10 @@ class Trending : Fragment() {
                                             videoId = data?.videoId,
                                             thumbnail = data?.thumbnail,
                                             title = data?.title,
-                                            longBylineText = data?.longBylineText
+                                            longBylineText = data?.longBylineText,
+                                            shortViewCountText = data?.shortViewCountText,
+                                            publishedTimeText = data?.publishedTimeText,
+                                            avatar = data?.avatar
                                         )
                                     )
                                 }
@@ -167,10 +176,10 @@ class Trending : Fragment() {
                         this?.text3?.text = trendingTabs[2]
                     }
 
-                    libraryAdapter = LibraryAdapter(requireContext(), videos = videos.distinct())
+                    trendingAdapter = TrendingAdapter(requireContext(), videos = videos.distinct())
                     binding?.recyclerView3.apply {
                         this?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                        this?.adapter = libraryAdapter
+                        this?.adapter = trendingAdapter
                     }
                 }
                 is YoutubeResponse.Error -> {
@@ -203,7 +212,10 @@ class Trending : Fragment() {
                                             videoId = data?.videoId,
                                             thumbnail = data?.thumbnail,
                                             title = data?.title,
-                                            longBylineText = data?.longBylineText
+                                            longBylineText = data?.longBylineText,
+                                            shortViewCountText = data?.shortViewCountText,
+                                            publishedTimeText = data?.publishedTimeText,
+                                            avatar = data?.avatar
                                         )
                                     )
                                 }
@@ -218,10 +230,10 @@ class Trending : Fragment() {
                         this?.text4?.text = trendingTabs[3]
                     }
 
-                    libraryAdapter = LibraryAdapter(requireContext(), videos = videos.distinct())
+                    trendingAdapter = TrendingAdapter(requireContext(), videos = videos.distinct())
                     binding?.recyclerView4.apply {
                         this?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                        this?.adapter = libraryAdapter
+                        this?.adapter = trendingAdapter
                     }
                 }
 
