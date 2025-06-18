@@ -1,5 +1,6 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,12 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.piyush.database.viewModel.DatabaseViewModel
@@ -22,6 +27,10 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.youtube.model.BrowseResponse
+import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -31,14 +40,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
+    private val viewmodel : YoutubeViewModel by viewModels<YoutubeViewModel>()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityYoutubePlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -52,7 +59,36 @@ class YoutubePlayer : AppCompatActivity() {
         val viewCount = intent.getStringExtra("viewCount")
         val channelImage = intent.getStringExtra("channelImage")
 
-        Log.i("FetchData","videoId : $videoId \n channelName : $channelName \n publishedTime : $publishedTime \n channelImage : $channelImage \n viewCount : $viewCount")
+        videoId?.let {
+            viewmodel.getPlayerInfo(it)
+        }
+
+        channelImage?.let {
+            Glide.with(this).load(it).into(binding.channelImage)
+        }
+
+        channelName?.let {
+            binding.channelName.text = it
+        }
+
+        viewmodel.playerInfo.observe(this) { response ->
+            when(response) {
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
+                    val videoInfo = "$viewCount • $publishedTime ...more"
+                    binding.videoTitle.text = response.data.videoDetails?.title
+                    binding.videoInfo.text = videoInfo
+                }
+                is YoutubeResponse.Error -> {
+                    Log.e("YoutubePlayer", "Error : ${response.exception}")
+                }
+            }
+        }
+
+        binding.videoInfo.setOnClickListener{
+            val youtubePlayerInfo = YoutubePlayerInfo()
+            youtubePlayerInfo.show(supportFragmentManager, youtubePlayerInfo.tag)
+        }
 
         binding.YtPlayer.enableBackgroundPlayback(true)
         binding.YtPlayer.enableAutomaticInitialization = false
@@ -74,76 +110,27 @@ class YoutubePlayer : AppCompatActivity() {
                 }
             }
         }, true, iFramePlayerOptions)
-
-        binding.YtPlayer.addFullscreenListener(object : FullscreenListener {
-            override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                window.decorView.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-
-                listOf(
-                    binding.YtPlayer,
-                    binding.addToPlayList,
-                    binding.addToCustomPlayList
-                ).forEach { it.visibility = View.GONE }
-
-                if (fullscreenView.parent == null) {
-                    binding.frameLayout.addView(fullscreenView)
-                }
-            }
-
-            override fun onExitFullscreen() {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                binding.frameLayout.removeAllViews()
-                listOf(
-                    binding.YtPlayer,
-                    binding.addToPlayList,
-                    binding.addToCustomPlayList
-                ).forEach { it.visibility = View.VISIBLE }
-            }
-        })
-
-        binding.enterInPip.setOnClickListener {
-            val supportsPIP =
-                packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
-            if (supportsPIP) enterPictureInPictureMode()
-        }
-
-        binding.addToCustomPlayList.setOnClickListener {
-            val bottomSheetFragment = MyBottomSheetFragment()
-            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-        }
     }
 }
 
-class MyBottomSheetFragment : BottomSheetDialogFragment(){
-    private lateinit var databaseViewModel: DatabaseViewModel
+class YoutubePlayerInfo : BottomSheetDialogFragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
-        val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
-        val customPlaylists : RecyclerView = view.findViewById(R.id.recyclerViewLocalPlaylist)
-        databaseViewModel = DatabaseViewModel(requireContext())
-        databaseViewModel.defaultMasterDev
+        return inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
+    }
 
-        createNewPlaylist.setOnClickListener {
-            val customDialog = CustomDialog(requireContext())
-            customDialog.show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        view.post {
+            val dialog = dialog as? BottomSheetDialog
+            dialog?.behavior?.let { behavior ->
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
-
-        customPlaylists.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = CustomPlaylistsAdapter(
-                requireContext(),
-                databaseViewModel.getPlaylist(),
-            )
-        }
-        return view
-
     }
 }

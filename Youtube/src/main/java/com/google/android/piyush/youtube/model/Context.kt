@@ -19,5 +19,12 @@ data class Context(
                 clientVersion = "2.20250219.07.00"
             )
         )
+
+        val HTML5 = Context(
+            client = Client(
+                clientName = "TVHTML5_SIMPLY_EMBEDDED_PLAYER",
+                clientVersion = "2.0"
+            )
+        )
     }
 }

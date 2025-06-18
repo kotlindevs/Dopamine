@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
+import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import kotlinx.coroutines.launch
@@ -26,10 +27,23 @@ class YoutubeViewModel() : ViewModel() {
     private val _moviesVideos : MutableLiveData<YoutubeResponse<BrowseResponse>> = MutableLiveData()
     val moviesVideos : LiveData<YoutubeResponse<BrowseResponse>> = _moviesVideos
 
+    private val _playerInfo : MutableLiveData<YoutubeResponse<PlayerResponse>> = MutableLiveData()
+    val playerInfo : LiveData<YoutubeResponse<PlayerResponse>> = _playerInfo
+
     private var alreadyExistsData = false
 
     init {
         getTrendingVideos()
+    }
+
+    fun getPlayerInfo(videoId : String) = viewModelScope.launch {
+        _playerInfo.postValue(YoutubeResponse.Loading)
+        try {
+            val info = repository.playerInfo(videoId)
+            _playerInfo.postValue(YoutubeResponse.Success(info))
+        } catch (e : Exception) {
+            _playerInfo.postValue(YoutubeResponse.Error(e))
+        }
     }
 
     private fun getTrendingVideos() = viewModelScope.launch {

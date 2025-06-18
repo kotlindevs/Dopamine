@@ -1,6 +1,7 @@
 package com.google.android.piyush.youtube.repository
 
 import com.google.android.piyush.youtube.BROWSE
+import com.google.android.piyush.youtube.PLAYER
 import com.google.android.piyush.youtube.TRENDING_GAMING
 import com.google.android.piyush.youtube.TRENDING_MOVIES
 import com.google.android.piyush.youtube.TRENDING_MUSIC
@@ -8,6 +9,8 @@ import com.google.android.piyush.youtube.Youtube
 import com.google.android.piyush.youtube.model.BrowseBody
 import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.Context
+import com.google.android.piyush.youtube.model.PlayerBody
+import com.google.android.piyush.youtube.model.PlayerResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -55,6 +58,17 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                     context = Context.WEB,
                     browseId = browseId,
                     params = TRENDING_MOVIES
+                )
+            )
+        }.body()
+    }
+
+    override suspend fun playerInfo(videoId: String): PlayerResponse {
+        return Youtube.post(PLAYER) {
+            setBody(
+                PlayerBody(
+                    context = Context.HTML5,
+                    videoId = videoId
                 )
             )
         }.body()
