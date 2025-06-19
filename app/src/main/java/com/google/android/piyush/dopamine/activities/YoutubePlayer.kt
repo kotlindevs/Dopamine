@@ -11,9 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
 import com.google.android.piyush.youtube.model.VideoInfo
@@ -76,6 +78,7 @@ class YoutubePlayer : AppCompatActivity() {
                             viewCount = viewCount,
                             channelName = channelName,
                             length = videoLength,
+                            keywords = video?.keywords,
                             channelImage = channelImage,
                             description = video?.shortDescription.toString()
                         )
@@ -144,6 +147,15 @@ class YoutubePlayerInfo : BottomSheetDialogFragment(){
                         this?.videoViews?.text = video.viewCount
                         this?.videoPublished?.text = video.publishedTime
                         this?.videoDuration?.text = video.length
+                        this?.keywords?.apply {
+                            layoutManager = LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                            adapter = YoutubePlayerKeywordsAdapter(video.keywords)
+                        }
+                        this?.videoDescription?.text = video.description
                     }
                 }
                 is YoutubeResponse.Error -> {

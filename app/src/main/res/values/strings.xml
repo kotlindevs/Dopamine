@@ -97,4 +97,7 @@
     <string name="web_client_id">929480757734-du8f823uda1upcdpf0ptpsc9terih1bp.apps.googleusercontent.com</string>
     <string name="no_contact_available">No Contact Available</string>
     <string name="photos_from_user">Photos from User</string>
+    <string name="published_time">Published Time</string>
+    <string name="views">Views</string>
+    <string name="duration">Duration</string>
 </resources>

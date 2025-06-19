@@ -9,6 +9,7 @@ data class VideoInfo(
     val publishedTime: String? = null,
     val viewCount: String? = null,
     val length: String? = null,
+    val keywords : List<String>? = null,
     val channelName: String? = null,
     val channelImage: String? = null,
     val description: String? = null

@@ -10,6 +10,7 @@ data class PlayerResponse(
     data class VideoDetails(
         val videoId : String? = null,
         val title : String? = null,
+        val keywords : List<String>? = null,
         val channelId : String? = null,
         val shortDescription : String? = null,
         val thumbnail : Thumbnail? = null,
