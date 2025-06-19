@@ -63,4 +63,17 @@
         app:layout_constraintTop_toTopOf="@id/channelImage"
         app:layout_constraintStart_toEndOf="@id/channelImage"
         app:layout_constraintBottom_toBottomOf="@id/channelImage"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:text="@string/save"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
+        app:icon="@drawable/ic_save_y25"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/channelName"
+        app:layout_constraintBottom_toBottomOf="@id/channelName"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
