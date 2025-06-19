@@ -43,6 +43,7 @@ val Youtube = HttpClient(OkHttp) {
 
 const val BROWSE = "/youtubei/v1/browse"
 const val PLAYER = "/youtubei/v1/player"
+const val SEARCH = "/youtubei/v1/search"
 const val TRENDING = "FEtrending"
 const val TRENDING_MUSIC = "4gINGgt5dG1hX2NoYXJ0cw%3D%3D"
 const val TRENDING_GAMING = "4gIcGhpnYW1pbmdfY29ycHVzX21vc3RfcG9wdWxhcg%3D%3D"

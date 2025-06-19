@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
+import com.google.android.piyush.youtube.model.SearchResponse
+import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
@@ -34,10 +36,39 @@ class YoutubeViewModel() : ViewModel() {
     private val _sharedVideoInfo : MutableLiveData<YoutubeResponse<VideoInfo>> = MutableLiveData()
     val sharedVideoInfo : LiveData<YoutubeResponse<VideoInfo>> = _sharedVideoInfo
 
+    private val _searchKeys : MutableLiveData<List<String>>? = MutableLiveData()
+    val searchKeys : LiveData<List<String>>? = _searchKeys
+
+    private val _relativeResults : MutableLiveData<MutableList<ShortsLockupViewModel>> = MutableLiveData()
+    val relativeResults : LiveData<MutableList<ShortsLockupViewModel>> = _relativeResults
+
+    private val _searchResults : MutableLiveData<YoutubeResponse<SearchResponse>> = MutableLiveData()
+    val searchResults : LiveData<YoutubeResponse<SearchResponse>> = _searchResults
+
     private var alreadyExistsData = false
 
     init {
         getTrendingVideos()
+    }
+
+    fun keys(keys : List<String>) = viewModelScope.launch {
+        _searchKeys?.postValue(keys)
+    }
+
+    fun relativeResults(results : MutableList<ShortsLockupViewModel>) = viewModelScope.launch {
+        _relativeResults.postValue(results)
+    }
+
+    fun searchData(query : String) = viewModelScope.launch {
+        _searchResults.postValue(YoutubeResponse.Loading)
+        try {
+            val results = repository.searchResults(query)
+            results.let {
+                _searchResults.postValue(YoutubeResponse.Success(it))
+            }
+        } catch (e : Exception) {
+            _searchResults.postValue(YoutubeResponse.Error(e))
+        }
     }
 
     fun submitSharedVideoInfo(videoInfo: VideoInfo) {

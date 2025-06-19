@@ -2,6 +2,7 @@ package com.google.android.piyush.youtube.repository
 
 import com.google.android.piyush.youtube.BROWSE
 import com.google.android.piyush.youtube.PLAYER
+import com.google.android.piyush.youtube.SEARCH
 import com.google.android.piyush.youtube.TRENDING_GAMING
 import com.google.android.piyush.youtube.TRENDING_MOVIES
 import com.google.android.piyush.youtube.TRENDING_MUSIC
@@ -11,6 +12,8 @@ import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.Context
 import com.google.android.piyush.youtube.model.PlayerBody
 import com.google.android.piyush.youtube.model.PlayerResponse
+import com.google.android.piyush.youtube.model.SearchBody
+import com.google.android.piyush.youtube.model.SearchResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -69,6 +72,17 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 PlayerBody(
                     context = Context.HTML5,
                     videoId = videoId
+                )
+            )
+        }.body()
+    }
+
+    override suspend fun searchResults(query: String): SearchResponse {
+        return Youtube.post(SEARCH) {
+            setBody(
+                SearchBody(
+                    context = Context.WEB,
+                    query = query
                 )
             )
         }.body()

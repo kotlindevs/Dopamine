@@ -16,8 +16,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
+import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
+import com.google.android.piyush.youtube.model.SearchResponse
+import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
@@ -28,7 +31,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
-    private val viewmodel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +51,8 @@ class YoutubePlayer : AppCompatActivity() {
         val channelImage = intent.getStringExtra("channelImage")
         val videoLength = intent.getStringExtra("videoLength")
 
-        Log.e("YoutubePlayer", "VideoId : $videoId || VideoLength : $videoLength")
         videoId?.let {
-            viewmodel.getPlayerInfo(it)
+            viewModel.getPlayerInfo(it)
         }
 
         channelImage?.let {
@@ -61,7 +63,7 @@ class YoutubePlayer : AppCompatActivity() {
             binding.channelName.text = it
         }
 
-        viewmodel.playerInfo.observe(this) { response ->
+        viewModel.playerInfo.observe(this) { response ->
             when(response) {
                 is YoutubeResponse.Loading -> {}
                 is YoutubeResponse.Success -> {
@@ -70,7 +72,7 @@ class YoutubePlayer : AppCompatActivity() {
                     binding.videoTitle.text = response.data.videoDetails?.title ?: "No Title"
                     binding.videoInfo.text = videoInfo
 
-                    viewmodel.submitSharedVideoInfo(
+                    viewModel.submitSharedVideoInfo(
                         VideoInfo(
                             videoId = videoId,
                             title = video?.title.toString(),
@@ -84,6 +86,49 @@ class YoutubePlayer : AppCompatActivity() {
                         )
                     )
 
+                    video?.keywords?.let {
+                        viewModel.keys(it)
+                    }
+                }
+                is YoutubeResponse.Error -> {
+                    Log.e("YoutubePlayer", "Error : ${response.exception}")
+                }
+            }
+        }
+
+        viewModel.searchKeys?.observe(this) { keys ->
+            val key = keys[0].toString()
+
+            viewModel.searchData(query = key)
+            Log.i("YoutubePlayer", "Keys : $key")
+        }
+
+        viewModel.searchResults.observe(this) { response ->
+            when(response) {
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
+                    val shortsList = mutableListOf<ShortsLockupViewModel>()
+                    response.data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
+                        contents.itemSectionRenderer?.contents?.forEach { content ->
+                            content.reelShelfRenderer?.items?.forEach { shorts ->
+                                val shortsViewModel = shorts.shortsLockupViewModel
+
+                                shortsViewModel?.let {
+                                    shortsList.add(it)
+                                }
+                            }
+                        }
+                    }
+                    binding.shorts.apply {
+                        layoutManager = LinearLayoutManager(
+                            this@YoutubePlayer,
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        adapter = YoutubePlayerShortsAdapter(
+                            shortsList
+                        )
+                    }
                 }
                 is YoutubeResponse.Error -> {
                     Log.e("YoutubePlayer", "Error : ${response.exception}")
