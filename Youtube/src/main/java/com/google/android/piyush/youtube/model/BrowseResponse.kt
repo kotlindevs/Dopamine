@@ -76,6 +76,7 @@ data class BrowseResponse(
                                                             val thumbnail : Thumbnail? = null,
                                                             val title : Title? = null,
                                                             val longBylineText : LongBylineText? = null,
+                                                            val lengthText : LengthText? = null,
                                                             val publishedTimeText : PublishedTimeText? = null,
                                                             val shortViewCountText : ShortViewCountText? = null,
                                                             val avatar : Avatar? = null
@@ -115,6 +116,11 @@ data class BrowseResponse(
                                                             )
                                                             @Serializable
                                                             data class ShortViewCountText(
+                                                                val simpleText : String? = null
+                                                            )
+
+                                                            @Serializable
+                                                            data class LengthText(
                                                                 val simpleText : String? = null
                                                             )
                                                         }

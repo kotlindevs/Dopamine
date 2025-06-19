@@ -59,6 +59,7 @@ class Trending : Fragment() {
                                             title = data?.title,
                                             longBylineText = data?.longBylineText,
                                             shortViewCountText = data?.shortViewCountText,
+                                            lengthText = data?.lengthText,
                                             publishedTimeText = data?.publishedTimeText,
                                             avatar = data?.avatar
                                         )
@@ -109,6 +110,7 @@ class Trending : Fragment() {
                                             title = data?.title,
                                             longBylineText = data?.longBylineText,
                                             shortViewCountText = data?.shortViewCountText,
+                                            lengthText = data?.lengthText,
                                             publishedTimeText = data?.publishedTimeText,
                                             avatar = data?.avatar
                                         )
@@ -160,6 +162,7 @@ class Trending : Fragment() {
                                             title = data?.title,
                                             longBylineText = data?.longBylineText,
                                             shortViewCountText = data?.shortViewCountText,
+                                            lengthText = data?.lengthText,
                                             publishedTimeText = data?.publishedTimeText,
                                             avatar = data?.avatar
                                         )
@@ -214,6 +217,7 @@ class Trending : Fragment() {
                                             title = data?.title,
                                             longBylineText = data?.longBylineText,
                                             shortViewCountText = data?.shortViewCountText,
+                                            lengthText = data?.lengthText,
                                             publishedTimeText = data?.publishedTimeText,
                                             avatar = data?.avatar
                                         )

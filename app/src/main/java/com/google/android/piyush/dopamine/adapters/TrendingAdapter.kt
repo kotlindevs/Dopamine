@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class TrendingAdapter(
                     .putExtra("channelName", video?.longBylineText?.runs?.get(0)?.text.toString())
                     .putExtra("publishedTime", video?.publishedTimeText?.simpleText.toString())
                     .putExtra("viewCount",video?.shortViewCountText?.simpleText.toString())
+                    .putExtra("videoLength", video?.lengthText?.simpleText.toString())
                     .putExtra("channelImage", video?.avatar?.decoratedAvatarViewModel?.avatar?.avatarViewModel?.image?.sources?.get(0)?.url.toString())
 
             )
