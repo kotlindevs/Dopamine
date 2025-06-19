@@ -117,6 +117,18 @@ class YoutubePlayer : AppCompatActivity() {
                                     shortsList.add(it)
                                 }
                             }
+                            content.channelRenderer.let { channelInfo ->
+                                if(channelInfo != null) {
+                                    binding.apply {
+                                        Glide.with(this@YoutubePlayer).load(
+                                            "https:${channelInfo.thumbnail?.thumbnails?.firstOrNull()?.url.toString()}"
+                                        ).into(channelOwnerImage)
+                                        channelOwnerTitle.text = channelInfo.shortBylineText?.runs?.firstOrNull()?.text.toString()
+                                        channelOwnerSubscriberCount.text = channelInfo.subscriberCountText?.simpleText.toString()
+                                        channelOwnerViewCount.text = channelInfo.videoCountText?.simpleText.toString()
+                                    }
+                                }
+                            }
                         }
                     }
                     binding.shorts.apply {
