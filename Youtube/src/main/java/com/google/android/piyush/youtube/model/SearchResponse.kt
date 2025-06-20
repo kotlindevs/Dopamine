@@ -34,7 +34,7 @@ data class SearchResponse(
                             @Serializable
                             data class Content(
                                 val reelShelfRenderer : ReelShelfRenderer? = null,
-//                                val videoRenderer : VideoRenderer? = null,
+                                val videoRenderer : VideoRenderer? = null,
                                 val channelRenderer : ChannelRenderer? = null,
 //                                val shelfRenderer : ShelfRenderer? = null
                             ){
@@ -82,6 +82,76 @@ data class SearchResponse(
                                                 data class BrowseEndpoint(
                                                     val browseId : String? = null,
                                                     val canonicalBaseUrl : String? = null
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Serializable
+                                data class VideoRenderer(
+                                    val videoId : String? = null,
+                                    val thumbnail : Thumbnail? = null,
+                                    val title : Title? = null,
+                                    val longBylineText : LongByLineText? = null,
+                                    val publishedTimeText : PublishedTimeText? = null,
+                                    val shortViewCountText : ShortViewCountText? = null,
+                                    val channelThumbnailSupportedRenderers : ChannelThumbnailSupportedRenderers? = null,
+                                ){
+                                    @Serializable
+                                    data class Thumbnail(
+                                        val thumbnails : List<Thumbnails>? = null
+                                    ){
+                                        @Serializable
+                                        data class Thumbnails(
+                                            val url : String? = null,
+                                            val width : Int? = null,
+                                            val height : Int? = null
+                                        )
+                                    }
+                                    @Serializable
+                                    data class Title(
+                                        val runs : List<Runs>? = null
+                                    ){
+                                        @Serializable
+                                        data class Runs(
+                                            val text : String? = null
+                                        )
+                                    }
+                                    @Serializable
+                                    data class LongByLineText(
+                                        val runs : List<Runs>? = null
+                                    ){
+                                        @Serializable
+                                        data class Runs(
+                                            val text : String? = null
+                                        )
+                                    }
+                                    @Serializable
+                                    data class PublishedTimeText(
+                                        val simpleText : String? = null
+                                    )
+                                    @Serializable
+                                    data class ShortViewCountText(
+                                        val simpleText : String? = null
+                                    )
+                                    @Serializable
+                                    data class ChannelThumbnailSupportedRenderers(
+                                        val channelThumbnailWithLinkRenderer : ChannelThumbnailWithLinkRenderer? = null
+                                    ){
+                                        @Serializable
+                                        data class ChannelThumbnailWithLinkRenderer(
+                                            val thumbnail : Thumbnail? = null
+                                        ){
+                                            @Serializable
+                                            data class Thumbnail(
+                                                val thumbnails : List<Thumbnails>? = null
+                                            ){
+                                                @Serializable
+                                                data class Thumbnails(
+                                                    val url : String? = null,
+                                                    val width : Int? = null,
+                                                    val height : Int? = null
                                                 )
                                             }
                                         }

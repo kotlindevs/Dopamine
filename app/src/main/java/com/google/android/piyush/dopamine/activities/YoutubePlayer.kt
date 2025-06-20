@@ -17,10 +17,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
+import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
 import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
+import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
@@ -108,6 +110,7 @@ class YoutubePlayer : AppCompatActivity() {
                 is YoutubeResponse.Loading -> {}
                 is YoutubeResponse.Success -> {
                     val shortsList = mutableListOf<ShortsLockupViewModel>()
+                    val videosList = mutableListOf<VideoRenderer>()
                     response.data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
                         contents.itemSectionRenderer?.contents?.forEach { content ->
                             content.reelShelfRenderer?.items?.forEach { shorts ->
@@ -118,15 +121,41 @@ class YoutubePlayer : AppCompatActivity() {
                                 }
                             }
                             content.channelRenderer.let { channelInfo ->
-                                if(channelInfo != null) {
+                                if (channelInfo != null) {
                                     binding.apply {
                                         Glide.with(this@YoutubePlayer).load(
                                             "https:${channelInfo.thumbnail?.thumbnails?.firstOrNull()?.url.toString()}"
                                         ).into(channelOwnerImage)
-                                        channelOwnerTitle.text = channelInfo.shortBylineText?.runs?.firstOrNull()?.text.toString()
-                                        channelOwnerSubscriberCount.text = channelInfo.subscriberCountText?.simpleText.toString()
-                                        channelOwnerViewCount.text = channelInfo.videoCountText?.simpleText.toString()
+                                        channelInfo.shortBylineText?.runs?.firstOrNull()?.text.toString()
+                                            .let { title ->
+                                                if (true) {
+                                                    channelOwnerTitle.text = title
+                                                } else {
+                                                    channelOwnerTitle.text = ""
+                                                }
+                                            }
+                                        channelInfo.subscriberCountText?.simpleText.toString()
+                                            .let { simpleName ->
+                                                if (true) {
+                                                    channelOwnerSubscriberCount.text = simpleName
+                                                } else {
+                                                    channelOwnerSubscriberCount.text = ""
+                                                }
+                                            }
+                                        channelInfo.videoCountText?.simpleText.toString()
+                                            .let { views ->
+                                                if (true) {
+                                                    channelOwnerViewCount.text = views
+                                                } else {
+                                                    channelOwnerViewCount.text = ""
+                                                }
+                                            }
                                     }
+                                }
+                            }
+                            content.videoRenderer.let { video ->
+                                if (video != null) {
+                                    videosList.add(video)
                                 }
                             }
                         }
@@ -141,6 +170,18 @@ class YoutubePlayer : AppCompatActivity() {
                             shortsList
                         )
                     }
+
+                    binding.relativeVideos.apply {
+                        layoutManager = LinearLayoutManager(
+                            this@YoutubePlayer,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
+                        adapter = YoutubePlayerVideosAdapter(
+                            videosList
+                        )
+                    }
+
                 }
                 is YoutubeResponse.Error -> {
                     Log.e("YoutubePlayer", "Error : ${response.exception}")
