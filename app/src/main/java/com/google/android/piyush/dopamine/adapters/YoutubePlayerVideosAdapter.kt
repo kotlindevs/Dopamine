@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.databinding.ItemYoutubePlayerRelativeVideosBinding
-import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 
 class YoutubePlayerVideosAdapter(private val videos : MutableList<VideoRenderer>) :
@@ -37,12 +36,18 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
     inner class YoutubePlayerVideosViewHolder(private val binding : ItemYoutubePlayerRelativeVideosBinding)
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(video : VideoRenderer) {
-            val videoInfo = "${video.longBylineText?.runs?.firstOrNull()?.text.toString()} • ${video.shortViewCountText?.simpleText?.toString()} • ${video.publishedTimeText?.simpleText.toString()}"
+            val channelName = video.longBylineText?.runs?.firstOrNull()?.text.toString()
+            val viewCount = video.shortViewCountText?.simpleText?.toString()
+            val publishedTime = video.publishedTimeText?.simpleText.toString()
+            val channelImage = video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
+            val videoImage = video.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
+
+            val videoInfo = "$channelName • $viewCount • $publishedTime"
             binding.apply {
+                Glide.with(root).load(channelImage).into(this.channelImage)
+                Glide.with(root).load(videoImage).into(this.videoImage)
                 videoTitle.text = video.title?.runs?.firstOrNull()?.text.toString()
                 otherVideoInfo.text = videoInfo
-                Glide.with(root).load(video.thumbnail?.thumbnails?.firstOrNull()?.url.toString()).into(videoImage)
-                Glide.with(root).load(video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString()).into(channelImage)
             }
         }
     }

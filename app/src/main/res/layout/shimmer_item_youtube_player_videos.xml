@@ -7,8 +7,9 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/videoImage"
         android:layout_width="match_parent"
-        android:layout_height="216dp"
+        android:layout_height="212dp"
         style="@style/Widget.Material3.CardView.Filled"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.ExtraSmall"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
