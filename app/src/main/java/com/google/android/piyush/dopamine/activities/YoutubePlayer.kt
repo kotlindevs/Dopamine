@@ -67,8 +67,25 @@ class YoutubePlayer : AppCompatActivity() {
 
         viewModel.playerInfo.observe(this) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Loading -> {
+                    binding.apply {
+                        shimmerEffectTitle.visibility = View.VISIBLE
+                        shimmerEffectVideoInfo.visibility = View.VISIBLE
+                        shimmerEffectTitle.startShimmer()
+                        shimmerEffectVideoInfo.startShimmer()
+                        videoTitle.visibility = View.GONE
+                        videoInfo.visibility = View.GONE
+                    }
+                }
                 is YoutubeResponse.Success -> {
+                    binding.apply {
+                        shimmerEffectTitle.visibility = View.GONE
+                        shimmerEffectVideoInfo.visibility = View.GONE
+                        shimmerEffectTitle.stopShimmer()
+                        shimmerEffectVideoInfo.stopShimmer()
+                        videoTitle.visibility = View.VISIBLE
+                        videoInfo.visibility = View.VISIBLE
+                    }
                     val video = response.data.videoDetails
                     val videoInfo = "$viewCount • $publishedTime ...more"
                     binding.videoTitle.text = response.data.videoDetails?.title ?: "No Title"
