@@ -32,10 +32,6 @@ import kotlin.random.Random
 
 class Search : Fragment() {
     private var fragmentSearchBinding: FragmentSearchBinding? = null
-    private lateinit var databaseViewModel: DatabaseViewModel
-    private lateinit var searchViewModel: SearchViewModel
-    private lateinit var youtubeRepositoryImpl: YoutubeRepositoryImpl
-    private lateinit var searchViewModelFactory: SearchViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,126 +46,6 @@ class Search : Fragment() {
 
         val binding = FragmentSearchBinding.bind(view)
         fragmentSearchBinding = binding
-        youtubeRepositoryImpl = YoutubeRepositoryImpl()
-        searchViewModelFactory = SearchViewModelFactory(youtubeRepositoryImpl)
-        searchViewModel = ViewModelProvider(this, searchViewModelFactory)[SearchViewModel::class.java]
-        databaseViewModel = DatabaseViewModel(context?.applicationContext!!)
-
-        fragmentSearchBinding!!.userImage.setOnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    DopamineUserProfile::class.java
-                )
-            )
-        }
-
-        binding.clearAll.setOnClickListener {
-            binding.utilList.visibility = View.GONE
-            binding.searchEffect.visibility = View.VISIBLE
-            binding.clearAll.visibility = View.GONE
-            databaseViewModel.deleteSearchVideoList()
-            ToastUtilities.showToast(
-                requireContext(),
-                "Search History Cleared",
-            )
-        }
-
-        databaseViewModel.getSearchVideoList()
-
-        databaseViewModel.searchVideoHistory.observe(viewLifecycleOwner){
-            if(it.isEmpty()){
-                binding.clearAll.visibility = View.GONE
-                binding.searchEffect.visibility = View.VISIBLE
-                binding.utilList.visibility = View.GONE
-            }else{
-                binding.searchEffect.visibility = View.INVISIBLE
-                binding.clearAll.visibility = View.VISIBLE
-                binding.utilList.apply {
-                    visibility = View.VISIBLE
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = SearchHistoryAdapter(it)
-                }
-            }
-            Log.d(TAG, " -> Fragment : Search || Search History : $it")
-        }
-
-        binding.searchVideo.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    binding.utilList.visibility = View.VISIBLE
-                    binding.searchEffect.visibility = View.INVISIBLE
-                    databaseViewModel.insertSearchVideos(
-                        EntityVideoSearch(
-                            Random.nextInt(1, 100000),
-                            query
-                        )
-                    )
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            }
-        )
-
-        binding.voiceSearch.setOnClickListener {
-            if(
-                ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_GRANTED
-            ){
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.RECORD_AUDIO),
-                    Utilities.PERMISSION_REQUEST_CODE
-                )
-            }else{
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
-                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
-            }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if(requestCode == Utilities.PERMISSION_REQUEST_CODE){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say Something 🧿")
-                startActivityForResult(intent, Utilities.PERMISSION_REQUEST_CODE)
-            }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    @Deprecated("Deprecated in Java", ReplaceWith(
-        "super.onActivityResult(requestCode, resultCode, data)",
-        "androidx.fragment.app.Fragment")
-    )
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == Utilities.PERMISSION_REQUEST_CODE && resultCode == RESULT_OK){
-            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            fragmentSearchBinding!!.searchVideo.setQuery(result?.get(0), true)
-            Log.d(TAG, " -> Fragment : Search || User Voice Search : ${result?.get(0)}")
-        }
     }
 
     override fun onDestroyView() {

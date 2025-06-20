@@ -44,8 +44,8 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
 
             val videoInfo = "$channelName • $viewCount • $publishedTime"
             binding.apply {
-                Glide.with(root).load(channelImage).into(this.channelImage)
                 Glide.with(root).load(videoImage).into(this.videoImage)
+                Glide.with(root).load(channelImage).into(this.channelImage)
                 videoTitle.text = video.title?.runs?.firstOrNull()?.text.toString()
                 otherVideoInfo.text = videoInfo
             }
