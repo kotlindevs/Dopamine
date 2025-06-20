@@ -188,7 +188,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/saveChannel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -274,12 +274,29 @@
             app:layout_constraintStart_toEndOf="@id/channelOwnerImage"
             app:layout_constraintBottom_toTopOf="@id/relativeVideos"/>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerEffectVideos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/shimmerEffectShorts"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include layout="@layout/shimmer_item_youtube_player_videos"/>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/relativeVideos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
             android:layout_marginTop="12dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/channelOwnerImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

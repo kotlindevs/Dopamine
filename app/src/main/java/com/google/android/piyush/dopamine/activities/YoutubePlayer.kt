@@ -20,7 +20,6 @@ import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
-import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.model.VideoInfo
@@ -134,7 +133,7 @@ class YoutubePlayer : AppCompatActivity() {
         }
 
         viewModel.searchKeys?.observe(this) { keys ->
-            val key = keys[0].toString()
+            val key = keys[1].toString()
 
             viewModel.searchData(query = key)
             Log.i("YoutubePlayer", "Keys : $key")
@@ -145,15 +144,21 @@ class YoutubePlayer : AppCompatActivity() {
                 is YoutubeResponse.Loading -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.VISIBLE
+                        shimmerEffectVideos.visibility = View.VISIBLE
                         shimmerEffectShorts.startShimmer()
+                        shimmerEffectVideos.startShimmer()
                         shorts.visibility = View.GONE
+                        relativeVideos.visibility = View.GONE
                     }
                 }
                 is YoutubeResponse.Success -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.GONE
+                        shimmerEffectVideos.visibility = View.GONE
                         shimmerEffectShorts.stopShimmer()
+                        shimmerEffectVideos.stopShimmer()
                         shorts.visibility = View.VISIBLE
+                        relativeVideos.visibility = View.VISIBLE
                     }
                     val shortsList = mutableListOf<ShortsLockupViewModel>()
                     val videosList = mutableListOf<VideoRenderer>()
@@ -224,7 +229,7 @@ class YoutubePlayer : AppCompatActivity() {
                     }
 
                     binding.relativeVideos.apply {
-                        isNestedScrollingEnabled = false
+                        isNestedScrollingEnabled = true
                         layoutManager = LinearLayoutManager(
                             this@YoutubePlayer,
                             LinearLayoutManager.VERTICAL,
