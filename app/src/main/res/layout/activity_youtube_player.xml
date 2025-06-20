@@ -69,19 +69,14 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/videoTitle"
+            app:layout_constraintTop_toBottomOf="@id/shimmerEffectTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="256dp"
-                    android:layout_height="16dp"
-                    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
-                    style="@style/Widget.Material3.CardView.Filled"/>
-            </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="256dp"
+                android:layout_height="16dp"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                style="@style/Widget.Material3.CardView.Filled"/>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <com.google.android.material.textview.MaterialTextView
@@ -99,6 +94,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerEffectChannelImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:visibility="gone"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/shimmerEffectVideoInfo"
+            app:layout_constraintStart_toStartOf="parent">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                style="@style/Widget.Material3.CardView.Filled"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/channelImage"
             android:layout_width="32dp"
@@ -106,9 +118,27 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:visibility="gone"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_constraintTop_toBottomOf="@id/videoInfo"
             app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerEffectChannelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/shimmerEffectChannelImage"
+            app:layout_constraintStart_toEndOf="@id/shimmerEffectChannelImage"
+            app:layout_constraintBottom_toBottomOf="@id/shimmerEffectChannelImage">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="190dp"
+                android:layout_height="20dp"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                style="@style/Widget.Material3.CardView.Filled"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/channelName"
@@ -118,9 +148,26 @@
             android:maxLines="1"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/channelImage"
             app:layout_constraintStart_toEndOf="@id/channelImage"
             app:layout_constraintBottom_toBottomOf="@id/channelImage"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerEffectSaveChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/shimmerEffectChannelName"
+            app:layout_constraintBottom_toBottomOf="@id/shimmerEffectChannelName">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="89dp"
+                android:layout_height="42dp"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                style="@style/Widget.Material3.CardView.Filled"/>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveChannel"
@@ -128,6 +175,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:text="@string/save"
+            android:visibility="gone"
             style="@style/Widget.Material3.Button.TextButton.Icon"
             app:icon="@drawable/ic_save_y25"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
@@ -135,11 +183,39 @@
             app:layout_constraintTop_toTopOf="@id/channelName"
             app:layout_constraintBottom_toBottomOf="@id/channelName"/>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerEffectShorts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/saveChannel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:overScrollMode="ifContentScrolls">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                    <include layout="@layout/shimmer_item_youtube_player_shorts"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shorts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/saveChannel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -152,6 +228,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:scaleType="center"
+            android:visibility="gone"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_constraintTop_toBottomOf="@id/shorts"
             app:layout_constraintStart_toStartOf="parent"
@@ -165,6 +242,7 @@
             android:layout_marginEnd="12dp"
             android:maxLines="1"
             android:textStyle="bold"
+            android:visibility="gone"
             android:layout_marginTop="6dp"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintTop_toTopOf="@id/channelOwnerImage"
@@ -177,6 +255,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
+            android:visibility="gone"
             android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
             app:layout_constraintTop_toBottomOf="@id/channelOwnerTitle"
             app:layout_constraintStart_toEndOf="@id/channelOwnerImage"/>
@@ -189,6 +268,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="8dp"
             android:textStyle="bold"
+            android:visibility="gone"
             android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
             app:layout_constraintTop_toBottomOf="@id/channelOwnerSubscriberCount"
             app:layout_constraintStart_toEndOf="@id/channelOwnerImage"
