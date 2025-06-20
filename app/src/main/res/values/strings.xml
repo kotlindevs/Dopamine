@@ -101,4 +101,5 @@
     <string name="views">Views</string>
     <string name="duration">Duration</string>
     <string name="save">Save</string>
+    <string name="account">Account</string>
 </resources>

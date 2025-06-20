@@ -14,4 +14,9 @@
         android:id="@+id/trending"
         android:title="@string/trending"
         android:icon="@drawable/ic_library"/>
+
+    <item
+        android:id="@+id/userAccount"
+        android:title="@string/account"
+        android:icon="@drawable/ic_user_account" />
 </menu>

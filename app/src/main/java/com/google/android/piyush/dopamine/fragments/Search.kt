@@ -21,6 +21,7 @@ import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.DopamineUserProfile
 import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
+import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -46,6 +47,15 @@ class Search : Fragment() {
 
         val binding = FragmentSearchBinding.bind(view)
         fragmentSearchBinding = binding
+
+        val searchSuggestionList = mutableListOf<String>(
+            "Microsoft", "Amazon" ,"Google", "Apple", "Samsung"
+        )
+
+        val adapter = SearchSuggestionAdapter(searchSuggestionList)
+        binding.searchSuggestionText.adapter = adapter
+        binding.searchSuggestionText.layoutManager = LinearLayoutManager(requireContext())
+
     }
 
     override fun onDestroyView() {

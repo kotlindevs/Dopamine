@@ -30,7 +30,10 @@
         android:hint="@string/searchbar_hint"
         app:layout_anchor="@id/search_bar">
 
-        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchSuggestionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </com.google.android.material.search.SearchView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
