@@ -12,6 +12,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
@@ -39,19 +40,12 @@ class Search : Fragment() {
 
         binding = FragmentSearchBinding.bind(view)
         binding?.apply {
+            searchBar.setOnClickListener {
+                searchView.show()
+            }
             searchView.editText.doAfterTextChanged { query ->
                 viewModel.searchSuggestions(query = query.toString())
             }
-
-            searchView.editText.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-                override fun onEditorAction(
-                    v: TextView?,
-                    actionId: Int,
-                    event: KeyEvent?
-                ): Boolean {
-                    return true
-                }
-            })
         }
 
         viewModel.searchSuggestions.observe(viewLifecycleOwner) { response ->
@@ -66,13 +60,18 @@ class Search : Fragment() {
                                 adapter = SearchSuggestionAdapter(
                                     results,
                                     onSuggestionClick = { search ->
-                                        binding?.searchBar?.setText(search)
                                         viewModel.searchData(search)
+                                        searchView.clearText()
+                                        searchView.clearFocusAndHideKeyboard()
+                                        searchView.hide()
                                     }
                                 )
                             }
                         }
+                    }else {
+                        Log.d("Search", "Results getting null !")
                     }
+                    Log.d("Search", results.toString())
                 }
                 is YoutubeResponse.Error -> {
                     Log.d("Search", response.exception.message.toString())
