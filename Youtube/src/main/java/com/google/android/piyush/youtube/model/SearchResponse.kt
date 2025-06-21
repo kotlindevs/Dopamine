@@ -1,7 +1,6 @@
 package com.google.android.piyush.youtube.model
 
 import kotlinx.serialization.Serializable
-import java.io.Serial
 
 @Serializable
 data class SearchResponse(

@@ -9,6 +9,7 @@ import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
+import com.google.android.piyush.youtube.model.SearchSuggestions
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
@@ -39,6 +40,9 @@ class YoutubeViewModel() : ViewModel() {
     private val _searchKeys : MutableLiveData<List<String>>? = MutableLiveData()
     val searchKeys : LiveData<List<String>>? = _searchKeys
 
+    private val _searchSuggestions : MutableLiveData<YoutubeResponse<SearchSuggestions>> = MutableLiveData()
+    val searchSuggestions : LiveData<YoutubeResponse<SearchSuggestions>> = _searchSuggestions
+
     private val _relativeResults : MutableLiveData<MutableList<ShortsLockupViewModel>> = MutableLiveData()
     val relativeResults : LiveData<MutableList<ShortsLockupViewModel>> = _relativeResults
 
@@ -57,6 +61,16 @@ class YoutubeViewModel() : ViewModel() {
 
     fun relativeResults(results : MutableList<ShortsLockupViewModel>) = viewModelScope.launch {
         _relativeResults.postValue(results)
+    }
+
+    fun searchSuggestions(query : String) = viewModelScope.launch {
+        _searchSuggestions.postValue(YoutubeResponse.Loading)
+        try {
+            val suggestions = repository.searchSuggestions(query)
+            _searchSuggestions.postValue(YoutubeResponse.Success(suggestions))
+        }catch (e : Exception) {
+            _searchSuggestions.postValue(YoutubeResponse.Error(e))
+        }
     }
 
     fun searchData(query : String) = viewModelScope.launch {

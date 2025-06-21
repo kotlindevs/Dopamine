@@ -1,38 +1,27 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.Manifest
-import android.app.Activity.RESULT_OK
-import android.content.ContentValues.TAG
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import androidx.core.app.ActivityCompat
+import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.piyush.database.entities.EntityVideoSearch
-import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineUserProfile
-import com.google.android.piyush.dopamine.adapters.SearchHistoryAdapter
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
-import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.dopamine.viewModels.SearchViewModel
-import com.google.android.piyush.dopamine.viewModels.SearchViewModelFactory
-import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
-import java.util.Locale
-import kotlin.random.Random
+import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
 
 class Search : Fragment() {
-    private var fragmentSearchBinding: FragmentSearchBinding? = null
+
+    private var binding: FragmentSearchBinding? = null
+    private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,17 +34,42 @@ class Search : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentSearchBinding.bind(view)
-        fragmentSearchBinding = binding
+        binding = FragmentSearchBinding.bind(view)
+        binding?.apply {
+            searchView.editText.doAfterTextChanged { query ->
+                viewModel.searchSuggestions(query = query.toString())
+            }
 
-        val searchSuggestionList = mutableListOf<String>(
-            "Microsoft", "Amazon" ,"Google", "Apple", "Samsung"
-        )
+            searchView.editText.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(
+                    v: TextView?,
+                    actionId: Int,
+                    event: KeyEvent?
+                ): Boolean {
+                    return true
+                }
+            })
+        }
 
-        val adapter = SearchSuggestionAdapter(searchSuggestionList)
-        binding.searchSuggestionText.adapter = adapter
-        binding.searchSuggestionText.layoutManager = LinearLayoutManager(requireContext())
-
+        viewModel.searchSuggestions.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is YoutubeResponse.Loading -> {}
+                is YoutubeResponse.Success -> {
+                    val results = response.data.refinements
+                    if (results != null) {
+                        binding?.apply {
+                            searchSuggestionText.apply {
+                                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                                adapter = SearchSuggestionAdapter(results)
+                            }
+                        }
+                    }
+                }
+                is YoutubeResponse.Error -> {
+                    Log.d("Search", response.exception.message.toString())
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

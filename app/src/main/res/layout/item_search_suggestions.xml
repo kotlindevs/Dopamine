@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
     style="@style/Widget.Material3.CardView.Filled">
 
@@ -17,7 +20,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.CardView.Filled"
             android:backgroundTint="?attr/colorSecondaryContainer"
-            android:layout_margin="4dp"
+            android:layout_margin="6dp"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,13 +35,15 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/searchSuggestionText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:layout_marginStart="16dp"
+            android:layout_margin="6dp"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:layout_margin="12dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/selectedSearchSuggestionText"
+            app:layout_constraintBottom_toBottomOf="@id/selectedSearchSuggestionText"
             app:layout_constraintStart_toEndOf="@id/selectedSearchSuggestionText"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

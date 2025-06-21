@@ -14,6 +14,7 @@ import com.google.android.piyush.youtube.model.PlayerBody
 import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.model.SearchBody
 import com.google.android.piyush.youtube.model.SearchResponse
+import com.google.android.piyush.youtube.model.SearchSuggestions
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -78,6 +79,17 @@ class YoutubeRepositoryImpl : YoutubeRepository {
     }
 
     override suspend fun searchResults(query: String): SearchResponse {
+        return Youtube.post(SEARCH) {
+            setBody(
+                SearchBody(
+                    context = Context.WEB,
+                    query = query
+                )
+            )
+        }.body()
+    }
+
+    override suspend fun searchSuggestions(query: String): SearchSuggestions {
         return Youtube.post(SEARCH) {
             setBody(
                 SearchBody(
