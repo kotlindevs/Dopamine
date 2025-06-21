@@ -4,13 +4,53 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/shimmerEffectVideoImage"
+        android:layout_width="match_parent"
+        android:layout_height="212dp"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:visibility="gone"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.ExtraSmall"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/videoImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/shimmerEffectChannelInfo"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/shimmerEffectVideoImage"
+        app:layout_constraintStart_toEndOf="@id/shimmerEffectChannelImage">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+            style="@style/Widget.Material3.CardView.Filled"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="6dp" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="256dp"
+            android:layout_height="16dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+            style="@style/Widget.Material3.CardView.Filled"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="6dp" />
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/videoTitle"
@@ -22,9 +62,23 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/videoImage"
         app:layout_constraintStart_toEndOf="@id/channelImage"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/shimmerEffectChannelImage"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:layout_constraintTop_toTopOf="@id/shimmerEffectChannelInfo"
+        app:layout_constraintEnd_toStartOf="@id/shimmerEffectChannelInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/shimmerEffectChannelInfo"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/channelImage"
@@ -32,6 +86,7 @@
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
+        android:visibility="gone"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:layout_constraintTop_toBottomOf="@id/videoImage"
         app:layout_constraintEnd_toStartOf="@id/videoTitle"
@@ -45,6 +100,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/videoTitle"
         app:layout_constraintStart_toEndOf="@id/channelImage"
         app:layout_constraintEnd_toEndOf="parent"/>
