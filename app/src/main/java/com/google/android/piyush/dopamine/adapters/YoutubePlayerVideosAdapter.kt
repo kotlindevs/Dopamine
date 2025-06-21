@@ -4,14 +4,12 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.piyush.dopamine.databinding.ItemYoutubePlayerRelativeVideosBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 
@@ -47,50 +45,111 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
             val channelName = video.longBylineText?.runs?.firstOrNull()?.text.toString()
             val viewCount = video.shortViewCountText?.simpleText?.toString()
             val publishedTime = video.publishedTimeText?.simpleText.toString()
-            val channelImage = video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
+            val channelImage =
+                video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
             val videoImage = video.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
-
+            val videoTitle = video.title?.runs?.firstOrNull()?.text.toString()
             val videoInfo = "$channelName • $viewCount • $publishedTime"
-            binding.apply {
-                Glide.with(binding.root)
-                    .load(videoImage)
-                    .listener(object : RequestListener<Drawable>{
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable?>,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            binding.apply {
-                                /*
-                                this.shimmerEffectVideoImage.visibility = View.GONE
-                                this.shimmerEffectVideoImage.stopShimmer()
-                                this.videoImage.visibility = View.VISIBLE */
-                                shimmerEffectVideoImage.apply {
-                                    this.visibility = View.VISIBLE
-                                    this.startShimmer()
-                                }
-                                binding.videoImage.visibility = View.GONE
-                            }
-                            return true
-                        }
 
-                        override fun onResourceReady(
-                            resource: Drawable,
-                            model: Any,
-                            target: Target<Drawable?>?,
-                            dataSource: DataSource,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            binding.apply {
-                                this.shimmerEffectVideoImage.visibility = View.GONE
-                                this.shimmerEffectVideoImage.stopShimmer()
-                                this.videoImage.visibility = View.VISIBLE
-                            }
-                            return true
-                        }
-                    })
-                    .into(this.videoImage)
+            binding.apply {
+                videoImage.let {
+                    if(it.isNotEmpty()) {
+                        shimmerEffectVideoImage.visibility = View.VISIBLE
+                        shimmerEffectVideoImage.startShimmer()
+                        this.videoImage.visibility = View.VISIBLE
+
+                        Glide.with(binding.root.context).load(it)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable?>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    binding.shimmerEffectVideoImage.visibility = View.GONE
+                                    binding.shimmerEffectVideoImage.stopShimmer()
+                                    binding.videoImage.visibility = View.VISIBLE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    binding.shimmerEffectVideoImage.visibility = View.GONE
+                                    binding.shimmerEffectVideoImage.stopShimmer()
+                                    binding.videoImage.visibility = View.VISIBLE
+                                    return false
+                                }
+
+                            })
+                            .into(this.videoImage)
+                    }
+                }
+
+                channelImage.let {
+                    if(it.isNotEmpty()){
+                        shimmerEffectChannelImage.visibility = View.VISIBLE
+                        shimmerEffectChannelImage.startShimmer()
+                        this.channelImage.visibility = View.VISIBLE
+
+                        Glide.with(binding.root.context).load(it)
+                            .listener(object : RequestListener<Drawable>{
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable?>,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    binding.shimmerEffectChannelImage.visibility = View.GONE
+                                    binding.shimmerEffectChannelImage.stopShimmer()
+                                    binding.channelImage.visibility = View.VISIBLE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    model: Any,
+                                    target: Target<Drawable?>?,
+                                    dataSource: DataSource,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    binding.shimmerEffectChannelImage.visibility = View.GONE
+                                    binding.shimmerEffectChannelImage.stopShimmer()
+                                    binding.channelImage.visibility = View.VISIBLE
+                                    return false
+                                }
+
+                            })
+                            .into(this.channelImage)
+
+                    }else{
+                        binding.shimmerEffectChannelImage.visibility = View.GONE
+                        binding.shimmerEffectChannelImage.stopShimmer()
+                        binding.channelImage.visibility = View.VISIBLE
+                    }
+                }
+
+                videoInfo.let {
+                    shimmerEffectChannelInfo.visibility = View.VISIBLE
+                    shimmerEffectChannelInfo.startShimmer()
+                    if(it.isNotEmpty() || videoTitle.isNotEmpty()) {
+                        shimmerEffectChannelInfo.visibility = View.GONE
+                        shimmerEffectChannelInfo.stopShimmer()
+                        this.videoTitle.visibility = View.VISIBLE
+                        this.videoTitle.text = videoTitle
+                        this.otherVideoInfo.visibility = View.VISIBLE
+                        this.otherVideoInfo.text = it
+                    }else{
+                        binding.shimmerEffectChannelInfo.visibility = View.GONE
+                        binding.shimmerEffectChannelInfo.stopShimmer()
+                        binding.otherVideoInfo.visibility = View.GONE
+                        binding.videoTitle.visibility = View.GONE
+                    }
+                }
             }
         }
     }

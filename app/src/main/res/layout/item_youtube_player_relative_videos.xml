@@ -7,7 +7,7 @@
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerEffectVideoImage"
         android:layout_width="match_parent"
-        android:layout_height="212dp"
+        android:layout_height="320dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,14 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/Widget.Material3.CardView.Filled"
+            android:backgroundTint="?attr/colorPrimaryContainer"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.ExtraSmall" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/videoImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="320dp"
         android:visibility="gone"
+        android:scaleType="fitCenter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -89,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/Widget.Material3.CardView.Filled"
+            android:backgroundTint="?attr/colorTertiaryContainer"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"/>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -99,6 +102,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:visibility="gone"
+        android:scaleType="fitCenter"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:layout_constraintTop_toBottomOf="@id/videoImage"
         app:layout_constraintEnd_toStartOf="@id/videoTitle"
