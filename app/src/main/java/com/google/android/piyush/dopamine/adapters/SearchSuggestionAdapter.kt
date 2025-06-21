@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.databinding.ItemSearchSuggestionsBinding
 
-class SearchSuggestionAdapter(private val suggestions : List<String>)
+class SearchSuggestionAdapter(
+    private val suggestions : List<String>,
+    private val onSuggestionClick : (String) -> Unit
+)
     : RecyclerView.Adapter<SearchSuggestionAdapter.SearchSuggestionViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,6 +38,9 @@ class SearchSuggestionAdapter(private val suggestions : List<String>)
             : RecyclerView.ViewHolder(binding.root) {
             fun bind(suggestion : String) {
                 binding.searchSuggestionText.text = suggestion
+                binding.selectedSearchSuggestionText.setOnClickListener {
+                    onSuggestionClick(suggestion)
+                }
             }
         }
 }
