@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:visibility="visible"
         style="@style/Widget.Material3.CardView.Filled"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
