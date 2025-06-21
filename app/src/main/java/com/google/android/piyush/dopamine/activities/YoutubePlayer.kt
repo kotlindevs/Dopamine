@@ -144,9 +144,7 @@ class YoutubePlayer : AppCompatActivity() {
                 is YoutubeResponse.Loading -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.VISIBLE
-                        shimmerEffectVideos.visibility = View.VISIBLE
                         shimmerEffectShorts.startShimmer()
-                        shimmerEffectVideos.startShimmer()
                         shorts.visibility = View.GONE
                         relativeVideos.visibility = View.GONE
                     }
@@ -154,9 +152,7 @@ class YoutubePlayer : AppCompatActivity() {
                 is YoutubeResponse.Success -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.GONE
-                        shimmerEffectVideos.visibility = View.GONE
                         shimmerEffectShorts.stopShimmer()
-                        shimmerEffectVideos.stopShimmer()
                         shorts.visibility = View.VISIBLE
                         relativeVideos.visibility = View.VISIBLE
                     }
