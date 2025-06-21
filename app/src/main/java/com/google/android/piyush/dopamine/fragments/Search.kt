@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +42,15 @@ class Search : Fragment() {
             }
             searchView.editText.doAfterTextChanged { query ->
                 viewModel.searchSuggestions(query = query.toString())
+            }
+
+            searchView.editText.doOnTextChanged {
+                    text, start, before, count ->
+                if(searchView.editText.text.toString().isEmpty()){
+                    searchSuggestionText.visibility = View.GONE
+                }else{
+                    searchSuggestionText.visibility = View.VISIBLE
+                }
             }
         }
 
