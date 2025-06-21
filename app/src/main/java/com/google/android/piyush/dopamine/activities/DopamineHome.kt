@@ -14,6 +14,7 @@ import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBindin
 import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.Search
+import com.google.android.piyush.dopamine.fragments.UserAccount
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
@@ -74,6 +75,10 @@ class DopamineHome : AppCompatActivity() {
                 }
                 R.id.trending -> {
                     defaultScreen(Trending())
+                    true
+                }
+                R.id.userAccount -> {
+                    defaultScreen(UserAccount())
                     true
                 }
                 else -> false
