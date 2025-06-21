@@ -32,16 +32,5 @@
         <item name="android:windowActivityTransitions">true</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:fontFamily">@font/circular_spotify</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <style name="Theme.Dopamine" parent="Base.Theme.Dopamine" />
-
-    <style name="Widget.BottomNavigationView"
-        parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/circular_spotify</item>
-    </style>
-
 </resources>
