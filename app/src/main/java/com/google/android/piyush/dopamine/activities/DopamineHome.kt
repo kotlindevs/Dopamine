@@ -1,19 +1,19 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.android.piyush.dopamine.fragments.Home
-import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.Search
+import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.UserAccount
 import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
@@ -35,64 +35,64 @@ class DopamineHome : AppCompatActivity() {
         sharedViewModel = SharedViewModel()
         setContentView(binding.root)
 
-        onBackPressedDispatcher.addCallback {
-            overridePendingTransition(
-                android.R.anim.fade_in, android.R.anim.fade_out
-            )
-            finishAffinity()
-            finish()
-            exitProcess(0)
-        }
-
-        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                0
-            )
-        }
-
+        onBackPressedDispatcher.addCallback(
+            owner = this,
+            enabled = true,
+            onBackPressed = {
+                overridePendingTransition(
+                    android.R.anim.fade_in, android.R.anim.fade_out
+                )
+                finishAffinity()
+                finish()
+                exitProcess(0)
+            }
+        )
 
         if(!NetworkUtilities.isNetworkAvailable(this)){
             Utilities.turnOnNetworkDialog(this,"No Internet Connection")
         }
 
         if (savedInstanceState == null) {
-            defaultScreen(Home())
+            replaceFragment(Home(), true)
         }
 
-
-
-        /*binding.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> {
-                    defaultScreen(Home())
-                    true
+        binding.bottomNavigationView.addOnButtonCheckedListener(
+            object : MaterialButtonToggleGroup.OnButtonCheckedListener{
+            override fun onButtonChecked(
+                group: MaterialButtonToggleGroup?,
+                checkedId: Int,
+                isChecked: Boolean
+            ) {
+                if(isChecked){
+                    when(checkedId){
+                        R.id.fragmentHome -> {
+                            replaceFragment(Home(), true)
+                        }
+                        R.id.fragmentSearch -> {
+                            replaceFragment(Search(), false)
+                            }
+                        R.id.fragmentTrending -> {
+                            replaceFragment(Trending(), false)
+                        }
+                        R.id.fragmentUserAccount -> {
+                            replaceFragment(UserAccount(), false)
+                        }
+                    }
                 }
-                R.id.search -> {
-                    defaultScreen(Search())
-                    true
-                }
-                R.id.trending -> {
-                    defaultScreen(Trending())
-                    true
-                }
-                R.id.userAccount -> {
-                    defaultScreen(UserAccount())
-                    true
-                }
-                else -> false
             }
-        }*/
+        })
     }
 
-    private fun defaultScreen(fragment: Fragment){
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout,fragment)
-        fragmentTransaction.commit()
+    private fun replaceFragment(fragment: Fragment, showTooBar : Boolean = true){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frameLayout, fragment)
+            .commit()
+
+        if(showTooBar){
+            binding.floatingToolBar.visibility = View.VISIBLE
+        }else{
+            binding.floatingToolBar.visibility = View.GONE
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
