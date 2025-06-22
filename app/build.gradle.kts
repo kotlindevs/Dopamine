@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.google.android.piyush.dopamine"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.google.android.piyush.dopamine"
