@@ -26,8 +26,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back"
                 app:title="History"
-                app:titleMarginStart="8dp"
-                app:titleTextAppearance="@style/ToolbarTheme" />
+                app:titleMarginStart="8dp" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -63,7 +63,9 @@ class DopamineHome : AppCompatActivity() {
             defaultScreen(Home())
         }
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
+
+
+        /*binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     defaultScreen(Home())
@@ -83,7 +85,7 @@ class DopamineHome : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
+        }*/
     }
 
     private fun defaultScreen(fragment: Fragment){

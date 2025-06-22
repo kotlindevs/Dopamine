@@ -29,8 +29,7 @@
                 app:menu="@menu/user_profile_menu"
                 app:navigationIcon="@drawable/ic_back"
                 app:title="Profile"
-                app:titleCentered="true"
-                app:titleTextAppearance="@style/ToolbarTheme">
+                app:titleCentered="true">
 
             </com.google.android.material.appbar.MaterialToolbar>
 
