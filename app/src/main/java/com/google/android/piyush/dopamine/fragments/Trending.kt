@@ -1,17 +1,14 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.adapters.TrendingAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
 import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
@@ -29,20 +26,6 @@ class Trending : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            owner = viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    binding = null
-                    startActivity(
-                        Intent(
-                            requireContext(),
-                            DopamineHome::class.java
-                        )
-                    )
-                }
-            }
-        )
         return inflater.inflate(R.layout.fragment_trending, container, false)
     }
 

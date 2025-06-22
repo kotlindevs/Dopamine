@@ -1,12 +1,10 @@
 package com.google.android.piyush.dopamine.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -14,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.activities.DopamineHome
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
@@ -31,20 +28,6 @@ class Search : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            owner = viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    binding = null
-                    startActivity(
-                        Intent(
-                            requireContext(),
-                            DopamineHome::class.java
-                        )
-                    )
-                }
-            }
-        )
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
