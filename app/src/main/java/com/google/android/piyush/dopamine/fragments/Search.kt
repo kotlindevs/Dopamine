@@ -12,12 +12,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
 
 class Search : Fragment() {
 
@@ -66,10 +66,12 @@ class Search : Fragment() {
                                 adapter = SearchSuggestionAdapter(
                                     results,
                                     onSuggestionClick = { search ->
-                                        viewModel.searchData(search)
-                                        searchView.clearText()
-                                        searchView.clearFocusAndHideKeyboard()
-                                        searchView.hide()
+                                        if(search.isNotEmpty()){
+                                            viewModel.searchData(search)
+                                            searchView.clearText()
+                                            searchView.clearFocusAndHideKeyboard()
+                                            searchView.hide()
+                                        }
                                     }
                                 )
                             }

@@ -13,7 +13,7 @@ import com.google.android.piyush.dopamine.adapters.TrendingAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
 import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
+import com.google.android.piyush.dopamine.YoutubeViewModel
 
 class Trending : Fragment() {
 

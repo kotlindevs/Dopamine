@@ -4,14 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.piyush.database.model.CustomPlaylistView
-import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.databinding.ItemCustomDialogBinding
 
 @Suppress("DEPRECATION")
 object NetworkUtilities {
@@ -76,37 +72,4 @@ const val PERMISSION_REQUEST_CODE = 100
     }.create().show()
 }
 
-class CustomDialog(context: Context) : MaterialAlertDialogBuilder(context) {
-    private var binding: ItemCustomDialogBinding
-    private var databaseViewModel: DatabaseViewModel
-    init {
-        setCancelable(true)
-        databaseViewModel = DatabaseViewModel(context)
-        binding = ItemCustomDialogBinding.inflate(LayoutInflater.from(context)).also {
-            setView(it.root)
-        }
-        val playlistName = binding.text1.text
-        val playlistDescription = binding.text2.text
-
-        binding.button.setOnClickListener {
-            if(databaseViewModel.isPlaylistExist(playlistName.toString())){
-                binding.textInputLayout1.isErrorEnabled = true
-                binding.textInputLayout1.error = "Playlist Already Exists"
-            }else{
-                if(playlistName.toString().isEmpty()){
-                    ToastUtilities.showToast(context, "Please Fill All Fields")
-                }else {
-                    databaseViewModel.createCustomPlaylist(
-                        CustomPlaylistView(
-                            playlistName.toString(),
-                            playlistDescription.toString().ifEmpty { "Empty Description" },
-                        )
-                    )
-                    playlistName?.clear()
-                    playlistDescription?.clear()
-                    ToastUtilities.showToast(context, "$playlistName Created ✅")
-                }
-            }
-        }
-    }
-}
+class CustomDialog{}

@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -25,20 +24,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineUserProfileBinding
 import com.google.android.piyush.dopamine.utilities.CustomDialog
-import com.google.android.piyush.dopamine.utilities.NetworkUtilities
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.youtube.utilities.DopamineVersionViewModel
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
 
 class DopamineUserProfile : AppCompatActivity() {
 
     private lateinit var binding: ActivityDopamineUserProfileBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var dopamineVersionViewModel: DopamineVersionViewModel
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,50 +73,6 @@ class DopamineUserProfile : AppCompatActivity() {
         }
 
         val preReleaseUpdates = sharedPreferences.getBoolean("PreReleaseUpdate", false)
-        if (preReleaseUpdates) {
-            dopamineVersionViewModel.preReleaseUpdate()
-            dopamineVersionViewModel.preRelease.observe(this@DopamineUserProfile) {
-                if (it is YoutubeResponse.Success) {
-                    sharedPreferences.edit().apply {
-                        putString("PreReleaseVersion", it.data.versionName)
-                        putString("PreReleaseUrl", it.data.url)
-                        apply()
-                    }
-                    if (it.data.versionName != Utilities.PRE_RELEASE_VERSION) {
-                        Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }else {
-            if (
-                NetworkUtilities.isNetworkAvailable(applicationContext)) {
-                dopamineVersionViewModel.update.observe(this) { update ->
-                    when (update) {
-                        is YoutubeResponse.Loading -> {}
-                        is YoutubeResponse.Success -> {
-                            sharedPreferences.edit().apply {
-                                putString("Version", update.data.versionName)
-                                putString("Url", update.data.url)
-                                apply()
-                            }
-                            if (update.data.versionName != Utilities.PROJECT_VERSION) {
-                                Toast.makeText(this,"Under Development",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        is YoutubeResponse.Error -> {
-                            Snackbar.make(
-                                binding.main,
-                                "Oh no! Something went wrong",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-            }
-        }
-
-
         binding.topAppBar.setNavigationOnClickListener {
             startActivity(Intent(this, DopamineHome::class.java))
             finish()
@@ -186,10 +136,6 @@ class DopamineUserProfile : AppCompatActivity() {
                 this.setCancelable(true)
             }.create().show()
         }
-
-        binding.cardView4.setOnClickListener{
-            AboutUs(context = this).create().show()
-        }
     }
 
     private fun getStorageInfo(): String {
@@ -251,8 +197,7 @@ class DopamineUserProfile : AppCompatActivity() {
 
             val createPlaylist = view.findViewById<MaterialButton>(R.id.btCreatePlaylist)
             createPlaylist.setOnClickListener {
-                val customDialog = CustomDialog(requireContext())
-                customDialog.show()
+                val customDialog = CustomDialog()
             }
             return view
         }

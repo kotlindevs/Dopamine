@@ -11,7 +11,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.youtube.viewModels.YoutubeViewModel
+import com.google.android.piyush.dopamine.YoutubeViewModel
 
 class Home : Fragment() {
 

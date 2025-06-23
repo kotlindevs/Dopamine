@@ -22,7 +22,6 @@ import com.google.android.material.carousel.FullScreenCarouselStrategy
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityAboutDopamineBinding
 import com.google.android.piyush.dopamine.utilities.Utilities
-import com.google.android.piyush.youtube.utilities.Photos
 import kotlin.random.Random
 
 class AboutDopamine : AppCompatActivity() {
@@ -104,25 +103,5 @@ class AboutDopamineRecyclerViewAdapter(val context: Context, private val imageLi
         Glide.with(context).load(imageList[position]).into(holder.image)
         holder.image.background =
             Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256)).toDrawable()
-    }
-}
-
-class AboutDeveloperRecyclerViewAdapter(val context: Context, private val devImage : List<Photos>)
-    : RecyclerView.Adapter<AboutDeveloperRecyclerViewAdapter.DevHolder>() {
-
-    class DevHolder(v: View) : RecyclerView.ViewHolder(v){
-        val image: ImageView = v.findViewById(R.id.image)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevHolder {
-        return DevHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.app_dopamine_image,parent,false)
-        )
-    }
-
-    override fun getItemCount(): Int = devImage.size
-
-    override fun onBindViewHolder(holder: DevHolder, position: Int) {
-        Glide.with(context).load(devImage[position].photo).into(holder.image)
     }
 }

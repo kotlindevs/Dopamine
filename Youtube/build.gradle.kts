@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.google.android.piyush.youtube"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -35,10 +35,6 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-
     // Ktor
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
@@ -48,9 +44,6 @@ dependencies {
 
     // Kotlinx-Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    //ViewModel
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,4 +1,4 @@
-package com.google.android.piyush.youtube.viewModels
+package com.google.android.piyush.dopamine
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,6 @@ import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.model.SearchResponse
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
 import com.google.android.piyush.youtube.model.SearchSuggestions
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
@@ -43,8 +42,8 @@ class YoutubeViewModel() : ViewModel() {
     private val _searchSuggestions : MutableLiveData<YoutubeResponse<SearchSuggestions>> = MutableLiveData()
     val searchSuggestions : LiveData<YoutubeResponse<SearchSuggestions>> = _searchSuggestions
 
-    private val _relativeResults : MutableLiveData<MutableList<ShortsLockupViewModel>> = MutableLiveData()
-    val relativeResults : LiveData<MutableList<ShortsLockupViewModel>> = _relativeResults
+    private val _relativeResults : MutableLiveData<MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>> = MutableLiveData()
+    val relativeResults : LiveData<MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>> = _relativeResults
 
     private val _searchResults : MutableLiveData<YoutubeResponse<SearchResponse>> = MutableLiveData()
     val searchResults : LiveData<YoutubeResponse<SearchResponse>> = _searchResults
@@ -59,7 +58,7 @@ class YoutubeViewModel() : ViewModel() {
         _searchKeys?.postValue(keys)
     }
 
-    fun relativeResults(results : MutableList<ShortsLockupViewModel>) = viewModelScope.launch {
+    fun relativeResults(results : MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>) = viewModelScope.launch {
         _relativeResults.postValue(results)
     }
 
@@ -128,4 +127,3 @@ class YoutubeViewModel() : ViewModel() {
        }
     }
 }
-
