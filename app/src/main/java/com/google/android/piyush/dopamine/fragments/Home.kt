@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.adapters.HomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
 import com.google.android.piyush.dopamine.YoutubeViewModel
@@ -17,7 +16,6 @@ class Home : Fragment() {
 
     private var binding : FragmentHomeBinding? = null
     private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
-    private lateinit var adapter : HomeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

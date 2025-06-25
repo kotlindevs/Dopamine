@@ -16,20 +16,17 @@ import com.google.android.piyush.dopamine.fragments.Search
 import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.UserAccount
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
-import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import kotlin.system.exitProcess
 
 class DopamineHome : AppCompatActivity() {
 
     private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: ActivityDopamineHomeBinding
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
-        sharedViewModel = SharedViewModel()
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback(
@@ -72,21 +69,22 @@ class DopamineHome : AppCompatActivity() {
             }
         })
 
-        object : NavigationBarView.OnItemReselectedListener{
-            override fun onNavigationItemReselected(item: MenuItem) {
-                when(item.itemId){
-                    R.id.home -> {
-                        replaceFragment(Home())
-                    }
-                    R.id.search -> {
-                        replaceFragment(Search())
-                    }
-                    R.id.trending -> {
-                        replaceFragment(Trending())
-                    }
-                    R.id.userAccount -> {
-                        replaceFragment(UserAccount())
-                    }
+        NavigationBarView.OnItemReselectedListener { item ->
+            when(item.itemId){
+                R.id.home -> {
+                    replaceFragment(Home())
+                }
+
+                R.id.search -> {
+                    replaceFragment(Search())
+                }
+
+                R.id.trending -> {
+                    replaceFragment(Trending())
+                }
+
+                R.id.userAccount -> {
+                    replaceFragment(UserAccount())
                 }
             }
         }
