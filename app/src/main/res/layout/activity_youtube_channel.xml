@@ -83,17 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/channelLogo"/>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/channelPlaylistLoader"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
-        android:layout_margin="8dp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/channelDescription"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelsPlaylist"
         android:layout_width="match_parent"

@@ -21,15 +21,6 @@
             android:layout_marginBottom="10sp">
         </com.google.android.material.card.MaterialCardView>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/auth"
-            android:layout_width="256dp"
-            android:layout_height="256dp"/>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btCreatePlaylist"
             android:layout_width="wrap_content"

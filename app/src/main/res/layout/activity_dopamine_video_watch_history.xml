@@ -53,9 +53,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="32dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
