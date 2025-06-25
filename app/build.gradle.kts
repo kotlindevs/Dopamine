@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.google.android.piyush.dopamine"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "version dopamine_20240704_01.phone.stable.dynamic"
 
