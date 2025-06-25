@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
-import com.google.android.piyush.dopamine.YoutubeViewModel
 
 class Home : Fragment() {
 

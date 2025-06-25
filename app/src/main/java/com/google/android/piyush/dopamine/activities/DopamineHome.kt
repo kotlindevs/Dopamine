@@ -69,22 +69,21 @@ class DopamineHome : AppCompatActivity() {
             }
         })
 
-        NavigationBarView.OnItemReselectedListener { item ->
-            when(item.itemId){
-                R.id.home -> {
-                    replaceFragment(Home())
-                }
-
-                R.id.search -> {
-                    replaceFragment(Search())
-                }
-
-                R.id.trending -> {
-                    replaceFragment(Trending())
-                }
-
-                R.id.userAccount -> {
-                    replaceFragment(UserAccount())
+        object : NavigationBarView.OnItemReselectedListener{
+            override fun onNavigationItemReselected(item: MenuItem) {
+                when(item.itemId){
+                    R.id.home -> {
+                        replaceFragment(Home())
+                    }
+                    R.id.search -> {
+                        replaceFragment(Search())
+                    }
+                    R.id.trending -> {
+                        replaceFragment(Trending())
+                    }
+                    R.id.userAccount -> {
+                        replaceFragment(UserAccount())
+                    }
                 }
             }
         }

@@ -10,9 +10,9 @@ android {
     defaultConfig {
         applicationId = "com.google.android.piyush.dopamine"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
-        versionName = "version dopamine_20250625_01.phone.stable.dynamic"
+        versionName = "version dopamine_20240704_01.phone.stable.dynamic"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,14 +32,26 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        @Suppress("DEPRECATION")
         jvmTarget = "1.8"
-        @Suppress("DEPRECATION")
-        languageVersion = "2.2"
     }
     buildFeatures {
         viewBinding = true
     }
+
+     splits {
+        abi {
+            isEnable = true
+            reset()
+            include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            isUniversalApk = true
+        }
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
 }
 
 dependencies {
@@ -49,14 +61,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.shimmer)
     implementation(libs.glide)
     implementation(libs.core)
+    implementation(libs.lottie)
+    implementation (libs.exomedia)
     implementation(project(":Youtube"))
     implementation(project(":Database"))
+    implementation(libs.androidx.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
