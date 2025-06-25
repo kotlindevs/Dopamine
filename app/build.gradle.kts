@@ -32,26 +32,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
+        @Suppress("DEPRECATION")
         jvmTarget = "1.8"
+        @Suppress("DEPRECATION")
+        languageVersion = "2.2"
     }
     buildFeatures {
         viewBinding = true
     }
-
-     splits {
-        abi {
-            isEnable = true
-            reset()
-            include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
-            isUniversalApk = true
-        }
-    }
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-
 }
 
 dependencies {
