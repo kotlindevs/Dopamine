@@ -16,31 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AboutDopamine"
-            android:exported="false" />
-        <activity
-            android:name=".activities.AboutDeveloper"
-            android:exported="false" />
-        <activity
-            android:name=".activities.CVPlaylist"
-            android:exported="true" />
-        <activity
-            android:name=".activities.YoutubeChannelPlaylistsVideos"
-            android:exported="true" />
-        <activity
-            android:name=".activities.YoutubeChannel"
-            android:exported="true" />
-        <activity
             android:name=".activities.YoutubePlayer"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:supportsPictureInPicture="true" />
-        <activity
-            android:name=".activities.DopamineVideoWatchHistory"
-            android:exported="true" />
-        <activity
-            android:name=".activities.DopamineUserProfile"
-            android:exported="true" />
         <activity
             android:name=".activities.DopamineHome"
             android:windowSoftInputMode="adjustPan"
