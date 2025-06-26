@@ -13,9 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.database.DopamineDao
+import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
+import com.google.android.piyush.dopamine.adapters.ExploreRecentSearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
@@ -73,7 +75,25 @@ class Explore : Fragment() {
                     is Response.Loading -> {}
                     is Response.Success -> {
                         val results = response.data
-                        Log.i("Recent Search => ", results.toString())
+                        val adapter = ExploreRecentSearchAdapter(
+                            results,
+                            selectedSearch = {},
+                            deleteSearch = {}
+                        )
+                        results.let {
+                            binding?.apply {
+                                recentSearchTitle.visibility = View.VISIBLE
+                                recentSearch.apply {
+                                    visibility = View.VISIBLE
+                                    layoutManager = LinearLayoutManager(
+                                        requireContext(),
+                                        LinearLayoutManager.VERTICAL,
+                                        false
+                                    )
+                                    this.adapter = adapter
+                                }
+                            }
+                        }
                     }
                     is Response.Error -> {
                         Log.e("Error => ", response.exception.message.toString())
