@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="6dp"
-    android:layout_marginStart="12dp"
-    android:layout_marginEnd="12dp"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp"
+    android:layout_marginStart="14dp"
+    android:layout_marginEnd="14dp"
     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
     style="@style/Widget.Material3.CardView.Filled">
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.CardView.Filled"
             android:backgroundTint="?attr/colorSecondaryContainer"
-            android:layout_margin="6dp"
+            android:layout_margin="8dp"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,8 +29,8 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_selected_item"
-                android:layout_margin="4dp"/>
+                android:src="@drawable/ic_selected_search"
+                android:layout_margin="8dp"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textview.MaterialTextView

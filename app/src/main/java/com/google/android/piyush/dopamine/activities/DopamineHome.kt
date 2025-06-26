@@ -12,7 +12,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.android.piyush.dopamine.fragments.Home
-import com.google.android.piyush.dopamine.fragments.Search
+import com.google.android.piyush.dopamine.fragments.Explore
 import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.UserAccount
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
@@ -50,8 +50,8 @@ class DopamineHome : AppCompatActivity() {
                         replaceFragment(Home())
                         return true
                     }
-                    R.id.search -> {
-                        replaceFragment(Search())
+                    R.id.explore -> {
+                        replaceFragment(Explore())
                         return true
                     }
                     R.id.trending -> {
@@ -69,21 +69,22 @@ class DopamineHome : AppCompatActivity() {
             }
         })
 
-        object : NavigationBarView.OnItemReselectedListener{
-            override fun onNavigationItemReselected(item: MenuItem) {
-                when(item.itemId){
-                    R.id.home -> {
-                        replaceFragment(Home())
-                    }
-                    R.id.search -> {
-                        replaceFragment(Search())
-                    }
-                    R.id.trending -> {
-                        replaceFragment(Trending())
-                    }
-                    R.id.userAccount -> {
-                        replaceFragment(UserAccount())
-                    }
+        NavigationBarView.OnItemReselectedListener { item ->
+            when(item.itemId){
+                R.id.home -> {
+                    replaceFragment(Home())
+                }
+
+                R.id.explore -> {
+                    replaceFragment(Explore())
+                }
+
+                R.id.trending -> {
+                    replaceFragment(Trending())
+                }
+
+                R.id.userAccount -> {
+                    replaceFragment(UserAccount())
                 }
             }
         }

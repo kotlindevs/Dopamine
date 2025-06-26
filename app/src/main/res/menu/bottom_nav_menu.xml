@@ -6,17 +6,17 @@
         android:icon="@drawable/ic_home" />
 
     <item
-        android:id="@+id/search"
-        android:title="@string/search"
-        android:icon="@drawable/ic_search" />
+        android:id="@+id/explore"
+        android:title="@string/explore"
+        android:icon="@drawable/ic_explore" />
 
     <item
         android:id="@+id/trending"
         android:title="@string/trending"
-        android:icon="@drawable/ic_library"/>
+        android:icon="@drawable/ic_trending"/>
 
     <item
         android:id="@+id/userAccount"
         android:title="@string/account"
-        android:icon="@drawable/ic_user_account" />
+        android:icon="@drawable/ic_account" />
 </menu>

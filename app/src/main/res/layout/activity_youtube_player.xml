@@ -177,7 +177,7 @@
             android:text="@string/save"
             android:visibility="gone"
             style="@style/Widget.Material3.Button.TextButton.Icon"
-            app:icon="@drawable/ic_save_y25"
+            app:icon="@drawable/ic_save"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/channelName"

@@ -44,7 +44,7 @@
         android:maxLines="2"
         android:padding="8dp"
         android:layout_margin="8dp"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorControlNormal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

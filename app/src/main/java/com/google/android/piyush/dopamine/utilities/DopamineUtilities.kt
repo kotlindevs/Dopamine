@@ -57,7 +57,6 @@ const val PERMISSION_REQUEST_CODE = 100
     fun turnOnNetworkDialog(context: Context, message: String) = MaterialAlertDialogBuilder(context).also {
         it.setTitle("Network not detected")
         it.setMessage("Please turn on network to view the $message.")
-        it.setIcon(R.drawable.wifi_off)
         it.setCancelable(true)
         it.setNegativeButton("Cancel") {
             dialog, _ ->
