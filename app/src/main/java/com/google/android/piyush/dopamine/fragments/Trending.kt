@@ -12,7 +12,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.TrendingAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
 import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.utilities.Response
 import com.google.android.piyush.dopamine.YoutubeViewModel
 
 class Trending : Fragment() {
@@ -36,12 +36,12 @@ class Trending : Fragment() {
 
         viewModel.trendingVideos.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding?.progressBar?.visibility = View.VISIBLE
                     binding?.text1?.visibility = View.GONE
                     binding?.recyclerView1?.visibility = View.GONE
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     val videos = mutableListOf<VideoRenderer>()
                     val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs
                     tabs?.forEach {
@@ -81,7 +81,7 @@ class Trending : Fragment() {
                         this?.adapter = trendingAdapter
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("Library", "Error : ${response.exception}")
                 }
             }
@@ -89,12 +89,12 @@ class Trending : Fragment() {
 
         viewModel.musicVideos.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding?.progressBar?.visibility = View.VISIBLE
                     binding?.text2?.visibility = View.GONE
                     binding?.recyclerView2?.visibility = View.GONE
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     val videos = mutableListOf<VideoRenderer>()
                     val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs
                     tabs?.forEach {
@@ -133,7 +133,7 @@ class Trending : Fragment() {
                         this?.adapter = trendingAdapter
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("Library", "Error : ${response.exception}")
                 }
             }
@@ -141,12 +141,12 @@ class Trending : Fragment() {
 
         viewModel.gamingVideos.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding?.progressBar?.visibility = View.VISIBLE
                     binding?.text3?.visibility = View.GONE
                     binding?.recyclerView3?.visibility = View.GONE
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     val videos = mutableListOf<VideoRenderer>()
                     val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs
                     tabs?.forEach {
@@ -185,7 +185,7 @@ class Trending : Fragment() {
                         this?.adapter = trendingAdapter
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("Library", "Error : ${response.exception}")
                 }
             }
@@ -193,13 +193,13 @@ class Trending : Fragment() {
 
         viewModel.moviesVideos.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding?.progressBar?.visibility = View.VISIBLE
                     binding?.text4?.visibility = View.GONE
                     binding?.recyclerView4?.visibility = View.GONE
                 }
 
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     val videos = mutableListOf<VideoRenderer>()
                     val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs
                     tabs?.forEach {
@@ -241,7 +241,7 @@ class Trending : Fragment() {
                     }
                 }
 
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("Library", "Error : ${response.exception}")
                 }
             }

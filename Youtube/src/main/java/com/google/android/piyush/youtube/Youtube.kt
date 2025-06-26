@@ -23,7 +23,7 @@ val Youtube = HttpClient(OkHttp) {
                 Log.v("Logger Ktor =>", message)
             }
         }
-        level = LogLevel.INFO
+        level = LogLevel.NONE
     }
     install(ContentNegotiation) {
         json(

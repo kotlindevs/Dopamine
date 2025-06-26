@@ -63,7 +63,6 @@ dependencies {
     implementation(project(":Youtube"))
     implementation(project(":Database"))
 
-    implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.fragment)

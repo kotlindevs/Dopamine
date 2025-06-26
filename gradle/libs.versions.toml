@@ -35,7 +35,6 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.9.1" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.8" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version = "0.5.0" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.7.2" }
 androidx-preference = { group = "androidx.preference", name = "preference", version = "1.2.1" }
 
 [plugins]

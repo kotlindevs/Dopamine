@@ -9,10 +9,10 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.database.DopamineDao
-import com.google.android.piyush.dopamine.DopamineApp
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
@@ -20,16 +20,19 @@ import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class Explore : Fragment() {
 
     private var binding: FragmentSearchBinding? = null
-    private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
-    private val database : DopamineDbViewModel by activityViewModels<DopamineDbViewModel>()
+    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+    private val database : DopamineDbViewModel by viewModels<DopamineDbViewModel>()
 
     @Inject
     lateinit var dao: DopamineDao
@@ -64,10 +67,25 @@ class Explore : Fragment() {
             }
         }
 
+        database.loadRecentSearch().run {
+            database.recentSearch.observe(viewLifecycleOwner){ response ->
+                when(response){
+                    is Response.Loading -> {}
+                    is Response.Success -> {
+                        val results = response.data
+                        Log.i("Recent Search => ", results.toString())
+                    }
+                    is Response.Error -> {
+                        Log.e("Error => ", response.exception.message.toString())
+                    }
+                }
+            }
+        }
+
         viewModel.searchSuggestions.observe(viewLifecycleOwner) { response ->
             when(response){
-                is YoutubeResponse.Loading -> {}
-                is YoutubeResponse.Success -> {
+                is Response.Loading -> {}
+                is Response.Success -> {
                     val results = response.data.refinements
                     if (results != null) {
                         binding?.apply {
@@ -77,7 +95,10 @@ class Explore : Fragment() {
                                     results,
                                     onSuggestionClick = { search ->
                                         if(search.isNotEmpty()){
-                                            database.addSearchKeyword(keyword = search)
+                                            database.addSearchKeyword(
+                                                keyword = search,
+                                                timestamp = System.currentTimeMillis()
+                                            )
                                             viewModel.searchData(search)
                                             searchView.clearText()
                                             searchView.clearFocusAndHideKeyboard()
@@ -92,7 +113,7 @@ class Explore : Fragment() {
                     }
                     Log.d("Search", results.toString())
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.d("Search", response.exception.message.toString())
                 }
             }
@@ -102,8 +123,8 @@ class Explore : Fragment() {
             val videosList = mutableListOf<VideoRenderer>()
 
             when(response){
-                is YoutubeResponse.Loading -> {}
-                is YoutubeResponse.Success -> {
+                is Response.Loading -> {}
+                is Response.Success -> {
                     val results = response.data
                     results.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
                         contents.itemSectionRenderer?.contents?.forEach { content -> val videos = content.videoRenderer
@@ -113,7 +134,7 @@ class Explore : Fragment() {
                         }
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.d("Search", response.exception.message.toString())
                 }
             }
@@ -142,5 +163,10 @@ class Explore : Fragment() {
                 })
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

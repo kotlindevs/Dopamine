@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class RecentSearch (
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0,
-    val searchText : String
+    val searchText : String,
+    val timestamp : Long
 )

@@ -23,7 +23,7 @@ import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.model.VideoInfo
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.utilities.Response
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -66,7 +66,7 @@ class YoutubePlayer : AppCompatActivity() {
 
         viewModel.playerInfo.observe(this) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding.apply {
                         shimmerEffectTitle.visibility = View.VISIBLE
                         shimmerEffectVideoInfo.visibility = View.VISIBLE
@@ -85,7 +85,7 @@ class YoutubePlayer : AppCompatActivity() {
                         saveChannel.visibility = View.GONE
                     }
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     binding.apply {
                         shimmerEffectTitle.visibility = View.GONE
                         shimmerEffectVideoInfo.visibility = View.GONE
@@ -126,7 +126,7 @@ class YoutubePlayer : AppCompatActivity() {
                         viewModel.keys(it)
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("YoutubePlayer", "Error : ${response.exception}")
                 }
             }
@@ -141,7 +141,7 @@ class YoutubePlayer : AppCompatActivity() {
 
         viewModel.searchResults.observe(this) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.VISIBLE
                         shimmerEffectShorts.startShimmer()
@@ -149,7 +149,7 @@ class YoutubePlayer : AppCompatActivity() {
                         relativeVideos.visibility = View.GONE
                     }
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     binding.apply {
                         shimmerEffectShorts.visibility = View.GONE
                         shimmerEffectShorts.stopShimmer()
@@ -237,7 +237,7 @@ class YoutubePlayer : AppCompatActivity() {
                     }
 
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("YoutubePlayer", "Error : ${response.exception}")
                 }
             }
@@ -291,8 +291,8 @@ class YoutubePlayerInfo : BottomSheetDialogFragment(){
 
         viewModel.sharedVideoInfo.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {}
-                is YoutubeResponse.Success -> {
+                is Response.Loading -> {}
+                is Response.Success -> {
                     val video = response.data
                     binding.apply {
                         this?.videoTitle?.text = video.title
@@ -310,7 +310,7 @@ class YoutubePlayerInfo : BottomSheetDialogFragment(){
                         this?.videoDescription?.text = video.description
                     }
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("YoutubePlayerInfo", "Error : ${response.exception}")
                 }
             }

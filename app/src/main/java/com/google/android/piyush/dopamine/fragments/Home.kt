@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.FragmentHomeBinding
-import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import com.google.android.piyush.youtube.utilities.Response
 
 class Home : Fragment() {
 
@@ -31,17 +31,17 @@ class Home : Fragment() {
 
         viewModel.trendingVideos.observe(viewLifecycleOwner) { response ->
             when(response) {
-                is YoutubeResponse.Loading -> {
+                is Response.Loading -> {
                     Log.d("Home", "Loading")
                 }
-                is YoutubeResponse.Success -> {
+                is Response.Success -> {
                     Log.i("Home", "Success : ${response.data}")
 
                     val tabs = response.data.contents?.twoColumnBrowseResultsRenderer?.tabs?.get(0)?.tabRenderer?.content?.sectionListRenderer?.contents?.get(0)?.itemSectionRenderer?.contents?.get(0)?.shelfRenderer?.content?.expandedShelfContentsRenderer?.items
                     val videos = tabs?.map { it.videoRenderer }
                     Log.i("Home","Videos : $videos")
                 }
-                is YoutubeResponse.Error -> {
+                is Response.Error -> {
                     Log.e("Home","Error : ${response.exception}")
                 }
             }
