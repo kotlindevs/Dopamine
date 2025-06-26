@@ -51,52 +51,93 @@ class Explore : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentSearchBinding.bind(view)
-        binding?.apply {
-            searchBar.setOnClickListener {
-                searchView.show()
-            }
-            searchView.editText.doAfterTextChanged { query ->
-                viewModel.searchSuggestions(query = query.toString())
-            }
-
-            searchView.editText.doOnTextChanged {
-                    text, start, before, count ->
-                if(searchView.editText.text.toString().isEmpty()){
-                    searchSuggestionText.visibility = View.GONE
-                }else{
-                    searchSuggestionText.visibility = View.VISIBLE
-                }
-            }
-        }
 
         database.loadRecentSearch().run {
             database.recentSearch.observe(viewLifecycleOwner){ response ->
                 when(response){
-                    is Response.Loading -> {}
+                    is Response.Loading -> {
+                        binding?.apply {
+                            progressBar.visibility = View.VISIBLE
+                            searchBar.visibility = View.GONE
+                            searchView.visibility = View.GONE
+                            emptySearch.visibility = View.GONE
+                            searchSuggestionText.visibility = View.GONE
+                            searchResults.visibility = View.GONE
+                            recentSearchTitle.visibility = View.GONE
+                            recentSearch.visibility = View.GONE
+                        }
+                    }
                     is Response.Success -> {
                         val results = response.data
-                        val adapter = ExploreRecentSearchAdapter(
-                            results,
-                            selectedSearch = {},
-                            deleteSearch = {}
-                        )
-                        results.let {
+                        if(results.isNotEmpty()) {
                             binding?.apply {
+                                progressBar.visibility = View.GONE
+                                searchBar.visibility = View.VISIBLE
+                                searchView.visibility = View.GONE
+                                emptySearch.visibility = View.GONE
+                                searchSuggestionText.visibility = View.GONE
+                                searchResults.visibility = View.GONE
                                 recentSearchTitle.visibility = View.VISIBLE
-                                recentSearch.apply {
-                                    visibility = View.VISIBLE
-                                    layoutManager = LinearLayoutManager(
-                                        requireContext(),
-                                        LinearLayoutManager.VERTICAL,
-                                        false
-                                    )
-                                    this.adapter = adapter
+                                recentSearch.visibility = View.VISIBLE
+                            }
+                            val adapter = ExploreRecentSearchAdapter(
+                                results,
+                                selectedSearch = { i ->
+                                    binding?.apply {
+                                        recentSearchTitle.visibility = View.GONE
+                                        recentSearch.visibility = View.GONE
+                                        searchResults.visibility = View.VISIBLE
+                                    }
+                                    viewModel.searchData(query = i.searchText)
+                                },
+                                deleteSearch = {}
+                            )
+                            results.let {
+                                binding?.apply {
+                                    recentSearchTitle.visibility = View.VISIBLE
+                                    recentSearch.apply {
+                                        visibility = View.VISIBLE
+                                        layoutManager = LinearLayoutManager(
+                                            requireContext(),
+                                            LinearLayoutManager.VERTICAL,
+                                            false
+                                        )
+                                        this.adapter = adapter
+                                    }
                                 }
+                            }
+                        }else{
+                            binding?.apply {
+                                recentSearchTitle.visibility = View.GONE
+                                recentSearch.visibility = View.GONE
+                                searchResults.visibility = View.VISIBLE
                             }
                         }
                     }
                     is Response.Error -> {
                         Log.e("Error => ", response.exception.message.toString())
+                    }
+                }
+            }
+        }
+
+        binding?.apply {
+            searchBar.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    searchView.show()
+                }
+            }
+            searchView.editText.apply {
+                doAfterTextChanged { query ->
+                    viewModel.searchSuggestions(query = query.toString())
+                }
+
+                doOnTextChanged { text, start, before, count ->
+                    if (searchView.editText.text.toString().isEmpty()) {
+                        searchSuggestionText.visibility = View.GONE
+                    } else {
+                        searchSuggestionText.visibility = View.VISIBLE
                     }
                 }
             }
@@ -115,6 +156,11 @@ class Explore : Fragment() {
                                     results,
                                     onSuggestionClick = { search ->
                                         if(search.isNotEmpty()){
+                                            binding?.apply {
+                                                recentSearchTitle.visibility = View.GONE
+                                                recentSearch.visibility = View.GONE
+                                                searchResults.visibility = View.VISIBLE
+                                            }
                                             database.addSearchKeyword(
                                                 keyword = search,
                                                 timestamp = System.currentTimeMillis()
@@ -143,8 +189,15 @@ class Explore : Fragment() {
             val videosList = mutableListOf<VideoRenderer>()
 
             when(response){
-                is Response.Loading -> {}
+                is Response.Loading -> {
+                    binding?.progressBar?.visibility = View.VISIBLE
+                    binding?.searchResults?.visibility = View.GONE
+                    binding?.searchBar?.visibility = View.GONE
+                }
                 is Response.Success -> {
+                    binding?.progressBar?.visibility = View.GONE
+                    binding?.searchResults?.visibility = View.VISIBLE
+                    binding?.searchBar?.visibility = View.VISIBLE
                     val results = response.data
                     results.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
                         contents.itemSectionRenderer?.contents?.forEach { content -> val videos = content.videoRenderer

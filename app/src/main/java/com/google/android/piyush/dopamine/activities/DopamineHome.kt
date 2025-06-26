@@ -31,15 +31,6 @@ class DopamineHome : AppCompatActivity() {
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        onBackPressedDispatcher.addCallback(
-            owner = this,
-            enabled = true,
-            onBackPressed = {
-               finish()
-                exitProcess(0)
-            }
-        )
-
         if (savedInstanceState == null) {
             replaceFragment(Home())
         }
