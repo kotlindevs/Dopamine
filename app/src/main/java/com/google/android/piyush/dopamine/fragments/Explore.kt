@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.piyush.database.DopamineDao
+import com.google.android.piyush.dopamine.DopamineApp
+import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
@@ -18,11 +21,18 @@ import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.utilities.YoutubeResponse
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Explore : Fragment() {
 
     private var binding: FragmentSearchBinding? = null
     private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
+    private val database : DopamineDbViewModel by activityViewModels<DopamineDbViewModel>()
+
+    @Inject
+    lateinit var dao: DopamineDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +77,7 @@ class Explore : Fragment() {
                                     results,
                                     onSuggestionClick = { search ->
                                         if(search.isNotEmpty()){
+                                            database.addSearchKeyword(keyword = search)
                                             viewModel.searchData(search)
                                             searchView.clearText()
                                             searchView.clearFocusAndHideKeyboard()
@@ -131,9 +142,5 @@ class Explore : Fragment() {
                 })
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

@@ -16,8 +16,10 @@ import com.google.android.piyush.dopamine.fragments.Explore
 import com.google.android.piyush.dopamine.fragments.Trending
 import com.google.android.piyush.dopamine.fragments.UserAccount
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
 
+@AndroidEntryPoint
 class DopamineHome : AppCompatActivity() {
 
     private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()

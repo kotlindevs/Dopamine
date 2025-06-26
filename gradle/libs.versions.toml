@@ -1,14 +1,19 @@
 [versions]
 agp = "8.11.0"
+hiltAndroid = "2.56.2"
+hiltNavigationFragment = "1.2.0"
 kotlin = "2.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.17.0-alpha01" }
+androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigationFragment" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.7.2" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.7.2" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version = "12.1.2" }
 exomedia = { module = "com.devbrackets.android:exomedia", version = "5.2.0" }
 glide = { module = "com.github.bumptech.glide:glide", version = "5.0.0-rc01" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.7.0-alpha04" }
