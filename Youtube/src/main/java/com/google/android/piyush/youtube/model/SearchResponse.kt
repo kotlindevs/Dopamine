@@ -24,8 +24,24 @@ data class SearchResponse(
                 ){
                     @Serializable
                     data class Content(
-                        val itemSectionRenderer : ItemSectionRenderer? = null
+                        val itemSectionRenderer : ItemSectionRenderer? = null,
+                        val continuationItemRenderer : ContinuationItemRenderer? = null
                     ){
+                        @Serializable
+                        data class ContinuationItemRenderer(
+                            val continuationEndpoint : ContinuationEndpoint? = null
+                        ){
+                            @Serializable
+                            data class ContinuationEndpoint(
+                                val continuationCommand : ContinuationCommand? = null
+                            ){
+                                @Serializable
+                                data class ContinuationCommand(
+                                    val token : String? = null,
+                                    val request : String? = null
+                                )
+                            }
+                        }
                         @Serializable
                         data class ItemSectionRenderer(
                             val contents : List<Content>? = null

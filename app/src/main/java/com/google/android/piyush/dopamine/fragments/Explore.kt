@@ -212,6 +212,12 @@ class Explore : Fragment() {
                             }
                         }
                     }
+
+                    results.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.get(1).let {
+                        it?.continuationItemRenderer?.continuationEndpoint?.continuationCommand.let { d ->
+                            Log.i("Search => ", "${d?.request.toString()} :: ${d?.token.toString()}" )
+                        }
+                    }
                 }
                 is Response.Error -> {
                     Log.d("Search", response.exception.message.toString())
