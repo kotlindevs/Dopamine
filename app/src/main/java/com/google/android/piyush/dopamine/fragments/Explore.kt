@@ -58,28 +58,20 @@ class Explore : Fragment() {
                     is Response.Loading -> {
                         binding?.apply {
                             progressBar.visibility = View.VISIBLE
-                            searchBar.visibility = View.GONE
-                            searchView.visibility = View.GONE
-                            emptySearch.visibility = View.GONE
-                            searchSuggestionText.visibility = View.GONE
-                            searchResults.visibility = View.GONE
                             recentSearchTitle.visibility = View.GONE
                             recentSearch.visibility = View.GONE
+                            searchResults.visibility = View.GONE
                         }
                     }
                     is Response.Success -> {
+                        binding?.apply {
+                            progressBar.visibility = View.GONE
+                            recentSearchTitle.visibility = View.VISIBLE
+                            recentSearch.visibility = View.VISIBLE
+                            searchResults.visibility = View.GONE
+                        }
                         val results = response.data
                         if(results.isNotEmpty()) {
-                            binding?.apply {
-                                progressBar.visibility = View.GONE
-                                searchBar.visibility = View.VISIBLE
-                                searchView.visibility = View.GONE
-                                emptySearch.visibility = View.GONE
-                                searchSuggestionText.visibility = View.GONE
-                                searchResults.visibility = View.GONE
-                                recentSearchTitle.visibility = View.VISIBLE
-                                recentSearch.visibility = View.VISIBLE
-                            }
                             val adapter = ExploreRecentSearchAdapter(
                                 results,
                                 selectedSearch = { i ->
@@ -138,6 +130,7 @@ class Explore : Fragment() {
                 doOnTextChanged { text, start, before, count ->
                     if (searchView.editText.text.toString().isEmpty()) {
                         searchSuggestionText.visibility = View.GONE
+                        searchViewProgressBar.visibility = View.GONE
                     } else {
                         searchSuggestionText.visibility = View.VISIBLE
                     }
@@ -147,8 +140,17 @@ class Explore : Fragment() {
 
         viewModel.searchSuggestions.observe(viewLifecycleOwner) { response ->
             when(response){
-                is Response.Loading -> {}
+                is Response.Loading -> {
+                    binding?.apply {
+                        searchViewProgressBar.visibility = View.VISIBLE
+                        searchSuggestionText.visibility = View.GONE
+                    }
+                }
                 is Response.Success -> {
+                    binding?.apply {
+                        searchViewProgressBar.visibility = View.GONE
+                        searchSuggestionText.visibility = View.VISIBLE
+                    }
                     val results = response.data.refinements
                     if (results != null) {
                         binding?.apply {
