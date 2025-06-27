@@ -102,6 +102,7 @@ class Explore : Fragment() {
                             }
                         }else{
                             binding?.apply {
+                                emptySearch.visibility = View.VISIBLE
                                 recentSearchTitle.visibility = View.GONE
                                 recentSearch.visibility = View.GONE
                                 searchResults.visibility = View.VISIBLE
@@ -119,6 +120,7 @@ class Explore : Fragment() {
             searchBar.apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
+                    binding?.emptySearch?.visibility = View.GONE
                     searchView.show()
                 }
             }
