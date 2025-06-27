@@ -90,7 +90,9 @@ class Explore : Fragment() {
                                     }
                                     viewModel.searchData(query = i.searchText)
                                 },
-                                deleteSearch = {}
+                                deleteSearch = { i ->
+                                    database.deleteRecentSearch(keyword = i.searchText)
+                                }
                             )
                             results.let {
                                 binding?.apply {

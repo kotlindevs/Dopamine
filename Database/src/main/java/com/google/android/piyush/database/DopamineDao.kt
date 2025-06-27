@@ -13,4 +13,7 @@ interface DopamineDao {
 
     @Query("SELECT * FROM recent_search ORDER BY timestamp DESC LIMIT 5")
     suspend fun getSearchKeywords(): MutableList<RecentSearch>
+
+    @Query("DELETE FROM recent_search WHERE searchText = :keyword")
+    suspend fun deleteSearchKeyword(keyword: String)
 }

@@ -49,4 +49,9 @@ class DopamineDbViewModel
             }
         }
     }
+
+    fun deleteRecentSearch(keyword: String) = viewModelScope.launch(Dispatchers.IO) {
+        dopamineDao.deleteSearchKeyword(keyword)
+        loadRecentSearch()
+    }
 }
