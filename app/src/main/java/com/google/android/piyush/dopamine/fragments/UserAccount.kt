@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.FragmentUserAccountBinding
@@ -27,8 +28,16 @@ class UserAccount : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentUserAccountBinding.bind(view)
+
+        binding?.editUserImage?.setOnClickListener {
+            launcher.launch("image/*")
+        }
     }
 
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.GetContent()){
+        uri -> uri?.let {}
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
