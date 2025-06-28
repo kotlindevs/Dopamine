@@ -10,4 +10,8 @@
     <string name="published_time">Published Time</string>
     <string name="save">Save</string>
     <string name="your_searches">Your Searches!</string>
+    <string name="settings">Settings</string>
+    <string name="nickname">Nickname</string>
+    <string name="about_me">About Me</string>
+    <string name="apply_changes">Apply Changes</string>
 </resources>
