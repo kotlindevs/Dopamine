@@ -116,7 +116,7 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_default_user"
         android:background="?attr/colorSurfaceContainer"
-        android:visibility="gone"
+        android:visibility="visible"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
         app:layout_constraintTop_toBottomOf="@id/topAppBar"
         app:layout_constraintStart_toStartOf="parent" />
