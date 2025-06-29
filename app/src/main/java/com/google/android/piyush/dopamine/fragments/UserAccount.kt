@@ -32,11 +32,22 @@ class UserAccount : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val image = "https://i.giphy.com/VbnUQpnihPSIgIXuZv.webp"
+
         binding = FragmentUserAccountBinding.bind(view)
         Glide.with(requireContext())
             .load(image)
             .into(binding?.userImage!!)
+
         database.getUser.observe(viewLifecycleOwner) { user ->
+            if(user == null){
+                binding?.apply {
+                    userImage.visibility = View.VISIBLE
+                    editUserImage.visibility = View.VISIBLE
+                    userNameInputLayout.visibility = View.VISIBLE
+                    userDescriptionLayout.visibility = View.VISIBLE
+                    applyChanges.visibility = View.VISIBLE
+                }
+            }
             user?.let {
                 val name = user.userName
                 val description = user.userDescription
@@ -70,6 +81,13 @@ class UserAccount : Fragment() {
             )
             if(name.isNotEmpty()){
                 database.setUser(user = user)
+                binding?.apply {
+                    userImage.visibility = View.GONE
+                    editUserImage.visibility = View.GONE
+                    userNameInputLayout.visibility = View.GONE
+                    userDescriptionLayout.visibility = View.GONE
+                    applyChanges.visibility = View.GONE
+                }
             }
         }
     }
