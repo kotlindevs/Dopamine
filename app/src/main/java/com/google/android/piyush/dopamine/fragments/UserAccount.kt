@@ -38,6 +38,24 @@ class UserAccount : Fragment() {
 
         binding = FragmentUserAccountBinding.bind(view)
 
+        database.getUser.observe(viewLifecycleOwner) { user ->
+            if(user == null){
+                binding?.apply {
+                    userImage.visibility = View.VISIBLE
+                    editUserImage.visibility = View.VISIBLE
+                    userNameInputLayout.visibility = View.VISIBLE
+                    userDescriptionLayout.visibility = View.VISIBLE
+                    applyChanges.visibility = View.VISIBLE
+                    userProfileImage.visibility = View.GONE
+                    userProfileName.visibility = View.GONE
+                    userProfileDescription.visibility = View.GONE
+                    recentlyExploredTitle.visibility = View.GONE
+                    recentlyExplored.visibility = View.GONE
+                }
+            }
+            userView(user = user)
+        }
+
         binding?.toolBar?.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.editAccount -> {
@@ -71,19 +89,6 @@ class UserAccount : Fragment() {
                     )
                 }
             }
-        }
-
-        database.getUser.observe(viewLifecycleOwner) { user ->
-            if(user == null){
-                binding?.apply {
-                    userImage.visibility = View.VISIBLE
-                    editUserImage.visibility = View.VISIBLE
-                    userNameInputLayout.visibility = View.VISIBLE
-                    userDescriptionLayout.visibility = View.VISIBLE
-                    applyChanges.visibility = View.VISIBLE
-                }
-            }
-            userView(user = user)
         }
 
         binding?.editUserImage?.setOnClickListener {
@@ -125,6 +130,8 @@ class UserAccount : Fragment() {
                             userProfileImage.visibility = View.VISIBLE
                             userProfileName.visibility = View.VISIBLE
                             userProfileDescription.visibility = View.VISIBLE
+                            recentlyExploredTitle.visibility = View.VISIBLE
+                            recentlyExplored.visibility = View.VISIBLE
                             userView(user = user)
                         }
                     }

@@ -132,7 +132,7 @@ class YoutubePlayer : AppCompatActivity() {
 
                     val recentVideo = RecentlyExplored(
                         videoId = videoId.toString(),
-                        thumbnail = video?.thumbnail?.thumbnails?.get(0)?.url.toString(),
+                        thumbnail = video?.thumbnail?.thumbnails?.get(1)?.url.toString(),
                         title = video?.title.toString(),
                         longBylineText = video?.author.toString(),
                         lengthText = videoLength.toString(),
