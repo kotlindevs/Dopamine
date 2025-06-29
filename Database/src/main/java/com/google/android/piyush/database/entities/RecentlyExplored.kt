@@ -12,5 +12,6 @@ data class RecentlyExplored(
     val lengthText : String? = null,
     val publishedTimeText : String? = null,
     val shortViewCountText : String? = null,
-    val avatar : String? = null
+    val avatar : String? = null,
+    val timestamp: Long = System.currentTimeMillis()
 )

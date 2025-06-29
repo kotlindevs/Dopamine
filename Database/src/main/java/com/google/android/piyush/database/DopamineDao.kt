@@ -27,4 +27,7 @@ interface DopamineDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRecentlyExplored(video: RecentlyExplored)
+
+    @Query("SELECT * FROM recently_explored ORDER BY timestamp DESC")
+    suspend fun getAllRecentlyExplored() : MutableList<RecentlyExplored>?
 }

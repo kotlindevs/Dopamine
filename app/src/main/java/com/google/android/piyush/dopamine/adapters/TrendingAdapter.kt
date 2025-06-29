@@ -23,12 +23,12 @@ import com.google.android.piyush.youtube.model.VideoRenderer
 class TrendingAdapter(
     private val context: Context,
     private var videos: List<VideoRenderer>?
-) : RecyclerView.Adapter<VideoRendererRecyclerViewHolder>() {
+) : RecyclerView.Adapter<TrendingViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): VideoRendererRecyclerViewHolder {
-        return VideoRendererRecyclerViewHolder(
+    ): TrendingViewHolder {
+        return TrendingViewHolder(
             LayoutInflater.from(
                 context
             ).inflate(
@@ -40,7 +40,7 @@ class TrendingAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: VideoRendererRecyclerViewHolder,
+        holder: TrendingViewHolder,
         position: Int
     ) {
         val video = videos?.get(position)
@@ -111,7 +111,7 @@ class TrendingAdapter(
     }
 }
 
-class VideoRendererRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     val video : ConstraintLayout = itemView.findViewById(R.id.trendingVideo)
     val image : ShapeableImageView = itemView.findViewById(R.id.videoImage)

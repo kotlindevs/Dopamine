@@ -30,11 +30,24 @@ class DopamineDbViewModel
     private val _recentSearch : MutableLiveData<Response<MutableList<RecentSearch>>> = MutableLiveData(Response.Loading)
     val recentSearch: LiveData<Response<MutableList<RecentSearch>>> = _recentSearch
 
+    private val _getRecentWatchHistory : MutableLiveData<MutableList<RecentlyExplored>?> = MutableLiveData()
+    val getRecentWatchHistory: LiveData<MutableList<RecentlyExplored>?> = _getRecentWatchHistory
+
     private val _getUser : MutableLiveData<User?> = MutableLiveData()
     val getUser: LiveData<User?> = _getUser
 
     init {
         getUser()
+        getRecentWatchHistory()
+    }
+
+    private fun getRecentWatchHistory() = viewModelScope.launch {
+        try {
+            val videos = dopamineDao.getAllRecentlyExplored()
+            _getRecentWatchHistory.postValue(videos)
+        }catch (e: Exception){
+            _getRecentWatchHistory.postValue(mutableListOf())
+        }
     }
 
     fun loadRecentSearch() = viewModelScope.launch(Dispatchers.IO) {

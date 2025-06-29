@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.database.entities.User
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.adapters.RecentlyExploredAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentUserAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -55,6 +57,19 @@ class UserAccount : Fragment() {
                     true
                 }
                 else -> false
+            }
+        }
+
+        database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
+            binding?.apply {
+                recentlyExplored.apply {
+                    visibility = View.VISIBLE
+                    layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    adapter = RecentlyExploredAdapter(
+                        videos = videos
+                    )
+                }
             }
         }
 
