@@ -68,6 +68,8 @@ class UserAccount : Fragment() {
                         userProfileImage.visibility = View.GONE
                         userProfileName.visibility = View.GONE
                         userProfileDescription.visibility = View.GONE
+                        recentlyExploredTitle.visibility = View.GONE
+                        recentlyExplored.visibility = View.GONE
                     }
                     true
                 }
@@ -75,19 +77,6 @@ class UserAccount : Fragment() {
                     true
                 }
                 else -> false
-            }
-        }
-
-        database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
-            binding?.apply {
-                recentlyExplored.apply {
-                    visibility = View.VISIBLE
-                    layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    adapter = RecentlyExploredAdapter(
-                        videos = videos
-                    )
-                }
             }
         }
 
@@ -156,6 +145,22 @@ class UserAccount : Fragment() {
                 userProfileImage.visibility = View.VISIBLE
                 userNameInput.setText(name)
                 userDescription.setText(description)
+            }
+            database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
+                binding?.apply {
+                    recentlyExplored.apply {
+                        visibility = View.VISIBLE
+                        layoutManager =
+                            LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                        adapter = RecentlyExploredAdapter(
+                            videos = videos
+                        )
+                    }
+                }
             }
         }
     }
