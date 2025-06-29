@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.database.entities.User
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.FragmentUserAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class UserAccount : Fragment() {
@@ -31,12 +34,29 @@ class UserAccount : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val image = "https://i.giphy.com/VbnUQpnihPSIgIXuZv.webp"
-
         binding = FragmentUserAccountBinding.bind(view)
-        Glide.with(requireContext())
-            .load(image)
-            .into(binding?.userImage!!)
+
+        binding?.toolBar?.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.editAccount -> {
+                    binding?.apply {
+                        userImage.visibility = View.VISIBLE
+                        editUserImage.visibility = View.VISIBLE
+                        userNameInputLayout.visibility = View.VISIBLE
+                        userDescriptionLayout.visibility = View.VISIBLE
+                        applyChanges.visibility = View.VISIBLE
+                        userProfileImage.visibility = View.GONE
+                        userProfileName.visibility = View.GONE
+                        userProfileDescription.visibility = View.GONE
+                    }
+                    true
+                }
+                R.id.settings -> {
+                    true
+                }
+                else -> false
+            }
+        }
 
         database.getUser.observe(viewLifecycleOwner) { user ->
             if(user == null){
@@ -48,14 +68,7 @@ class UserAccount : Fragment() {
                     applyChanges.visibility = View.VISIBLE
                 }
             }
-            user?.let {
-                val name = user.userName
-                val description = user.userDescription
-                binding?.apply {
-                    userNameInput.setText(name)
-                    userDescription.setText(description)
-                }
-            }
+            userView(user = user)
         }
 
         binding?.editUserImage?.setOnClickListener {
@@ -75,19 +88,52 @@ class UserAccount : Fragment() {
             val name = binding?.userNameInput?.text.toString()
             val description = binding?.userDescription?.text.toString()
 
-            val user = User(
-                userName = name,
-                userDescription = description
-            )
-            if(name.isNotEmpty()){
-                database.setUser(user = user)
+            CoroutineScope(Dispatchers.Main).launch{
                 binding?.apply {
                     userImage.visibility = View.GONE
                     editUserImage.visibility = View.GONE
                     userNameInputLayout.visibility = View.GONE
                     userDescriptionLayout.visibility = View.GONE
                     applyChanges.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
                 }
+
+                delay(2025).run {
+                    val user = User(
+                        userName = name,
+                        userDescription = description
+                    )
+                    if(name.isNotEmpty()){
+                        database.setUser(user = user)
+                        binding?.apply {
+                            progressBar.visibility = View.GONE
+                            userProfileImage.visibility = View.VISIBLE
+                            userProfileName.visibility = View.VISIBLE
+                            userProfileDescription.visibility = View.VISIBLE
+                            userView(user = user)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun userView(user: User?) {
+        user?.let {
+            val name = user.userName
+            val description = user.userDescription
+            binding?.apply {
+                userProfileName.apply {
+                    visibility = View.VISIBLE
+                    text = name
+                }
+                userProfileDescription.apply {
+                    visibility = View.VISIBLE
+                    text = description
+                }
+                userProfileImage.visibility = View.VISIBLE
+                userNameInput.setText(name)
+                userDescription.setText(description)
             }
         }
     }

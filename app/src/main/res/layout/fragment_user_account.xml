@@ -107,4 +107,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/userProfileImage"
+        android:layout_width="74dp"
+        android:layout_height="74dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_default_user"
+        android:background="?attr/colorSurfaceContainer"
+        android:visibility="gone"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userProfileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:layout_constraintStart_toEndOf="@id/userProfileImage"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/userProfileImage"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/userProfileDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="6dp"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        app:layout_constraintStart_toEndOf="@id/userProfileImage"
+        app:layout_constraintTop_toBottomOf="@id/userProfileName"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.loadingindicator.LoadingIndicator
+        android:id="@+id/progressBar"
+        style="@style/Widget.Material3.LoadingIndicator.Contained"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

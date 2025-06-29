@@ -15,4 +15,5 @@
     <string name="about_me">About Me</string>
     <string name="apply_changes">Apply Changes</string>
     <string name="dismiss">Close</string>
+    <string name="edit_user_profile">Edit User Profile</string>
 </resources>
