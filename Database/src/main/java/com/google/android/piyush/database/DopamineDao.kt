@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.google.android.piyush.database.entities.RecentSearch
+import com.google.android.piyush.database.entities.User
 
 @Dao
 interface DopamineDao {
@@ -16,4 +17,10 @@ interface DopamineDao {
 
     @Query("DELETE FROM recent_search WHERE searchText = :keyword")
     suspend fun deleteSearchKeyword(keyword: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun setUser(user: User)
+
+    @Query("SELECT * FROM user")
+    suspend fun getUser(): User?
 }

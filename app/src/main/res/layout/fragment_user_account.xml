@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.UserAccount">
 
@@ -28,6 +29,7 @@
         android:layout_width="256dp"
         android:layout_height="256dp"
         android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_default_user"
         android:background="?attr/colorSurfaceContainer"
         app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"

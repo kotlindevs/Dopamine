@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.database.DopamineDao
 import com.google.android.piyush.database.entities.RecentSearch
+import com.google.android.piyush.database.entities.User
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,13 @@ class DopamineDbViewModel
 
     private val _recentSearch : MutableLiveData<Response<MutableList<RecentSearch>>> = MutableLiveData(Response.Loading)
     val recentSearch: LiveData<Response<MutableList<RecentSearch>>> = _recentSearch
+
+    private val _getUser : MutableLiveData<User?> = MutableLiveData()
+    val getUser: LiveData<User?> = _getUser
+
+    init {
+        getUser()
+    }
 
     fun loadRecentSearch() = viewModelScope.launch(Dispatchers.IO) {
         _recentSearch.postValue(Response.Loading)
@@ -53,5 +61,14 @@ class DopamineDbViewModel
     fun deleteRecentSearch(keyword: String) = viewModelScope.launch(Dispatchers.IO) {
         dopamineDao.deleteSearchKeyword(keyword)
         loadRecentSearch()
+    }
+
+    fun setUser(user: User) = viewModelScope.launch {
+        dopamineDao.setUser(user)
+    }
+
+    private fun getUser() = viewModelScope.launch {
+        val user = dopamineDao.getUser()
+        _getUser.postValue(user)
     }
 }
