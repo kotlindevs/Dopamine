@@ -2,6 +2,7 @@ package com.google.android.piyush.dopamine.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,11 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.dopamine.R
@@ -39,9 +45,51 @@ class TrendingAdapter(
         position: Int
     ) {
         val video = videos?.get(position)
-        Glide.with(context)
-            .load(video?.thumbnail?.thumbnails?.get(0)?.url)
-            .into(holder.image)
+        val videoImage = video?.thumbnail?.thumbnails?.get(0)?.url
+        videoImage?.let {
+            if(it.isNotEmpty()){
+                holder.shimmerEffectVideoImage.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
+                holder.image.visibility = View.VISIBLE
+
+                Glide.with(context)
+                    .load(it)
+                    .listener(object : RequestListener<Drawable>{
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable?>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            holder.shimmerEffectVideoImage.apply {
+                                stopShimmer()
+                                visibility = View.GONE
+                            }
+                            holder.image.visibility = View.VISIBLE
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            model: Any,
+                            target: Target<Drawable?>?,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            holder.shimmerEffectVideoImage.apply {
+                                stopShimmer()
+                                visibility = View.GONE
+                            }
+                            holder.image.visibility = View.VISIBLE
+                            return false
+                        }
+                    })
+                    .into(holder.image)
+            }
+        }
+
         holder.title.text = video?.title?.runs?.get(0)?.text
         holder.subtitle.text = video?.longBylineText?.runs?.get(0)?.text
         holder.video.setOnClickListener {
@@ -70,4 +118,5 @@ class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val image : ShapeableImageView = itemView.findViewById(R.id.videoImage)
     val title : MaterialTextView = itemView.findViewById(R.id.videoTitle)
     val subtitle : MaterialTextView = itemView.findViewById(R.id.channelTitle)
+    val shimmerEffectVideoImage : ShimmerFrameLayout = itemView.findViewById(R.id.shimmerEffectVideoImage)
 }

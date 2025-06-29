@@ -16,4 +16,5 @@
     <string name="apply_changes">Apply Changes</string>
     <string name="dismiss">Close</string>
     <string name="edit_user_profile">Edit User Profile</string>
+    <string name="recently_explored">Recently Explored</string>
 </resources>

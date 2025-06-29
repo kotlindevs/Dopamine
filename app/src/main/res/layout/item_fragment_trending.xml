@@ -8,6 +8,22 @@
     style="@style/Widget.Material3.CardView.Filled"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerEffectVideoImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/videoTitle">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="116dp"
+            android:layout_height="70dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:backgroundTint="?attr/colorSecondaryContainer"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/videoImage"
         android:layout_width="116dp"
