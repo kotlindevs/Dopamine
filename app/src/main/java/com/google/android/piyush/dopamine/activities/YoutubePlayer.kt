@@ -14,6 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.piyush.database.entities.RecentlyExplored
+import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
@@ -28,11 +30,17 @@ import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
     private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+    private val database : DopamineDbViewModel by viewModels<DopamineDbViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,6 +129,21 @@ class YoutubePlayer : AppCompatActivity() {
                             description = video?.shortDescription.toString()
                         )
                     )
+
+                    val recentVideo = RecentlyExplored(
+                        videoId = videoId.toString(),
+                        thumbnail = video?.thumbnail?.thumbnails?.get(0)?.url.toString(),
+                        title = video?.title.toString(),
+                        longBylineText = video?.author.toString(),
+                        lengthText = videoLength.toString(),
+                        publishedTimeText = publishedTime.toString(),
+                        shortViewCountText = viewCount.toString(),
+                        avatar = channelImage.toString()
+                    )
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        database.addRecentWatch(video = recentVideo)
+                    }
 
                     video?.keywords?.let {
                         viewModel.keys(it)

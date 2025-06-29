@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.google.android.piyush.database.entities.RecentSearch
+import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
 
 @Dao
@@ -23,4 +24,7 @@ interface DopamineDao {
 
     @Query("SELECT * FROM user")
     suspend fun getUser(): User?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addRecentlyExplored(video: RecentlyExplored)
 }

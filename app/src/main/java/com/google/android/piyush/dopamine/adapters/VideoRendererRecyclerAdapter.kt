@@ -3,7 +3,6 @@ package com.google.android.piyush.dopamine.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,17 +18,17 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
-import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
+import com.google.android.piyush.youtube.model.VideoRenderer
 
 class TrendingAdapter(
     private val context: Context,
     private var videos: List<VideoRenderer>?
-) : RecyclerView.Adapter<TrendingViewHolder>() {
+) : RecyclerView.Adapter<VideoRendererRecyclerViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TrendingViewHolder {
-        return TrendingViewHolder(
+    ): VideoRendererRecyclerViewHolder {
+        return VideoRendererRecyclerViewHolder(
             LayoutInflater.from(
                 context
             ).inflate(
@@ -41,7 +40,7 @@ class TrendingAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: TrendingViewHolder,
+        holder: VideoRendererRecyclerViewHolder,
         position: Int
     ) {
         val video = videos?.get(position)
@@ -112,7 +111,7 @@ class TrendingAdapter(
     }
 }
 
-class TrendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class VideoRendererRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     val video : ConstraintLayout = itemView.findViewById(R.id.trendingVideo)
     val image : ShapeableImageView = itemView.findViewById(R.id.videoImage)

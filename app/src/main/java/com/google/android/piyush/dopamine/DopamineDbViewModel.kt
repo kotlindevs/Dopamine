@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.database.DopamineDao
 import com.google.android.piyush.database.entities.RecentSearch
+import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,6 +68,11 @@ class DopamineDbViewModel
         dopamineDao.setUser(user)
     }
 
+    fun addRecentWatch(video : RecentlyExplored?) = viewModelScope.launch {
+        video?.let {
+            dopamineDao.addRecentlyExplored(video)
+        }
+    }
     private fun getUser() = viewModelScope.launch {
         val user = dopamineDao.getUser()
         _getUser.postValue(user)

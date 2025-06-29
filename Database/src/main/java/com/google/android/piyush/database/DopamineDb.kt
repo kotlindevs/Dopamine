@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.google.android.piyush.database.entities.RecentSearch
+import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
 
-@Database(entities = [RecentSearch::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [RecentSearch::class, User::class, RecentlyExplored::class], version = 1, exportSchema = false)
 abstract class DopamineDb : RoomDatabase(){
 
     abstract fun dopamineDao() : DopamineDao

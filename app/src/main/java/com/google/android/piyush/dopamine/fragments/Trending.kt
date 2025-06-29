@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.adapters.TrendingAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentTrendingBinding
-import com.google.android.piyush.youtube.model.BrowseResponse.Contents.TwoColumnBrowseResultsRenderer.Tab.TabRenderer.Content.SectionListRenderer.Contents.ItemSectionRenderer.Contents.ShelfRenderer.Content.ExpandedShelfContentsRenderer.Item.VideoRenderer
+import com.google.android.piyush.youtube.model.VideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
-import com.google.android.piyush.dopamine.YoutubeViewModel
 
 class Trending : Fragment() {
 
