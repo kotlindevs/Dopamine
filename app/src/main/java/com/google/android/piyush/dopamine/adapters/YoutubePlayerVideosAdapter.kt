@@ -47,12 +47,14 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
             val publishedTime = video.publishedTimeText?.simpleText.toString()
             val channelImage =
                 video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
-            val videoImage = video.thumbnail?.thumbnails?.firstOrNull()?.url.toString()
+            val videoImage = video.thumbnail?.thumbnails?.let {
+                it.getOrNull(1)?.url ?: it.firstOrNull()?.url
+            }
             val videoTitle = video.title?.runs?.firstOrNull()?.text.toString()
             val videoInfo = "$channelName • $viewCount • $publishedTime"
 
             binding.apply {
-                videoImage.let {
+                videoImage?.let {
                     if(it.isNotEmpty()) {
                         shimmerEffectVideoImage.visibility = View.VISIBLE
                         shimmerEffectVideoImage.startShimmer()
