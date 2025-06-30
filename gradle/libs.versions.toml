@@ -10,7 +10,6 @@ androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fr
 androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.7.2" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.7.2" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version = "12.1.2" }
-exomedia = { module = "com.devbrackets.android:exomedia", version = "5.2.0" }
 glide = { module = "com.github.bumptech.glide:glide", version = "5.0.0-rc01" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
@@ -26,14 +25,9 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version = "3.1.3
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version = "3.1.3" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version = "3.1.3" }
 
-lottie = { module = "com.airbnb.android:lottie", version = "6.6.7" }
 material = { group = "com.google.android.material", name = "material", version = "1.14.0-alpha02" }
 androidx-activity = { group = "androidx.activity", name = "activity", version = "1.12.0-alpha03" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.1" }
-androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version = "1.0.0" }
-androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version = "2.9.1" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.9.1" }
-androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.8" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version = "0.5.0" }
 androidx-preference = { group = "androidx.preference", name = "preference", version = "1.2.1" }
 

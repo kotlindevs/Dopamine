@@ -44,7 +44,19 @@ class UserAccount : Fragment() {
         binding = FragmentUserAccountBinding.bind(view)
 
         database.getUser.observe(viewLifecycleOwner) { user ->
-            if(user == null){
+            if(user != null){
+                binding?.apply {
+                    userImage.visibility = View.GONE
+                    editUserImage.visibility = View.GONE
+                    userNameInputLayout.visibility = View.GONE
+                    userDescriptionLayout.visibility = View.GONE
+                    applyChanges.visibility = View.GONE
+                    userProfileImage.visibility = View.VISIBLE
+                    userProfileName.visibility = View.VISIBLE
+                    userProfileDescription.visibility = View.VISIBLE
+                    createUserPlaylist.visibility = View.VISIBLE
+                }
+            }else{
                 binding?.apply {
                     userImage.visibility = View.VISIBLE
                     editUserImage.visibility = View.VISIBLE
@@ -113,37 +125,52 @@ class UserAccount : Fragment() {
             val name = binding?.userNameInput?.text.toString()
             val description = binding?.userDescription?.text.toString()
 
-            CoroutineScope(Dispatchers.Main).launch{
-                binding?.apply {
-                    userImage.visibility = View.GONE
-                    editUserImage.visibility = View.GONE
-                    userNameInputLayout.visibility = View.GONE
-                    userDescriptionLayout.visibility = View.GONE
-                    applyChanges.visibility = View.GONE
-                    progressBar.visibility = View.VISIBLE
-                }
+            if(name.isNotEmpty()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding?.apply {
+                        userImage.visibility = View.GONE
+                        editUserImage.visibility = View.GONE
+                        userNameInputLayout.visibility = View.GONE
+                        userDescriptionLayout.visibility = View.GONE
+                        applyChanges.visibility = View.GONE
+                        progressBar.visibility = View.VISIBLE
+                    }
 
-                delay(2025).run {
-                    val user = User(
-                        userName = name,
-                        userDescription = description
-                    )
-                    if(name.isNotEmpty()){
+                    delay(2025).run {
+                        val user = User(
+                            userName = name,
+                            userDescription = description
+                        )
                         database.setUser(user = user)
                         binding?.apply {
                             progressBar.visibility = View.GONE
                             userProfileImage.visibility = View.VISIBLE
                             userProfileName.visibility = View.VISIBLE
                             userProfileDescription.visibility = View.VISIBLE
-                            recentlyExploredTitle.visibility = View.VISIBLE
-                            recentlyExplored.visibility = View.VISIBLE
-                            userPlaylists.visibility = View.VISIBLE
-                            userPlaylistsTitle.visibility = View.VISIBLE
                             createUserPlaylist.visibility = View.VISIBLE
                             userView(user = user)
                         }
                     }
                 }
+            }else {
+                Snackbar.make(view, "Nickname cannot be empty.", Snackbar.LENGTH_SHORT).apply {
+                    addCallback(object : Snackbar.Callback() {
+                        override fun onShown(sb: Snackbar?) {
+                            super.onShown(sb)
+                            binding?.applyChanges?.isEnabled = false
+                        }
+
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                            dismiss()
+                            binding?.applyChanges?.isEnabled = true
+                        }
+                    })
+                    animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                    setAction(R.string.dismiss) {
+                        dismiss()
+                    }
+                }.show()
             }
         }
     }
@@ -166,24 +193,28 @@ class UserAccount : Fragment() {
                 userDescription.setText(description)
             }
             database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
-                if(videos == null){
-                    binding?.apply {
-                        recentlyExploredTitle.visibility = View.GONE
-                        recentlyExplored.visibility = View.GONE
-                    }
-                }
-                binding?.apply {
-                    recentlyExplored.apply {
-                        visibility = View.VISIBLE
-                        layoutManager =
-                            LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
-                        adapter = RecentlyExploredAdapter(
-                            videos = videos
-                        )
+                videos?.count()?.let { i ->
+                    if(i > 0){
+                        binding?.apply {
+                            recentlyExploredTitle.visibility = View.VISIBLE
+                            recentlyExplored.apply {
+                                visibility = View.VISIBLE
+                                layoutManager =
+                                    LinearLayoutManager(
+                                        requireContext(),
+                                        LinearLayoutManager.HORIZONTAL,
+                                        false
+                                    )
+                                adapter = RecentlyExploredAdapter(
+                                    videos = videos
+                                )
+                            }
+                        }
+                    }else{
+                        binding?.apply {
+                            recentlyExploredTitle.visibility = View.GONE
+                            recentlyExplored.visibility = View.GONE
+                        }
                     }
                 }
             }
