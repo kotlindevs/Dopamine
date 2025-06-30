@@ -17,4 +17,6 @@
     <string name="dismiss">Close</string>
     <string name="edit_user_profile">Edit User Profile</string>
     <string name="recently_explored">Recently Explored</string>
+    <string name="playlists">Playlists</string>
+    <string name="craft_your_vibe">Craft Your Vibe</string>
 </resources>

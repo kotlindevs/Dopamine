@@ -6,13 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.database.entities.User
+import com.google.android.piyush.database.entities.UserPlaylists
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.RecentlyExploredAdapter
+import com.google.android.piyush.dopamine.databinding.CreateUserPlaylistsBinding
 import com.google.android.piyush.dopamine.databinding.FragmentUserAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -51,9 +55,17 @@ class UserAccount : Fragment() {
                     userProfileDescription.visibility = View.GONE
                     recentlyExploredTitle.visibility = View.GONE
                     recentlyExplored.visibility = View.GONE
+                    userPlaylists.visibility = View.GONE
+                    userPlaylistsTitle.visibility = View.GONE
+                    createUserPlaylist.visibility = View.GONE
                 }
             }
             userView(user = user)
+        }
+
+        binding?.createUserPlaylist?.setOnClickListener {
+            val playlist = UserPlaylists()
+            playlist.show(childFragmentManager, "BottomSheet")
         }
 
         binding?.toolBar?.setOnMenuItemClickListener { menuItem ->
@@ -70,6 +82,9 @@ class UserAccount : Fragment() {
                         userProfileDescription.visibility = View.GONE
                         recentlyExploredTitle.visibility = View.GONE
                         recentlyExplored.visibility = View.GONE
+                        userPlaylists.visibility = View.GONE
+                        userPlaylistsTitle.visibility = View.GONE
+                        createUserPlaylist.visibility = View.GONE
                     }
                     true
                 }
@@ -121,6 +136,9 @@ class UserAccount : Fragment() {
                             userProfileDescription.visibility = View.VISIBLE
                             recentlyExploredTitle.visibility = View.VISIBLE
                             recentlyExplored.visibility = View.VISIBLE
+                            userPlaylists.visibility = View.VISIBLE
+                            userPlaylistsTitle.visibility = View.VISIBLE
+                            createUserPlaylist.visibility = View.VISIBLE
                             userView(user = user)
                         }
                     }
@@ -147,6 +165,12 @@ class UserAccount : Fragment() {
                 userDescription.setText(description)
             }
             database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
+                if(videos == null){
+                    binding?.apply {
+                        recentlyExploredTitle.visibility = View.GONE
+                        recentlyExplored.visibility = View.GONE
+                    }
+                }
                 binding?.apply {
                     recentlyExplored.apply {
                         visibility = View.VISIBLE
@@ -169,6 +193,63 @@ class UserAccount : Fragment() {
         ActivityResultContracts.GetContent()){
         uri -> uri?.let {}
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+}
+
+class UserPlaylists : BottomSheetDialogFragment(){
+
+    private var binding : CreateUserPlaylistsBinding? = null
+    private val database : DopamineDbViewModel by activityViewModels<DopamineDbViewModel>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.create_user_playlists,container,false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = CreateUserPlaylistsBinding.bind(view)
+
+        binding?.createPlaylist?.setOnClickListener {
+            val playListName = binding?.playlistsName?.text.toString()
+            val description = binding?.playlistsDescription?.text.toString()
+
+            if(!playListName.isEmpty()){
+                CoroutineScope(Dispatchers.IO).launch {
+                    database.createUserPlaylist(
+                        playlists = UserPlaylists(
+                            playlistName = playListName,
+                            playlistDescription = description
+                        )
+                    )
+                }
+                dismiss()
+            }else{
+                Snackbar.make(
+                    view,
+                    "Playlist name cannot be empty.",
+                    Snackbar.LENGTH_SHORT
+                ).apply {
+                    animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                    setAction(R.string.dismiss){
+                        dismiss()
+                    }
+                }.show()
+            }
+        }
+
+        binding?.close?.setOnClickListener{
+            dismiss()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

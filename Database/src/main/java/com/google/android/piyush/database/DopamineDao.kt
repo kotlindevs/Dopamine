@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
+import com.google.android.piyush.database.entities.UserPlaylists
 
 @Dao
 interface DopamineDao {
@@ -30,4 +31,7 @@ interface DopamineDao {
 
     @Query("SELECT * FROM recently_explored ORDER BY timestamp DESC")
     suspend fun getAllRecentlyExplored() : MutableList<RecentlyExplored>?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun createUserPlaylists(userPlaylists: UserPlaylists)
 }

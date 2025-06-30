@@ -8,6 +8,7 @@ import com.google.android.piyush.database.DopamineDao
 import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
+import com.google.android.piyush.database.entities.UserPlaylists
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -82,5 +83,13 @@ class DopamineDbViewModel
     private fun getUser() = viewModelScope.launch {
         val user = dopamineDao.getUser()
         _getUser.postValue(user)
+    }
+
+    fun createUserPlaylist(playlists: UserPlaylists) = viewModelScope.launch {
+        try {
+            dopamineDao.createUserPlaylists(userPlaylists = playlists)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }
