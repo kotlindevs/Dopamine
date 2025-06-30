@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.database.DopamineDao
-import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
@@ -24,9 +22,6 @@ import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -136,6 +131,24 @@ class Explore : Fragment() {
                     } else {
                         searchSuggestionText.visibility = View.VISIBLE
                     }
+                }
+
+                setOnEditorActionListener { v, actionId, event ->
+                    val search = v?.text.toString()
+                    if(search.isNotEmpty()){
+                        viewModel.searchData(query = search)
+                        database.addSearchKeyword(
+                            keyword = search,
+                            timestamp = System.currentTimeMillis()
+                        )
+                        searchSuggestionText.visibility = View.GONE
+                        searchView.visibility = View.GONE
+                        searchResults.visibility = View.VISIBLE
+                    }else{
+                        searchSuggestionText.visibility = View.GONE
+                        searchViewProgressBar.visibility = View.GONE
+                    }
+                    true
                 }
             }
         }
