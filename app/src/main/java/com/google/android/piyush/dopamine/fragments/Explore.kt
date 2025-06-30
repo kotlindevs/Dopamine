@@ -143,6 +143,8 @@ class Explore : Fragment() {
                             keyword = search,
                             timestamp = System.currentTimeMillis()
                         )
+                        recentSearchTitle.visibility = View.GONE
+                        recentSearch.visibility = View.GONE
                         searchSuggestionText.visibility = View.GONE
                         searchView.visibility = View.GONE
                         searchResults.visibility = View.VISIBLE
