@@ -17,6 +17,7 @@ import com.google.android.piyush.database.entities.UserPlaylists
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.adapters.RecentlyExploredAdapter
+import com.google.android.piyush.dopamine.adapters.UserPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.CreateUserPlaylistsBinding
 import com.google.android.piyush.dopamine.databinding.FragmentUserAccountBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -192,28 +193,56 @@ class UserAccount : Fragment() {
                 userNameInput.setText(name)
                 userDescription.setText(description)
             }
-            database.getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
-                videos?.count()?.let { i ->
-                    if(i > 0){
-                        binding?.apply {
-                            recentlyExploredTitle.visibility = View.VISIBLE
-                            recentlyExplored.apply {
-                                visibility = View.VISIBLE
-                                layoutManager =
-                                    LinearLayoutManager(
-                                        requireContext(),
-                                        LinearLayoutManager.HORIZONTAL,
-                                        false
+            database.apply {
+                getRecentWatchHistory.observe(viewLifecycleOwner) { videos ->
+                    videos?.count()?.let { i ->
+                        if (i > 0) {
+                            binding?.apply {
+                                recentlyExploredTitle.visibility = View.VISIBLE
+                                recentlyExplored.apply {
+                                    visibility = View.VISIBLE
+                                    layoutManager =
+                                        LinearLayoutManager(
+                                            requireContext(),
+                                            LinearLayoutManager.HORIZONTAL,
+                                            false
+                                        )
+                                    adapter = RecentlyExploredAdapter(
+                                        videos = videos
                                     )
-                                adapter = RecentlyExploredAdapter(
-                                    videos = videos
-                                )
+                                }
+                            }
+                        } else {
+                            binding?.apply {
+                                recentlyExploredTitle.visibility = View.GONE
+                                recentlyExplored.visibility = View.GONE
                             }
                         }
-                    }else{
-                        binding?.apply {
-                            recentlyExploredTitle.visibility = View.GONE
-                            recentlyExplored.visibility = View.GONE
+                    }
+
+                    userPlaylists.observe(viewLifecycleOwner) { playlists ->
+                        playlists?.count()?.let { i ->
+                            if(i > 0) {
+                                binding?.apply {
+                                    userPlaylistsTitle.visibility = View.VISIBLE
+                                    userPlaylists.apply {
+                                        visibility = View.VISIBLE
+                                        layoutManager = LinearLayoutManager(
+                                            requireContext(),
+                                            LinearLayoutManager.HORIZONTAL,
+                                            false
+                                        )
+                                        adapter = UserPlaylistsAdapter(
+                                            playlists = playlists
+                                        )
+                                    }
+                                }
+                            }else{
+                                binding?.apply {
+                                    userPlaylistsTitle.visibility = View.GONE
+                                    userPlaylists.visibility = View.GONE
+                                }
+                            }
                         }
                     }
                 }

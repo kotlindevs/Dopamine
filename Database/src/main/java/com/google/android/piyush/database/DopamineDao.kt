@@ -34,4 +34,7 @@ interface DopamineDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createUserPlaylists(userPlaylists: UserPlaylists)
+
+    @Query("SELECT * FROM user_playlists")
+    suspend fun getAllPlaylists() : MutableList<UserPlaylists>?
 }

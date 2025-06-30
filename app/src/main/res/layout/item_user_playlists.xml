@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    android:id="@+id/playlist"
+    style="@style/Widget.Material3.CardView.Filled"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/playlistNoImageView"
+        android:layout_width="116dp"
+        android:layout_height="70dp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.CardView.Filled"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playlistTitle">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher_foreground"
+            app:tint="?attr/colorPrimary"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/playlistImage"
+        android:layout_width="116dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playlistTitle"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/playlistTitle"
+        android:layout_width="116dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        app:layout_constraintTop_toBottomOf="@id/playlistImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playlistDescription"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/playlistDescription"
+        android:layout_width="116dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:maxLines="2"
+        android:textColor="?attr/colorControlNormal"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/playlistTitle"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

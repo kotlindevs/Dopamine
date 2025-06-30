@@ -30,9 +30,13 @@ class DopamineDbViewModel
     private val _getUser : MutableLiveData<User?> = MutableLiveData()
     val getUser: LiveData<User?> = _getUser
 
+    private val _userPlaylists : MutableLiveData<MutableList<UserPlaylists>?> = MutableLiveData()
+    val userPlaylists: LiveData<MutableList<UserPlaylists>?> = _userPlaylists
+
     init {
         getUser()
         getRecentWatchHistory()
+        getAllUserPlaylists()
     }
 
     private fun getRecentWatchHistory() = viewModelScope.launch {
@@ -90,6 +94,17 @@ class DopamineDbViewModel
             dopamineDao.createUserPlaylists(userPlaylists = playlists)
         }catch (e: Exception){
             e.printStackTrace()
+        }
+    }
+
+    private fun getAllUserPlaylists() {
+        viewModelScope.launch {
+            try {
+                val playlists = dopamineDao.getAllPlaylists()
+                _userPlaylists.postValue(playlists)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
         }
     }
 }
