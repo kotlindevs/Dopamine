@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
@@ -217,26 +218,56 @@ class UserPlaylists : BottomSheetDialogFragment(){
 
         binding = CreateUserPlaylistsBinding.bind(view)
 
+        binding?.apply {
+            playlistsNameLayout.visibility = View.VISIBLE
+            playlistsDescriptionLayout.visibility = View.VISIBLE
+            createPlaylist.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            progressBarViewer.visibility = View.GONE
+        }
+
         binding?.createPlaylist?.setOnClickListener {
             val playListName = binding?.playlistsName?.text.toString()
             val description = binding?.playlistsDescription?.text.toString()
 
             if(!playListName.isEmpty()){
-                CoroutineScope(Dispatchers.IO).launch {
-                    database.createUserPlaylist(
-                        playlists = UserPlaylists(
-                            playlistName = playListName,
-                            playlistDescription = description
+                lifecycleScope.launch {
+                    binding?.apply {
+                        playlistsNameLayout.visibility = View.GONE
+                        playlistsDescriptionLayout.visibility = View.GONE
+                        createPlaylist.visibility = View.GONE
+                        progressBarViewer.visibility = View.VISIBLE
+                        progressBar.visibility = View.VISIBLE
+                    }
+                    delay(2025).run {
+                        database.createUserPlaylist(
+                            playlists = UserPlaylists(
+                                playlistName = playListName,
+                                playlistDescription = description
+                            )
                         )
-                    )
+                        dismiss()
+                    }
                 }
-                dismiss()
             }else{
                 Snackbar.make(
                     view,
                     "Playlist name cannot be empty.",
                     Snackbar.LENGTH_SHORT
                 ).apply {
+                    addCallback(
+                        object : Snackbar.Callback(){
+                            override fun onShown(sb: Snackbar?) {
+                                super.onShown(sb)
+                                binding?.createPlaylist?.isEnabled = false
+                            }
+                            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                super.onDismissed(transientBottomBar, event)
+                                dismiss()
+                                binding?.createPlaylist?.isEnabled = true
+                            }
+                        }
+                    )
                     animationMode = Snackbar.ANIMATION_MODE_SLIDE
                     setAction(R.string.dismiss){
                         dismiss()
