@@ -1,5 +1,6 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,16 +18,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
 import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
 import com.google.android.piyush.youtube.model.VideoInfo
+import com.google.android.piyush.youtube.model.VideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
-import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -255,7 +256,21 @@ class YoutubePlayer : AppCompatActivity() {
                             false
                         )
                         adapter = YoutubePlayerVideosAdapter(
-                            videosList
+                            videosList,
+                            onVideoClick = { video ->
+                                context.startActivity(
+                                    Intent(context, YoutubePlayer::class.java)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        .putExtra("videoId", video.videoId.toString())
+                                        .putExtra("channelName", video.longBylineText?.runs?.get(0)?.text.toString())
+                                        .putExtra("publishedTime", video.publishedTimeText?.simpleText.toString())
+                                        .putExtra("viewCount", video.shortViewCountText?.simpleText.toString())
+                                        .putExtra("videoLength", video.lengthText?.simpleText.toString())
+                                        .putExtra("channelImage", video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString())
+
+                                )
+                            },
+                            onChannelClick = {}
                         )
                     }
 

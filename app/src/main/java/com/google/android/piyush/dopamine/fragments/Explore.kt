@@ -1,5 +1,6 @@
 package com.google.android.piyush.dopamine.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,11 +16,12 @@ import com.google.android.piyush.database.DopamineDao
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
+import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.adapters.ExploreRecentSearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentSearchBinding
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
+import com.google.android.piyush.youtube.model.VideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -239,7 +241,23 @@ class Explore : Fragment() {
 
             binding?.searchResults?.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                adapter = YoutubePlayerVideosAdapter(videosList)
+                adapter = YoutubePlayerVideosAdapter(
+                    videosList,
+                    onVideoClick = { video ->
+                        context.startActivity(
+                            Intent(context, YoutubePlayer::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("videoId", video.videoId.toString())
+                                .putExtra("channelName", video.longBylineText?.runs?.get(0)?.text.toString())
+                                .putExtra("publishedTime", video.publishedTimeText?.simpleText.toString())
+                                .putExtra("viewCount", video.shortViewCountText?.simpleText.toString())
+                                .putExtra("videoLength", video.lengthText?.simpleText.toString())
+                                .putExtra("channelImage", video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString())
+
+                        )
+                    },
+                    onChannelClick = {}
+                )
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)

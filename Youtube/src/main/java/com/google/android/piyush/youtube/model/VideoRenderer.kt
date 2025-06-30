@@ -11,7 +11,8 @@ data class VideoRenderer(
     val lengthText : LengthText? = null,
     val publishedTimeText : PublishedTimeText? = null,
     val shortViewCountText : ShortViewCountText? = null,
-    val avatar : Avatar? = null
+    val avatar : Avatar? = null,
+    val channelThumbnailSupportedRenderers : ChannelThumbnailSupportedRenderers? = null
 ){
     @Serializable
     data class Thumbnail(
@@ -55,4 +56,25 @@ data class VideoRenderer(
     data class LengthText(
         val simpleText : String? = null
     )
+    @Serializable
+    data class ChannelThumbnailSupportedRenderers(
+        val channelThumbnailWithLinkRenderer : ChannelThumbnailWithLinkRenderer? = null
+    ){
+        @Serializable
+        data class ChannelThumbnailWithLinkRenderer(
+            val thumbnail : Thumbnail? = null
+        ){
+            @Serializable
+            data class Thumbnail(
+                val thumbnails : List<Thumbnails>? = null
+            ){
+                @Serializable
+                data class Thumbnails(
+                    val url : String? = null,
+                    val width : Int? = null,
+                    val height : Int? = null
+                )
+            }
+        }
+    }
 }

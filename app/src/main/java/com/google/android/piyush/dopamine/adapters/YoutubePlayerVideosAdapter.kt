@@ -11,9 +11,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.piyush.dopamine.databinding.ItemYoutubePlayerRelativeVideosBinding
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.VideoRenderer
+import com.google.android.piyush.youtube.model.VideoRenderer
 
-class YoutubePlayerVideosAdapter(private val videos : MutableList<VideoRenderer>) :
+class YoutubePlayerVideosAdapter(
+    private val videos : MutableList<VideoRenderer>,
+    private val onVideoClick : (VideoRenderer) -> Unit,
+    private val onChannelClick : (String) -> Unit
+) :
 RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>(){
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,7 +36,7 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
         position: Int
     ) {
         val video = videos[position]
-        holder.bind(video)
+        holder.bind(video, onVideoClick, onChannelClick)
     }
 
     override fun getItemCount(): Int {
@@ -41,7 +45,11 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
 
     inner class YoutubePlayerVideosViewHolder(private val binding : ItemYoutubePlayerRelativeVideosBinding)
         : RecyclerView.ViewHolder(binding.root) {
-        fun bind(video : VideoRenderer) {
+        fun bind(
+            video : VideoRenderer,
+            onVideoClick : (VideoRenderer) -> Unit ,
+            onChannelClick : (String) -> Unit,
+        ) {
             val channelName = video.longBylineText?.runs?.firstOrNull()?.text.toString()
             val viewCount = video.shortViewCountText?.simpleText?.toString()
             val publishedTime = video.publishedTimeText?.simpleText.toString()
@@ -59,7 +67,9 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
                         shimmerEffectVideoImage.visibility = View.VISIBLE
                         shimmerEffectVideoImage.startShimmer()
                         this.videoImage.visibility = View.VISIBLE
-
+                        this.videoImage.setOnClickListener {
+                            onVideoClick(video)
+                        }
                         Glide.with(binding.root.context).load(it)
                             .listener(object : RequestListener<Drawable> {
                                 override fun onLoadFailed(
@@ -97,7 +107,7 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
                         shimmerEffectChannelImage.visibility = View.VISIBLE
                         shimmerEffectChannelImage.startShimmer()
                         this.channelImage.visibility = View.VISIBLE
-
+                        onChannelClick(channelName)
                         Glide.with(binding.root.context).load(it)
                             .listener(object : RequestListener<Drawable>{
                                 override fun onLoadFailed(
@@ -141,6 +151,7 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
                     if(it.isNotEmpty() || videoTitle.isNotEmpty()) {
                         shimmerEffectChannelInfo.visibility = View.GONE
                         shimmerEffectChannelInfo.stopShimmer()
+                        onChannelClick(channelName) // set the channels browse Id here......................
                         this.videoTitle.visibility = View.VISIBLE
                         this.videoTitle.text = videoTitle
                         this.otherVideoInfo.visibility = View.VISIBLE
