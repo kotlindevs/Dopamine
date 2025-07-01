@@ -149,6 +149,7 @@ class Explore : Fragment() {
                         searchSuggestionText.visibility = View.GONE
                         searchView.visibility = View.GONE
                         searchResults.visibility = View.VISIBLE
+                        searchBar.visibility = View.VISIBLE
                     }else{
                         searchSuggestionText.visibility = View.GONE
                         searchViewProgressBar.visibility = View.GONE
