@@ -168,8 +168,8 @@ class ChannelInfo : AppCompatActivity() {
                                                     isFirstResource: Boolean
                                                 ): Boolean {
                                                     binding.shimmerEffectChannelImage.apply {
-                                                        visibility = View.VISIBLE
-                                                        startShimmer()
+                                                        visibility = View.GONE
+                                                        stopShimmer()
                                                     }
                                                     binding.channelImage.visibility = View.GONE
                                                     return false
@@ -194,8 +194,8 @@ class ChannelInfo : AppCompatActivity() {
                                             .into(binding.channelImage)
                                     }else{
                                         binding.shimmerEffectChannelImage.apply {
-                                            visibility = View.VISIBLE
-                                            startShimmer()
+                                            visibility = View.GONE
+                                            stopShimmer()
                                         }
                                         binding.channelImage.visibility = View.GONE
                                     }
@@ -234,9 +234,8 @@ class ChannelInfo : AppCompatActivity() {
                                 channelDescription?.let {
                                     binding.channelDescription.visibility = View.VISIBLE
                                     if(it.isNotEmpty()){
-                                        val desc = "${it.trim()}...more"
                                         binding.shimmerEffectChannelDescription.visibility = View.GONE
-                                        binding.channelDescription.text = desc
+                                        binding.channelDescription.text = it.trim()
                                     }else{
                                         binding.channelDescription.visibility = View.GONE
                                     }
