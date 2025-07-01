@@ -14,6 +14,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
@@ -87,6 +88,14 @@ class ChannelInfo : AppCompatActivity() {
                             visibility = View.VISIBLE
                             startShimmer()
                         }
+                        shimmerEffectChannelDescription.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
+                        shimmerEffectAddToFavorites.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
                     }
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(555).run {
@@ -101,9 +110,10 @@ class ChannelInfo : AppCompatActivity() {
                                 val channelUserName = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(0)?.metadataParts?.getOrNull(0)?.text?.content
                                 val channelSubscribers = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(1)?.metadataParts?.getOrNull(0)?.text?.content
                                 val channelVideos = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(1)?.metadataParts?.getOrNull(1)?.text?.content
+                                val channelDescription = channelInfo.description?.descriptionPreviewViewModel?.description?.content
                                 channelBanner?.let {
-                                    binding.channelBanner.visibility = View.VISIBLE
                                     if(it.isNotEmpty()){
+                                        binding.channelBanner.visibility = View.VISIBLE
                                         Glide.with(this@ChannelInfo)
                                             .load(channelBanner)
                                             .listener(object : RequestListener<Drawable>{
@@ -139,8 +149,8 @@ class ChannelInfo : AppCompatActivity() {
                                             .into(binding.channelBanner)
                                     }else{
                                         binding.shimmerEffectChannelBanner.apply {
-                                            visibility = View.VISIBLE
-                                            startShimmer()
+                                            visibility = View.GONE
+                                            stopShimmer()
                                         }
                                         binding.channelBanner.visibility = View.GONE
                                     }
@@ -218,6 +228,34 @@ class ChannelInfo : AppCompatActivity() {
                                         }else{
                                             binding.channelOtherInfo.visibility = View.GONE
                                         }
+                                    }
+                                }
+
+                                channelDescription?.let {
+                                    binding.channelDescription.visibility = View.VISIBLE
+                                    if(it.isNotEmpty()){
+                                        val desc = "${it.trim()}...more"
+                                        binding.shimmerEffectChannelDescription.visibility = View.GONE
+                                        binding.channelDescription.text = desc
+                                    }else{
+                                        binding.channelDescription.visibility = View.GONE
+                                    }
+                                }
+
+                                channelId?.let {
+                                    binding.shimmerEffectAddToFavorites.visibility = View.GONE
+                                    binding.addToFavorites.visibility = View.VISIBLE
+                                    binding.addToFavorites.setOnClickListener {
+                                        Snackbar.make(
+                                            binding.root,
+                                            "Coming soon.",
+                                            Snackbar.LENGTH_SHORT
+                                        ).apply {
+                                            animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                                            setAction("Close"){
+                                                dismiss()
+                                            }
+                                        }.show()
                                     }
                                 }
                             }
