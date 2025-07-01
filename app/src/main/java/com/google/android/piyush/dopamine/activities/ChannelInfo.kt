@@ -18,11 +18,13 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
 import com.google.android.piyush.youtube.utilities.Response
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ChannelInfo : AppCompatActivity() {
 
     private lateinit var binding: ActivityChannelInfoBinding
@@ -73,6 +75,18 @@ class ChannelInfo : AppCompatActivity() {
                             visibility = View.VISIBLE
                             startShimmer()
                         }
+                        shimmerEffectChannelTitle.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
+                        shimmerEffectChannelUsername.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
+                        shimmerEffectChannelOtherInfo.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
                     }
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(555).run {
@@ -83,6 +97,10 @@ class ChannelInfo : AppCompatActivity() {
                                 val channelImage = channelInfo.image?.decoratedAvatarViewModel?.avatar?.avatarViewModel?.image?.sources?.let{ image ->
                                     image.getOrNull(2)?.url ?: image.getOrNull(1)?.url ?: image.firstOrNull()?.url
                                 }
+                                val channelTitle = channelInfo.title?.dynamicTextViewModel?.text?.content
+                                val channelUserName = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(0)?.metadataParts?.getOrNull(0)?.text?.content
+                                val channelSubscribers = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(1)?.metadataParts?.getOrNull(0)?.text?.content
+                                val channelVideos = channelInfo.metadata?.contentMetadataViewModel?.metadataRows?.getOrNull(1)?.metadataParts?.getOrNull(1)?.text?.content
                                 channelBanner?.let {
                                     binding.channelBanner.visibility = View.VISIBLE
                                     if(it.isNotEmpty()){
@@ -96,8 +114,8 @@ class ChannelInfo : AppCompatActivity() {
                                                     isFirstResource: Boolean
                                                 ): Boolean {
                                                     binding.shimmerEffectChannelBanner.apply {
-                                                        visibility = View.VISIBLE
-                                                        startShimmer()
+                                                        visibility = View.GONE
+                                                        stopShimmer()
                                                     }
                                                     binding.channelBanner.visibility = View.GONE
                                                     return false
@@ -170,6 +188,36 @@ class ChannelInfo : AppCompatActivity() {
                                             startShimmer()
                                         }
                                         binding.channelImage.visibility = View.GONE
+                                    }
+                                }
+                                channelTitle?.let {
+                                    binding.channelTitle.visibility = View.VISIBLE
+                                    if(it.isNotEmpty()){
+                                        binding.shimmerEffectChannelTitle.visibility = View.GONE
+                                        binding.channelTitle.text = it
+                                    }else{
+                                        binding.channelTitle.visibility = View.GONE
+                                    }
+                                }
+                                channelUserName?.let {
+                                    binding.channelUsername.visibility = View.VISIBLE
+                                    if(it.isNotEmpty()){
+                                        binding.shimmerEffectChannelUsername.visibility = View.GONE
+                                        binding.channelUsername.text = it
+                                    }else{
+                                        binding.channelUsername.visibility = View.GONE
+                                    }
+                                }
+                                channelSubscribers?.let { subscriber ->
+                                    channelVideos?.let { videos ->
+                                        binding.channelOtherInfo.visibility = View.VISIBLE
+                                        if(subscriber.isNotEmpty() && videos.isNotEmpty()){
+                                            val channelOtherInfo = "$subscriber • $videos"
+                                            binding.shimmerEffectChannelOtherInfo.visibility = View.GONE
+                                            binding.channelOtherInfo.text = channelOtherInfo
+                                        }else{
+                                            binding.channelOtherInfo.visibility = View.GONE
+                                        }
                                     }
                                 }
                             }
