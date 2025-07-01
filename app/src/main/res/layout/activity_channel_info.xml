@@ -235,6 +235,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/channelDescription"/>
 
+    <FrameLayout
+        android:id="@+id/channelTabsView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addToFavorites"/>
+
+    <com.google.android.material.floatingtoolbar.FloatingToolbarLayout
+        android:id="@+id/channelsTabsToolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/channelTabs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
+                app:icon="@drawable/ic_home" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Videos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
+                app:icon="@drawable/ic_videos" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Shorts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
+                app:icon="@drawable/ic_shorts" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Playlists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
+                app:icon="@drawable/ic_trending" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Posts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
+                app:icon="@drawable/ic_posts" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </com.google.android.material.floatingtoolbar.FloatingToolbarLayout>
+
     <com.google.android.material.loadingindicator.LoadingIndicator
         android:id="@+id/progressBar"
         style="@style/Widget.Material3.LoadingIndicator.Contained"

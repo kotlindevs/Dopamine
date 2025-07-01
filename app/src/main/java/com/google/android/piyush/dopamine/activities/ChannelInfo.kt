@@ -9,15 +9,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
+import com.google.android.piyush.dopamine.fragments.Explore
+import com.google.android.piyush.dopamine.fragments.Home
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +67,9 @@ class ChannelInfo : AppCompatActivity() {
                         channelUsername.visibility = View.GONE
                         channelOtherInfo.visibility = View.GONE
                         channelDescription.visibility = View.GONE
+                        addToFavorites.visibility = View.GONE
+                        channelTabsView.visibility = View.GONE
+                        channelsTabsToolbar.visibility = View.GONE
                     }
                 }
                 is Response.Success -> {
@@ -155,6 +163,7 @@ class ChannelInfo : AppCompatActivity() {
                                         binding.channelBanner.visibility = View.GONE
                                     }
                                 }
+
                                 channelImage?.let {
                                     binding.channelImage.visibility = View.VISIBLE
                                     if(it.isNotEmpty()) {
@@ -200,6 +209,7 @@ class ChannelInfo : AppCompatActivity() {
                                         binding.channelImage.visibility = View.GONE
                                     }
                                 }
+
                                 channelTitle?.let {
                                     binding.channelTitle.visibility = View.VISIBLE
                                     if(it.isNotEmpty()){
@@ -209,6 +219,7 @@ class ChannelInfo : AppCompatActivity() {
                                         binding.channelTitle.visibility = View.GONE
                                     }
                                 }
+
                                 channelUserName?.let {
                                     binding.channelUsername.visibility = View.VISIBLE
                                     if(it.isNotEmpty()){
@@ -218,6 +229,7 @@ class ChannelInfo : AppCompatActivity() {
                                         binding.channelUsername.visibility = View.GONE
                                     }
                                 }
+
                                 channelSubscribers?.let { subscriber ->
                                     channelVideos?.let { videos ->
                                         binding.channelOtherInfo.visibility = View.VISIBLE
@@ -244,6 +256,7 @@ class ChannelInfo : AppCompatActivity() {
                                 channelId?.let {
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
+                                    binding.channelsTabsToolbar.visibility = View.VISIBLE
                                     binding.addToFavorites.setOnClickListener {
                                         Snackbar.make(
                                             binding.root,
@@ -266,5 +279,36 @@ class ChannelInfo : AppCompatActivity() {
                 }
             }
         }
+
+        binding.channelTabs.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
+            if (isChecked){
+                when(checkedId) {
+                    R.id.Home -> {
+                        ToastUtilities.showToast(this,"Home")
+                    }
+                    R.id.Videos -> {
+                        ToastUtilities.showToast(this,"Videos")
+                    }
+                    R.id.Shorts -> {
+                        ToastUtilities.showToast(this,"Shorts")
+                    }
+                    R.id.Playlists -> {
+                        ToastUtilities.showToast(this,"Playlists")
+                    }
+                    R.id.Posts -> {
+                        ToastUtilities.showToast(this,"Posts")
+                    }
+                    else -> {
+                        ToastUtilities.showToast(this,"Else")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun replaceTab(tab : Fragment){
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.channelTabsView, tab)
+            .commit()
     }
 }
