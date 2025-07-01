@@ -16,7 +16,7 @@ import com.google.android.piyush.youtube.model.VideoRenderer
 class YoutubePlayerVideosAdapter(
     private val videos : MutableList<VideoRenderer>,
     private val onVideoClick : (VideoRenderer) -> Unit,
-    private val onChannelClick : (String) -> Unit
+    private val onChannelClick : (VideoRenderer) -> Unit
 ) :
 RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>(){
     override fun onCreateViewHolder(
@@ -47,8 +47,8 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
         : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             video : VideoRenderer,
-            onVideoClick : (VideoRenderer) -> Unit ,
-            onChannelClick : (String) -> Unit,
+            onVideoClick : (VideoRenderer) -> Unit,
+            onChannelClick : (VideoRenderer) -> Unit,
         ) {
             val channelName = video.longBylineText?.runs?.firstOrNull()?.text.toString()
             val viewCount = video.shortViewCountText?.simpleText?.toString()
@@ -107,7 +107,9 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
                         shimmerEffectChannelImage.visibility = View.VISIBLE
                         shimmerEffectChannelImage.startShimmer()
                         this.channelImage.visibility = View.VISIBLE
-                        onChannelClick(channelName)
+                        this.channelImage.setOnClickListener {
+                            onChannelClick(video)
+                        }
                         Glide.with(binding.root.context).load(it)
                             .listener(object : RequestListener<Drawable>{
                                 override fun onLoadFailed(
@@ -151,11 +153,13 @@ RecyclerView.Adapter<YoutubePlayerVideosAdapter.YoutubePlayerVideosViewHolder>()
                     if(it.isNotEmpty() || videoTitle.isNotEmpty()) {
                         shimmerEffectChannelInfo.visibility = View.GONE
                         shimmerEffectChannelInfo.stopShimmer()
-                        onChannelClick(channelName) // set the channels browse Id here......................
                         this.videoTitle.visibility = View.VISIBLE
                         this.videoTitle.text = videoTitle
                         this.otherVideoInfo.visibility = View.VISIBLE
                         this.otherVideoInfo.text = it
+                        this.otherVideoInfo.setOnClickListener {
+                            onChannelClick(video)
+                        }
                     }else{
                         binding.shimmerEffectChannelInfo.visibility = View.GONE
                         binding.shimmerEffectChannelInfo.stopShimmer()

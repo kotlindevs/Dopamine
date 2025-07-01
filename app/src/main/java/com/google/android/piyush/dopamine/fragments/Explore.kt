@@ -258,7 +258,9 @@ class Explore : Fragment() {
 
                         )
                     },
-                    onChannelClick = {}
+                    onChannelClick = { video ->
+                        Log.d("Channel ID => ", video.longBylineText?.runs?.firstOrNull()?.navigationEndpoint?.browseEndpoint?.browseId.toString())
+                    }
                 )
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

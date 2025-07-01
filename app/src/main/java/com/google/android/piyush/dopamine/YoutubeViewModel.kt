@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
+import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchSuggestions
 import com.google.android.piyush.youtube.model.VideoInfo
@@ -42,8 +43,8 @@ class YoutubeViewModel() : ViewModel() {
     private val _searchSuggestions : MutableLiveData<Response<SearchSuggestions>> = MutableLiveData()
     val searchSuggestions : LiveData<Response<SearchSuggestions>> = _searchSuggestions
 
-    private val _relativeResults : MutableLiveData<MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>> = MutableLiveData()
-    val relativeResults : LiveData<MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>> = _relativeResults
+    private val _relativeResults : MutableLiveData<MutableList<ReelShelfRenderer.Item.ShortsLockupViewModel>> = MutableLiveData()
+    val relativeResults : LiveData<MutableList<ReelShelfRenderer.Item.ShortsLockupViewModel>> = _relativeResults
 
     private val _searchResults : MutableLiveData<Response<SearchResponse>> = MutableLiveData()
     val searchResults : LiveData<Response<SearchResponse>> = _searchResults
@@ -58,7 +59,7 @@ class YoutubeViewModel() : ViewModel() {
         _searchKeys?.postValue(keys)
     }
 
-    fun relativeResults(results : MutableList<SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel>) = viewModelScope.launch {
+    fun relativeResults(results : MutableList<ReelShelfRenderer.Item.ShortsLockupViewModel>) = viewModelScope.launch {
         _relativeResults.postValue(results)
     }
 

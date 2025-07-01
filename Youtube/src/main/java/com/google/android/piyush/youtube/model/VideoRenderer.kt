@@ -41,7 +41,19 @@ data class VideoRenderer(
         @Serializable
         data class Runs(
             val text : String? = null,
-        )
+            val navigationEndpoint : NavigationEndpoint? = null
+        ){
+            @Serializable
+            data class NavigationEndpoint(
+                val browseEndpoint : BrowseEndpoint? = null
+            ){
+                @Serializable
+                data class BrowseEndpoint(
+                    val browseId : String? = null,
+                    val canonicalBaseUrl : String? = null
+                )
+            }
+        }
     }
     @Serializable
     data class PublishedTimeText(

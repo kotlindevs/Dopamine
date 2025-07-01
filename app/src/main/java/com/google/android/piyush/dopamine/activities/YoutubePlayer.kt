@@ -24,7 +24,7 @@ import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
 import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
 import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
+import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.model.VideoInfo
 import com.google.android.piyush.youtube.model.VideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
@@ -180,7 +180,7 @@ class YoutubePlayer : AppCompatActivity() {
                         shorts.visibility = View.VISIBLE
                         relativeVideos.visibility = View.VISIBLE
                     }
-                    val shortsList = mutableListOf<ShortsLockupViewModel>()
+                    val shortsList = mutableListOf<ReelShelfRenderer.Item.ShortsLockupViewModel>()
                     val videosList = mutableListOf<VideoRenderer>()
                     response.data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
                         contents.itemSectionRenderer?.contents?.forEach { content ->

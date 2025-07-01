@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.piyush.dopamine.databinding.ItemYoutubePlayerShortsBinding
-import com.google.android.piyush.youtube.model.SearchResponse.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Content.ItemSectionRenderer.Content.ReelShelfRenderer.Item.ShortsLockupViewModel
+import com.google.android.piyush.youtube.model.ReelShelfRenderer
 
-class YoutubePlayerShortsAdapter(private val shorts : MutableList<ShortsLockupViewModel>) :
+class YoutubePlayerShortsAdapter(private val shorts : MutableList<ReelShelfRenderer.Item.ShortsLockupViewModel>) :
 RecyclerView.Adapter<YoutubePlayerShortsAdapter.ShortsViewHolder>(){
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +34,7 @@ RecyclerView.Adapter<YoutubePlayerShortsAdapter.ShortsViewHolder>(){
     }
 
     inner class ShortsViewHolder(val binding : ItemYoutubePlayerShortsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(shortsViewModel : ShortsLockupViewModel) {
+        fun bind(shortsViewModel : ReelShelfRenderer.Item.ShortsLockupViewModel) {
             val url = shortsViewModel.thumbnail?.sources?.firstOrNull()?.url.toString()
             val title = shortsViewModel.overlayMetadata?.primaryText?.content?.toString()
             val views = shortsViewModel.overlayMetadata?.secondaryText?.content?.toString()
