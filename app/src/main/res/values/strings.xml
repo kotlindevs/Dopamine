@@ -22,4 +22,5 @@
     <string name="name_your_playlist">Name your playlist</string>
     <string name="tell_us_about_your_playlist">Tell us about your playlist</string>
     <string name="craft_a_playlists">Craft a Playlists</string>
+    <string name="add_to_favorites">Add to Favorites</string>
 </resources>

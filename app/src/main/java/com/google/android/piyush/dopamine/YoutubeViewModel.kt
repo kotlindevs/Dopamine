@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
+import com.google.android.piyush.youtube.model.ChannelResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.model.SearchResponse
@@ -48,6 +49,9 @@ class YoutubeViewModel() : ViewModel() {
 
     private val _searchResults : MutableLiveData<Response<SearchResponse>> = MutableLiveData()
     val searchResults : LiveData<Response<SearchResponse>> = _searchResults
+
+    private val _channelInfo : MutableLiveData<Response<ChannelResponse>> = MutableLiveData()
+    val channelInfo : LiveData<Response<ChannelResponse>> = _channelInfo
 
     private var alreadyExistsData = false
 
@@ -100,6 +104,16 @@ class YoutubeViewModel() : ViewModel() {
             _playerInfo.postValue(Response.Success(info))
         } catch (e : Exception) {
             _playerInfo.postValue(Response.Error(e))
+        }
+    }
+
+    fun channelDetails(channelId : String, filter : String?) = viewModelScope.launch {
+        _channelInfo.postValue(Response.Loading)
+        try {
+            val info = repository.channelResponse(channelId, filter)
+            _channelInfo.postValue(Response.Success(info))
+        } catch (e : Exception) {
+            _channelInfo.postValue(Response.Error(e))
         }
     }
 

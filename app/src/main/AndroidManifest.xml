@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".DopamineApp"
         android:allowBackup="true"
@@ -16,12 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ChannelInfo"
+            android:exported="false" />
+        <activity
             android:name=".activities.YoutubePlayer"
             android:exported="true" />
         <activity
             android:name=".activities.DopamineHome"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,4 +33,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

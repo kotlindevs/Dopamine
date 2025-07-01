@@ -16,6 +16,7 @@ import com.google.android.piyush.database.DopamineDao
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
+import com.google.android.piyush.dopamine.activities.ChannelInfo
 import com.google.android.piyush.dopamine.activities.YoutubePlayer
 import com.google.android.piyush.dopamine.adapters.ExploreRecentSearchAdapter
 import com.google.android.piyush.dopamine.adapters.SearchSuggestionAdapter
@@ -259,7 +260,12 @@ class Explore : Fragment() {
                         )
                     },
                     onChannelClick = { video ->
-                        Log.d("Channel ID => ", video.longBylineText?.runs?.firstOrNull()?.navigationEndpoint?.browseEndpoint?.browseId.toString())
+                        val channelId = video.longBylineText?.runs?.firstOrNull()?.navigationEndpoint?.browseEndpoint?.browseId.toString()
+                        context.startActivity(
+                            Intent(context, ChannelInfo::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("channelId", channelId)
+                        )
                     }
                 )
                 addOnScrollListener(object : RecyclerView.OnScrollListener(){

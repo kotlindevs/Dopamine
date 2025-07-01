@@ -1,0 +1,185 @@
+package com.google.android.piyush.dopamine.activities
+
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
+import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
+import com.google.android.piyush.youtube.utilities.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+class ChannelInfo : AppCompatActivity() {
+
+    private lateinit var binding: ActivityChannelInfoBinding
+    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+    private var channelId : String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityChannelInfoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        intent.getStringExtra("channelId").let {
+            channelId = it
+        }
+
+        viewModel.channelDetails(channelId = channelId!!, filter = null)
+
+        viewModel.channelInfo.observe(this){ response ->
+            when(response){
+                is Response.Loading -> {
+                    binding.apply {
+                        progressBar.visibility = View.VISIBLE
+                        shimmerEffectChannelImage.visibility = View.GONE
+                        shimmerEffectChannelBanner.visibility = View.GONE
+                        channelBanner.visibility = View.GONE
+                        channelImage.visibility = View.GONE
+                        channelTitle.visibility = View.GONE
+                        channelUsername.visibility = View.GONE
+                        channelOtherInfo.visibility = View.GONE
+                        channelDescription.visibility = View.GONE
+                    }
+                }
+                is Response.Success -> {
+                    val channel = response.data
+                    binding.apply {
+                        progressBar.visibility = View.GONE
+                        shimmerEffectChannelBanner.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
+                        shimmerEffectChannelImage.apply {
+                            visibility = View.VISIBLE
+                            startShimmer()
+                        }
+                    }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(555).run {
+                            channel.header?.pageHeaderRenderer?.content?.pageHeaderViewModel?.let { channelInfo ->
+                                val channelBanner = channelInfo.banner?.imageBannerViewModel?.image?.sources?.let { image ->
+                                    image.getOrNull(2)?.url ?: image.firstOrNull()?.url
+                                }
+                                val channelImage = channelInfo.image?.decoratedAvatarViewModel?.avatar?.avatarViewModel?.image?.sources?.let{ image ->
+                                    image.getOrNull(2)?.url ?: image.getOrNull(1)?.url ?: image.firstOrNull()?.url
+                                }
+                                channelBanner?.let {
+                                    binding.channelBanner.visibility = View.VISIBLE
+                                    if(it.isNotEmpty()){
+                                        Glide.with(this@ChannelInfo)
+                                            .load(channelBanner)
+                                            .listener(object : RequestListener<Drawable>{
+                                                override fun onLoadFailed(
+                                                    e: GlideException?,
+                                                    model: Any?,
+                                                    target: Target<Drawable?>,
+                                                    isFirstResource: Boolean
+                                                ): Boolean {
+                                                    binding.shimmerEffectChannelBanner.apply {
+                                                        visibility = View.VISIBLE
+                                                        startShimmer()
+                                                    }
+                                                    binding.channelBanner.visibility = View.GONE
+                                                    return false
+                                                }
+
+                                                override fun onResourceReady(
+                                                    resource: Drawable,
+                                                    model: Any,
+                                                    target: Target<Drawable?>?,
+                                                    dataSource: DataSource,
+                                                    isFirstResource: Boolean
+                                                ): Boolean {
+                                                    binding.shimmerEffectChannelBanner.apply {
+                                                        visibility = View.GONE
+                                                        stopShimmer()
+                                                    }
+                                                    binding.channelBanner.visibility = View.VISIBLE
+                                                    return false
+                                                }
+                                            })
+                                            .into(binding.channelBanner)
+                                    }else{
+                                        binding.shimmerEffectChannelBanner.apply {
+                                            visibility = View.VISIBLE
+                                            startShimmer()
+                                        }
+                                        binding.channelBanner.visibility = View.GONE
+                                    }
+                                }
+                                channelImage?.let {
+                                    binding.channelImage.visibility = View.VISIBLE
+                                    if(it.isNotEmpty()) {
+                                        Glide.with(this@ChannelInfo)
+                                            .load(channelImage)
+                                            .listener(object : RequestListener<Drawable> {
+                                                override fun onLoadFailed(
+                                                    e: GlideException?,
+                                                    model: Any?,
+                                                    target: Target<Drawable?>,
+                                                    isFirstResource: Boolean
+                                                ): Boolean {
+                                                    binding.shimmerEffectChannelImage.apply {
+                                                        visibility = View.VISIBLE
+                                                        startShimmer()
+                                                    }
+                                                    binding.channelImage.visibility = View.GONE
+                                                    return false
+                                                }
+
+                                                override fun onResourceReady(
+                                                    resource: Drawable,
+                                                    model: Any,
+                                                    target: Target<Drawable?>?,
+                                                    dataSource: DataSource,
+                                                    isFirstResource: Boolean
+                                                ): Boolean {
+                                                    binding.shimmerEffectChannelImage.apply {
+                                                        visibility = View.GONE
+                                                        stopShimmer()
+                                                    }
+                                                    binding.channelImage.visibility = View.VISIBLE
+                                                    return false
+                                                }
+
+                                            })
+                                            .into(binding.channelImage)
+                                    }else{
+                                        binding.shimmerEffectChannelImage.apply {
+                                            visibility = View.VISIBLE
+                                            startShimmer()
+                                        }
+                                        binding.channelImage.visibility = View.GONE
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                is Response.Error -> {
+                    Log.d("Error => ", response.exception.toString())
+                }
+            }
+        }
+    }
+}

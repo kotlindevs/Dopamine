@@ -9,6 +9,7 @@ import com.google.android.piyush.youtube.TRENDING_MUSIC
 import com.google.android.piyush.youtube.Youtube
 import com.google.android.piyush.youtube.model.BrowseBody
 import com.google.android.piyush.youtube.model.BrowseResponse
+import com.google.android.piyush.youtube.model.ChannelResponse
 import com.google.android.piyush.youtube.model.Context
 import com.google.android.piyush.youtube.model.PlayerBody
 import com.google.android.piyush.youtube.model.PlayerResponse
@@ -95,6 +96,18 @@ class YoutubeRepositoryImpl : YoutubeRepository {
                 SearchBody(
                     context = Context.WEB,
                     query = query
+                )
+            )
+        }.body()
+    }
+
+    override suspend fun channelResponse(channelId: String, filter : String?): ChannelResponse {
+        return Youtube.post(BROWSE){
+            setBody(
+                BrowseBody(
+                    context = Context.WEB,
+                    browseId = channelId,
+                    params = filter
                 )
             )
         }.body()
