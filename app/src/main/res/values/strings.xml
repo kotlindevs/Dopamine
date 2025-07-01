@@ -23,4 +23,6 @@
     <string name="tell_us_about_your_playlist">Tell us about your playlist</string>
     <string name="craft_a_playlists">Craft a Playlists</string>
     <string name="add_to_favorites">Add to Favorites</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

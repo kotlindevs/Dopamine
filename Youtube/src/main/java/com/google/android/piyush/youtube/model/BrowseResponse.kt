@@ -22,7 +22,8 @@ data class BrowseResponse(
                 data class TabRenderer(
                     val title : String? = null,
                     val endpoint : EndPoint? = null,
-                    val content : Content? = null
+                    val content : Content? = null,
+                    val selected : Boolean? = null
                 ){
                     @Serializable
                     data class EndPoint(
