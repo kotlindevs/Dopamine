@@ -57,12 +57,43 @@ data class BrowseResponse(
                                     ){
                                         @Serializable
                                         data class ShelfRenderer(
-                                            val content : Content? = null
+                                            val title : Title? = null,
+                                            val endpoint : Endpoint? = null,
+                                            val content : Content? = null,
+                                            val subtitle : Subtitle? = null
                                         ){
                                             @Serializable
+                                            data class Title(
+                                                val runs : List<Run>? = null
+                                            ){
+                                                @Serializable
+                                                data class Run(
+                                                    val text : String? = null
+                                                )
+                                            }
+                                            @Serializable
+                                            data class Endpoint(
+                                                val browseEndpoint : BrowseEndpoint? = null
+                                            ){
+                                                @Serializable
+                                                data class BrowseEndpoint(
+                                                    val browseId : String? = null
+                                                )
+                                            }
+                                            @Serializable
                                             data class Content(
+                                                val horizontalListRenderer : HorizontalListRenderer? = null,
                                                 val expandedShelfContentsRenderer : ExpandedShelfContentsRenderer? = null
                                             ){
+                                                @Serializable
+                                                data class HorizontalListRenderer(
+                                                    val items : List<Item>? = null
+                                                ){
+                                                    @Serializable
+                                                    data class Item(
+                                                        val gridVideoRenderer : GridVideoRenderer? = null
+                                                    )
+                                                }
                                                 @Serializable
                                                 data class ExpandedShelfContentsRenderer(
                                                     val items : List<Item>? = null
@@ -73,6 +104,11 @@ data class BrowseResponse(
                                                     )
                                                 }
                                             }
+
+                                            @Serializable
+                                            data class Subtitle(
+                                                val simpleText : String? = null
+                                            )
                                         }
                                     }
                                 }
