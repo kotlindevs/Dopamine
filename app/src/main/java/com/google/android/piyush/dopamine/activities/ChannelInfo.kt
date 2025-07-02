@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
+import com.google.android.piyush.dopamine.fragments.ChannelHome
 import com.google.android.piyush.dopamine.fragments.Explore
 import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
@@ -281,10 +282,11 @@ class ChannelInfo : AppCompatActivity() {
         }
 
         binding.channelTabs.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
+            binding.channelTabsView.visibility = View.VISIBLE
             if (isChecked){
                 when(checkedId) {
                     R.id.Home -> {
-                        ToastUtilities.showToast(this,"Home")
+                        replaceTab(tab = ChannelHome())
                     }
                     R.id.Videos -> {
                         ToastUtilities.showToast(this,"Videos")

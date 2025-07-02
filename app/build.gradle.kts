@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -37,10 +38,14 @@ android {
         @Suppress("DEPRECATION")
         jvmTarget = "1.8"
         @Suppress("DEPRECATION")
-        languageVersion = "2.2"
+        languageVersion = "2.0"
     }
     buildFeatures {
+        compose = true
         viewBinding = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 }
 
@@ -63,6 +68,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
     implementation("androidx.compose.ui:ui:1.8.3")
     implementation("androidx.compose.ui:ui-viewbinding:1.8.3")
+    implementation("androidx.compose.material3:material3:1.3.2")
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

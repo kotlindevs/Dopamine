@@ -2,7 +2,7 @@
 agp = "8.11.0"
 hiltAndroid = "2.56.2"
 hiltNavigationFragment = "1.2.0"
-kotlin = "2.2.0"
+kotlin = "2.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.17.0-alpha01" }
@@ -35,3 +35,4 @@ androidx-preference = { group = "androidx.preference", name = "preference", vers
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-compose = {id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
