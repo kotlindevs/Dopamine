@@ -32,7 +32,7 @@ android {
         @Suppress("DEPRECATION")
         jvmTarget = "1.8"
         @Suppress("DEPRECATION")
-        languageVersion = "2.0"
+        languageVersion = "2.2"
     }
 }
 
