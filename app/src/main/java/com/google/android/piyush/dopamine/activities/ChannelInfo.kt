@@ -20,7 +20,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
 import com.google.android.piyush.dopamine.fragments.ChannelHome
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -285,21 +284,11 @@ class ChannelInfo : AppCompatActivity() {
                     R.id.Home -> {
                         replaceTab(ChannelHome(channelId = channelId))
                     }
-                    R.id.Videos -> {
-                        ToastUtilities.showToast(this,"Videos")
-                    }
-                    R.id.Shorts -> {
-                        ToastUtilities.showToast(this,"Shorts")
-                    }
-                    R.id.Playlists -> {
-                        ToastUtilities.showToast(this,"Playlists")
-                    }
-                    R.id.Posts -> {
-                        ToastUtilities.showToast(this,"Posts")
-                    }
-                    else -> {
-                        ToastUtilities.showToast(this,"Else")
-                    }
+                    R.id.Videos -> {}
+                    R.id.Shorts -> {}
+                    R.id.Playlists -> {}
+                    R.id.Posts -> {}
+                    else -> {}
                 }
             }
         }

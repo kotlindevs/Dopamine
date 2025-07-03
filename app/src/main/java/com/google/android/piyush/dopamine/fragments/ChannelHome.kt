@@ -17,6 +17,10 @@ import com.google.android.piyush.youtube.model.ChannelHomeHeader
 import com.google.android.piyush.youtube.model.GridVideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ChannelHome(
@@ -43,34 +47,44 @@ class ChannelHome(
 
         viewModel.channelHomeContent.observe(viewLifecycleOwner){ response ->
             when(response){
-                is Response.Loading -> {}
+                is Response.Loading -> {
+                    binding?.progressBar?.visibility = View.VISIBLE
+                    binding?.channelHomeContent?.visibility = View.GONE
+                }
                 is Response.Success -> {
                     val content = response.data
                     val playlistData = mutableListOf<ChannelHomeContent>()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(777).run {
+                            binding?.progressBar?.visibility = View.GONE
+                            binding?.channelHomeContent?.visibility = View.VISIBLE
+                            content.contents?.twoColumnBrowseResultsRenderer?.tabs?.forEach { tabs ->
+                                tabs.tabRenderer?.content?.sectionListRenderer?.contents?.forEach { sectionListContent ->
+                                    sectionListContent.itemSectionRenderer?.contents?.forEach { itemSectionContent ->
+                                        itemSectionContent.shelfRenderer?.let { shelf ->
+                                            val currentPlaylistTitle =
+                                                shelf.title?.runs?.firstOrNull()?.text
+                                            val currentPlaylistSubtitle = shelf.subtitle?.simpleText
 
-                    content.contents?.twoColumnBrowseResultsRenderer?.tabs?.forEach { tabs ->
-                        tabs.tabRenderer?.content?.sectionListRenderer?.contents?.forEach { sectionListContent ->
-                            sectionListContent.itemSectionRenderer?.contents?.forEach { itemSectionContent ->
-                                itemSectionContent.shelfRenderer?.let { shelf ->
-                                    val currentPlaylistTitle = shelf.title?.runs?.firstOrNull()?.text
-                                    val currentPlaylistSubtitle = shelf.subtitle?.simpleText
+                                            val currentPlaylistVideos =
+                                                mutableListOf<GridVideoRenderer>()
+                                            shelf.content?.horizontalListRenderer?.items?.forEach { item ->
+                                                item.gridVideoRenderer?.let { video ->
+                                                    currentPlaylistVideos.add(video)
+                                                }
+                                            }
 
-                                    val currentPlaylistVideos = mutableListOf<GridVideoRenderer>()
-                                    shelf.content?.horizontalListRenderer?.items?.forEach { item ->
-                                        item.gridVideoRenderer?.let { video ->
-                                            currentPlaylistVideos.add(video)
+                                            val playlistContent = ChannelHomeContent(
+                                                header = ChannelHomeHeader(
+                                                    title = currentPlaylistTitle,
+                                                    subtitle = currentPlaylistSubtitle
+                                                ),
+                                                items = currentPlaylistVideos
+                                            )
+
+                                            playlistData.add(playlistContent)
                                         }
                                     }
-
-                                    val playlistContent = ChannelHomeContent(
-                                        header = ChannelHomeHeader(
-                                            title = currentPlaylistTitle,
-                                            subtitle = currentPlaylistSubtitle
-                                        ),
-                                        items = currentPlaylistVideos
-                                    )
-
-                                    playlistData.add(playlistContent)
                                 }
                             }
                         }
