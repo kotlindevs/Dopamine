@@ -32,7 +32,7 @@ class TrendingAdapter(
             LayoutInflater.from(
                 context
             ).inflate(
-                R.layout.item_fragment_trending,
+                R.layout.item_row_view_video_renderer,
                 parent,
                 false
             )

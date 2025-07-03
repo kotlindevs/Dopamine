@@ -15,13 +15,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
-import com.google.android.piyush.dopamine.fragments.Explore
-import com.google.android.piyush.dopamine.fragments.Home
+import com.google.android.piyush.dopamine.fragments.ChannelHome
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
@@ -285,6 +283,7 @@ class ChannelInfo : AppCompatActivity() {
             if (isChecked){
                 when(checkedId) {
                     R.id.Home -> {
+                        replaceTab(ChannelHome(channelId = channelId))
                     }
                     R.id.Videos -> {
                         ToastUtilities.showToast(this,"Videos")

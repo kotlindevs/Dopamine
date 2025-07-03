@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.piyush.youtube.CHANNEL_HOME
 import com.google.android.piyush.youtube.TRENDING
 import com.google.android.piyush.youtube.model.BrowseResponse
 import com.google.android.piyush.youtube.model.ChannelResponse
@@ -12,14 +13,17 @@ import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchSuggestions
 import com.google.android.piyush.youtube.model.VideoInfo
+import com.google.android.piyush.youtube.repository.YoutubeRepository
 import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
 import com.google.android.piyush.youtube.utilities.Response
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class YoutubeViewModel() : ViewModel() {
+@HiltViewModel
+class YoutubeViewModel @Inject constructor() : ViewModel() {
 
-    private val repository : YoutubeRepositoryImpl = YoutubeRepositoryImpl()
-
+    private val repository: YoutubeRepository = YoutubeRepositoryImpl()
     private val _trendingVideos : MutableLiveData<Response<BrowseResponse>> = MutableLiveData()
     val trendingVideos : LiveData<Response<BrowseResponse>> = _trendingVideos
 
@@ -52,6 +56,9 @@ class YoutubeViewModel() : ViewModel() {
 
     private val _channelInfo : MutableLiveData<Response<ChannelResponse>> = MutableLiveData()
     val channelInfo : LiveData<Response<ChannelResponse>> = _channelInfo
+
+    private val _channelHomeContent : MutableLiveData<Response<BrowseResponse>> = MutableLiveData()
+    val channelHomeContent : LiveData<Response<BrowseResponse>> = _channelHomeContent
 
     private var alreadyExistsData = false
 
@@ -117,6 +124,16 @@ class YoutubeViewModel() : ViewModel() {
         }
     }
 
+    fun channelHomeContent(browseId : String) = viewModelScope.launch {
+        _channelHomeContent.postValue(Response.Loading)
+        try {
+            val content = repository.browseNow(browseId = browseId, params = CHANNEL_HOME)
+            _channelHomeContent.postValue(Response.Success(content))
+        } catch (e : Exception) {
+            _channelHomeContent.postValue(Response.Error(e))
+        }
+    }
+
     private fun getTrendingVideos() = viewModelScope.launch {
        if(!alreadyExistsData){
            _trendingVideos.postValue(Response.Loading)
@@ -124,7 +141,7 @@ class YoutubeViewModel() : ViewModel() {
            _gamingVideos.postValue(Response.Loading)
            _musicVideos.postValue(Response.Loading)
            try {
-               val now = repository.browseNow(TRENDING)
+               val now = repository.browseNow(TRENDING, null)
                val music = repository.browseMusic(TRENDING)
                val gaming = repository.browseGaming(TRENDING)
                val movies = repository.browseMovies(TRENDING)

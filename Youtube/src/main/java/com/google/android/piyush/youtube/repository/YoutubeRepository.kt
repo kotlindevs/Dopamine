@@ -7,7 +7,7 @@ import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchSuggestions
 
 interface YoutubeRepository {
-    suspend fun browseNow(browseId : String) : BrowseResponse
+    suspend fun browseNow(browseId : String, params : String?) : BrowseResponse
     suspend fun browseMusic(browseId : String) : BrowseResponse
     suspend fun browseGaming(browseId : String) : BrowseResponse
     suspend fun browseMovies(browseId : String) : BrowseResponse

@@ -1,0 +1,99 @@
+package com.google.android.piyush.dopamine.fragments
+
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.piyush.dopamine.R
+import com.google.android.piyush.dopamine.YoutubeViewModel
+import com.google.android.piyush.dopamine.adapters.ChannelHomeAdapter
+import com.google.android.piyush.dopamine.databinding.FragmentChannelHomeBinding
+import com.google.android.piyush.youtube.model.ChannelHomeContent
+import com.google.android.piyush.youtube.model.ChannelHomeHeader
+import com.google.android.piyush.youtube.model.GridVideoRenderer
+import com.google.android.piyush.youtube.utilities.Response
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class ChannelHome(
+    private val channelId : String?
+) : Fragment() {
+
+    private var binding : FragmentChannelHomeBinding? = null
+    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_channel_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentChannelHomeBinding.bind(view)
+        if(channelId != null){
+            viewModel.channelHomeContent(browseId = channelId)
+        }
+
+        viewModel.channelHomeContent.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    val content = response.data
+                    val playlistData = mutableListOf<ChannelHomeContent>()
+
+                    content.contents?.twoColumnBrowseResultsRenderer?.tabs?.forEach { tabs ->
+                        tabs.tabRenderer?.content?.sectionListRenderer?.contents?.forEach { sectionListContent ->
+                            sectionListContent.itemSectionRenderer?.contents?.forEach { itemSectionContent ->
+                                itemSectionContent.shelfRenderer?.let { shelf ->
+                                    val currentPlaylistTitle = shelf.title?.runs?.firstOrNull()?.text
+                                    val currentPlaylistSubtitle = shelf.subtitle?.simpleText
+
+                                    val currentPlaylistVideos = mutableListOf<GridVideoRenderer>()
+                                    shelf.content?.horizontalListRenderer?.items?.forEach { item ->
+                                        item.gridVideoRenderer?.let { video ->
+                                            currentPlaylistVideos.add(video)
+                                        }
+                                    }
+
+                                    val playlistContent = ChannelHomeContent(
+                                        header = ChannelHomeHeader(
+                                            title = currentPlaylistTitle,
+                                            subtitle = currentPlaylistSubtitle
+                                        ),
+                                        items = currentPlaylistVideos
+                                    )
+
+                                    playlistData.add(playlistContent)
+                                }
+                            }
+                        }
+                    }
+
+                    binding?.channelHomeContent?.apply {
+                        adapter = ChannelHomeAdapter(playlistData)
+                        layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
+                    }
+                }
+                is Response.Error -> {
+                    Log.d("ChannelHome", response.exception.toString())
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+}
