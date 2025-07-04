@@ -18,16 +18,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/videoTitle">
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="116dp"
-            android:layout_height="70dp"
+            android:layout_width="152dp"
+            android:layout_height="82dp"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
             style="@style/Widget.Material3.CardView.Filled"
             android:backgroundTint="?attr/colorSecondaryContainer"/>
     </com.facebook.shimmer.ShimmerFrameLayout>
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/videoImage"
-        android:layout_width="116dp"
-        android:layout_height="70dp"
+        android:layout_width="152dp"
+        android:layout_height="82dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:scaleType="centerCrop"
@@ -38,7 +38,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/videoTitle"
-        android:layout_width="116dp"
+        android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
@@ -50,7 +50,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/channelTitle"
-        android:layout_width="116dp"
+        android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:maxLines="1"
