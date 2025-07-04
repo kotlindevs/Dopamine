@@ -50,7 +50,9 @@ class ChannelVideosRenderer(
                 image.getOrNull(1)?.url ?: image.firstOrNull()?.url
             }
             val videoTitle = video.title?.simpleText.toString()
-            val channelTitle = video.shortBylineText?.runs?.firstOrNull()?.text.toString()
+            val channelTitle = video.let {
+                it.shortBylineText?.runs?.firstOrNull()?.text ?: it.shortViewCountText?.simpleText ?: ""
+            }
 
             videoImage?.let {
                 if(it.isNotEmpty()){
@@ -95,8 +97,19 @@ class ChannelVideosRenderer(
                         .into(binding.videoImage)
                 }
             }
-            binding.videoTitle.text = videoTitle
-            binding.channelTitle.text = channelTitle
+            videoTitle.let {
+                if(it.isNotEmpty()){
+                    binding.videoTitle.visibility = View.VISIBLE
+                    binding.videoTitle.text = it
+                }
+            }
+
+            channelTitle.let {
+                if(it.isNotEmpty()){
+                    binding.channelTitle.visibility = View.VISIBLE
+                    binding.channelTitle.text = it
+                }
+            }
         }
     }
 }
