@@ -67,7 +67,6 @@ class ChannelInfo : AppCompatActivity() {
                         channelDescription.visibility = View.GONE
                         addToFavorites.visibility = View.GONE
                         channelTabsView.visibility = View.GONE
-                        channelsTabsToolbar.visibility = View.GONE
                     }
                 }
                 is Response.Success -> {
@@ -254,10 +253,7 @@ class ChannelInfo : AppCompatActivity() {
                                 channelId?.let {
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
-                                    binding.channelsTabsToolbar.visibility = View.VISIBLE
-                                    replaceTab(ChannelHome(channelId)).let {
-                                        binding.channelTabs.check(R.id.Home)
-                                    }
+                                    replaceTab(ChannelHome(it))
                                     binding.addToFavorites.setOnClickListener {
                                         Snackbar.make(
                                             binding.root,
@@ -277,24 +273,6 @@ class ChannelInfo : AppCompatActivity() {
                 }
                 is Response.Error -> {
                     Log.d("Error => ", response.exception.toString())
-                }
-            }
-        }
-
-        ChannelHome(channelId)
-
-        binding.channelTabs.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
-            //binding.channelTabsView.visibility = View.VISIBLE
-            if (isChecked){
-                when(checkedId) {
-                    R.id.Home -> {
-                        replaceTab(ChannelHome(channelId = channelId))
-                    }
-                    R.id.Videos -> {}
-                    R.id.Shorts -> {}
-                    R.id.Playlists -> {}
-                    R.id.Posts -> {}
-                    else -> {}
                 }
             }
         }
