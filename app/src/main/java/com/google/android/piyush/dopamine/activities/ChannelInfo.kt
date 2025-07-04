@@ -21,7 +21,6 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
 import com.google.android.piyush.dopamine.fragments.ChannelHome
-import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
