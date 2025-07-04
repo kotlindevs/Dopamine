@@ -20,6 +20,7 @@ import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
 import com.google.android.piyush.dopamine.fragments.ChannelHome
+import com.google.android.piyush.dopamine.fragments.Home
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +48,6 @@ class ChannelInfo : AppCompatActivity() {
 
         intent.getStringExtra("channelId").let {
             channelId = it
-            replaceTab(ChannelHome(channelId))
         }
 
         viewModel.channelDetails(channelId = channelId!!, filter = null)
@@ -255,6 +255,9 @@ class ChannelInfo : AppCompatActivity() {
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
                                     binding.channelsTabsToolbar.visibility = View.VISIBLE
+                                    replaceTab(ChannelHome(channelId)).let {
+                                        binding.channelTabs.check(R.id.Home)
+                                    }
                                     binding.addToFavorites.setOnClickListener {
                                         Snackbar.make(
                                             binding.root,
