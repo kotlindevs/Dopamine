@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
@@ -253,6 +254,7 @@ class ChannelInfo : AppCompatActivity() {
                                 channelId?.let {
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
+                                    binding.channelTabs.visibility = View.VISIBLE
                                     replaceTab(ChannelHome(it))
                                     binding.addToFavorites.setOnClickListener {
                                         Snackbar.make(
@@ -276,6 +278,25 @@ class ChannelInfo : AppCompatActivity() {
                 }
             }
         }
+
+        binding.channelTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                p0?.text?.toString()?.let { selectedTab->
+                    when(selectedTab){
+                        getString(R.string.home) -> {
+                            replaceTab(ChannelHome(channelId))
+                        }
+                        getString(R.string.videos) -> {}
+                        getString(R.string.shorts) -> {}
+                        getString(R.string.playlists) -> {}
+                        getString(R.string.posts) -> {}
+                    }
+                }
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+            override fun onTabReselected(p0: TabLayout.Tab?) {}
+        })
     }
 
     private fun replaceTab(tab : Fragment){
