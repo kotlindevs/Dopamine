@@ -100,6 +100,7 @@ class TrendingAdapter(
                     .putExtra("publishedTime", video?.publishedTimeText?.simpleText.toString())
                     .putExtra("viewCount",video?.shortViewCountText?.simpleText.toString())
                     .putExtra("videoLength", video?.lengthText?.simpleText.toString())
+                    .putExtra("channelId", video?.longBylineText?.runs?.get(0)?.navigationEndpoint?.browseEndpoint?.browseId.toString())
                     .putExtra("channelImage", video?.avatar?.decoratedAvatarViewModel?.avatar?.avatarViewModel?.image?.sources?.get(0)?.url.toString())
 
             )

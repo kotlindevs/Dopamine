@@ -47,6 +47,7 @@ class ChannelInfo : AppCompatActivity() {
 
         intent.getStringExtra("channelId").let {
             channelId = it
+            replaceTab(ChannelHome(channelId))
         }
 
         viewModel.channelDetails(channelId = channelId!!, filter = null)
@@ -277,8 +278,10 @@ class ChannelInfo : AppCompatActivity() {
             }
         }
 
+        ChannelHome(channelId)
+
         binding.channelTabs.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
-            binding.channelTabsView.visibility = View.VISIBLE
+            //binding.channelTabsView.visibility = View.VISIBLE
             if (isChecked){
                 when(checkedId) {
                     R.id.Home -> {
@@ -295,6 +298,7 @@ class ChannelInfo : AppCompatActivity() {
     }
 
     private fun replaceTab(tab : Fragment){
+        binding.channelTabsView.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
             .replace(R.id.channelTabsView, tab)
             .commit()

@@ -6,9 +6,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.InternalSerializationApi
 import javax.inject.Singleton
 
 @Module
+@InternalSerializationApi
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds

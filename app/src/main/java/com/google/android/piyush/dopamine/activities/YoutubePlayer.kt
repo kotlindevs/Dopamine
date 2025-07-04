@@ -59,6 +59,7 @@ class YoutubePlayer : AppCompatActivity() {
         val viewCount = intent.getStringExtra("viewCount")
         val channelName = intent.getStringExtra("channelName")
         val channelImage = intent.getStringExtra("channelImage")
+        val channelId = intent.getStringExtra("channelId")
         val videoLength = intent.getStringExtra("videoLength")
 
         videoId?.let {
@@ -117,6 +118,7 @@ class YoutubePlayer : AppCompatActivity() {
                     binding.videoTitle.text = response.data.videoDetails?.title ?: "No Title"
                     binding.videoInfo.text = videoInfo
 
+                    //viewModel.searchData(query = video?.title?.substring(6).toString())
                     viewModel.submitSharedVideoInfo(
                         VideoInfo(
                             videoId = videoId,
@@ -156,11 +158,26 @@ class YoutubePlayer : AppCompatActivity() {
             }
         }
 
+        binding.channelImage.setOnClickListener {
+            startActivity(
+                Intent(this, ChannelInfo::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra("channelId", channelId)
+            )
+        }
+
+        binding.channelName.setOnClickListener {
+            startActivity(
+                Intent(this, ChannelInfo::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra("channelId", channelId)
+            )
+        }
+
         viewModel.searchKeys?.observe(this) { keys ->
-            val key = keys[1].toString()
+            val key = keys[1]
 
             viewModel.searchData(query = key)
-            Log.i("YoutubePlayer", "Keys : $key")
         }
 
         viewModel.searchResults.observe(this) { response ->
@@ -226,6 +243,15 @@ class YoutubePlayer : AppCompatActivity() {
                                                 "https:${channelImage}"
                                             ).into(coi)
                                         }
+
+                                        binding.channelOwnerImage.setOnClickListener {
+                                            val channelId = channelInfo.channelId
+                                           startActivity(
+                                                Intent(this, ChannelInfo::class.java)
+                                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                    .putExtra("channelId", channelId)
+                                            )
+                                        }
                                     }
 
                                 }
@@ -270,7 +296,14 @@ class YoutubePlayer : AppCompatActivity() {
 
                                 )
                             },
-                            onChannelClick = {}
+                            onChannelClick = { video ->
+                                val channelId = video.longBylineText?.runs?.firstOrNull()?.navigationEndpoint?.browseEndpoint?.browseId.toString()
+                                context.startActivity(
+                                    Intent(context, ChannelInfo::class.java)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        .putExtra("channelId", channelId)
+                                )
+                            }
                         )
                     }
 

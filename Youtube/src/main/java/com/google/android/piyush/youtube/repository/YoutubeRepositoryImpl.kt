@@ -19,10 +19,12 @@ import com.google.android.piyush.youtube.model.SearchSuggestions
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import kotlinx.serialization.InternalSerializationApi
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@InternalSerializationApi
 class YoutubeRepositoryImpl @Inject constructor(): YoutubeRepository {
     override suspend fun browseNow(browseId: String, params : String?): BrowseResponse {
         return Youtube.post(BROWSE) {

@@ -1,11 +1,13 @@
 package com.google.android.piyush.dopamine.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.databinding.ChannelHomeHeaderBinding
+import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.model.ChannelHomeContent
 
 class ChannelHomeAdapter(
@@ -38,6 +40,7 @@ class ChannelHomeAdapter(
         return channelContent?.size ?: 0
     }
 
+    @Suppress("DEPRECATION")
     inner class ChannelHomeViewHolder(private val binding : ChannelHomeHeaderBinding)
         : RecyclerView.ViewHolder(binding.root){
         fun bind(content : ChannelHomeContent){
@@ -57,7 +60,7 @@ class ChannelHomeAdapter(
                 }
             }
 
-            content.items.let { videos ->
+            content.videos.let { videos ->
                 binding.playlistVideos.visibility = View.GONE
                 if(videos != null){
                     binding.playlistVideos.visibility = View.VISIBLE
@@ -73,6 +76,28 @@ class ChannelHomeAdapter(
                     }
                 }
             }
+
+            content.videos?.size?.let { videoCount ->
+                binding.playlistChannels.visibility = View.GONE
+                if(videoCount < 1){
+                    binding.playlistChannels.visibility = View.VISIBLE
+                    binding.playlistChannels.apply {
+                        layoutManager = LinearLayoutManager(
+                            binding.root.context,
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        adapter = ChannelProfileRenderer(
+                            content.channels
+                        )
+                    }
+                }
+            }
+
+            Log.d("Channel Home => Title[$position] => ", content.header.title ?: "")
+            Log.d("Channel Home => SubTitle[$position] => ", content.header.subtitle ?: "")
+            Log.d("Channel Home => Videos[$position] => ", content.videos?.size.toString())
+            Log.d("Channel Home => Divider[$position] => ", "==================================================================================================================================================>")
         }
     }
 }

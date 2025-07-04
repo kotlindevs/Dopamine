@@ -14,6 +14,7 @@ import com.google.android.piyush.dopamine.adapters.ChannelHomeAdapter
 import com.google.android.piyush.dopamine.databinding.FragmentChannelHomeBinding
 import com.google.android.piyush.youtube.model.ChannelHomeContent
 import com.google.android.piyush.youtube.model.ChannelHomeHeader
+import com.google.android.piyush.youtube.model.GridChannelRenderer
 import com.google.android.piyush.youtube.model.GridVideoRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,12 +75,21 @@ class ChannelHome(
                                                 }
                                             }
 
+                                            val currentPlaylistChannels =
+                                                mutableListOf<GridChannelRenderer>()
+                                            shelf.content?.horizontalListRenderer?.items?.forEach { item ->
+                                                item.gridChannelRenderer?.let { channel ->
+                                                    currentPlaylistChannels.add(channel)
+                                                }
+                                            }
+
                                             val playlistContent = ChannelHomeContent(
                                                 header = ChannelHomeHeader(
                                                     title = currentPlaylistTitle,
                                                     subtitle = currentPlaylistSubtitle
                                                 ),
-                                                items = currentPlaylistVideos
+                                                videos = currentPlaylistVideos,
+                                                channels = currentPlaylistChannels
                                             )
 
                                             playlistData.add(playlistContent)

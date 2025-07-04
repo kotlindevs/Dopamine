@@ -5,7 +5,9 @@ import com.google.android.piyush.youtube.model.ChannelResponse
 import com.google.android.piyush.youtube.model.PlayerResponse
 import com.google.android.piyush.youtube.model.SearchResponse
 import com.google.android.piyush.youtube.model.SearchSuggestions
+import kotlinx.serialization.InternalSerializationApi
 
+@InternalSerializationApi
 interface YoutubeRepository {
     suspend fun browseNow(browseId : String, params : String?) : BrowseResponse
     suspend fun browseMusic(browseId : String) : BrowseResponse

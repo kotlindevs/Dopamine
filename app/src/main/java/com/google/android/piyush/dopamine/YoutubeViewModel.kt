@@ -125,13 +125,15 @@ class YoutubeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun channelHomeContent(browseId : String) = viewModelScope.launch {
-        _channelHomeContent.postValue(Response.Loading)
-        try {
-            val content = repository.browseNow(browseId = browseId, params = CHANNEL_HOME)
-            _channelHomeContent.postValue(Response.Success(content))
-        } catch (e : Exception) {
-            _channelHomeContent.postValue(Response.Error(e))
-        }
+       if(!alreadyExistsData){
+           _channelHomeContent.postValue(Response.Loading)
+           try {
+               val content = repository.browseNow(browseId = browseId, params = CHANNEL_HOME)
+               _channelHomeContent.postValue(Response.Success(content))
+           } catch (e : Exception) {
+               _channelHomeContent.postValue(Response.Error(e))
+           }
+       }
     }
 
     private fun getTrendingVideos() = viewModelScope.launch {
