@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playlistChannels"
+        android:id="@+id/playlistReels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -54,6 +54,18 @@
         android:layout_marginTop="6dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/playlistVideos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlistChannels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="6dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/playlistReels"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

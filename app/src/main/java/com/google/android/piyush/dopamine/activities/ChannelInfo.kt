@@ -48,6 +48,7 @@ class ChannelInfo : AppCompatActivity() {
 
         intent.getStringExtra("channelId").let {
             channelId = it
+            Log.d("ChannelId => ", it.toString())
         }
 
         viewModel.channelDetails(channelId = channelId!!, filter = null)

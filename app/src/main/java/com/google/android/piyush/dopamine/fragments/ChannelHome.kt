@@ -16,6 +16,7 @@ import com.google.android.piyush.youtube.model.ChannelHomeContent
 import com.google.android.piyush.youtube.model.ChannelHomeHeader
 import com.google.android.piyush.youtube.model.GridChannelRenderer
 import com.google.android.piyush.youtube.model.GridVideoRenderer
+import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -55,6 +56,7 @@ class ChannelHome(
                 is Response.Success -> {
                     val content = response.data
                     val playlistData = mutableListOf<ChannelHomeContent>()
+                    val reelRenderer = mutableListOf<ReelShelfRenderer.Item.ShortsLockupViewModel>()
                     CoroutineScope(Dispatchers.Main).launch {
                         delay(777).run {
                             binding?.progressBar?.visibility = View.GONE
@@ -62,6 +64,13 @@ class ChannelHome(
                             content.contents?.twoColumnBrowseResultsRenderer?.tabs?.forEach { tabs ->
                                 tabs.tabRenderer?.content?.sectionListRenderer?.contents?.forEach { sectionListContent ->
                                     sectionListContent.itemSectionRenderer?.contents?.forEach { itemSectionContent ->
+                                        itemSectionContent.reelShelfRenderer?.let { reelShelf ->
+                                            reelShelf.items?.forEach { item ->
+                                                item.shortsLockupViewModel?.let {
+                                                    reelRenderer.add(it)
+                                                }
+                                            }
+                                        }
                                         itemSectionContent.shelfRenderer?.let { shelf ->
                                             val currentPlaylistTitle =
                                                 shelf.title?.runs?.firstOrNull()?.text
@@ -82,16 +91,15 @@ class ChannelHome(
                                                     currentPlaylistChannels.add(channel)
                                                 }
                                             }
-
                                             val playlistContent = ChannelHomeContent(
                                                 header = ChannelHomeHeader(
                                                     title = currentPlaylistTitle,
                                                     subtitle = currentPlaylistSubtitle
                                                 ),
                                                 videos = currentPlaylistVideos,
-                                                channels = currentPlaylistChannels
+                                                channels = currentPlaylistChannels,
+                                                reels = reelRenderer
                                             )
-
                                             playlistData.add(playlistContent)
                                         }
                                     }

@@ -15,5 +15,6 @@ data class ChannelHomeHeader(
 data class ChannelHomeContent(
     val header : ChannelHomeHeader,
     val videos : MutableList<GridVideoRenderer>?,
-    val channels : MutableList<GridChannelRenderer>?
+    val channels : MutableList<GridChannelRenderer>?,
+    val reels : MutableList<ReelShelfRenderer.Item.ShortsLockupViewModel>?
 )

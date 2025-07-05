@@ -55,6 +55,7 @@ data class BrowseResponse(
                                 ){
                                     @Serializable
                                     data class Contents(
+                                        val reelShelfRenderer: ReelShelfRenderer? = null,
                                         val shelfRenderer : ShelfRenderer? = null
                                     ){
                                         @Serializable

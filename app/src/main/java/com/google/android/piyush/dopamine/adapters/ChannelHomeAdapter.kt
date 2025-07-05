@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.databinding.ChannelHomeHeaderBinding
 import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.model.ChannelHomeContent
+import com.google.android.piyush.youtube.model.ReelShelfRenderer
 
 class ChannelHomeAdapter(
     private val channelContent : MutableList<ChannelHomeContent>?
@@ -79,25 +80,42 @@ class ChannelHomeAdapter(
 
             content.videos?.size?.let { videoCount ->
                 binding.playlistChannels.visibility = View.GONE
-                if(videoCount < 1){
-                    binding.playlistChannels.visibility = View.VISIBLE
-                    binding.playlistChannels.apply {
-                        layoutManager = LinearLayoutManager(
-                            binding.root.context,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                        )
-                        adapter = ChannelProfileRenderer(
-                            content.channels
-                        )
+                binding.playlistReels.visibility = View.GONE
+                content.channels?.size?.let { channelCount ->
+                    if(videoCount < 1 && channelCount > 0){
+                        binding.playlistChannels.visibility = View.VISIBLE
+                        binding.playlistChannels.apply {
+                            layoutManager = LinearLayoutManager(
+                                binding.root.context,
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                            adapter = ChannelProfileRenderer(
+                                content.channels
+                            )
+                        }
+                    }else if (videoCount < 1){
+                        binding.playlistReels.visibility = View.VISIBLE
+                        binding.playlistReels.apply {
+                            layoutManager = LinearLayoutManager(
+                                binding.root.context,
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                            adapter = YoutubePlayerShortsAdapter(
+                                content.reels!!
+                            )
+                        }
                     }
                 }
             }
 
-            Log.d("Channel Home => Title[$position] => ", content.header.title ?: "")
-            Log.d("Channel Home => SubTitle[$position] => ", content.header.subtitle ?: "")
-            Log.d("Channel Home => Videos[$position] => ", content.videos?.size.toString())
-            Log.d("Channel Home => Divider[$position] => ", "==================================================================================================================================================>")
+            Log.d("Channel Title => [$position] => ", content.header.title ?: "")
+            Log.d("Channel Subtitle => [$position] => ", content.header.subtitle ?: "")
+            Log.d("Channel Videos => [$position] => ", content.videos?.size.toString())
+            Log.d("Channel Reels => [$position] => ", content.reels?.size.toString())
+            Log.d("Channel Channels => [$position] => ", content.channels?.size.toString())
+            Log.d("Channel Divider => [$position] => ", "==================================================================================================================================================>")
         }
     }
 }

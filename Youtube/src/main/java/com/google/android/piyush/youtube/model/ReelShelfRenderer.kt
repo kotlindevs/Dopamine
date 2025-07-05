@@ -1,7 +1,9 @@
 package com.google.android.piyush.youtube.model
 
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 
+@InternalSerializationApi
 @Serializable
 data class ReelShelfRenderer(
     val title : Title? = null,
