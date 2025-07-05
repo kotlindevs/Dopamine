@@ -1,15 +1,12 @@
 package com.google.android.piyush.dopamine.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.piyush.dopamine.databinding.ChannelHomeHeaderBinding
-import com.google.android.piyush.dopamine.utilities.ToastUtilities
 import com.google.android.piyush.youtube.model.ChannelHomeContent
-import com.google.android.piyush.youtube.model.ReelShelfRenderer
 
 class ChannelHomeAdapter(
     private val channelContent : MutableList<ChannelHomeContent>?
