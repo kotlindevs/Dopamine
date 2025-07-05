@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.piyush.database.DopamineDao
+import com.google.android.piyush.database.entities.FavouriteChannels
 import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
@@ -92,6 +93,14 @@ class DopamineDbViewModel
     fun createUserPlaylist(playlists: UserPlaylists) = viewModelScope.launch {
         try {
             dopamineDao.createUserPlaylists(userPlaylists = playlists)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fun addFavouriteChannels(channel : FavouriteChannels) = viewModelScope.launch {
+        try {
+            dopamineDao.addFavouriteChannels(channel)
         }catch (e: Exception){
             e.printStackTrace()
         }

@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
 import com.google.android.piyush.dopamine.databinding.ActivityChannelInfoBinding
@@ -33,6 +34,7 @@ class ChannelInfo : AppCompatActivity() {
 
     private lateinit var binding: ActivityChannelInfoBinding
     private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
+    private val database : DopamineDbViewModel by viewModels<DopamineDbViewModel>()
     private var channelId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -251,11 +253,11 @@ class ChannelInfo : AppCompatActivity() {
                                     }
                                 }
 
-                                channelId?.let {
+                                channelId?.let { id ->
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
                                     binding.channelTabs.visibility = View.VISIBLE
-                                    replaceTab(ChannelHome(it))
+                                    replaceTab(ChannelHome(id))
                                     binding.addToFavorites.setOnClickListener {
                                         Snackbar.make(
                                             binding.root,

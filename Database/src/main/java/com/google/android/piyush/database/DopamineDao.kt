@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.google.android.piyush.database.entities.FavouriteChannels
 import com.google.android.piyush.database.entities.RecentSearch
 import com.google.android.piyush.database.entities.RecentlyExplored
 import com.google.android.piyush.database.entities.User
@@ -37,4 +38,7 @@ interface DopamineDao {
 
     @Query("SELECT * FROM user_playlists")
     suspend fun getAllPlaylists() : MutableList<UserPlaylists>?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addFavouriteChannels(channel: FavouriteChannels)
 }
