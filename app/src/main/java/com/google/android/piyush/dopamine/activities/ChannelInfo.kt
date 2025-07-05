@@ -52,9 +52,27 @@ class ChannelInfo : AppCompatActivity() {
             insets
         }
 
-        intent.getStringExtra("channelId").let {
+        intent.getStringExtra("channelId")?.let {
             channelId = it
+            database.isChannelFavourite(it)
             Log.d("ChannelId => ", it.toString())
+        }
+
+        database.isChannelFavourite.observe(this){ channel ->
+            channelId?.let{
+                if(it == channel?.channelId){
+                    binding.addToFavorites.apply {
+                        this.text = getString(R.string.remove_from_favourites)
+                        this.icon = AppCompatResources.getDrawable(this@ChannelInfo, R.drawable.ic_remove_from_favourites)
+                        this.backgroundTintList = ColorStateList.valueOf(
+                            MaterialColors.getColor(
+                                this@ChannelInfo,
+                                com.google.android.material.R.attr.colorSecondary, Color.GRAY
+                            )
+                        )
+                    }
+                }
+            }
         }
 
         viewModel.channelDetails(channelId = channelId!!, filter = null)

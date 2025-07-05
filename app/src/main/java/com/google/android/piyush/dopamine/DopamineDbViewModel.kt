@@ -34,6 +34,9 @@ class DopamineDbViewModel
     private val _userPlaylists : MutableLiveData<MutableList<UserPlaylists>?> = MutableLiveData()
     val userPlaylists: LiveData<MutableList<UserPlaylists>?> = _userPlaylists
 
+    private val _isChannelFavourite : MutableLiveData<FavouriteChannels?> = MutableLiveData()
+    val isChannelFavourite: LiveData<FavouriteChannels?> = _isChannelFavourite
+
     init {
         getUser()
         getRecentWatchHistory()
@@ -101,6 +104,15 @@ class DopamineDbViewModel
     fun addFavouriteChannels(channel : FavouriteChannels) = viewModelScope.launch {
         try {
             dopamineDao.addFavouriteChannels(channel)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fun isChannelFavourite(channelId: String) = viewModelScope.launch {
+        try {
+            val channel = dopamineDao.isChannelFavourite(channelId)
+            _isChannelFavourite.postValue(channel)
         }catch (e: Exception){
             e.printStackTrace()
         }

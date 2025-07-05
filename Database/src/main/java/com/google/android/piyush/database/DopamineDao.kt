@@ -41,4 +41,7 @@ interface DopamineDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavouriteChannels(channel: FavouriteChannels)
+
+    @Query("SELECT * FROM favourite_channels WHERE channelId = :channelId")
+    suspend fun isChannelFavourite(channelId: String) : FavouriteChannels?
 }
