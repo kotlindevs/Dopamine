@@ -48,6 +48,7 @@ class DopamineDbViewModel
             val videos = dopamineDao.getAllRecentlyExplored()
             _getRecentWatchHistory.postValue(videos)
         }catch (e: Exception){
+            e.printStackTrace()
             _getRecentWatchHistory.postValue(mutableListOf())
         }
     }

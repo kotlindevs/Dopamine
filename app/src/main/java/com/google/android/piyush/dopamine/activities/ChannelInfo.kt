@@ -55,7 +55,7 @@ class ChannelInfo : AppCompatActivity() {
         intent.getStringExtra("channelId")?.let {
             channelId = it
             database.isChannelFavourite(it)
-            Log.d("ChannelId => ", it.toString())
+            Log.d("ChannelId => ", it)
         }
 
         database.isChannelFavourite.observe(this){ channel ->
