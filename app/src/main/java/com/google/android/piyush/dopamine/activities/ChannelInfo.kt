@@ -1,5 +1,7 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -15,8 +18,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
+import com.google.android.piyush.database.entities.FavouriteChannels
 import com.google.android.piyush.dopamine.DopamineDbViewModel
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.YoutubeViewModel
@@ -259,16 +263,49 @@ class ChannelInfo : AppCompatActivity() {
                                     binding.channelTabs.visibility = View.VISIBLE
                                     replaceTab(ChannelHome(id))
                                     binding.addToFavorites.setOnClickListener {
-                                        Snackbar.make(
-                                            binding.root,
-                                            "Coming soon.",
-                                            Snackbar.LENGTH_SHORT
-                                        ).apply {
-                                            animationMode = Snackbar.ANIMATION_MODE_SLIDE
-                                            setAction("Close"){
-                                                dismiss()
+                                        binding.addToFavorites.animate()
+                                            .alpha(0f)
+                                            .scaleX(0.8f)
+                                            .scaleY(0.8f)
+                                            .setDuration(300)
+                                            .withEndAction {
+                                                it.visibility = View.GONE
+                                            }.start()
+                                        if(id.isNotEmpty()){
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                delay(777).run {
+                                                    val channel = FavouriteChannels(
+                                                        channelId = id,
+                                                        channelName = channelTitle,
+                                                        channelImage = channelImage,
+                                                        channelSubscribersCount = channelSubscribers,
+                                                        channelShortUrl = channelUserName
+                                                    )
+                                                    database.addFavouriteChannels(channel)
+                                                    binding.addToFavorites.apply {
+                                                        this.text = getString(R.string.remove_from_favourites)
+                                                        this.icon = AppCompatResources.getDrawable(this@ChannelInfo, R.drawable.ic_remove_from_favourites)
+                                                        this.backgroundTintList = ColorStateList.valueOf(
+                                                            MaterialColors.getColor(
+                                                                this@ChannelInfo,
+                                                                com.google.android.material.R.attr.colorSecondary, Color.GRAY
+                                                            )
+                                                        )
+                                                        this.visibility = View.VISIBLE
+                                                        this.alpha = 0f
+                                                        this.scaleX = 0.8f
+                                                        this.scaleY = 0.8f
+
+                                                        this.animate()
+                                                            .alpha(1f)
+                                                            .scaleX(1f)
+                                                            .scaleY(1f)
+                                                            .setDuration(300)
+                                                            .start()
+                                                    }
+                                                }
                                             }
-                                        }.show()
+                                        }
                                     }
                                 }
                             }
