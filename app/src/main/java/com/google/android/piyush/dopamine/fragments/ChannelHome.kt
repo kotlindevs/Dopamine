@@ -16,6 +16,7 @@ import com.google.android.piyush.youtube.model.ChannelHomeContent
 import com.google.android.piyush.youtube.model.ChannelHomeHeader
 import com.google.android.piyush.youtube.model.GridChannelRenderer
 import com.google.android.piyush.youtube.model.GridVideoRenderer
+import com.google.android.piyush.youtube.model.LockupViewModel
 import com.google.android.piyush.youtube.model.ReelShelfRenderer
 import com.google.android.piyush.youtube.utilities.Response
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,9 +87,13 @@ class ChannelHome(
 
                                             val currentPlaylistChannels =
                                                 mutableListOf<GridChannelRenderer>()
+                                            val currentPlaylist = mutableListOf<LockupViewModel>()
                                             shelf.content?.horizontalListRenderer?.items?.forEach { item ->
                                                 item.gridChannelRenderer?.let { channel ->
                                                     currentPlaylistChannels.add(channel)
+                                                }
+                                                item.lockupViewModel?.let { playlists ->
+                                                    currentPlaylist.add(playlists)
                                                 }
                                             }
                                             val playlistContent = ChannelHomeContent(
@@ -98,6 +103,7 @@ class ChannelHome(
                                                 ),
                                                 videos = currentPlaylistVideos,
                                                 channels = currentPlaylistChannels,
+                                                playlists = currentPlaylist,
                                                 reels = reelRenderer
                                             )
                                             playlistData.add(playlistContent)

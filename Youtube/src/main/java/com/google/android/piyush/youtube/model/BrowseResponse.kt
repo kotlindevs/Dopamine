@@ -95,7 +95,8 @@ data class BrowseResponse(
                                                     @Serializable
                                                     data class Item(
                                                         val gridVideoRenderer : GridVideoRenderer? = null,
-                                                        val gridChannelRenderer : GridChannelRenderer? = null
+                                                        val gridChannelRenderer : GridChannelRenderer? = null,
+                                                        val lockupViewModel : LockupViewModel? = null
                                                     )
                                                 }
                                                 @Serializable

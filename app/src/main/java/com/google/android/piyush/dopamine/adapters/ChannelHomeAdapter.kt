@@ -80,7 +80,7 @@ class ChannelHomeAdapter(
 
             content.videos?.size?.let { videoCount ->
                 binding.playlistChannels.visibility = View.GONE
-                binding.playlistReels.visibility = View.GONE
+                binding.playlists.visibility = View.GONE
                 content.channels?.size?.let { channelCount ->
                     if(videoCount < 1 && channelCount > 0){
                         binding.playlistChannels.visibility = View.VISIBLE
@@ -95,27 +95,20 @@ class ChannelHomeAdapter(
                             )
                         }
                     }else if (videoCount < 1){
-                        binding.playlistReels.visibility = View.VISIBLE
-                        binding.playlistReels.apply {
+                        binding.playlists.visibility = View.VISIBLE
+                        binding.playlists.apply {
                             layoutManager = LinearLayoutManager(
                                 binding.root.context,
                                 LinearLayoutManager.HORIZONTAL,
                                 false
                             )
-                            adapter = YoutubePlayerShortsAdapter(
-                                content.reels!!
+                            adapter = PlaylistsChannelRenderer(
+                                content.playlists
                             )
                         }
                     }
                 }
             }
-
-            Log.d("Channel Title => [$position] => ", content.header.title ?: "")
-            Log.d("Channel Subtitle => [$position] => ", content.header.subtitle ?: "")
-            Log.d("Channel Videos => [$position] => ", content.videos?.size.toString())
-            Log.d("Channel Reels => [$position] => ", content.reels?.size.toString())
-            Log.d("Channel Channels => [$position] => ", content.channels?.size.toString())
-            Log.d("Channel Divider => [$position] => ", "==================================================================================================================================================>")
         }
     }
 }
