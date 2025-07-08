@@ -1,20 +1,18 @@
 package com.google.android.piyush.youtube.repository
 
-import com.google.android.piyush.youtube.model.BrowseResponse
-import com.google.android.piyush.youtube.model.ChannelResponse
-import com.google.android.piyush.youtube.model.PlayerResponse
-import com.google.android.piyush.youtube.model.SearchResponse
-import com.google.android.piyush.youtube.model.SearchSuggestions
-import kotlinx.serialization.InternalSerializationApi
+import com.google.android.piyush.youtube.model.SearchTube
+import com.google.android.piyush.youtube.model.Shorts
+import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.model.channelDetails.YoutubeChannel
+import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 
-@InternalSerializationApi
 interface YoutubeRepository {
-    suspend fun browseNow(browseId : String, params : String?) : BrowseResponse
-    suspend fun browseMusic(browseId : String) : BrowseResponse
-    suspend fun browseGaming(browseId : String) : BrowseResponse
-    suspend fun browseMovies(browseId : String) : BrowseResponse
-    suspend fun playerInfo(videoId : String) : PlayerResponse
-    suspend fun searchResults(query : String) : SearchResponse
-    suspend fun searchSuggestions(query : String) : SearchSuggestions
-    suspend fun channelResponse(channelId : String, filter : String?) : ChannelResponse
+    suspend fun getHomeVideos() : Youtube
+    suspend fun getLibraryVideos(playListId : String) : Youtube
+    suspend fun getSearchVideos(query : String) : SearchTube
+    suspend fun getYoutubeShorts() : List<Shorts>
+    suspend fun getChannelDetails(channelId : String) : YoutubeChannel
+    suspend fun getChannelsPlaylists(channelId : String) : ChannelPlaylists
+    suspend fun getPlaylistVideos(playListId : String) : Youtube
+    suspend fun getVideoDetails(videoId : String) : Youtube
 }

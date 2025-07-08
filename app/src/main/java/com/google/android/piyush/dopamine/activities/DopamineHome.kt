@@ -1,91 +1,96 @@
 package com.google.android.piyush.dopamine.activities
 
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.piyush.dopamine.R
 import com.google.android.piyush.dopamine.databinding.ActivityDopamineHomeBinding
 import com.google.android.piyush.dopamine.fragments.Home
-import com.google.android.piyush.dopamine.fragments.Explore
-import com.google.android.piyush.dopamine.fragments.Trending
-import com.google.android.piyush.dopamine.fragments.UserAccount
+import com.google.android.piyush.dopamine.fragments.Library
+import com.google.android.piyush.dopamine.fragments.Search
+import com.google.android.piyush.dopamine.fragments.Shorts
+import com.google.android.piyush.dopamine.utilities.NetworkUtilities
+import com.google.android.piyush.dopamine.utilities.Utilities
 import com.google.android.piyush.dopamine.viewModels.DopamineHomeViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.google.android.piyush.dopamine.viewModels.SharedViewModel
 import kotlin.system.exitProcess
 
-@AndroidEntryPoint
+@Suppress("DEPRECATION")
 class DopamineHome : AppCompatActivity() {
 
     private val viewModel : DopamineHomeViewModel by viewModels<DopamineHomeViewModel>()
+    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: ActivityDopamineHomeBinding
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDopamineHomeBinding.inflate(layoutInflater)
+        sharedViewModel = SharedViewModel()
         setContentView(binding.root)
 
-        if (savedInstanceState == null) {
-            replaceFragment(Home())
+        onBackPressedDispatcher.addCallback {
+            overridePendingTransition(
+                android.R.anim.fade_in, android.R.anim.fade_out
+            )
+            finishAffinity()
+            finish()
+            exitProcess(0)
         }
 
-        binding.bottomNavigationView.setOnItemSelectedListener(
-            object : NavigationBarView.OnItemSelectedListener{
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when(item.itemId){
-                    R.id.home -> {
-                        replaceFragment(Home())
-                        return true
-                    }
-                    R.id.explore -> {
-                        replaceFragment(Explore())
-                        return true
-                    }
-                    R.id.trending -> {
-                        replaceFragment(Trending())
-                        return true
-                    }
-                    R.id.userAccount -> {
-                        replaceFragment(UserAccount())
-                        return true
-                    }
-                    else -> {
-                        return false
-                    }
-                }
-            }
-        })
+        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
 
-        NavigationBarView.OnItemReselectedListener { item ->
-            when(item.itemId){
+
+        if(!NetworkUtilities.isNetworkAvailable(this)){
+            Utilities.turnOnNetworkDialog(this,"No Internet Connection")
+        }
+
+        if (savedInstanceState == null) {
+            defaultScreen(Home())
+        }
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
                 R.id.home -> {
-                    replaceFragment(Home())
+                    defaultScreen(Home())
+                    true
                 }
-
-                R.id.explore -> {
-                    replaceFragment(Explore())
+                R.id.search -> {
+                    defaultScreen(Search())
+                    true
                 }
-
-                R.id.trending -> {
-                    replaceFragment(Trending())
+                R.id.library -> {
+                    defaultScreen(Library())
+                    true
                 }
-
-                R.id.userAccount -> {
-                    replaceFragment(UserAccount())
+                R.id.shorts -> {
+                    defaultScreen(Shorts())
+                    true
                 }
+                else -> false
             }
         }
     }
-    private fun replaceFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayout, fragment)
-            .commit()
+
+    private fun defaultScreen(fragment: Fragment){
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout,fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

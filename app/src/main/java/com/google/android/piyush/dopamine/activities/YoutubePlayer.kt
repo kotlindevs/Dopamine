@@ -1,52 +1,72 @@
 package com.google.android.piyush.dopamine.activities
 
-import android.content.Intent
+import android.content.ContentValues.TAG
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.piyush.database.entities.RecentlyExplored
-import com.google.android.piyush.dopamine.DopamineDbViewModel
+import com.google.android.material.button.MaterialButton
+import com.google.android.piyush.database.entities.EntityFavouritePlaylist
+import com.google.android.piyush.database.entities.EntityRecentVideos
+import com.google.android.piyush.database.viewModel.DatabaseViewModel
 import com.google.android.piyush.dopamine.R
-import com.google.android.piyush.dopamine.YoutubeViewModel
-import com.google.android.piyush.dopamine.adapters.YoutubePlayerKeywordsAdapter
-import com.google.android.piyush.dopamine.adapters.YoutubePlayerShortsAdapter
-import com.google.android.piyush.dopamine.adapters.YoutubePlayerVideosAdapter
+import com.google.android.piyush.dopamine.adapters.CustomPlaylistsAdapter
+import com.google.android.piyush.dopamine.adapters.YoutubeChannelPlaylistsAdapter
 import com.google.android.piyush.dopamine.databinding.ActivityYoutubePlayerBinding
-import com.google.android.piyush.dopamine.databinding.YoutubePlayerInfoBinding
-import com.google.android.piyush.youtube.model.ReelShelfRenderer
-import com.google.android.piyush.youtube.model.VideoInfo
-import com.google.android.piyush.youtube.model.VideoRenderer
-import com.google.android.piyush.youtube.utilities.Response
+import com.google.android.piyush.dopamine.utilities.CustomDialog
+import com.google.android.piyush.dopamine.utilities.Utilities
+import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModel
+import com.google.android.piyush.dopamine.viewModels.YoutubePlayerViewModelFactory
+import com.google.android.piyush.youtube.repository.YoutubeRepositoryImpl
+import com.google.android.piyush.youtube.utilities.YoutubeResource
+import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
-@AndroidEntryPoint
+@Suppress("DEPRECATION")
 class YoutubePlayer : AppCompatActivity() {
 
     private lateinit var binding: ActivityYoutubePlayerBinding
-    private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
-    private val database : DopamineDbViewModel by viewModels<DopamineDbViewModel>()
+    private lateinit var youtubeRepositoryImpl: YoutubeRepositoryImpl
+    private lateinit var youtubePlayerViewModel: YoutubePlayerViewModel
+    private lateinit var youtubePlayerViewModelFactory: YoutubePlayerViewModelFactory
+    private lateinit var databaseViewModel: DatabaseViewModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityYoutubePlayerBinding.inflate(layoutInflater)
+        youtubeRepositoryImpl = YoutubeRepositoryImpl()
+        youtubePlayerViewModelFactory = YoutubePlayerViewModelFactory(youtubeRepositoryImpl)
+        databaseViewModel = DatabaseViewModel(applicationContext)
+        youtubePlayerViewModel = ViewModelProvider(
+            this, youtubePlayerViewModelFactory
+        )[YoutubePlayerViewModel::class.java]
+
         setContentView(binding.root)
+
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -54,269 +74,12 @@ class YoutubePlayer : AppCompatActivity() {
             insets
         }
 
-        val videoId = intent?.getStringExtra("videoId")
-        val publishedTime = intent.getStringExtra("publishedTime")
-        val viewCount = intent.getStringExtra("viewCount")
-        val channelName = intent.getStringExtra("channelName")
-        val channelImage = intent.getStringExtra("channelImage")
-        val channelId = intent.getStringExtra("channelId")
-        val videoLength = intent.getStringExtra("videoLength")
 
-        videoId?.let {
-            viewModel.getPlayerInfo(it)
-        }
-
-        channelImage?.let {
-            Glide.with(this).load(it).into(binding.channelImage)
-        }
-
-        channelName?.let {
-            binding.channelName.text = it
-        }
-
-        viewModel.playerInfo.observe(this) { response ->
-            when(response) {
-                is Response.Loading -> {
-                    binding.apply {
-                        shimmerEffectTitle.visibility = View.VISIBLE
-                        shimmerEffectVideoInfo.visibility = View.VISIBLE
-                        shimmerEffectChannelImage.visibility = View.VISIBLE
-                        shimmerEffectChannelName.visibility = View.VISIBLE
-                        shimmerEffectSaveChannel.visibility = View.VISIBLE
-                        shimmerEffectTitle.startShimmer()
-                        shimmerEffectVideoInfo.startShimmer()
-                        shimmerEffectChannelImage.startShimmer()
-                        shimmerEffectChannelName.startShimmer()
-                        shimmerEffectSaveChannel.startShimmer()
-                        videoTitle.visibility = View.GONE
-                        videoInfo.visibility = View.GONE
-                        this.channelImage.visibility = View.GONE
-                        this.channelName.visibility = View.GONE
-                        saveChannel.visibility = View.GONE
-                    }
-                }
-                is Response.Success -> {
-                    binding.apply {
-                        shimmerEffectTitle.visibility = View.GONE
-                        shimmerEffectVideoInfo.visibility = View.GONE
-                        shimmerEffectChannelImage.visibility = View.GONE
-                        shimmerEffectChannelName.visibility = View.GONE
-                        shimmerEffectSaveChannel.visibility = View.GONE
-                        shimmerEffectTitle.stopShimmer()
-                        shimmerEffectVideoInfo.stopShimmer()
-                        shimmerEffectChannelImage.stopShimmer()
-                        shimmerEffectChannelName.stopShimmer()
-                        shimmerEffectSaveChannel.stopShimmer()
-                        videoTitle.visibility = View.VISIBLE
-                        videoInfo.visibility = View.VISIBLE
-                        this.channelImage.visibility = View.VISIBLE
-                        this.channelName.visibility = View.VISIBLE
-                        saveChannel.visibility = View.VISIBLE
-                    }
-                    val video = response.data.videoDetails
-                    val videoInfo = "$viewCount • $publishedTime ...more"
-                    binding.videoTitle.text = response.data.videoDetails?.title ?: "No Title"
-                    binding.videoInfo.text = videoInfo
-
-                    //viewModel.searchData(query = video?.title?.substring(6).toString())
-                    viewModel.submitSharedVideoInfo(
-                        VideoInfo(
-                            videoId = videoId,
-                            title = video?.title.toString(),
-                            publishedTime = publishedTime,
-                            viewCount = viewCount,
-                            channelName = channelName,
-                            length = videoLength,
-                            keywords = video?.keywords,
-                            channelImage = channelImage,
-                            description = video?.shortDescription.toString()
-                        )
-                    )
-
-                    val recentVideo = RecentlyExplored(
-                        videoId = videoId.toString(),
-                        thumbnail = video?.thumbnail?.thumbnails?.get(1)?.url.toString(),
-                        title = video?.title.toString(),
-                        longBylineText = video?.author.toString(),
-                        lengthText = videoLength.toString(),
-                        publishedTimeText = publishedTime.toString(),
-                        shortViewCountText = viewCount.toString(),
-                        avatar = channelImage.toString()
-                    )
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        database.addRecentWatch(video = recentVideo)
-                    }
-
-                    video?.keywords?.let {
-                        viewModel.keys(it)
-                    }
-                }
-                is Response.Error -> {
-                    Log.e("YoutubePlayer", "Error : ${response.exception}")
-                }
-            }
-        }
-
-        binding.channelImage.setOnClickListener {
-            startActivity(
-                Intent(this, ChannelInfo::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("channelId", channelId)
-            )
-        }
-
-        binding.channelName.setOnClickListener {
-            startActivity(
-                Intent(this, ChannelInfo::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra("channelId", channelId)
-            )
-        }
-
-        viewModel.searchKeys?.observe(this) { keys ->
-            val key = keys[1]
-
-            viewModel.searchData(query = key)
-        }
-
-        viewModel.searchResults.observe(this) { response ->
-            when(response) {
-                is Response.Loading -> {
-                    binding.apply {
-                        shimmerEffectShorts.visibility = View.VISIBLE
-                        shimmerEffectShorts.startShimmer()
-                        shorts.visibility = View.GONE
-                        relativeVideos.visibility = View.GONE
-                    }
-                }
-                is Response.Success -> {
-                    binding.apply {
-                        shimmerEffectShorts.visibility = View.GONE
-                        shimmerEffectShorts.stopShimmer()
-                        shorts.visibility = View.VISIBLE
-                        relativeVideos.visibility = View.VISIBLE
-                    }
-                    val shortsList = mutableListOf<ReelShelfRenderer.Item.ShortsLockupViewModel>()
-                    val videosList = mutableListOf<VideoRenderer>()
-                    response.data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents?.forEach { contents ->
-                        contents.itemSectionRenderer?.contents?.forEach { content ->
-                            content.reelShelfRenderer?.items?.forEach { shorts ->
-                                val shortsViewModel = shorts.shortsLockupViewModel
-
-                                shortsViewModel?.let {
-                                    shortsList.add(it)
-                                }
-                            }
-                            content.channelRenderer.let { channelInfo ->
-                                channelInfo?.let {
-                                    val titleOfChannel = channelInfo.shortBylineText?.runs?.get(0)?.text.toString()
-                                    val subscriberCount = channelInfo.subscriberCountText?.simpleText.toString()
-                                    val videoCount = channelInfo.videoCountText?.simpleText.toString()
-                                    val channelImage = channelInfo.thumbnail?.thumbnails?.get(0)?.url.toString()
-
-                                    if(titleOfChannel.isNotEmpty()) {
-                                        binding.channelOwnerTitle.apply {
-                                            visibility = View.VISIBLE
-                                            text = titleOfChannel
-                                        }
-                                    }
-
-                                    if(subscriberCount.isNotEmpty()){
-                                        binding.channelOwnerSubscriberCount.apply {
-                                            visibility = View.VISIBLE
-                                            text = subscriberCount
-                                        }
-                                    }
-
-                                    if(videoCount.isNotEmpty()) {
-                                        binding.channelOwnerViewCount.apply {
-                                            visibility = View.VISIBLE
-                                            text = videoCount
-                                        }
-                                    }
-
-                                    if(channelImage.isNotEmpty()) {
-                                        binding.channelOwnerImage.let { coi ->
-                                            coi.visibility = View.VISIBLE
-                                            Glide.with(this@YoutubePlayer).load(
-                                                "https:${channelImage}"
-                                            ).into(coi)
-                                        }
-
-                                        binding.channelOwnerImage.setOnClickListener {
-                                            val channelId = channelInfo.channelId
-                                           startActivity(
-                                                Intent(this, ChannelInfo::class.java)
-                                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                                    .putExtra("channelId", channelId)
-                                            )
-                                        }
-                                    }
-
-                                }
-                            }
-                            content.videoRenderer.let { video ->
-                                if (video != null) {
-                                    videosList.add(video)
-                                }
-                            }
-                        }
-                    }
-                    binding.shorts.apply {
-                        layoutManager = LinearLayoutManager(
-                            this@YoutubePlayer,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                        )
-                        adapter = YoutubePlayerShortsAdapter(
-                            shortsList
-                        )
-                    }
-
-                    binding.relativeVideos.apply {
-                        isNestedScrollingEnabled = true
-                        layoutManager = LinearLayoutManager(
-                            this@YoutubePlayer,
-                            LinearLayoutManager.VERTICAL,
-                            false
-                        )
-                        adapter = YoutubePlayerVideosAdapter(
-                            videosList,
-                            onVideoClick = { video ->
-                                context.startActivity(
-                                    Intent(context, YoutubePlayer::class.java)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        .putExtra("videoId", video.videoId.toString())
-                                        .putExtra("channelName", video.longBylineText?.runs?.get(0)?.text.toString())
-                                        .putExtra("publishedTime", video.publishedTimeText?.simpleText.toString())
-                                        .putExtra("viewCount", video.shortViewCountText?.simpleText.toString())
-                                        .putExtra("videoLength", video.lengthText?.simpleText.toString())
-                                        .putExtra("channelImage", video.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail?.thumbnails?.firstOrNull()?.url.toString())
-
-                                )
-                            },
-                            onChannelClick = { video ->
-                                val channelId = video.longBylineText?.runs?.firstOrNull()?.navigationEndpoint?.browseEndpoint?.browseId.toString()
-                                context.startActivity(
-                                    Intent(context, ChannelInfo::class.java)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        .putExtra("channelId", channelId)
-                                )
-                            }
-                        )
-                    }
-
-                }
-                is Response.Error -> {
-                    Log.e("YoutubePlayer", "Error : ${response.exception}")
-                }
-            }
-        }
-
-        binding.videoInfo.setOnClickListener{
-            val youtubePlayerInfo = YoutubePlayerInfo()
-            youtubePlayerInfo.show(supportFragmentManager, youtubePlayerInfo.tag)
+        databaseViewModel.isFavouriteVideo(
+            intent?.getStringExtra("videoId").toString()
+        )
+        databaseViewModel.isFavourite.observe(this) {
+            binding.addToPlayList.isChecked = it == intent.getStringExtra("videoId").toString()
         }
 
         binding.YtPlayer.enableBackgroundPlayback(true)
@@ -336,64 +99,261 @@ class YoutubePlayer : AppCompatActivity() {
                         intent?.getStringExtra("videoId")!!,
                         0F
                     )
+                    Log.d(
+                        TAG,
+                        " -> Activity : YoutubePlayer || videoId : $intent.getStringExtra(\"videoId\") "
+                    )
                 }
             }
         }, true, iFramePlayerOptions)
+
+        binding.YtPlayer.addFullscreenListener(object : FullscreenListener {
+            override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                window.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+
+                listOf(
+                    binding.YtPlayer,
+                    binding.addToPlayList,
+                    binding.addToCustomPlayList
+                ).forEach { it.visibility = View.GONE }
+
+                if (fullscreenView.parent == null) {
+                    binding.frameLayout.addView(fullscreenView)
+                }
+            }
+
+            override fun onExitFullscreen() {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                binding.frameLayout.removeAllViews()
+                listOf(
+                    binding.YtPlayer,
+                    binding.addToPlayList,
+                    binding.addToCustomPlayList
+                ).forEach { it.visibility = View.VISIBLE }
+            }
+        })
+
+        binding.enterInPip.setOnClickListener {
+            val supportsPIP =
+                packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+            if (supportsPIP) enterPictureInPictureMode()
+        }
+
+        binding.addToCustomPlayList.setOnClickListener {
+            val bottomSheetFragment = MyBottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+        }
+
+        val videoId = intent?.getStringExtra("videoId").toString()
+        val channelId = intent?.getStringExtra("channelId").toString()
+
+        youtubePlayerViewModel.getVideoDetails(videoId)
+
+        youtubePlayerViewModel.videoDetails.observe(this) { videoDetails ->
+            when (videoDetails) {
+                is YoutubeResource.Loading -> {}
+
+                is YoutubeResource.Success -> {
+                    val videoTitle = videoDetails.data.items?.get(0)?.snippet?.title
+                    val videoDescription = videoDetails.data.items?.get(0)?.snippet?.description
+                    val videoThumbnail = videoDetails.data.items?.get(0)?.snippet?.thumbnails?.high?.url
+                    val videoDuration = videoDetails.data.items?.get(0)?.contentDetails?.duration
+                    val videoPublishedAt = videoDetails.data.items?.get(0)?.snippet?.publishedAt
+                    val channelTitle = videoDetails.data.items?.get(0)?.snippet?.channelTitle
+                    val videoLikes = counter(videoDetails.data.items?.get(0)?.statistics?.likeCount!!.toInt())
+                    val videoViews = counter(videoDetails.data.items?.get(0)?.statistics?.viewCount!!.toInt())
+
+                    binding.apply {
+                        textTitle.text  = videoTitle
+                        textLiked.text  = videoLikes
+                        textView.text   = videoViews
+                        textDescription.text = videoDescription
+
+                        addToPlayList.addOnCheckedStateChangedListener { _, isFavourite ->
+                            if (isFavourite == 1) {
+                                databaseViewModel.insertFavouriteVideos(
+                                    EntityFavouritePlaylist(
+                                        videoId = videoId,
+                                        thumbnail = videoThumbnail,
+                                        title = videoTitle,
+                                        channelId = channelId,
+                                        channelTitle = channelTitle
+                                    )
+                                )
+                            } else {
+                                databaseViewModel.deleteFavouriteVideo(
+                                    videoId = videoId
+                                )
+                            }
+                        }
+                    }
+                    databaseViewModel.isRecentVideo(videoId = videoId)
+
+                    databaseViewModel.isRecent.observe(this) {
+                        if (it == videoId) {
+                            databaseViewModel.updateRecentVideo(
+                                videoId = videoId,
+                                time = LocalTime.now()
+                                    .format(DateTimeFormatter.ofPattern("hh:mm a")).toString())
+                        } else {
+                            databaseViewModel.insertRecentVideos(
+                                EntityRecentVideos(
+                                    id = Random.nextInt(1, 100000),
+                                    videoId = videoId,
+                                    thumbnail = videoThumbnail,
+                                    title = videoTitle,
+                                    timing = LocalTime.now()
+                                        .format(DateTimeFormatter.ofPattern("hh:mm a"))
+                                        .toString(),
+                                    channelId = channelId
+                                )
+                            )
+                        }
+                    }
+
+                    getSharedPreferences("customPlaylist", MODE_PRIVATE).edit {
+                        putString("videoId", videoId)
+                        putString("thumbnail", videoThumbnail)
+                        putString("title", videoTitle)
+                        putString("channelId", channelId)
+                        putString("channelTitle", channelTitle)
+                        putString("viewCount", videoViews)
+                        putString("publishedAt",  videoPublishedAt)
+                        putString("duration", videoDuration)
+                    }
+                }
+
+                is YoutubeResource.Error -> {
+                    Log.d("YoutubePlayer", "YoutubePlayer: ${videoDetails.exception.message.toString()}")
+                }
+            }
+        }
+
+        youtubePlayerViewModel.getChannelDetails(channelId)
+
+        youtubePlayerViewModel.channelDetails.observe(this) { channelDetails ->
+            when (channelDetails) {
+                is YoutubeResource.Loading -> {}
+
+                is YoutubeResource.Success -> {
+                    val channelLogo = channelDetails.data.items?.get(0)?.snippet?.thumbnails?.default?.url
+                    val channelSubscribers = "${counter(channelDetails.data.items?.get(0)?.statistics?.subscriberCount!!.toInt())} Subscribers"
+                    val channelTitle = channelDetails.data.items?.get(0)?.snippet?.title
+                    val customUrl = channelDetails.data.items?.get(0)?.snippet?.customUrl
+                    val channelDescription = channelDetails.data.items?.get(0)?.snippet?.description
+
+                    if(channelLogo.isNullOrEmpty()){
+                        Glide.with(this).load(Utilities.DEFAULT_LOGO).into(binding.imageView)
+                    }else {
+                        Glide.with(this).load(channelLogo).into(binding.imageView)
+                    }
+                    binding.apply {
+                        this.text1.text = channelTitle
+                        this.text2.text = customUrl
+                        this.text3.text = channelSubscribers
+                        this.text4.text = channelDescription
+                    }
+                }
+
+                is YoutubeResource.Error -> {
+                    Log.d(TAG, "YoutubePlayer: ${channelDetails.exception.message.toString()}")
+                }
+            }
+        }
+
+        youtubePlayerViewModel.getChannelsPlaylist(channelId)
+
+        youtubePlayerViewModel.channelsPlaylists.observe(this) { channelsPlaylist ->
+            when (channelsPlaylist) {
+                is YoutubeResource.Loading -> {}
+
+                is YoutubeResource.Success -> {
+                    binding.channelsPlaylist.apply {
+                        layoutManager = LinearLayoutManager(this@YoutubePlayer)
+                        adapter = YoutubeChannelPlaylistsAdapter(context, channelsPlaylist.data)
+                    }
+                }
+
+                is YoutubeResource.Error -> {
+                    Log.d(TAG, "YoutubePlayer: ${channelsPlaylist.exception.message.toString()}")
+                }
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
+        if (isInPictureInPictureMode) {
+            binding.YtPlayer.wrapContent()
+            binding.addToPlayList.visibility = View.GONE
+            binding.addToCustomPlayList.visibility = View.GONE
+        } else {
+            binding.addToPlayList.visibility = View.VISIBLE
+            binding.addToCustomPlayList.visibility = View.VISIBLE
+        }
+    }
+
+    private fun counter(count : Int) : String{
+        var num : Double = count.toDouble()
+        val data: String
+        if(num > 1000000.00){
+            num /= 1000000.00
+            num = DecimalFormat("#.##").format(num).toDouble()
+            data = "${num}M"
+        }else {
+            num /= 1000
+            num = DecimalFormat("#.##").format(num).toDouble()
+            data = "${num}K"
+        }
+        return data
     }
 }
 
-class YoutubePlayerInfo : BottomSheetDialogFragment(){
-
-    private var binding : YoutubePlayerInfoBinding? = null
-    private val viewModel : YoutubeViewModel by activityViewModels<YoutubeViewModel>()
+class MyBottomSheetFragment : BottomSheetDialogFragment(){
+    private lateinit var databaseViewModel: DatabaseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.youtube_player_info,container,false)
-    }
+        val view = inflater.inflate(R.layout.bottom_sheet_add_to_a_playlist,container,false)
+        val createNewPlaylist: MaterialButton = view.findViewById(R.id.createNewPlayList)
+        val customPlaylists : RecyclerView = view.findViewById(R.id.recyclerViewLocalPlaylist)
+        databaseViewModel = DatabaseViewModel(requireContext())
+        databaseViewModel.defaultMasterDev
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        createNewPlaylist.setOnClickListener {
+            val customDialog = CustomDialog(requireContext())
+            customDialog.show()
+        }
 
-        binding = YoutubePlayerInfoBinding.bind(view)
-
-        viewModel.sharedVideoInfo.observe(viewLifecycleOwner) { response ->
-            when(response) {
-                is Response.Loading -> {}
-                is Response.Success -> {
-                    val video = response.data
-                    binding.apply {
-                        this?.videoTitle?.text = video.title
-                        this?.videoViews?.text = video.viewCount
-                        this?.videoPublished?.text = video.publishedTime
-                        this?.videoDuration?.text = video.length
-                        this?.keywords?.apply {
-                            layoutManager = LinearLayoutManager(
-                                requireContext(),
-                                LinearLayoutManager.HORIZONTAL,
-                                false
-                            )
-                            adapter = YoutubePlayerKeywordsAdapter(video.keywords)
-                        }
-                        this?.videoDescription?.text = video.description
-                    }
-                }
-                is Response.Error -> {
-                    Log.e("YoutubePlayerInfo", "Error : ${response.exception}")
-                }
+        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            if(!databaseViewModel.isPlaylistExist(databaseViewModel.isUserFromPhoneAuth)){
+                databaseViewModel.userFromPhoneAuth()
+            }else{
+                Log.d(TAG, "${databaseViewModel.isUserFromPhoneAuth} : Exists")
+            }
+        }else {
+            if (!databaseViewModel.isPlaylistExist(databaseViewModel.newPlaylistName)) {
+                databaseViewModel.defaultUserPlaylist()
+            } else {
+                Log.d(TAG, "${databaseViewModel.newPlaylistName} : Exists")
             }
         }
 
-        binding?.closeInfo?.setOnClickListener{
-            dismiss()
+        customPlaylists.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = CustomPlaylistsAdapter(
+                requireContext(),
+                databaseViewModel.getPlaylist(),
+            )
         }
-    }
+        return view
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 }

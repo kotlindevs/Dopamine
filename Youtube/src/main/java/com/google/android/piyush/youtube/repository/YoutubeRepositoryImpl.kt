@@ -1,121 +1,242 @@
 package com.google.android.piyush.youtube.repository
 
-import com.google.android.piyush.youtube.BROWSE
-import com.google.android.piyush.youtube.PLAYER
-import com.google.android.piyush.youtube.SEARCH
-import com.google.android.piyush.youtube.TRENDING_GAMING
-import com.google.android.piyush.youtube.TRENDING_MOVIES
-import com.google.android.piyush.youtube.TRENDING_MUSIC
-import com.google.android.piyush.youtube.Youtube
-import com.google.android.piyush.youtube.model.BrowseBody
-import com.google.android.piyush.youtube.model.BrowseResponse
-import com.google.android.piyush.youtube.model.ChannelResponse
-import com.google.android.piyush.youtube.model.Context
-import com.google.android.piyush.youtube.model.PlayerBody
-import com.google.android.piyush.youtube.model.PlayerResponse
-import com.google.android.piyush.youtube.model.SearchBody
-import com.google.android.piyush.youtube.model.SearchResponse
-import com.google.android.piyush.youtube.model.SearchSuggestions
+import com.google.android.piyush.youtube.model.SearchTube
+import com.google.android.piyush.youtube.model.Shorts
+import com.google.android.piyush.youtube.utilities.YoutubeClient
+import com.google.android.piyush.youtube.model.Youtube
+import com.google.android.piyush.youtube.model.channelDetails.YoutubeChannel
+import com.google.android.piyush.youtube.model.channelPlaylists.ChannelPlaylists
 import io.ktor.client.call.body
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import kotlinx.serialization.InternalSerializationApi
-import javax.inject.Inject
-import javax.inject.Singleton
+import io.ktor.client.request.get
 
-@Singleton
-@InternalSerializationApi
-class YoutubeRepositoryImpl @Inject constructor(): YoutubeRepository {
-    override suspend fun browseNow(browseId: String, params : String?): BrowseResponse {
-        return Youtube.post(BROWSE) {
-            setBody(
-                BrowseBody(
-                    context = Context.WEB,
-                    browseId = browseId,
-                    params = params
-                )
-            )
-        }.body()
+class YoutubeRepositoryImpl : YoutubeRepository {
+    override suspend fun getHomeVideos(): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", YoutubeClient.REGION_CODE)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun browseMusic(browseId: String): BrowseResponse {
-        return Youtube.post(BROWSE) {
-            setBody(
-                BrowseBody(
-                    context = Context.WEB,
-                    browseId = browseId,
-                    params = TRENDING_MUSIC
-                )
-            )
-        }.body()
+    override suspend fun getLibraryVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun browseGaming(browseId: String): BrowseResponse {
-        return Youtube.post(BROWSE) {
-            setBody(
-                BrowseBody(
-                    context = Context.WEB,
-                    browseId = browseId,
-                    params = TRENDING_GAMING
-                )
-            )
-        }.body()
+    override suspend fun getSearchVideos(query: String): SearchTube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", query)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun browseMovies(browseId: String): BrowseResponse {
-        return Youtube.post(BROWSE) {
-            setBody(
-                BrowseBody(
-                    context = Context.WEB,
-                    browseId = browseId,
-                    params = TRENDING_MOVIES
-                )
-            )
-        }.body()
+    override suspend fun getYoutubeShorts(): List<Shorts> {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.HIDDEN_CLIENT + YoutubeClient.SHORTS_PART
+        )
+        return response.body()
     }
 
-    override suspend fun playerInfo(videoId: String): PlayerResponse {
-        return Youtube.post(PLAYER) {
-            setBody(
-                PlayerBody(
-                    context = Context.HTML5,
-                    videoId = videoId
-                )
-            )
-        }.body()
+    override suspend fun getChannelDetails(channelId: String): YoutubeChannel {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+        ){
+            url {
+                parameters.append("part", YoutubeClient.CHANNEL_PART)
+                parameters.append("id", channelId)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun searchResults(query: String): SearchResponse {
-        return Youtube.post(SEARCH) {
-            setBody(
-                SearchBody(
-                    context = Context.WEB,
-                    query = query
-                )
-            )
-        }.body()
+    override suspend fun getChannelsPlaylists(channelId: String): ChannelPlaylists {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("channelId", channelId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun searchSuggestions(query: String): SearchSuggestions {
-        return Youtube.post(SEARCH) {
-            setBody(
-                SearchBody(
-                    context = Context.WEB,
-                    query = query
-                )
-            )
-        }.body()
+    override suspend fun getPlaylistVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+            ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
     }
 
-    override suspend fun channelResponse(channelId: String, filter : String?): ChannelResponse {
-        return Youtube.post(BROWSE){
-            setBody(
-                BrowseBody(
-                    context = Context.WEB,
-                    browseId = channelId,
-                    params = filter
-                )
-            )
-        }.body()
+    override suspend fun getVideoDetails(videoId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", videoId)
+                parameters.append("key", YoutubeClient.API_KEY)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetHomeVideos() : Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", YoutubeClient.REGION_CODE)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetLibraryVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key",YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetSearchVideos(query: String): SearchTube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", query)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key",YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetChannelDetails(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.CHANNEL
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", channelId)
+                parameters.append("key", YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetChannelsPlaylists(channelId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLISTS
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("channelId", channelId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetPlaylistVideos(playListId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.PLAYLIST
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PLAYLIST_PART)
+                parameters.append("playlistId", playListId)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+                parameters.append("key", YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun reGetVideoDetails(videoId: String): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.YOUTUBE + YoutubeClient.VIDEO
+        ){
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("id", videoId)
+                parameters.append("key", YoutubeClient.EXTRA_KEYS)
+            }
+        }
+        return response.body()
+    }
+
+
+    //Experimental
+    suspend fun experimentalDefaultVideos(): Youtube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.VIDEO
+        ) {
+            url {
+                parameters.append("part", YoutubeClient.PART)
+                parameters.append("chart", YoutubeClient.CHART)
+                parameters.append("regionCode", YoutubeClient.REGION_CODE)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+            }
+        }
+        return response.body()
+    }
+
+    suspend fun experimentalSearchVideos(search : String): SearchTube {
+        val response = YoutubeClient.CLIENT.get(
+            YoutubeClient.EXPERIMENTAL_API + YoutubeClient.SEARCH
+        ){
+            url {
+                parameters.append("part", YoutubeClient.SEARCH_PART)
+                parameters.append("q", search)
+                parameters.append("maxResults", YoutubeClient.MAX_RESULTS)
+            }
+        }
+        return response.body()
     }
 }
