@@ -26,11 +26,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ChannelHome(
-    private val channelId : String?
-) : Fragment() {
+class ChannelHome() : Fragment() {
 
     private var binding : FragmentChannelHomeBinding? = null
+    private val channelId by lazy {
+        arguments?.getString(CHANNEL_ID)
+    }
     private val viewModel : YoutubeViewModel by viewModels<YoutubeViewModel>()
 
     override fun onCreateView(
@@ -40,12 +41,25 @@ class ChannelHome(
         return inflater.inflate(R.layout.fragment_channel_home, container, false)
     }
 
+    companion object{
+        private const val CHANNEL_ID = "channel_id"
+
+        @JvmStatic
+        fun newInstance(channelId : String) : ChannelHome{
+            val fragment = ChannelHome()
+            val args = Bundle()
+            args.putString(CHANNEL_ID, channelId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentChannelHomeBinding.bind(view)
         if(channelId != null){
-            viewModel.channelHomeContent(browseId = channelId)
+            viewModel.channelHomeContent(browseId = channelId!!)
         }
 
         viewModel.channelHomeContent.observe(viewLifecycleOwner){ response ->
@@ -128,10 +142,5 @@ class ChannelHome(
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 }

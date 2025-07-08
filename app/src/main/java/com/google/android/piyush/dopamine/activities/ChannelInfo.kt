@@ -279,7 +279,7 @@ class ChannelInfo : AppCompatActivity() {
                                     binding.shimmerEffectAddToFavorites.visibility = View.GONE
                                     binding.addToFavorites.visibility = View.VISIBLE
                                     binding.channelTabs.visibility = View.VISIBLE
-                                    replaceTab(ChannelHome(id))
+                                    replaceTab(ChannelHome.newInstance(id))
                                     binding.addToFavorites.setOnClickListener {
                                         binding.addToFavorites.animate()
                                             .alpha(0f)
@@ -341,7 +341,7 @@ class ChannelInfo : AppCompatActivity() {
                 p0?.text?.toString()?.let { selectedTab->
                     when(selectedTab){
                         getString(R.string.home) -> {
-                            replaceTab(ChannelHome(channelId))
+                            replaceTab(ChannelHome.newInstance(channelId!!))
                         }
                         getString(R.string.videos) -> {}
                         getString(R.string.shorts) -> {}
