@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11459978795",
+    "project_id": "dopamine-rtx",
+    "storage_bucket": "dopamine-rtx.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11459978795:android:f875a5d00554bbe3932c6e",
+        "android_client_info": {
+          "package_name": "com.google.android.piyush.dopamine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHjTGfegLmCvNseHglpYhQoCFHH15MJ54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

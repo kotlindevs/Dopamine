@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.Home">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/userImage"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/greeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/circular_spotify"
+                android:text="@string/about_dopamine"
+                android:textSize="22sp" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/watchHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_history" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+                <include layout="@layout/shimmer_item_fragment_home"/>
+            </LinearLayout>
+        </ScrollView>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        tools:listitem="@layout/item_fragment_home" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
